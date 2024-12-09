@@ -5,28 +5,11 @@ public class JoinUI : MonoBehaviour
 {
     [SerializeField] GameObject joinUICanvas;
 
-    private void Awake()
-    {
-        
-    }
-    public void HostButtonPressed()
-    {
-        NetworkManager.Singleton.StartHost();
-        HideJoinUICanvas();
-    }
-    public void ServerButtonPressed()
-    {
-        NetworkManager.Singleton.StartServer();
-        HideJoinUICanvas();
-    }
-    public void ClientButtonPressed()
-    {
-        NetworkManager.Singleton.StartClient();
-        HideJoinUICanvas();
-    }
 
-    private void HideJoinUICanvas()
+    public void ExitUI()
     {
+        //fancy camera rotating
+        //animation of UI switching off
         joinUICanvas.SetActive(false);
     }
 }
