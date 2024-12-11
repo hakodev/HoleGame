@@ -286,19 +286,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 3128275879941511967}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04515998a5ab1d6419a39f0a17662a56, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e231df8286519a4b8c0f10ded4e3924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 8597542607743496175}
-  speed: 6
-  gravity: -9.81
-  jumpHeight: 1.5
-  isGrounded: 0
-  sphereRadius: 0.4
-  groundMask:
+  playerCamera: {fileID: 0}
+  groundLayer:
     serializedVersion: 2
     m_Bits: 0
-  mouseSensitivity: 100
+  groundedColor: {fileID: 0}
+  jumpingColor: {fileID: 0}
+  groundLayerMaxDistance: 0
+  movementEnabled: 1
+  walkSpeed: 0.4
+  runSpeed: 1
+  crouchSpeed: 0.01
+  crouchRunSpeed: 0.2
+  jumpHeight: 0
+  uncrouchedCameraHeight: 1
+  crouchedCameraHeight: 0.5
+  cameraHeightSwitchSpeed: 0.2
 --- !u!114 &3147466627149330650
 MonoBehaviour:
   m_ObjectHideFlags: 0
