@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
 
-[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(Collider))]
 public class PlayerController : MonoBehaviour {
     [SerializeField] private Camera playerCamera;
     [SerializeField] private LayerMask groundLayer;
@@ -9,7 +8,6 @@ public class PlayerController : MonoBehaviour {
     [Header("TESTING ONLY")]
     [SerializeField] private Material groundedColor;
     [SerializeField] private Material jumpingColor;
-    [SerializeField] private float groundLayerMaxDistance;
     private MeshRenderer meshRenderer;
 
     [Header("Movement")]
@@ -19,6 +17,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float crouchSpeed;
     [SerializeField] private float crouchRunSpeed;
     [SerializeField] private float jumpHeight;
+    [SerializeField] private float crouchedJumpHeight;
+    [SerializeField] private float groundLayerDistance;
 
     [Header("Crouching")]
     [SerializeField] private float uncrouchedCameraHeight;
@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour {
     private bool isMoving;
     private bool isGrounded;
     private bool isCrouching;
+    private bool isRunning;
     private const float gravity = -9.81f;
     private float horizontalInput;
     private float verticalInput;
@@ -66,35 +67,29 @@ public class PlayerController : MonoBehaviour {
             return;
         }
 
+        isMoving = horizontalInput > 0 || verticalInput > 0;
         isCrouching = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        isGrounded = Physics.Raycast(this.transform.position, Vector3.down, groundLayerMaxDistance, groundLayer);
+        isGrounded = Physics.Raycast(this.transform.position, Vector3.down, groundLayerDistance, groundLayer);
+        isRunning = isMoving && Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift);
 
         float currentSpeed;
+        float jumpForce;
 
-        if(!isCrouching && Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) {
-            currentSpeed = runSpeed;
-        } else if(isCrouching && Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) {
-            currentSpeed = crouchRunSpeed;
-        } else if(isCrouching && !Input.GetKeyDown(KeyCode.LeftShift) && !Input.GetKeyDown(KeyCode.RightShift)) {
-            currentSpeed = crouchSpeed;
+        if(isCrouching) {
+            currentSpeed = isRunning ? crouchRunSpeed : crouchSpeed;
+            jumpForce = Mathf.Sqrt(crouchedJumpHeight * -2f * gravity);
         } else {
-            currentSpeed = walkSpeed;
+            currentSpeed = isRunning ? runSpeed : walkSpeed;
+            jumpForce = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        Vector3 targetVelocity = currentSpeed * Time.deltaTime * transform.TransformDirection(moveDirection);
-        //targetVelocity.y = rigid.linearVelocity.y; //Preserve the existing vertical velocity (gravity/jump)
-
-        // Apply movement force
-        Vector3 currentVelocity = rigid.angularVelocity;
-        Vector3 velocityChange = targetVelocity - new Vector3(currentVelocity.x, 0, currentVelocity.z);
-        rigid.AddForce(velocityChange, ForceMode.VelocityChange);
+        this.transform.position += currentSpeed * Time.deltaTime * transform.TransformDirection(moveDirection);
 
         // Handle jumping
         if(isGrounded && Input.GetKeyDown(KeyCode.Space)) {
-            float jumpForce = Mathf.Sqrt(jumpHeight * -2f * gravity);
             rigid.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
