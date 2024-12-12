@@ -1,9 +1,8 @@
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
-[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(Collider))]
 public class PlayerController : MonoBehaviour {
-    [SerializeField] private Camera playerCamera;
-    [SerializeField] private LayerMask groundLayer;
+    [field: SerializeField] public bool MovementEnabled { get; private set; } = true;
 
     [Header("TESTING ONLY")]
     [SerializeField] private Material groundedColor;
@@ -11,44 +10,34 @@ public class PlayerController : MonoBehaviour {
     private MeshRenderer meshRenderer;
 
     [Header("Movement")]
-    [SerializeField] private bool movementEnabled = true;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float crouchSpeed;
     [SerializeField] private float crouchRunSpeed;
+
+    [Header("Jumping & Physics")]
+    [SerializeField] private float gravityMultiplier;
     [SerializeField] private float jumpHeight;
     [SerializeField] private float crouchedJumpHeight;
-    [SerializeField] private float groundLayerDistance;
 
-    [Header("Crouching")]
-    [SerializeField] private float uncrouchedCameraHeight;
-    [SerializeField] private float crouchedCameraHeight;
-    [SerializeField] private float cameraHeightSwitchSpeed;
-
-    private Rigidbody rigid;
+    private CharacterController characterController;
     private bool isMoving;
-    private bool isGrounded;
-    private bool isCrouching;
     private bool isRunning;
     private const float gravity = -9.81f;
+    private const float startingVerticalVelocity = 2f;
+    private Vector3 verticalVelocity;
     private float horizontalInput;
     private float verticalInput;
 
-    private void Awake() {
-        rigid = GetComponent<Rigidbody>();
-        meshRenderer = GetComponent<MeshRenderer>();
-    }
+    public bool IsCrouching { get; private set; }
 
-    private void Start() {
-        if(playerCamera == null) {
-            Debug.LogError("Player camera is not set up in the inspector!");
-            UnityEditor.EditorApplication.isPlaying = false;
-            return;
-        }
+    private void Awake() {
+        meshRenderer = GetComponent<MeshRenderer>(); // will be removed after testing
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Update() {
-        if(isGrounded) {
+        if(characterController.isGrounded) { // will be removed after testing
             meshRenderer.material = groundedColor;
         } else {
             meshRenderer.material = jumpingColor;
@@ -57,57 +46,50 @@ public class PlayerController : MonoBehaviour {
         ProcessMovement();
     }
 
-    private void LateUpdate() {
-        ProcessCameraCrouched();
-    }
-
     private void ProcessMovement() {
-        if(!movementEnabled) {
+        if(!MovementEnabled) {
             ResetMovementValues();
             return;
         }
 
         isMoving = horizontalInput > 0 || verticalInput > 0;
-        isCrouching = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        isGrounded = Physics.Raycast(this.transform.position, Vector3.down, groundLayerDistance, groundLayer);
-        isRunning = isMoving && Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift);
+        isRunning = isMoving && Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        IsCrouching = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
 
         float currentSpeed;
-        float jumpForce;
+        float currentjumpHeight;
 
-        if(isCrouching) {
+        if(IsCrouching) {
             currentSpeed = isRunning ? crouchRunSpeed : crouchSpeed;
-            jumpForce = Mathf.Sqrt(crouchedJumpHeight * -2f * gravity);
+            currentjumpHeight = crouchedJumpHeight;
         } else {
             currentSpeed = isRunning ? runSpeed : walkSpeed;
-            jumpForce = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            currentjumpHeight = jumpHeight;
         }
 
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        this.transform.position += currentSpeed * Time.deltaTime * transform.TransformDirection(moveDirection);
+        Vector3 finalMovement = currentSpeed * Time.deltaTime * transform.TransformDirection(moveDirection);
+
+        if(characterController.isGrounded && verticalVelocity.y < 0) {
+            verticalVelocity.y = -startingVerticalVelocity;
+        } else {
+            verticalVelocity.y += gravity * gravityMultiplier * Time.deltaTime;
+        }
 
         // Handle jumping
-        if(isGrounded && Input.GetKeyDown(KeyCode.Space)) {
-            rigid.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if(characterController.isGrounded && Input.GetKeyDown(KeyCode.Space)) {
+            verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
         }
-    }
 
-    private void ProcessCameraCrouched() {
-        Vector3 uncrouchedCamera = new(playerCamera.transform.localPosition.x, uncrouchedCameraHeight, playerCamera.transform.localPosition.z);
-        Vector3 crouchedCamera = new(playerCamera.transform.localPosition.x, crouchedCameraHeight, playerCamera.transform.localPosition.z);
+        finalMovement += verticalVelocity * Time.deltaTime;
 
-        playerCamera.transform.localPosition = isCrouching
-            ? Vector3.Lerp(playerCamera.transform.localPosition, crouchedCamera, cameraHeightSwitchSpeed * Time.fixedDeltaTime)
-            : Vector3.Lerp(playerCamera.transform.localPosition, uncrouchedCamera, cameraHeightSwitchSpeed * Time.fixedDeltaTime);
+        characterController.Move(finalMovement);
     }
 
     private void ResetMovementValues() {
-        Vector3 resetToUncrouchedCamera = new(playerCamera.transform.localPosition.x, uncrouchedCameraHeight, playerCamera.transform.localPosition.z);
-        playerCamera.transform.localPosition = resetToUncrouchedCamera;
-
-        isCrouching = false;
+        IsCrouching = false;
         horizontalInput = 0f;
         verticalInput = 0f;
     }
