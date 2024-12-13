@@ -1,12 +1,12 @@
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using Unity.Netcode;
 
 public class PlayerController : MonoBehaviour {
     [field: SerializeField] public bool MovementEnabled { get; private set; } = true;
 
-    [Header("TESTING ONLY")]
-    [SerializeField] private Material groundedColor;
-    [SerializeField] private Material jumpingColor;
+
     private MeshRenderer meshRenderer;
 
     [Header("Movement")]
@@ -28,26 +28,34 @@ public class PlayerController : MonoBehaviour {
     private Vector3 verticalVelocity;
     private float horizontalInput;
     private float verticalInput;
+    private bool justJumped = false;
 
     public bool IsCrouching { get; private set; }
 
+
+    private Alteruna.Avatar avatar;
+
     private void Awake() {
+        avatar = GetComponent<Alteruna.Avatar>();
         meshRenderer = GetComponent<MeshRenderer>(); // will be removed after testing
         characterController = GetComponent<CharacterController>();
     }
 
     private void Update() {
-        if(characterController.isGrounded) { // will be removed after testing
-            meshRenderer.material = groundedColor;
-        } else {
-            meshRenderer.material = jumpingColor;
+        //      if (!IsOwner) return;
+        if (!avatar.IsMe)
+        {
+            return;
         }
 
+        ProcessInput();
         ProcessMovement();
     }
 
-    private void ProcessMovement() {
-        if(!MovementEnabled) {
+    private void ProcessInput()
+    {
+        if (!MovementEnabled)
+        {
             ResetMovementValues();
             return;
         }
@@ -58,6 +66,10 @@ public class PlayerController : MonoBehaviour {
         isRunning = isMoving && Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         IsCrouching = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
 
+        if (characterController.isGrounded && Input.GetKeyDown(KeyCode.Space)) justJumped = true;
+    }
+
+    private void ProcessMovement() {
         float currentSpeed;
         float currentjumpHeight;
 
@@ -79,8 +91,9 @@ public class PlayerController : MonoBehaviour {
         }
 
         // Handle jumping
-        if(characterController.isGrounded && Input.GetKeyDown(KeyCode.Space)) {
+        if(justJumped) {
             verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
+            justJumped = false;
         }
 
         finalMovement += verticalVelocity * Time.deltaTime;
