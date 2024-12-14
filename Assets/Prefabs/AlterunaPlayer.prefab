@@ -17,8 +17,7 @@ GameObject:
   - component: {fileID: 671298061454234600}
   - component: {fileID: 9156419535061637383}
   - component: {fileID: 7518534502350208058}
-  - component: {fileID: 7489230578188000880}
-  - component: {fileID: 9021769680562615658}
+  - component: {fileID: 6819232429365655515}
   m_Layer: 0
   m_Name: AlterunaPlayer
   m_TagString: Untagged
@@ -40,6 +39,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5896413458620184735}
+  - {fileID: 6223943137824756081}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4155649491343316820
@@ -236,7 +236,7 @@ MonoBehaviour:
   gravityMultiplier: 1.75
   jumpHeight: 3.8
   crouchedJumpHeight: 2.3
---- !u!114 &7489230578188000880
+--- !u!114 &6819232429365655515
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -245,31 +245,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2507407002761147588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbe54bbbddb34e24587090fb9ad5f7f6, type: 3}
+  m_Script: {fileID: 11500000, guid: f31b2876078eafd4aa4acb86adf7c481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: 389b12f7-d54b-4ea8-a397-7a0806d1b94d
-  Reliability: 1
-  LocalMethodBehavior: 1
---- !u!114 &9021769680562615658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2507407002761147588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b37a9690e49276e4390e925b12756e65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: 39d7d9d4-2838-40d3-84b5-8e5a675fa7b6
-  Reliability: 1
-  LocalMethodBehavior: 1
-  avatar: {fileID: 1520071485617270120}
+  hand: {fileID: 8545988785631638419}
   playerCamera: {fileID: 2139418295369524711}
+  grabReach: 6
+  primaryButton: 323
+  interactButton: 324
+  minMaxThrowStrength: {x: 0.2, y: 5}
+  minMaxThrowChargeUpTime: {x: 0.1, y: 0.5}
 --- !u!1 &2944378312340303748
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,3 +447,34 @@ MonoBehaviour:
   uncrouchedCameraHeight: 0.6
   crouchedCameraHeight: -0.4
   cameraHeightSwitchSpeed: 4
+--- !u!1 &8545988785631638419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6223943137824756081}
+  m_Layer: 0
+  m_Name: Hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6223943137824756081
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8545988785631638419}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.215, y: 0.065, z: 0.489}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7499172478257644583}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
