@@ -3,12 +3,7 @@ using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour {
     [field: SerializeField] public bool MovementEnabled { get; private set; } = true;
-
-    [Header("TESTING ONLY")]
-    [SerializeField] private Material groundedColor;
-    [SerializeField] private Material jumpingColor;
-    private MeshRenderer meshRenderer;
-
+    
     [Header("Movement")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
@@ -32,17 +27,10 @@ public class PlayerController : MonoBehaviour {
     public bool IsCrouching { get; private set; }
 
     private void Awake() {
-        meshRenderer = GetComponent<MeshRenderer>(); // will be removed after testing
         characterController = GetComponent<CharacterController>();
     }
 
     private void Update() {
-        if(characterController.isGrounded) { // will be removed after testing
-            meshRenderer.material = groundedColor;
-        } else {
-            meshRenderer.material = jumpingColor;
-        }
-
         ProcessMovement();
     }
 
