@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Alteruna;
 
+
 public class Interact : MonoBehaviour, IObserver
 {
     private Alteruna.Avatar avatar;
@@ -30,6 +31,8 @@ public class Interact : MonoBehaviour, IObserver
     bool finishedPickUp = true;
     bool isChargingUp = false;
 
+    RigidbodySynchronizable rbToTrack;
+
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -48,7 +51,13 @@ public class Interact : MonoBehaviour, IObserver
 
         ProcessInput();
         HighlightInteractable();
+
         if (isChargingUp) currentChargeUpTime += Time.deltaTime;
+    }
+
+    private void FixedUpdate()
+    {
+        UpdateHeldObjectPhysics();
     }
     private void ProcessInput()
     {
@@ -64,7 +73,7 @@ public class Interact : MonoBehaviour, IObserver
                 {
                     if (currentChargeUpTime > minMaxThrowChargeUpTime.y) currentChargeUpTime = minMaxThrowChargeUpTime.y;
                     AnimateReleaseChargebar();
-                    currentThrowStrength = Mathf.Abs(currentChargeUpTime / minMaxThrowChargeUpTime.y);
+                    currentThrowStrength = Mathf.Lerp(minMaxThrowStrength.x, minMaxThrowStrength.y, currentChargeUpTime);
                     currentChargeUpTime = 0;
                     Throw();
                 }
@@ -130,7 +139,7 @@ public class Interact : MonoBehaviour, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity))
         {
-            heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, false);
+            heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
             heldObject.transform.position = hit.point + hit.normal.normalized;
             heldObject.transform.up = hit.normal;
             heldObject = null;
@@ -138,9 +147,12 @@ public class Interact : MonoBehaviour, IObserver
     }
     private void Throw()
     {
-        RigidbodySynchronizable rb = heldObject.GetComponent<RigidbodySynchronizable>();
-        rb.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
+        heldObject.GetComponent<Rigidbody>().freezeRotation = false;
+        heldObject.GetComponent<Rigidbody>().useGravity = true;
+        rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
+
         currentThrowStrength = 0;
+        heldObject.transform.parent = null;
         heldObject = null;
     }
     private void TryPickUp(GameObject pickedUp)
@@ -148,9 +160,11 @@ public class Interact : MonoBehaviour, IObserver
         if(pickedUp.GetComponent<DynamicInteractableObject>() != null)
         {
             heldObject = pickedUp;
-            heldObject.transform.SetParent(hand.transform, false);
+            heldObject.transform.parent = hand.transform;
             pickedUp.transform.rotation = Quaternion.Euler(0f, hand.transform.eulerAngles.y, 0f);
+            heldObject.GetComponent<Rigidbody>().freezeRotation = true;
             heldObject.GetComponent<Rigidbody>().useGravity = false;
+            rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
         }
         else
         {
@@ -158,6 +172,18 @@ public class Interact : MonoBehaviour, IObserver
         }
     }
 
+    private void UpdateHeldObjectPhysics()
+    {
+        if (heldObject != null)
+        {
+            Vector3 actualPosition = hand.transform.position + (playerCamera.transform.forward * heldObject.transform.localScale.x);
+            if (Vector3.Distance(rbToTrack.transform.position, actualPosition) > 0.1f)
+            {
+                Vector3 moveDirection = hand.transform.position - rbToTrack.transform.position;
+                rbToTrack.AddForce(moveDirection * 10);
+            }
+        }
+    }
 
     //art stuff
     private void AnimateWindUpChanrgebar()
