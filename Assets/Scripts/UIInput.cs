@@ -2,15 +2,22 @@ using UnityEngine;
 
 public class UIInput : MonoBehaviour
 {
-    GameObject lobbyManager;
+    [SerializeField] GameObject roomMenu;
     private void Awake()
     {
-        lobbyManager = GameObject.Find("LobbyManager");
-        lobbyManager.SetActive(false);
+
     }
     public void ClickedPlayButton()
     {
-        lobbyManager.SetActive(true);
+        roomMenu.SetActive(true);
+        gameObject.SetActive(false);
+    }
+    public void ClickedJoinButton()
+    {
+        gameObject.SetActive(false);
+    }
+    public void ClickedStartButton()
+    {
         gameObject.SetActive(false);
     }
 }
