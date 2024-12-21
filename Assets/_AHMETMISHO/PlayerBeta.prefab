@@ -427,10 +427,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <MovementEnabled>k__BackingField: 1
-  walkSpeed: 2.8
-  runSpeed: 4.5
-  crouchSpeed: 1.24
-  crouchRunSpeed: 1.65
+  walkSpeed: 3.8
+  runSpeed: 5.5
+  crouchSpeed: 2.24
+  crouchRunSpeed: 2.65
   gravityMultiplier: 1.75
   jumpHeight: 3.8
   crouchedJumpHeight: 2.3
