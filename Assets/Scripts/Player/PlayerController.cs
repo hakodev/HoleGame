@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour {
-    [field: SerializeField] public bool MovementEnabled { get; private set; } = true;
+    [field: SerializeField] public bool MovementEnabled { get; set; } = true;
 
     [Header("Movement")]
     [SerializeField] private float walkSpeed;

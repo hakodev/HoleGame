@@ -16,7 +16,7 @@ public class CameraMovement : MonoBehaviour {
     private PlayerController playerController;
     private Alteruna.Avatar avatar;
 
-    float mouseX, mouseY;
+    private float mouseX, mouseY;
 
     private void Awake() {
         avatar = GetComponentInParent<Alteruna.Avatar>();
@@ -57,22 +57,23 @@ public class CameraMovement : MonoBehaviour {
     private void ProcessCameraInput()
     {
         //Horizontal rotation
-         mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         if (invertCameraXAxis)
             mouseX = -mouseX;
-        playerController.transform.Rotate(Vector3.up, mouseX);
 
         //Vertical rotation
-         mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+        mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
         if (invertCameraYAxis)
             mouseY = -mouseY;
     }
+
     private void ProcessCamera() {
         if(!playerController.MovementEnabled) {
             ResetCameraValues();
             return;
         }
 
+        playerController.transform.Rotate(Vector3.up, mouseX);
         verticalRotation -= mouseY;
         verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
 
