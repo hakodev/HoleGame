@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
-
+using Alteruna;
 public class PlayerController : MonoBehaviour {
     [field: SerializeField] public bool MovementEnabled { get; set; } = true;
 
@@ -24,13 +24,16 @@ public class PlayerController : MonoBehaviour {
     private float horizontalInput;
     private float verticalInput;
 
+    private Alteruna.Avatar avatar;
     public bool IsCrouching { get; private set; }
 
     private void Awake() {
         characterController = GetComponent<CharacterController>();
+        avatar = GetComponent<Alteruna.Avatar>();
     }
 
     private void Update() {
+        if (!avatar.IsMe) { return; }
         ProcessMovement();
     }
 

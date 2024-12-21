@@ -12,7 +12,7 @@ public class Gun : DynamicInteractableObject
         RaycastHit hit;
         if(Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition), out hit, 40))
         {
-            if (hit.collider.gameObject.tag == "Player")
+            if (hit.collider.gameObject != gameObject && hit.collider.gameObject.tag == "Player")
             {
                 hit.collider.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.ShotWithGun);
             }

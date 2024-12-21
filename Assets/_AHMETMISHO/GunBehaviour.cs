@@ -1,7 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
-
-public class GunBehaviour : MonoBehaviour {
+using Alteruna;
+public class GunBehaviour : AttributesSync {
     [SerializeField] private Camera playerCamera;
     [SerializeField] private int maxShotsBeforeReloading;
     [SerializeField] private float bulletMaxDistance;
@@ -10,8 +10,21 @@ public class GunBehaviour : MonoBehaviour {
     [SerializeField] private float fovToggleDuration;
     private int shotsTaken = 0;
 
+    [SerializeField] Alteruna.Avatar avatar;
+
+
+    private void Start()
+    {
+        if (!avatar.IsMe) { return; }
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
     private void Update() {
-        if(Input.GetKeyDown(KeyCode.Mouse0)) {
+
+        if (!avatar.IsMe) { return; }
+
+
+        if (Input.GetKeyDown(KeyCode.Mouse0)) {
             Fire();
         }
 
@@ -28,17 +41,19 @@ public class GunBehaviour : MonoBehaviour {
         }
 
         if(shotsTaken == maxShotsBeforeReloading) {
-            Debug.Log("Out of ammo, reloading...");
+          //  Debug.Log("Out of ammo, reloading...");
             Reload();
         }
     }
 
     private void Fire() {
-        Debug.Log("Fired weapon");
+       // Debug.Log("Fired weapon");
         if(Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, bulletMaxDistance)) {
-            if(hit.collider.gameObject.CompareTag("Player")) {
-                hit.collider.gameObject.GetComponent<Health>().DamagePlayer(Random.Range(3f, 7f)); // Change later
-                Debug.Log("BULLSEYE!");
+            Debug.Log(hit.collider.gameObject.name + " " + transform.parent.gameObject.name);
+            if(hit.collider.gameObject != transform.parent.gameObject && hit.collider.gameObject.CompareTag("Player")) {
+               // UserId targetUserId = hit.collider.gameObject.GetComponent<UserId>();
+                hit.collider.gameObject.GetComponent<Health>().DamagePlayer(Random.Range(3, 7)); // Change later
+                //   Debug.Log("BULLSEYE!");
             }
         }
         shotsTaken++;
@@ -53,7 +68,7 @@ public class GunBehaviour : MonoBehaviour {
     }
 
     private void Reload() {
-        Debug.Log("Reloading...");
+      //  Debug.Log("Reloading...");
         shotsTaken = 0;
     }
 }
