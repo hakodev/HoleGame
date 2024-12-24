@@ -214,7 +214,9 @@ public class Interact : AttributesSync, IObserver
         {
             Gun gun = (Gun)caller;
             Debug.Log("Special Interaction Gun Player");
-            gameObject.GetComponent<Health>().DamagePlayer(gun.Damage);
+            Health health = gameObject.GetComponent<Health>();
+            health.DamagePlayer(gun.Damage());
+            Debug.Log(gun.Damage());
         }
     }
 }

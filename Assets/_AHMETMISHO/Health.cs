@@ -23,8 +23,8 @@ public class Health : AttributesSync {
     }
     public void DamagePlayer(float damageAmount) {
         currentHealth -= damageAmount;
-
-        if (currentHealth < 0)
+        Debug.Log(damageAmount);
+        if (currentHealth <= 0)
         {
             currentHealth = 0;
             Debug.Log("Reduced HP");

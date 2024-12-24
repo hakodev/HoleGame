@@ -16,8 +16,8 @@ TagManager:
   - 
   - DynamicInteractableObject
   - StationaryInteractableObject
-  - 
-  - 
+  - PlayerLayer
+  - SelfPlayerLayer
   - 
   - 
   - 

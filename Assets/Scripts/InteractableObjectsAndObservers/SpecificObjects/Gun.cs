@@ -8,8 +8,12 @@ public class Gun : DynamicInteractableObject
     [SynchronizableField] int currentAmmo;
     [SerializeField] float bulletMaxDistance;
     LayerMask otherPlayerLayerMask;
-    public int Damage { get; set; }
+    [SynchronizableField] [SerializeField] int damage;
 
+    public int Damage() {
+        Debug.Log(damage);
+        return damage;
+    }
 
     private void Start()
     {
