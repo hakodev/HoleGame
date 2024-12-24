@@ -52,7 +52,7 @@ public class GunBehaviour : AttributesSync {
             Debug.Log(hit.collider.gameObject.name + " " + transform.parent.gameObject.name);
             if(hit.collider.gameObject != transform.parent.gameObject && hit.collider.gameObject.CompareTag("Player")) {
                // UserId targetUserId = hit.collider.gameObject.GetComponent<UserId>();
-                hit.collider.gameObject.GetComponent<Health>().DamagePlayer(Random.Range(3, 7)); // Change later
+                    hit.collider.gameObject.GetComponent<Health>().DamagePlayer(Random.Range(3, 7)); // Change later
                 //   Debug.Log("BULLSEYE!");
             }
         }

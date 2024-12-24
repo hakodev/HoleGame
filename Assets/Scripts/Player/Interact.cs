@@ -4,7 +4,7 @@ using UnityEngine;
 using Alteruna;
 
 
-public class Interact : MonoBehaviour, IObserver
+public class Interact : AttributesSync, IObserver
 {
     private Alteruna.Avatar avatar;
     GameObject heldObject = null;
@@ -43,6 +43,15 @@ public class Interact : MonoBehaviour, IObserver
         dynamicLayerMask = LayerMask.GetMask("DynamicInteractableObject");
         stationaryLayerMask = LayerMask.GetMask("StationaryInteractableObject");
         interactableLayerMask = dynamicLayerMask | stationaryLayerMask;
+
+        if (!avatar.IsMe) {
+            gameObject.layer = LayerMask.NameToLayer("PlayerLayer");
+            return;
+        }
+        else
+        {
+            gameObject.layer = LayerMask.NameToLayer("SelfPlayerLayer");
+        }
     }
 
     void Update()
@@ -112,7 +121,7 @@ public class Interact : MonoBehaviour, IObserver
         }
 
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             //if raycast with stationary, prioritize it
             RaycastHit hit;
@@ -127,14 +136,6 @@ public class Interact : MonoBehaviour, IObserver
                     heldObject.GetComponent<DynamicInteractableObject>().Use();
                 }
             }
-        }
-    }
-
-    public void SpecialInteraction(InteractionEnum interaction)
-    {
-        if(interaction == InteractionEnum.ShotWithGun)
-        {
-            Die();
         }
     }
     private void Place()
@@ -206,9 +207,17 @@ public class Interact : MonoBehaviour, IObserver
         }
     }
 
-    private void Die()
+
+    public void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
     {
-        //whatever happens when you die (kicked out screen or whatever
+        if (interaction == InteractionEnum.ShotWithGun)
+        {
+            Gun gun = (Gun)caller;
+            Debug.Log("Special Interaction Gun Player");
+            Health health = gameObject.GetComponent<Health>();
+            health.DamagePlayer(gun.Damage());
+            Debug.Log(gun.Damage());
+        }
     }
 }
 
