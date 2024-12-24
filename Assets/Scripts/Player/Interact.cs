@@ -32,6 +32,7 @@ public class Interact : AttributesSync, IObserver
     bool isChargingUp = false;
 
     RigidbodySynchronizable rbToTrack;
+    Rigidbody rb;
 
     private void Awake()
     {
@@ -141,34 +142,48 @@ public class Interact : AttributesSync, IObserver
     private void Place()
     {
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity))
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach))
         {
             heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
             heldObject.transform.position = hit.point + hit.normal.normalized;
             heldObject.transform.up = hit.normal;
+            DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
+            DIO.CurrentlyOwnedByAvatar = null;
             heldObject = null;
+            rbToTrack = null;
+            rb = null;
         }
     }
     private void Throw()
     {
-        heldObject.GetComponent<Rigidbody>().freezeRotation = false;
-        heldObject.GetComponent<Rigidbody>().useGravity = true;
+        rb.freezeRotation = false;
+        rb.useGravity = true;
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
 
         currentThrowStrength = 0;
+        DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
+        DIO.CurrentlyOwnedByAvatar = null;
         heldObject.transform.parent = null;
         heldObject = null;
+        rbToTrack = null;
+        rb= null;
     }
     private void TryPickUp(GameObject pickedUp)
     {
-        if(pickedUp.GetComponent<DynamicInteractableObject>() != null)
+        DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
+
+        Debug.Log("object can't be picked up, because it's owned by object " + DIO.CurrentlyOwnedByAvatar);
+        if (DIO != null && DIO.CurrentlyOwnedByAvatar == null)
         {
             heldObject = pickedUp;
+            rb = heldObject.GetComponent<Rigidbody>();
             heldObject.transform.parent = hand.transform;
             pickedUp.transform.rotation = Quaternion.Euler(0f, hand.transform.eulerAngles.y, 0f);
-            heldObject.GetComponent<Rigidbody>().freezeRotation = true;
-            heldObject.GetComponent<Rigidbody>().useGravity = false;
+            pickedUp.transform.position = hand.transform.position;
+            rb.freezeRotation = true;
+            rb.useGravity = false;
             rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
+            DIO.CurrentlyOwnedByAvatar = avatar;
         }
         else
         {
@@ -178,15 +193,21 @@ public class Interact : AttributesSync, IObserver
 
     private void UpdateHeldObjectPhysics()
     {
+        
         if (heldObject != null)
         {
+           // heldObject.transform.position = hand.transform.position;
+          //  heldObject.transform.rotation = hand.transform.rotation;
+            
             Vector3 actualPosition = hand.transform.position + (playerCamera.transform.forward * heldObject.transform.localScale.x);
             if (Vector3.Distance(rbToTrack.transform.position, actualPosition) > 0.01f)
             {
                 Vector3 moveDirection = hand.transform.position - rbToTrack.transform.position;
                 rbToTrack.AddForce(moveDirection * 10);
             }
+            
         }
+        
     }
 
     //art stuff
