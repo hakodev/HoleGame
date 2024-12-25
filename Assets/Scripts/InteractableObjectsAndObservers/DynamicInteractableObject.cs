@@ -1,10 +1,35 @@
 using Alteruna;
 using UnityEngine;
-using Alteruna;
 
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
-    public Alteruna.Avatar CurrentlyOwnedByAvatar { get; set; }
+    [SynchronizableField] Alteruna.Avatar currentlyOwnedByAvatar;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
     public abstract void Use();
+
+
+    public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
+    {
+        return currentlyOwnedByAvatar;
+    }
+    [SynchronizableMethod] public void SetCurrentlyOwnedByAvatar(int newIndex)
+    {
+        currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
+        Debug.Log("SetCUrrentlyOwnedAvatar " + currentlyOwnedByAvatar); //important debug log
+    }
+
+    public Alteruna.Avatar GetAvatarByOwnerIndex(int ownerIndex)
+    {
+        Alteruna.Avatar[] avatars = FindObjectsOfType<Alteruna.Avatar>();
+        foreach (Alteruna.Avatar avatar in avatars)
+        {
+            if (avatar.Owner.Index == ownerIndex)
+            {
+                return avatar;
+            }
+        }
+
+        Debug.LogWarning($"No avatar found for Owner Index: {ownerIndex}");
+        return null;
+    }
 }

@@ -148,7 +148,7 @@ public class Interact : AttributesSync, IObserver
             heldObject.transform.position = hit.point + hit.normal.normalized;
             heldObject.transform.up = hit.normal;
             DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
-            DIO.CurrentlyOwnedByAvatar = null;
+            DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
             heldObject = null;
             rbToTrack = null;
             rb = null;
@@ -162,7 +162,7 @@ public class Interact : AttributesSync, IObserver
 
         currentThrowStrength = 0;
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
-        DIO.CurrentlyOwnedByAvatar = null;
+        DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
         heldObject.transform.parent = null;
         heldObject = null;
         rbToTrack = null;
@@ -172,18 +172,20 @@ public class Interact : AttributesSync, IObserver
     {
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
-        Debug.Log("object can't be picked up, because it's owned by object " + DIO.CurrentlyOwnedByAvatar);
-        if (DIO != null && DIO.CurrentlyOwnedByAvatar == null)
+        Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
+        if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
         {
             heldObject = pickedUp;
             rb = heldObject.GetComponent<Rigidbody>();
             heldObject.transform.parent = hand.transform;
             pickedUp.transform.rotation = Quaternion.Euler(0f, hand.transform.eulerAngles.y, 0f);
-            pickedUp.transform.position = hand.transform.position;
+           // pickedUp.transform.position = hand.transform.position;
             rb.freezeRotation = true;
             rb.useGravity = false;
+            rb.linearVelocity = Vector3.zero;
             rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
-            DIO.CurrentlyOwnedByAvatar = avatar;
+            DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
+            Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
         }
         else
         {
@@ -203,7 +205,11 @@ public class Interact : AttributesSync, IObserver
             if (Vector3.Distance(rbToTrack.transform.position, actualPosition) > 0.01f)
             {
                 Vector3 moveDirection = hand.transform.position - rbToTrack.transform.position;
-                rbToTrack.AddForce(moveDirection * 10);
+                rbToTrack.AddForce(moveDirection * 1);
+            }
+            else
+            {
+                transform.position = hand.transform.position;
             }
             
         }
