@@ -35,11 +35,15 @@ public class Interact : AttributesSync, IObserver
 
     RigidbodySynchronizable rbToTrack;
     Rigidbody rb;
+    Animator animator;
+    AnimationSynchronizable animatorSync;
 
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
         playerController = GetComponent<PlayerController>();
+        animator = transform.Find("Animation").GetComponent<Animator>();
+        animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
     }
     private void Start()
     {
@@ -162,6 +166,9 @@ public class Interact : AttributesSync, IObserver
     }
     private void Throw()
     {
+        animator.SetTrigger("Throwing");
+        animatorSync.SetTrigger("Throwing");
+
         rb.freezeRotation = false;
         rb.useGravity = true;
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
@@ -176,6 +183,9 @@ public class Interact : AttributesSync, IObserver
     }
     private void TryPickUp(GameObject pickedUp)
     {
+        animator.SetTrigger("PickingUp");
+        animatorSync.SetTrigger("PickingUp");
+
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
         Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());

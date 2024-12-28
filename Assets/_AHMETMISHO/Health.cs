@@ -5,16 +5,22 @@ using Unity.Netcode;
 
 public class Health : AttributesSync {
 
-   [SynchronizableField] [SerializeField] private float currentHealth = 100f;
+   [SynchronizableField] private float currentHealth = 100f;
     private const float maxHealth = 100f;
     [SerializeField] private Material debugDeathMaterial; // remove when done testing
+
+
     private PlayerController playerController;
     private Alteruna.Avatar avatar;
-    
-
+    private Animator animator;
+    private AnimationSynchronizable animatorSync;
+    private CharacterController characterController;
     private void Awake() {
         playerController = GetComponent<PlayerController>();
+        characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
+        animator = transform.Find("Animation").GetComponent<Animator>();
+        animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
     }
 
     private void Start() {
@@ -35,13 +41,29 @@ public class Health : AttributesSync {
     [SynchronizableMethod]
     private void KillPlayer() {
         Debug.Log("Player died!");
+
+        animator.SetBool("Dead", true);
+        animatorSync.SetBool("Dead", true);
+
         playerController.MovementEnabled = false;
         //Destroy(this.gameObject);
     }
     
     private void Update()
     {
+
+
         if (!avatar.IsMe) { return; }
+
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 &&
+    animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        {
+            Debug.Log("die alreday successfully");
+            animator.speed = 0; // Freeze the animation
+            Vector2 oldValues = new Vector2(characterController.radius, characterController.height);
+            characterController.height = oldValues.x;
+            characterController.radius = oldValues.y;
+        }
 
     }
     public float GetHealth()
