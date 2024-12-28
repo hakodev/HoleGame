@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using Alteruna;
 using Unity.Netcode;
+using System.Collections.Generic;
 
 public class Health : AttributesSync {
 
@@ -15,6 +16,7 @@ public class Health : AttributesSync {
     private Animator animator;
     private AnimationSynchronizable animatorSync;
     private CharacterController characterController;
+    bool dead = false;
     private void Awake() {
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
@@ -46,25 +48,58 @@ public class Health : AttributesSync {
         animatorSync.SetBool("Dead", true);
 
         playerController.MovementEnabled = false;
+        dead = true;
         //Destroy(this.gameObject);
     }
-    
+
+    bool happenedOnce = false;
     private void Update()
     {
-
+       FixAnimatorOffset();
 
         if (!avatar.IsMe) { return; }
 
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 &&
+        if (!happenedOnce && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 &&
     animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
-            Debug.Log("die alreday successfully");
-            animator.speed = 0; // Freeze the animation
-            Vector2 oldValues = new Vector2(characterController.radius, characterController.height);
-            characterController.height = oldValues.x;
-            characterController.radius = oldValues.y;
+            animator.speed = 0f;
+            ChangeColliderAfterDeath();
+           // happenedOnce = true;
         }
 
+    }
+
+    private new void LateUpdate()
+    {
+      FixAnimatorOffset();
+    }
+    private void FixAnimatorOffset()
+    {
+        animator.transform.localPosition = Vector3.zero;
+        animator.transform.rotation = transform.rotation;
+
+        animator.transform.Find("mixamorig:Hips").localPosition = new Vector3(0, -0.15f, 0);
+        animator.transform.Find("Human 2.001").localPosition = Vector3.zero;
+        //animationTie.transform.localPosition = new Vector3(-0.0130000003f, -0.97299999f, 0);
+    }
+    private void ChangeColliderAfterDeath()
+    {
+        Queue<Transform> temp = new Queue<Transform>();
+        temp.Enqueue(transform);
+        CapsuleCollider capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
+
+        /*
+        CustomMethods.FindChildRecursively(temp, "mixamorig:Spine1");
+        CustomMethods.foundRecursively.AddComponent<CapsuleCollider>();
+        CustomMethods.foundRecursively = null;
+
+        capsuleCollider.center = new Vector3(0, -0.2f, 0);
+        capsuleCollider.radius = characterController.radius;
+        capsuleCollider.height = characterController.height;
+        capsuleCollider.direction = 2; // Z-axis
+        */
+        characterController.height = 0;
+        characterController.radius = 0;
     }
     public float GetHealth()
     {

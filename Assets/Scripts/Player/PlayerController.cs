@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Update() {
-        FixAnimatorOffset();
 
         if (!avatar.IsMe) { return; }
 
@@ -54,19 +53,7 @@ public class PlayerController : MonoBehaviour {
         ProcessMovement();
     }
 
-    private void LateUpdate()
-    {
-        FixAnimatorOffset();
-    }
-    private void FixAnimatorOffset() 
-    {
-        animator.transform.localPosition = Vector3.zero;
-        animator.transform.rotation = transform.rotation;
 
-        animator.transform.Find("mixamorig:Hips").localPosition = new Vector3(0, -0.15f, 0);
-        animator.transform.Find("Human 2.001").localPosition = Vector3.zero;
-        //animationTie.transform.localPosition = new Vector3(-0.0130000003f, -0.97299999f, 0);
-    }
 
     private void ProcessInput()
     {
