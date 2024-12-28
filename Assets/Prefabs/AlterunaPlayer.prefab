@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 
+  _uidString: 6899a936-a13e-4c32-817d-b323e2011bf7
   Reliability: 1
   LocalMethodBehavior: 1
   hand: {fileID: 8545988785631638419}
