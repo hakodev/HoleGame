@@ -87,23 +87,6 @@ public class Health : AttributesSync {
     private void ChangeColliderAfterDeath()
     {
         characterController.enabled = false;
-
-        //   Queue<Transform> temp = new Queue<Transform>();
-        //  temp.Enqueue(transform);
-        //  CapsuleCollider capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
-
-        /*
-        CustomMethods.FindChildRecursively(temp, "mixamorig:Spine1");
-        CustomMethods.foundRecursively.AddComponent<CapsuleCollider>();
-        CustomMethods.foundRecursively = null;
-
-        capsuleCollider.center = new Vector3(0, -0.2f, 0);
-        capsuleCollider.radius = characterController.radius;
-        capsuleCollider.height = characterController.height;
-        capsuleCollider.direction = 2; // Z-axis
-        */
-        //  characterController.height = 0;
-        //   characterController.radius = 0;
     }
     public float GetHealth()
     {
