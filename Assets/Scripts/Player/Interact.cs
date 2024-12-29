@@ -183,8 +183,8 @@ public class Interact : AttributesSync, IObserver
     }
     private void TryPickUp(GameObject pickedUp)
     {
-        animator.SetTrigger("PickingUp");
-        animatorSync.SetTrigger("PickingUp");
+     //   animator.SetTrigger("PickingUp");
+     //   animatorSync.SetTrigger("PickingUp");
 
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 

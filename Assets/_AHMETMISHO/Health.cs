@@ -64,7 +64,7 @@ public class Health : AttributesSync {
         {
             animator.speed = 0f;
             ChangeColliderAfterDeath();
-           // happenedOnce = true;
+            happenedOnce = true;
         }
 
     }
@@ -75,18 +75,22 @@ public class Health : AttributesSync {
     }
     private void FixAnimatorOffset()
     {
+        if (dead) { return; }
         animator.transform.localPosition = Vector3.zero;
         animator.transform.rotation = transform.rotation;
 
-        animator.transform.Find("mixamorig:Hips").localPosition = new Vector3(0, -0.15f, 0);
+        Vector3 temp = animator.transform.Find("mixamorig:Hips").localPosition;
+        animator.transform.Find("mixamorig:Hips").localPosition = new Vector3(0, temp.y, 0);
         animator.transform.Find("Human 2.001").localPosition = Vector3.zero;
         //animationTie.transform.localPosition = new Vector3(-0.0130000003f, -0.97299999f, 0);
     }
     private void ChangeColliderAfterDeath()
     {
-        Queue<Transform> temp = new Queue<Transform>();
-        temp.Enqueue(transform);
-        CapsuleCollider capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
+        characterController.enabled = false;
+
+        //   Queue<Transform> temp = new Queue<Transform>();
+        //  temp.Enqueue(transform);
+        //  CapsuleCollider capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
 
         /*
         CustomMethods.FindChildRecursively(temp, "mixamorig:Spine1");
@@ -98,8 +102,8 @@ public class Health : AttributesSync {
         capsuleCollider.height = characterController.height;
         capsuleCollider.direction = 2; // Z-axis
         */
-        characterController.height = 0;
-        characterController.radius = 0;
+        //  characterController.height = 0;
+        //   characterController.radius = 0;
     }
     public float GetHealth()
     {

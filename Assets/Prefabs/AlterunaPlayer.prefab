@@ -838,7 +838,6 @@ MonoBehaviour:
   _uidString: de3dc5d3-98de-4284-b100-d333bd162e74
   Reliability: 1
   LocalMethodBehavior: 1
-  currentHealth: 0
   debugDeathMaterial: {fileID: 0}
 --- !u!114 &10831237468437592
 MonoBehaviour:
