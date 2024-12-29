@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 7302515988430808718}
   - component: {fileID: 1715216983052222396}
   - component: {fileID: 8320582983665946068}
-  - component: {fileID: 5998952589394607315}
+  - component: {fileID: 2730662021482031466}
   m_Layer: 7
   m_Name: Gun
   m_TagString: Untagged
@@ -266,7 +266,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5998952589394607315
+--- !u!114 &2730662021482031466
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: c5a472a0-86a1-49c3-ab75-4c864956e120
+  _uidString: 4e0197bf-94c3-4122-96e8-eab348185e96
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
