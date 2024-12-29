@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Alteruna;
 using DG.Tweening;
-
+using System.Collections.Generic;
 
 public class Interact : AttributesSync, IObserver
 {
@@ -11,7 +11,10 @@ public class Interact : AttributesSync, IObserver
     GameObject heldObject = null;
 
     [Header("not important")]
-    [SerializeField] GameObject hand;
+    [SerializeField] GameObject clientHand;
+    [SerializeField] GameObject serverHand;
+    GameObject serverHeldObject;
+    List<GameObject> allServerHandObjects = new List<GameObject>();
     [SerializeField] Camera playerCamera;
     PlayerController playerController;
 
@@ -61,6 +64,11 @@ public class Interact : AttributesSync, IObserver
             gameObject.layer = selfLayer;
             SetLayerRecursively(gameObject, selfLayer);
 
+            foreach (GameObject child in serverHand.GetComponentInChildren<Transform>())
+            {
+                allServerHandObjects.Add(child.gameObject);
+                child.gameObject.SetActive(false);
+            }
         }
     }
     void SetLayerRecursively(GameObject obj, int layer)
@@ -162,6 +170,8 @@ public class Interact : AttributesSync, IObserver
             heldObject = null;
             rbToTrack = null;
             rb = null;
+
+            ToggleHandServerObject(serverHeldObject.name.Replace("(Clone)", ""), false);
         }
     }
     private void Throw()
@@ -180,6 +190,8 @@ public class Interact : AttributesSync, IObserver
         heldObject = null;
         rbToTrack = null;
         rb= null;
+
+        ToggleHandServerObject(serverHeldObject.name.Replace("(Clone)", ""), false);
     }
     private void TryPickUp(GameObject pickedUp)
     {
@@ -192,31 +204,51 @@ public class Interact : AttributesSync, IObserver
         if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
         {
             heldObject = pickedUp;
+
             rb = heldObject.GetComponent<Rigidbody>();
-            heldObject.transform.parent = hand.transform;
-            pickedUp.transform.rotation = Quaternion.Euler(0f, hand.transform.eulerAngles.y, 0f);
-           // pickedUp.transform.position = hand.transform.position;
+            heldObject.transform.parent = clientHand.transform;
+            heldObject.transform.rotation = Quaternion.Euler(0f, clientHand.transform.eulerAngles.y, 0f);
+
             rb.freezeRotation = true;
             rb.useGravity = false;
             rb.linearVelocity = Vector3.zero;
             rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
             DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
+
+            ToggleHandServerObject(pickedUp.name.Replace("(Clone)", ""), true);
+
+            //Instantiate(pickedUp, serverHand.transform);
+            serverHeldObject.GetComponent<DynamicInteractableObject>().enabled = false;
+            SetLayerRecursively(serverHeldObject, LayerMask.NameToLayer("SelfPlayerLayer"));
         }
         else
         {
             Debug.Log("You can't pick up that");
         }
     }
-
+    private GameObject ToggleHandServerObject(string name, bool state)
+    {
+        GameObject found = null;
+        foreach (GameObject child in allServerHandObjects)
+        {
+            if (child.name.Contains(name))
+            {
+                serverHeldObject = child;
+                serverHeldObject.SetActive(state);
+                break;
+            }
+        }
+        return found;
+    }
     private void UpdateHeldObjectPhysics()
     {
         if (heldObject != null)
         {
-            Vector3 targetPosition = hand.transform.position + (playerCamera.transform.forward * heldObject.transform.localScale.x);
+            Vector3 targetPosition = clientHand.transform.position + (playerCamera.transform.forward * heldObject.transform.localScale.x);
 
             heldObject.transform.DOMove(targetPosition, 0.1f);
-            Quaternion targetRotation = hand.transform.rotation;
+            Quaternion targetRotation = clientHand.transform.rotation;
             heldObject.transform.DORotateQuaternion(targetRotation, 0.1f);
 
             rbToTrack.MovePosition(targetPosition);
