@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour {
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        isMoving = horizontalInput > 0 || verticalInput > 0;
+        isMoving = horizontalInput != 0 || verticalInput != 0;
 
         isRunning = isMoving && Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         IsCrouching = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
