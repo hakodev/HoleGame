@@ -1,7 +1,6 @@
 using UnityEngine;
 using Alteruna;
-using NUnit.Framework;
-using System.Collections.Generic;
+
 public class PlayerController : MonoBehaviour {
     [field: SerializeField] public bool MovementEnabled { get; set; } = true;
 
@@ -30,6 +29,8 @@ public class PlayerController : MonoBehaviour {
     private AnimationSynchronizable animatorSync;
     private GameObject animationTie;
     public bool IsCrouching { get; private set; }
+
+    public Roles Role { get; set; }
 
     private void Awake() {
         characterController = GetComponent<CharacterController>();

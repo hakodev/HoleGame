@@ -1,8 +1,5 @@
-using TMPro;
 using UnityEngine;
 using Alteruna;
-using Unity.Netcode;
-using System.Collections.Generic;
 
 public class Health : AttributesSync {
 
@@ -28,8 +25,7 @@ public class Health : AttributesSync {
     }
     public void DamagePlayer(float damageAmount) {
         currentHealth -= damageAmount;
-        Debug.Log(damageAmount);
-        Debug.Log("Reduced HP");
+        Debug.Log($"Reduced HP by {damageAmount}");
 
         if (currentHealth <= 0)
         {
