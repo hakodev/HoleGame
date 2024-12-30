@@ -6,23 +6,20 @@ using System.Collections.Generic;
 
 public class Health : AttributesSync {
 
-   [SynchronizableField] private float currentHealth = 100f;
+    [SynchronizableField] private float currentHealth = 100f;
     private const float maxHealth = 100f;
-    [SerializeField] private Material debugDeathMaterial; // remove when done testing
-
+    [SerializeField] private Animator animator; // from Animation child gameobject
+    [SerializeField] private AnimationSynchronizable animatorSync; // from Animation child gameobject
 
     private PlayerController playerController;
     private Alteruna.Avatar avatar;
-    private Animator animator;
-    private AnimationSynchronizable animatorSync;
     private CharacterController characterController;
-    bool dead = false;
+    private bool dead = false;
+
     private void Awake() {
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
-        animator = transform.Find("Animation").GetComponent<Animator>();
-        animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
     }
 
     private void Start() {
@@ -32,11 +29,12 @@ public class Health : AttributesSync {
     public void DamagePlayer(float damageAmount) {
         currentHealth -= damageAmount;
         Debug.Log(damageAmount);
+        Debug.Log("Reduced HP");
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Debug.Log("Reduced HP");
-            BroadcastRemoteMethod("KillPlayer");
+            BroadcastRemoteMethod(nameof(KillPlayer));
         }
     }
 
