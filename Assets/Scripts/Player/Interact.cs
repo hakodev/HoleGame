@@ -2,6 +2,7 @@ using System.Buffers.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using Alteruna;
+using DG.Tweening;
 
 
 public class Interact : AttributesSync, IObserver
@@ -17,6 +18,7 @@ public class Interact : AttributesSync, IObserver
 
     [Header("Designer Values")]
     [SerializeField] float grabReach;
+    [SerializeField] float placeReach;
     [SerializeField] KeyCode primaryButton;
     [SerializeField] KeyCode interactButton;
     [SerializeField] Vector2 minMaxThrowStrength;
@@ -33,11 +35,15 @@ public class Interact : AttributesSync, IObserver
 
     RigidbodySynchronizable rbToTrack;
     Rigidbody rb;
+    Animator animator;
+    AnimationSynchronizable animatorSync;
 
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
         playerController = GetComponent<PlayerController>();
+        animator = transform.Find("Animation").GetComponent<Animator>();
+        animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
     }
     private void Start()
     {
@@ -51,10 +57,21 @@ public class Interact : AttributesSync, IObserver
         }
         else
         {
-            gameObject.layer = LayerMask.NameToLayer("SelfPlayerLayer");
+            int selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
+            gameObject.layer = selfLayer;
+            SetLayerRecursively(gameObject, selfLayer);
+
         }
     }
+    void SetLayerRecursively(GameObject obj, int layer)
+    {
+        obj.layer = layer;
 
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, layer);
+        }
+    }
     void Update()
     {
         if (!avatar.IsMe) { return; }
@@ -106,17 +123,10 @@ public class Interact : AttributesSync, IObserver
             else
             {
                 RaycastHit hit;
-                if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, dynamicLayerMask))
+                if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, dynamicLayerMask))
                 {
-                    if(Vector3.Distance(hit.transform.position, transform.position) < grabReach)
-                    {
-                        TryPickUp(hit.transform.gameObject);
-                        finishedPickUp = false;
-                    }
-                    else
-                    {
-                        Debug.Log("Object too far");
-                    }
+                    TryPickUp(hit.transform.gameObject);
+                    finishedPickUp = false;
                 }
             }
         }
@@ -142,7 +152,7 @@ public class Interact : AttributesSync, IObserver
     private void Place()
     {
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach))
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach))
         {
             heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
             heldObject.transform.position = hit.point + hit.normal.normalized;
@@ -156,6 +166,9 @@ public class Interact : AttributesSync, IObserver
     }
     private void Throw()
     {
+        animator.SetTrigger("Throwing");
+        animatorSync.SetTrigger("Throwing");
+
         rb.freezeRotation = false;
         rb.useGravity = true;
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
@@ -170,6 +183,9 @@ public class Interact : AttributesSync, IObserver
     }
     private void TryPickUp(GameObject pickedUp)
     {
+     //   animator.SetTrigger("PickingUp");
+     //   animatorSync.SetTrigger("PickingUp");
+
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
         Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
@@ -195,25 +211,16 @@ public class Interact : AttributesSync, IObserver
 
     private void UpdateHeldObjectPhysics()
     {
-        
         if (heldObject != null)
         {
-           // heldObject.transform.position = hand.transform.position;
-          //  heldObject.transform.rotation = hand.transform.rotation;
-            
-            Vector3 actualPosition = hand.transform.position + (playerCamera.transform.forward * heldObject.transform.localScale.x);
-            if (Vector3.Distance(rbToTrack.transform.position, actualPosition) > 0.01f)
-            {
-                Vector3 moveDirection = hand.transform.position - rbToTrack.transform.position;
-                rbToTrack.AddForce(moveDirection * 1);
-            }
-            else
-            {
-                transform.position = hand.transform.position;
-            }
-            
+            Vector3 targetPosition = hand.transform.position + (playerCamera.transform.forward * heldObject.transform.localScale.x);
+
+            heldObject.transform.DOMove(targetPosition, 0.1f);
+            Quaternion targetRotation = hand.transform.rotation;
+            heldObject.transform.DORotateQuaternion(targetRotation, 0.1f);
+
+            rbToTrack.MovePosition(targetPosition);
         }
-        
     }
 
     //art stuff
