@@ -94,7 +94,7 @@ public class Interact : AttributesSync, IObserver
         {
             if (finishedPickUp)
             {
-                isChargingUp = false;
+                //isChargingUp = false;
 //                heldObject.GetComponent<Rigidbody>().useGravity = true;
 
                 if (currentChargeUpTime > minMaxThrowChargeUpTime.x)
@@ -102,7 +102,7 @@ public class Interact : AttributesSync, IObserver
                     if (currentChargeUpTime > minMaxThrowChargeUpTime.y) currentChargeUpTime = minMaxThrowChargeUpTime.y;
                     AnimateReleaseChargebar();
                     currentThrowStrength = Mathf.Lerp(minMaxThrowStrength.x, minMaxThrowStrength.y, currentChargeUpTime);
-                    currentChargeUpTime = 0;
+                    //currentChargeUpTime = 0;
                     Throw();
                 }
                 else
@@ -111,6 +111,8 @@ public class Interact : AttributesSync, IObserver
                 }
             }
             finishedPickUp = true;
+            currentChargeUpTime = 0;
+            isChargingUp = false;
         }
 
         //windup
@@ -158,24 +160,26 @@ public class Interact : AttributesSync, IObserver
             //placing anim
             Spam1();
 
-
             //specific to placing
             Vector3 bounds = GetRenderersSize(heldObject);
             Vector3 alignsBestWith = GetClosestAxis(hit.normal);
-            float temp = 0;
-            if(alignsBestWith.normalized.x != 0) temp = bounds.x * alignsBestWith.normalized.x;
-            if(alignsBestWith.normalized.y != 0) temp = bounds.x * alignsBestWith.normalized.y;
-            if(alignsBestWith.normalized.z != 0) temp = bounds.x * alignsBestWith.normalized.z;
 
-            heldObject.transform.position = hit.point + hit.normal*temp;
+            Vector3 temp = Vector3.zero;
+            temp.x = Mathf.Abs(bounds.x * alignsBestWith.normalized.x);
+            temp.y = Mathf.Abs(bounds.y * alignsBestWith.normalized.y);
+            temp.z = Mathf.Abs(bounds.z * alignsBestWith.normalized.z);
+
+            Debug.Log("temp " + temp);
+
+            heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp)/2;
+            rbToTrack.MovePosition(hit.point + Vector3.Scale(hit.normal.normalized, temp)/2);
+
             heldObject.transform.forward = -hit.normal;
-
-
-            rbToTrack.MovePosition(heldObject.transform.position);
             rbToTrack.SetRotation(heldObject.transform.rotation);
 
 
             Spam2();
+           // Debug.Break();
 
         }
     }
