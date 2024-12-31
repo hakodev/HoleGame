@@ -158,14 +158,25 @@ public class Interact : AttributesSync, IObserver
             //placing anim
             Spam1();
 
+
             //specific to placing
-            heldObject.transform.position = hit.point + GetRenderersSize(heldObject);
-            heldObject.transform.up = hit.normal;
+            Vector3 bounds = GetRenderersSize(heldObject);
+            Vector3 alignsBestWith = GetClosestAxis(hit.normal);
+            float temp = 0;
+            if(alignsBestWith.normalized.x != 0) temp = bounds.x * alignsBestWith.normalized.x;
+            if(alignsBestWith.normalized.y != 0) temp = bounds.x * alignsBestWith.normalized.y;
+            if(alignsBestWith.normalized.z != 0) temp = bounds.x * alignsBestWith.normalized.z;
+
+            heldObject.transform.position = hit.point + hit.normal*temp;
+            heldObject.transform.forward = -hit.normal;
+
 
             rbToTrack.MovePosition(heldObject.transform.position);
             rbToTrack.SetRotation(heldObject.transform.rotation);
 
+
             Spam2();
+
         }
     }
     private void Throw()
@@ -212,6 +223,27 @@ public class Interact : AttributesSync, IObserver
         {
             return Vector3.zero;
         }
+    }
+    Vector3 GetClosestAxis(Vector3 vector)
+    {
+        vector.Normalize();
+        Vector3[] axes = { Vector3.right, Vector3.up, Vector3.forward,
+                           -Vector3.right, -Vector3.up, -Vector3.forward };
+
+        Vector3 closest = axes[0];
+        float maxDot = Vector3.Dot(vector, axes[0]);
+
+        for (int i = 1; i < axes.Length; i++)
+        {
+            float dot = Vector3.Dot(vector, axes[i]);
+            if (dot > maxDot)
+            {
+                maxDot = dot;
+                closest = axes[i];
+            }
+        }
+
+        return closest;
     }
     private void Spam1()
     {
@@ -277,8 +309,8 @@ public class Interact : AttributesSync, IObserver
            // rb.DOMove(targetPosition, smoothingHeldObjectMovement);
          //   heldObject.transform.DORotateQuaternion(targetRotation, smoothingHeldObjectMovement);
 
-            rbToTrack.MovePosition(rb.transform.position);
-            rbToTrack.SetRotation(rb.transform.rotation);
+            rbToTrack.MovePosition(targetPosition);
+            rbToTrack.SetRotation(targetRotation);
         }
     }
 
