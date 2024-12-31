@@ -171,15 +171,15 @@ public class Interact : AttributesSync, IObserver
 
             Debug.Log("temp " + temp);
 
-            heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp)/2;
-            rbToTrack.MovePosition(hit.point + Vector3.Scale(hit.normal.normalized, temp)/2);
+            heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp)/8;
+            rbToTrack.MovePosition(hit.point + Vector3.Scale(hit.normal.normalized, temp)/8);
 
             heldObject.transform.forward = -hit.normal;
             rbToTrack.SetRotation(heldObject.transform.rotation);
 
 
             Spam2();
-           // Debug.Break();
+            //Debug.Break();
 
         }
     }
