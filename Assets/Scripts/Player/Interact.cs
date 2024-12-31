@@ -4,6 +4,7 @@ using UnityEngine;
 using Alteruna;
 using DG.Tweening;
 using System.Collections.Generic;
+using UnityEngine.InputSystem.HID;
 
 public class Interact : AttributesSync, IObserver
 {
@@ -13,8 +14,7 @@ public class Interact : AttributesSync, IObserver
     [Header("not important")]
     [SerializeField] GameObject clientHand;
     [SerializeField] GameObject serverHand;
-    GameObject serverHeldObject;
-    List<GameObject> allServerHandObjects = new List<GameObject>();
+
     [SerializeField] Camera playerCamera;
     PlayerController playerController;
 
@@ -26,7 +26,7 @@ public class Interact : AttributesSync, IObserver
     [SerializeField] KeyCode interactButton;
     [SerializeField] Vector2 minMaxThrowStrength;
     [SerializeField] Vector2 minMaxThrowChargeUpTime;
-
+    [SerializeField] float smoothingHeldObjectMovement;
 
     float currentChargeUpTime = 0;
     float currentThrowStrength = 0;
@@ -38,14 +38,13 @@ public class Interact : AttributesSync, IObserver
 
     RigidbodySynchronizable rbToTrack;
     Rigidbody rb;
-    Animator animator;
     AnimationSynchronizable animatorSync;
 
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
         playerController = GetComponent<PlayerController>();
-        animator = transform.Find("Animation").GetComponent<Animator>();
+        //animator = transform.Find("Animation").GetComponent<Animator>();
         animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
     }
     private void Start()
@@ -63,12 +62,6 @@ public class Interact : AttributesSync, IObserver
             int selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
             gameObject.layer = selfLayer;
             SetLayerRecursively(gameObject, selfLayer);
-
-            foreach (GameObject child in serverHand.GetComponentInChildren<Transform>())
-            {
-                allServerHandObjects.Add(child.gameObject);
-                child.gameObject.SetActive(false);
-            }
         }
     }
     void SetLayerRecursively(GameObject obj, int layer)
@@ -102,7 +95,7 @@ public class Interact : AttributesSync, IObserver
             if (finishedPickUp)
             {
                 isChargingUp = false;
-                heldObject.GetComponent<Rigidbody>().useGravity = true;
+//                heldObject.GetComponent<Rigidbody>().useGravity = true;
 
                 if (currentChargeUpTime > minMaxThrowChargeUpTime.x)
                 {
@@ -162,41 +155,89 @@ public class Interact : AttributesSync, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach))
         {
-            heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
-            heldObject.transform.position = hit.point + hit.normal.normalized;
-            heldObject.transform.up = hit.normal;
-            DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
-            DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
-            heldObject = null;
-            rbToTrack = null;
-            rb = null;
+            //placing anim
+            Spam1();
 
-            ToggleHandServerObject(serverHeldObject.name.Replace("(Clone)", ""), false);
+            //specific to placing
+            heldObject.transform.position = hit.point + GetRenderersSize(heldObject);
+            heldObject.transform.up = hit.normal;
+
+            rbToTrack.MovePosition(heldObject.transform.position);
+            rbToTrack.SetRotation(heldObject.transform.rotation);
+
+            Spam2();
         }
     }
     private void Throw()
     {
-        animator.SetTrigger("Throwing");
-        animatorSync.SetTrigger("Throwing");
+        //specifics to thtowing
+        animatorSync.Animator.SetTrigger("Throwing");
 
+        Spam1();
+
+        //specifics t thowing
+        rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
+        currentThrowStrength = 0;
+
+        Spam2();
+    }
+
+    private Vector3 GetRenderersSize(GameObject obj)
+    {
+        Renderer[] temp = obj.GetComponentsInChildren<Renderer>();
+        List<Renderer> renderers = new List<Renderer>();
+
+        for(int i=0; i<temp.Length; i++)
+        {
+            if (temp[i]!=null)
+            {
+                renderers.Add(temp[i]);
+            }
+        }
+
+        if (renderers.Count > 0)
+        {
+            Bounds combinedBounds = renderers[0].bounds;
+
+            for (int i = 0; i < renderers.Count; i++)
+            {
+                if (renderers[i] != null) 
+                {
+                    combinedBounds.Encapsulate(renderers[i].bounds);
+                }
+            }
+            return combinedBounds.size;
+        }
+        else
+        {
+            return Vector3.zero;
+        }
+    }
+    private void Spam1()
+    {
+        HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
+        //heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
+       // rb.linearVelocity = Vector3.zero;
+       // rb.angularVelocity = Vector3.zero;
+        rbToTrack.velocity = Vector3.zero;
         rb.freezeRotation = false;
         rb.useGravity = true;
-        rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
-
-        currentThrowStrength = 0;
+        heldObject.transform.parent = GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform;
+    }
+    private void Spam2()
+    {
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
-        heldObject.transform.parent = null;
+
+       // rbToTrack.enabled = true;
         heldObject = null;
         rbToTrack = null;
-        rb= null;
-
-        ToggleHandServerObject(serverHeldObject.name.Replace("(Clone)", ""), false);
+        rb = null;
     }
     private void TryPickUp(GameObject pickedUp)
     {
-     //   animator.SetTrigger("PickingUp");
-     //   animatorSync.SetTrigger("PickingUp");
+        //   animator.SetTrigger("PickingUp");
+        //   animatorSync.SetTrigger("PickingUp");
 
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
@@ -204,56 +245,45 @@ public class Interact : AttributesSync, IObserver
         if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
         {
             heldObject = pickedUp;
-
             rb = heldObject.GetComponent<Rigidbody>();
+            rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
+
             heldObject.transform.parent = clientHand.transform;
             heldObject.transform.rotation = Quaternion.Euler(0f, clientHand.transform.eulerAngles.y, 0f);
 
             rb.freezeRotation = true;
             rb.useGravity = false;
             rb.linearVelocity = Vector3.zero;
-            rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
+            rb.angularVelocity = Vector3.zero;
+           // rbToTrack.enabled = false;
             DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
 
-            ToggleHandServerObject(pickedUp.name.Replace("(Clone)", ""), true);
 
-            //Instantiate(pickedUp, serverHand.transform);
-            serverHeldObject.GetComponent<DynamicInteractableObject>().enabled = false;
-            SetLayerRecursively(serverHeldObject, LayerMask.NameToLayer("SelfPlayerLayer"));
+            HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
         }
         else
         {
             Debug.Log("You can't pick up that");
         }
     }
-    private GameObject ToggleHandServerObject(string name, bool state)
-    {
-        GameObject found = null;
-        foreach (GameObject child in allServerHandObjects)
-        {
-            if (child.name.Contains(name))
-            {
-                serverHeldObject = child;
-                serverHeldObject.SetActive(state);
-                break;
-            }
-        }
-        return found;
-    }
     private void UpdateHeldObjectPhysics()
     {
         if (heldObject != null)
         {
-            Vector3 targetPosition = clientHand.transform.position + (playerCamera.transform.forward * heldObject.transform.localScale.x);
+            Vector3 targetPosition = clientHand.transform.position;
+            Quaternion targetRotation = playerCamera.transform.rotation;
 
-            heldObject.transform.DOMove(targetPosition, 0.1f);
-            Quaternion targetRotation = clientHand.transform.rotation;
-            heldObject.transform.DORotateQuaternion(targetRotation, 0.1f);
+           // rb.DOMove(targetPosition, smoothingHeldObjectMovement);
+         //   heldObject.transform.DORotateQuaternion(targetRotation, smoothingHeldObjectMovement);
 
-            rbToTrack.MovePosition(targetPosition);
+            rbToTrack.MovePosition(rb.transform.position);
+            rbToTrack.SetRotation(rb.transform.rotation);
         }
     }
+
+  
+
 
     //art stuff
     private void AnimateWindUpChanrgebar()
