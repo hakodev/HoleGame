@@ -290,6 +290,7 @@ public class Interact : AttributesSync, IObserver
             rb = heldObject.GetComponent<Rigidbody>();
             rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
 
+            if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
             heldObject.transform.parent = clientHand.transform;
             heldObject.transform.rotation = Quaternion.Euler(0f, clientHand.transform.eulerAngles.y, 0f);
 
@@ -303,7 +304,6 @@ public class Interact : AttributesSync, IObserver
 
 
             HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
-            if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
         }
         else
         {

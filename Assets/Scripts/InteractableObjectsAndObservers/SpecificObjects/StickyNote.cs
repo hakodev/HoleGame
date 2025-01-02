@@ -6,17 +6,23 @@ using UnityEngine;
 public class StickyNote : DynamicInteractableObject
 {
     Rigidbody rb;
-   // RigidbodySynchronizable rbToTrack;
-    bool isPlaced;
+    RigidbodySynchronizable rbToTrack;
+    bool isPlaced=false;
     bool isThrown = false;
+    bool isGameStart = true;
     Vector3 placedLocalPos;
     Vector3 placedLocalRot;
+    int selfLayer;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-       // rbToTrack = GetComponent<RigidbodySynchronizable>();
+        rbToTrack = GetComponent<RigidbodySynchronizable>();
     }
-
+    private void Start()
+    {
+        selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
+    }
     //if thrown and hit a surface
     //if placed specifically
     public override void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
@@ -25,7 +31,7 @@ public class StickyNote : DynamicInteractableObject
         {
             Stick();
         }
-        if(interaction == InteractionEnum.ThrownStickyNote)
+        if (interaction == InteractionEnum.ThrownStickyNote)
         {
             isThrown = true;
         }
@@ -37,12 +43,13 @@ public class StickyNote : DynamicInteractableObject
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (isThrown)
+        if(collision.gameObject.layer == selfLayer) { return; }
+        if (isThrown || isGameStart)
         {
             AlignWithSurface(collision);
             Stick();
+            isGameStart = false;
         }
-
     }
 
     public override void Use()
@@ -82,13 +89,13 @@ public class StickyNote : DynamicInteractableObject
         temp.z = Mathf.Abs(bounds.z * alignsBestWith.normalized.z);
 
         gameObject.transform.position = point - Vector3.Scale(hitNormal, temp)/4;
-       // rbToTrack.MovePosition(hit.point + Vector3.Scale(hit.normal.normalized, temp) / 8);
+        rbToTrack.MovePosition(point - Vector3.Scale(hitNormal, temp) / 4);
 
        // gameObject.transform.position = point;
       //  rbToTrack.MovePosition(point);
 
         gameObject.transform.forward = -hitNormal;
-       // rbToTrack.SetRotation(gameObject.transform.rotation);
+        rbToTrack.SetRotation(transform.rotation);
 
         transform.parent = collision.transform;
     }
@@ -96,10 +103,10 @@ public class StickyNote : DynamicInteractableObject
     {
      //   rb.linearVelocity = Vector3.zero;
      //   rb.angularVelocity = Vector3.zero;
-          transform.localPosition = placedLocalPos;
-          transform.localRotation = Quaternion.Euler(placedLocalRot);
-       // rbToTrack.MovePosition(placedLocalPos);
-      //  rbToTrack.SetRotation(gameObject.transform.rotation);
+        transform.localPosition = placedLocalPos;
+        transform.localRotation = Quaternion.Euler(placedLocalRot);
+        rbToTrack.MovePosition(transform.position);
+        rbToTrack.SetRotation(transform.rotation);
     }
     private Vector3 GetRenderersSize(GameObject obj)
     {
