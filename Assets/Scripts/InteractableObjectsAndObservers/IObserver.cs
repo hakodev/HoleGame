@@ -5,6 +5,9 @@ public interface IObserver
 public enum InteractionEnum
 {
     ShotWithGun,
+    PlacedStickyNote,
+    ThrownStickyNote,
+    PickedUpStickyNote,
     Oiled,
     Watered,
     Caffenated,

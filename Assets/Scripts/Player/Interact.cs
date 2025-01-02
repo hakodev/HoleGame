@@ -178,9 +178,14 @@ public class Interact : AttributesSync, IObserver
             rbToTrack.SetRotation(heldObject.transform.rotation);
 
 
+            if (heldObject.name.Contains("StickyNote"))
+            {
+                heldObject.transform.parent = hit.collider.transform;
+                heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
+            }
+
             Spam2();
             //Debug.Break();
-
         }
     }
     private void Throw()
@@ -193,6 +198,7 @@ public class Interact : AttributesSync, IObserver
         //specifics t thowing
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
         currentThrowStrength = 0;
+        if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
 
         Spam2();
     }
@@ -297,6 +303,7 @@ public class Interact : AttributesSync, IObserver
 
 
             HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+            if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
         }
         else
         {
