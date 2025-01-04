@@ -38,7 +38,7 @@ public class StickyNote : DynamicInteractableObject
         if (interaction == InteractionEnum.PickedUpStickyNote) 
         {
             isPlaced = false;
-            isThrown = false;
+        //    isThrown = false;
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -48,7 +48,6 @@ public class StickyNote : DynamicInteractableObject
         {
             AlignWithSurface(collision);
             Stick();
-            isGameStart = false;
         }
     }
 
@@ -66,8 +65,10 @@ public class StickyNote : DynamicInteractableObject
     private void Stick()
     {
         isPlaced = true;
-        rb.useGravity = false;
         isThrown = false;
+        isGameStart = false;
+
+        rb.useGravity = false;
         placedLocalPos = transform.localPosition;
         placedLocalRot = transform.localEulerAngles;
         rb.linearVelocity = Vector3.zero;
@@ -101,12 +102,12 @@ public class StickyNote : DynamicInteractableObject
     }
     private void StasisInPlace()
     {
-     //   rb.linearVelocity = Vector3.zero;
-     //   rb.angularVelocity = Vector3.zero;
+        //   rb.linearVelocity = Vector3.zero;
+        //   rb.angularVelocity = Vector3.zero;
         transform.localPosition = placedLocalPos;
         transform.localRotation = Quaternion.Euler(placedLocalRot);
-        rbToTrack.MovePosition(transform.position);
-        rbToTrack.SetRotation(transform.rotation);
+        rbToTrack.MovePosition(placedLocalPos + transform.parent.position);
+        rbToTrack.SetRotation(Quaternion.Euler(placedLocalRot) * transform.parent.rotation);
     }
     private Vector3 GetRenderersSize(GameObject obj)
     {

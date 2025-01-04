@@ -43,22 +43,34 @@ public class Interact : AttributesSync, IObserver
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
+
+        if (!avatar.IsMe) { return; }
         playerController = GetComponent<PlayerController>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
         animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
+       // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
+    }
+    private void OnEnable()
+    {
+        if (!avatar.IsMe) { return; }
+        animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
     }
     private void Start()
     {
-        dynamicLayerMask = LayerMask.GetMask("DynamicInteractableObject");
-        stationaryLayerMask = LayerMask.GetMask("StationaryInteractableObject");
-        interactableLayerMask = dynamicLayerMask | stationaryLayerMask;
-
         if (!avatar.IsMe) {
-            gameObject.layer = LayerMask.NameToLayer("PlayerLayer");
+            int playerLayer = LayerMask.NameToLayer("PlayerLayer");
+            gameObject.layer = playerLayer;
+            SetLayerRecursively(gameObject, playerLayer);
             return;
         }
         else
         {
+            //animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
+
+            dynamicLayerMask = LayerMask.GetMask("DynamicInteractableObject");
+            stationaryLayerMask = LayerMask.GetMask("StationaryInteractableObject");
+            interactableLayerMask = dynamicLayerMask | stationaryLayerMask;
+
             int selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
             gameObject.layer = selfLayer;
             SetLayerRecursively(gameObject, selfLayer);
@@ -191,11 +203,11 @@ public class Interact : AttributesSync, IObserver
     private void Throw()
     {
         //specifics to thtowing
-        animatorSync.Animator.SetTrigger("Throwing");
 
         Spam1();
 
         //specifics t thowing
+        animatorSync.Animator.SetTrigger("Throwing");
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
         currentThrowStrength = 0;
         if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
@@ -259,8 +271,10 @@ public class Interact : AttributesSync, IObserver
     {
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
         //heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
-       // rb.linearVelocity = Vector3.zero;
-       // rb.angularVelocity = Vector3.zero;
+        // rb.linearVelocity = Vector3.zero;
+        // rb.angularVelocity = Vector3.zero;
+
+        rbToTrack.SendData = true;
         rbToTrack.velocity = Vector3.zero;
         rb.freezeRotation = false;
         rb.useGravity = true;
@@ -291,8 +305,11 @@ public class Interact : AttributesSync, IObserver
             rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
 
             if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
+
             heldObject.transform.parent = clientHand.transform;
             heldObject.transform.rotation = Quaternion.Euler(0f, clientHand.transform.eulerAngles.y, 0f);
+            rbToTrack.MovePosition(heldObject.transform.position);
+            rbToTrack.MoveRotation(Quaternion.Euler(0f, clientHand.transform.eulerAngles.y, 0f));
 
             rb.freezeRotation = true;
             rb.useGravity = false;
@@ -304,6 +321,11 @@ public class Interact : AttributesSync, IObserver
 
 
             HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+
+            //Vector3 pos = rbToTrack.position;
+            //rbToTrack.MovePosition(new Vector3(-9999, -9999, -9999));
+            //rbToTrack.SendData = false;
+            //rbToTrack.MovePosition(pos);
         }
         else
         {
@@ -317,11 +339,15 @@ public class Interact : AttributesSync, IObserver
             Vector3 targetPosition = clientHand.transform.position;
             Quaternion targetRotation = playerCamera.transform.rotation;
 
-           // rb.DOMove(targetPosition, smoothingHeldObjectMovement);
-         //   heldObject.transform.DORotateQuaternion(targetRotation, smoothingHeldObjectMovement);
+            //rb.DOMove(targetPosition, smoothingHeldObjectMovement);
+            //     heldObject.transform.DORotateQuaternion(targetRotation, smoothingHeldObjectMovement);
 
+            heldObject.transform.position = targetPosition;
+            heldObject.transform.rotation = targetRotation;
+
+
+            rbToTrack.MoveRotation(targetRotation);
             rbToTrack.MovePosition(targetPosition);
-            rbToTrack.SetRotation(targetRotation);
         }
     }
 

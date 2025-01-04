@@ -137,7 +137,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &8737214232734451512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: c5a472a0-86a1-49c3-ab75-4c864956e120
+  _uidString: 7799cc62-5dca-4436-a706-61dbab498fef
   BucketBehaviors:
   - Name: Min
     NetLOD: 0

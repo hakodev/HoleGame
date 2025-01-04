@@ -87,8 +87,8 @@ public class PlayerController : MonoBehaviour {
                     // animator.SetBool("Running", true);
                     //  animator.SetBool("Walking", false);
 
-                   // animatorSync.Animator.SetBool("Running", true);
-                  //  animatorSync.Animator.SetBool("Walking", false);
+                    animatorSync.Animator.SetBool("Running", true);
+                    animatorSync.Animator.SetBool("Walking", false);
 
                     animatorSync.SetBool("Running", true);
                     animatorSync.SetBool("Walking", false);
@@ -99,8 +99,8 @@ public class PlayerController : MonoBehaviour {
                     // animator.SetBool("Walking", true);
                     // animator.SetBool("Running", false);
 
-                  //  animatorSync.Animator.SetBool("Walking", true);
-                   // animatorSync.Animator.SetBool("Running", false);
+                   animatorSync.Animator.SetBool("Walking", true);
+                    animatorSync.Animator.SetBool("Running", false);
 
                     animatorSync.SetBool("Walking", true);
                     animatorSync.SetBool("Running", false);
@@ -114,8 +114,8 @@ public class PlayerController : MonoBehaviour {
             // animator.SetBool("Running", false);
             //  animator.SetBool("Walking", false);
 
-         //   animatorSync.Animator.SetBool("Running", false);
-         //   animatorSync.Animator.SetBool("Walking", false);
+            animatorSync.Animator.SetBool("Running", false);
+            animatorSync.Animator.SetBool("Walking", false);
 
             animatorSync.SetBool("Running", false);
             animatorSync.SetBool("Walking", false);
@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour {
         {
             //  animator.SetBool("Jumping", false);
 
-            //animatorSync.Animator.SetBool("Jumping", false);
+            animatorSync.Animator.SetBool("Jumping", false);
 
             animatorSync.SetBool("Jumping", false);
         }
@@ -146,9 +146,9 @@ public class PlayerController : MonoBehaviour {
             //  animator.SetBool("Running", false);
             //  animator.SetBool("Walking", false);
 
-        //    animatorSync.Animator.SetBool("Jumping", true);
-        //    animatorSync.Animator.SetBool("Running", false);
-         //   animatorSync.Animator.SetBool("Walking", false);
+            animatorSync.Animator.SetBool("Jumping", true);
+            animatorSync.Animator.SetBool("Running", false);
+            animatorSync.Animator.SetBool("Walking", false);
 
 
             animatorSync.SetBool("Jumping", true);
