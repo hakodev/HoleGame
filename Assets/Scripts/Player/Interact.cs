@@ -222,8 +222,6 @@ public class Interact : AttributesSync, IObserver
         Debug.DrawRay(heldObject.transform.position, rb.angularVelocity, Color.green);
 
         Spam2();
-
-        Debug.Break();
     }
 
     private Vector3 GetRenderersSize(GameObject obj)
