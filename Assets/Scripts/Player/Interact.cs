@@ -183,10 +183,12 @@ public class Interact : AttributesSync, IObserver
 
             Debug.Log("temp " + temp);
 
-            heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp)/8;
-            rbToTrack.MovePosition(hit.point + Vector3.Scale(hit.normal.normalized, temp)/8);
+            float divider = 2;
+            if(heldObject.gameObject.name.Contains("StickyNote")) divider = 20;
+            heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp)/divider;
+            rbToTrack.SetPosition(heldObject.transform.position);
 
-            heldObject.transform.forward = -hit.normal;
+            heldObject.transform.forward = hit.normal;
             rbToTrack.SetRotation(heldObject.transform.rotation);
 
 
@@ -207,7 +209,7 @@ public class Interact : AttributesSync, IObserver
         Spam1();
 
         //specifics t thowing
-        animatorSync.Animator.SetTrigger("Throwing");
+       // animatorSync.Animator.SetTrigger("Throwing");
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
         currentThrowStrength = 0;
         if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);

@@ -1,18 +1,22 @@
 using Alteruna;
 using System.Collections.Generic;
 using System.Drawing;
+using UnityEditor.Search;
 using UnityEngine;
 
 public class StickyNote : DynamicInteractableObject
 {
     Rigidbody rb;
     RigidbodySynchronizable rbToTrack;
-    bool isPlaced=false;
-    bool isThrown = false;
-    bool isGameStart = true;
-    Vector3 placedLocalPos;
-    Vector3 placedLocalRot;
+    [SynchronizableField] bool isPlaced = false;
+    [SynchronizableField] bool isThrown = false;
+    [SynchronizableField] bool isGameStart = true;
+    [SynchronizableField] Vector3 placedLocalPos;
+     [SynchronizableField] Vector3 placedLocalRot;
     int selfLayer;
+
+    //disable object colliding with it's child
+    //
 
     private void Awake()
     {
@@ -22,28 +26,28 @@ public class StickyNote : DynamicInteractableObject
     private void Start()
     {
         selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
+
     }
-    //if thrown and hit a surface
-    //if placed specifically
+
     public override void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
     {
-        if(interaction == InteractionEnum.PlacedStickyNote)
+        if (interaction == InteractionEnum.PlacedStickyNote)
         {
             Stick();
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
             isThrown = true;
+
         }
-        if (interaction == InteractionEnum.PickedUpStickyNote) 
+        if (interaction == InteractionEnum.PickedUpStickyNote)
         {
             isPlaced = false;
-        //    isThrown = false;
         }
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.layer == selfLayer) { return; }
+        if (collision.gameObject.layer == selfLayer) { return; }
         if (isThrown || isGameStart)
         {
             AlignWithSurface(collision);
@@ -57,57 +61,107 @@ public class StickyNote : DynamicInteractableObject
     }
     private void Update()
     {
-        if(isPlaced)
+        if (isPlaced)
         {
             StasisInPlace();
         }
     }
     private void Stick()
     {
+        //physics
+        rb.useGravity = false;
+        ResetMomentum();
+
+
+        //essential for sticking
+        placedLocalRot = transform.localEulerAngles;
+        placedLocalPos = transform.localPosition;
+
+
+        //make sure sticky notes can stack when spawned without parenting causing issues
+        if (transform.parent.gameObject.name.Contains("StickyNote"))
+        {
+            if (isGameStart)
+            {
+                 placedLocalPos = new Vector3(0, 0, 1);
+                 placedLocalRot = new Vector3(0, 0, 0);
+                 transform.localScale = Vector3.one;
+            }
+        }
+
+
+        //states of sticky note management
         isPlaced = true;
         isThrown = false;
         isGameStart = false;
-
-        rb.useGravity = false;
-        placedLocalPos = transform.localPosition;
-        placedLocalRot = transform.localEulerAngles;
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
     }
     private void AlignWithSurface(Collision collision)
     {
-        //collider only works for rigidbodies for some reason, doesnt detect floor -> make sure collider is always CONVEX
-        Vector3 point = collision.gameObject.GetComponent<Collider>().ClosestPoint(transform.position);
-        Vector3 hitNormal = point - transform.position;
-        Vector3 bounds = GetRenderersSize(gameObject);
+        ResetMomentum();
 
 
+        //getting point variable from either a regular or a meshcollider because it caused issues
+        //make sure mesh collider is always CONVEX  (otherwise it wouldnt detect a hit)
+        Vector3 point = Vector3.zero;
+        Collider col = collision.gameObject.GetComponent<Collider>();
+        MeshCollider stupidCol = collision.gameObject.GetComponent<MeshCollider>();
+        if (col != null && col.enabled)
+        {
+            point = col.ClosestPoint(transform.position);
+        }
+        else
+        {
+            if (stupidCol != null && stupidCol.enabled)
+            {
+                point = (stupidCol).ClosestPoint(transform.position);
+            }
+            else
+            {
+                Debug.Log("Some other collider somehow " + stupidCol + stupidCol.enabled);
+            }
+        }
+
+        //calc correct position
+        Vector3 hitNormal = transform.position - point;
         Vector3 alignsBestWith = GetClosestAxis(hitNormal);
+        Vector3 bounds = GetRenderersSize(gameObject);
+        Vector3 temp = new Vector3(Mathf.Abs(bounds.x * alignsBestWith.normalized.x), Mathf.Abs(bounds.y * alignsBestWith.normalized.y), Mathf.Abs(bounds.z * alignsBestWith.normalized.z));
 
-        Vector3 temp = Vector3.zero;
-        temp.x = Mathf.Abs(bounds.x * alignsBestWith.normalized.x);
-        temp.y = Mathf.Abs(bounds.y * alignsBestWith.normalized.y);
-        temp.z = Mathf.Abs(bounds.z * alignsBestWith.normalized.z);
 
-        gameObject.transform.position = point - Vector3.Scale(hitNormal, temp)/4;
-        rbToTrack.MovePosition(point - Vector3.Scale(hitNormal, temp) / 4);
-
-       // gameObject.transform.position = point;
-      //  rbToTrack.MovePosition(point);
-
-        gameObject.transform.forward = -hitNormal;
+        //assign correct position and rotation
+        gameObject.transform.forward = hitNormal;
         rbToTrack.SetRotation(transform.rotation);
 
-        transform.parent = collision.transform;
+        if (isGameStart)
+        {
+            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 2f;
+        }
+        else
+        {
+            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 12;
+        }
+        rbToTrack.SetPosition(transform.position);
+
+
+        //i hate this line
+        transform.SetParent(collision.transform, true);
+    }
+    void OnDrawGizmos()
+    {
+        Gizmos.color = UnityEngine.Color.red;
+        Gizmos.DrawWireCube(GetComponent<Collider>().bounds.center, GetComponent<Collider>().bounds.size);
     }
     private void StasisInPlace()
     {
-        //   rb.linearVelocity = Vector3.zero;
-        //   rb.angularVelocity = Vector3.zero;
+        if (transform.parent == null) { return; }
+
+        ResetMomentum();
+
         transform.localPosition = placedLocalPos;
+        rbToTrack.SetPosition(transform.position);
+
         transform.localRotation = Quaternion.Euler(placedLocalRot);
-        rbToTrack.MovePosition(placedLocalPos + transform.parent.position);
-        rbToTrack.SetRotation(Quaternion.Euler(placedLocalRot) * transform.parent.rotation);
+        rbToTrack.SetRotation(transform.rotation);
     }
     private Vector3 GetRenderersSize(GameObject obj)
     {
@@ -160,5 +214,14 @@ public class StickyNote : DynamicInteractableObject
         }
 
         return closest;
+    }
+
+    private void ResetMomentum()
+    {
+        //helps avoid bs parenting physics glitches
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rbToTrack.velocity = Vector3.zero;
+        rbToTrack.angularVelocity = Vector3.zero;
     }
 }
