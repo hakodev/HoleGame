@@ -16,8 +16,9 @@ public class StickyNote : DynamicInteractableObject
     int selfLayer;
 
     //disable object colliding with it's child
-    //
-
+    //  enalbe ticking to self player if it is thrown
+    //make paper physics fall as if gliding
+    //if object has a sticky note parent it behaves weirdly when thrown after being picked up
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -61,7 +62,7 @@ public class StickyNote : DynamicInteractableObject
     }
     private void Update()
     {
-        if (isPlaced)
+        if (isPlaced && transform.parent != null && !transform.parent.gameObject.name.Contains("Hand"))
         {
             StasisInPlace();
         }
@@ -153,8 +154,6 @@ public class StickyNote : DynamicInteractableObject
     }
     private void StasisInPlace()
     {
-        if (transform.parent == null) { return; }
-
         ResetMomentum();
 
         transform.localPosition = placedLocalPos;

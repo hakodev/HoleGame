@@ -5,6 +5,7 @@ using Alteruna;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine.InputSystem.HID;
+using Unity.Burst.CompilerServices;
 
 public class Interact : AttributesSync, IObserver
 {
@@ -194,7 +195,9 @@ public class Interact : AttributesSync, IObserver
 
             if (heldObject.name.Contains("StickyNote"))
             {
-                heldObject.transform.parent = hit.collider.transform;
+                //heldObject.transform.parent = hit.collider.transform;
+                heldObject.transform.SetParent(hit.collider.transform, true);
+
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             }
 
@@ -209,12 +212,18 @@ public class Interact : AttributesSync, IObserver
         Spam1();
 
         //specifics t thowing
-       // animatorSync.Animator.SetTrigger("Throwing");
+        // animatorSync.Animator.SetTrigger("Throwing");
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
+        Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
         currentThrowStrength = 0;
         if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
 
+        Debug.DrawRay(heldObject.transform.position, rbToTrack.velocity, Color.magenta);
+        Debug.DrawRay(heldObject.transform.position, rb.angularVelocity, Color.green);
+
         Spam2();
+
+        Debug.Break();
     }
 
     private Vector3 GetRenderersSize(GameObject obj)
@@ -272,15 +281,14 @@ public class Interact : AttributesSync, IObserver
     private void Spam1()
     {
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
-        //heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
-        // rb.linearVelocity = Vector3.zero;
-        // rb.angularVelocity = Vector3.zero;
 
-        rbToTrack.SendData = true;
-        rbToTrack.velocity = Vector3.zero;
+        heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
+        ResetMomentum();
+
         rb.freezeRotation = false;
         rb.useGravity = true;
-        heldObject.transform.parent = GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform;
+
+
     }
     private void Spam2()
     {
@@ -302,37 +310,38 @@ public class Interact : AttributesSync, IObserver
         Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
         if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
         {
+            //get all necessary variales
             heldObject = pickedUp;
             rb = heldObject.GetComponent<Rigidbody>();
             rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
 
             if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
-            heldObject.transform.parent = clientHand.transform;
-            heldObject.transform.rotation = Quaternion.Euler(0f, clientHand.transform.eulerAngles.y, 0f);
-            rbToTrack.MovePosition(heldObject.transform.position);
-            rbToTrack.MoveRotation(Quaternion.Euler(0f, clientHand.transform.eulerAngles.y, 0f));
-
+            //reset physics
             rb.freezeRotation = true;
             rb.useGravity = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-           // rbToTrack.enabled = false;
+            ResetMomentum();
+
+            heldObject.transform.SetParent(clientHand.transform, true);
+
+            //actually move
+            UpdateHeldObjectPhysics();
+
             DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
-
-
             HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
-
-            //Vector3 pos = rbToTrack.position;
-            //rbToTrack.MovePosition(new Vector3(-9999, -9999, -9999));
-            //rbToTrack.SendData = false;
-            //rbToTrack.MovePosition(pos);
         }
         else
         {
             Debug.Log("You can't pick up that");
         }
+    }
+    private void ResetMomentum()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rbToTrack.velocity = Vector3.zero;
+        rbToTrack.angularVelocity = Vector3.zero;
     }
     private void UpdateHeldObjectPhysics()
     {
@@ -341,15 +350,11 @@ public class Interact : AttributesSync, IObserver
             Vector3 targetPosition = clientHand.transform.position;
             Quaternion targetRotation = playerCamera.transform.rotation;
 
-            //rb.DOMove(targetPosition, smoothingHeldObjectMovement);
-            //     heldObject.transform.DORotateQuaternion(targetRotation, smoothingHeldObjectMovement);
-
             heldObject.transform.position = targetPosition;
             heldObject.transform.rotation = targetRotation;
 
-
-            rbToTrack.MoveRotation(targetRotation);
-            rbToTrack.MovePosition(targetPosition);
+            rbToTrack.SetPosition(targetPosition);
+            rbToTrack.SetRotation(targetRotation);
         }
     }
 
