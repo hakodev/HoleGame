@@ -167,26 +167,26 @@ public class Interact : AttributesSync, IObserver
     }
     private void Place()
     {
+        SetLayerRecursively(heldObject, 11);
+        LayerMask everythingButHeldObject = ~(1 << 11);
+
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach))
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject))
         {
+            SetLayerRecursively(heldObject, 7);
+
             //placing anim
             Spam1();
 
             //specific to placing
             Vector3 bounds = GetRenderersSize(heldObject);
             Vector3 alignsBestWith = GetClosestAxis(hit.normal);
+            Vector3 temp = new Vector3(Mathf.Abs(bounds.x * alignsBestWith.normalized.x), Mathf.Abs(bounds.y * alignsBestWith.normalized.y), Mathf.Abs(bounds.z * alignsBestWith.normalized.z));
 
-            Vector3 temp = Vector3.zero;
-            temp.x = Mathf.Abs(bounds.x * alignsBestWith.normalized.x);
-            temp.y = Mathf.Abs(bounds.y * alignsBestWith.normalized.y);
-            temp.z = Mathf.Abs(bounds.z * alignsBestWith.normalized.z);
-
-            Debug.Log("temp " + temp);
 
             float divider = 2;
-            if(heldObject.gameObject.name.Contains("StickyNote")) divider = 20;
-            heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp)/divider;
+            if (heldObject.gameObject.name.Contains("StickyNote")) divider = 20;
+            heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
             rbToTrack.SetPosition(heldObject.transform.position);
 
             heldObject.transform.forward = hit.normal;
@@ -203,6 +203,10 @@ public class Interact : AttributesSync, IObserver
 
             Spam2();
             //Debug.Break();
+        }
+        else
+        {
+            SetLayerRecursively(heldObject, 7);
         }
     }
     private void Throw()
