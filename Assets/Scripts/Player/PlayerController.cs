@@ -1,13 +1,8 @@
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
+using Alteruna;
 
 public class PlayerController : MonoBehaviour {
-    [field: SerializeField] public bool MovementEnabled { get; private set; } = true;
-
-    [Header("TESTING ONLY")]
-    [SerializeField] private Material groundedColor;
-    [SerializeField] private Material jumpingColor;
-    private MeshRenderer meshRenderer;
+    [field: SerializeField] public bool MovementEnabled { get; set; } = true;
 
     [Header("Movement")]
     [SerializeField] private float walkSpeed;
@@ -29,44 +24,93 @@ public class PlayerController : MonoBehaviour {
     private float horizontalInput;
     private float verticalInput;
 
+    private Alteruna.Avatar avatar;
+    private Animator animator;
+    private AnimationSynchronizable animatorSync;
+    private GameObject animationTie;
     public bool IsCrouching { get; private set; }
 
+    public Roles Role { get; set; }
+
     private void Awake() {
-        meshRenderer = GetComponent<MeshRenderer>(); // will be removed after testing
         characterController = GetComponent<CharacterController>();
+        avatar = GetComponent<Alteruna.Avatar>();
+        animator = transform.Find("Animation").GetComponent<Animator>(); // Automatically assign Animator if not set
+        animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
     }
 
     private void Update() {
-        if(characterController.isGrounded) { // will be removed after testing
-            meshRenderer.material = groundedColor;
-        } else {
-            meshRenderer.material = jumpingColor;
-        }
 
-        ProcessMovement();
-    }
+        if (!avatar.IsMe) { return; }
 
-    private void ProcessMovement() {
-        if(!MovementEnabled) {
+
+        if (!MovementEnabled)
+        {
             ResetMovementValues();
             return;
         }
 
-        isMoving = horizontalInput > 0 || verticalInput > 0;
+        ProcessInput();
+        ProcessMovement();
+    }
+
+
+
+    private void ProcessInput()
+    {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+        isMoving = horizontalInput != 0 || verticalInput != 0;
+
         isRunning = isMoving && Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         IsCrouching = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+    }
+    private void ProcessMovement() {
 
-        float currentSpeed;
+        float currentSpeed = 0f;
         float currentjumpHeight;
 
         if(IsCrouching) {
-            currentSpeed = isRunning ? crouchRunSpeed : crouchSpeed;
-            currentjumpHeight = crouchedJumpHeight;
-        } else {
-            currentSpeed = isRunning ? runSpeed : walkSpeed;
+            //  currentSpeed = isRunning ? crouchRunSpeed : crouchSpeed;
+            if (isMoving) 
+            {
+                //crouching walking animation
+                currentSpeed = crouchSpeed;
+            }
+            //  currentjumpHeight = crouchedJumpHeight;
             currentjumpHeight = jumpHeight;
+        } else {
+            if(isMoving)
+            {
+                if (isRunning)
+                {
+                    currentSpeed = runSpeed;
+                    animator.SetBool("Running", true);
+                    animator.SetBool("Walking", false);
+
+                    animatorSync.SetBool("Running", true);
+                    animatorSync.SetBool("Walking", false);
+                }
+                else
+                {
+                    currentSpeed = walkSpeed;
+                    animator.SetBool("Walking", true);
+                    animator.SetBool("Running", false);
+
+                    animatorSync.SetBool("Walking", true);
+                    animatorSync.SetBool("Running", false);
+                }
+            }
+           
+            currentjumpHeight = jumpHeight;
+        }
+        if(!isMoving)
+        {
+            animator.SetBool("Running", false);
+            animator.SetBool("Walking", false);
+
+            animatorSync.SetBool("Running", false);
+            animatorSync.SetBool("Walking", false);
         }
 
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
@@ -78,11 +122,24 @@ public class PlayerController : MonoBehaviour {
             verticalVelocity.y += gravity * gravityMultiplier * Time.deltaTime;
         }
 
-        // Handle jumping
-        if(characterController.isGrounded && Input.GetKeyDown(KeyCode.Space)) {
-            verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
+        if (characterController.isGrounded)
+        {
+            animator.SetBool("Jumping", false);
+
+            animatorSync.SetBool("Jumping", false);
         }
 
+        // Handle jumping
+        if (characterController.isGrounded && Input.GetKeyDown(KeyCode.Space)) {
+            verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
+            animator.SetBool("Jumping", true);
+            animator.SetBool("Running", false);
+            animator.SetBool("Walking", false);
+
+            animatorSync.SetBool("Jumping", true);
+            animatorSync.SetBool("Running", false);
+            animatorSync.SetBool("Walking", false);
+        }
         finalMovement += verticalVelocity * Time.deltaTime;
 
         characterController.Move(finalMovement);

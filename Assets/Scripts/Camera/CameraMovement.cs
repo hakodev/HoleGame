@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using Unity.Netcode;
+using Alteruna;
 public class CameraMovement : MonoBehaviour {
     [Header("Mouse Input")]
     [SerializeField] private float mouseSensitivity;
@@ -13,22 +14,57 @@ public class CameraMovement : MonoBehaviour {
     [SerializeField] private float cameraHeightSwitchSpeed;
 
     private PlayerController playerController;
+    private Alteruna.Avatar avatar;
+
+    private float mouseX, mouseY;
 
     private void Awake() {
+        avatar = GetComponentInParent<Alteruna.Avatar>();
         playerController = GetComponentInParent<PlayerController>();
     }
 
     private void Start() {
+
+        if (!avatar.IsMe)
+        {
+            return;
+        }
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     private void Update() {
+        // if (!IsOwner) return;
+        if (!avatar.IsMe)
+        {
+            return;
+        }
+        ProcessCameraInput();
         ProcessCamera();
     }
 
     private void LateUpdate() {
+        //  if (!IsOwner) return;
+
+        if (!avatar.IsMe)
+        {
+            return;
+        }
         ProcessCameraCrouched();
+    }
+
+    private void ProcessCameraInput()
+    {
+        //Horizontal rotation
+        mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        if (invertCameraXAxis)
+            mouseX = -mouseX;
+
+        //Vertical rotation
+        mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+        if (invertCameraYAxis)
+            mouseY = -mouseY;
     }
 
     private void ProcessCamera() {
@@ -37,16 +73,7 @@ public class CameraMovement : MonoBehaviour {
             return;
         }
 
-        //Horizontal rotation
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        if(invertCameraXAxis)
-            mouseX = -mouseX;
         playerController.transform.Rotate(Vector3.up, mouseX);
-
-        //Vertical rotation
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
-        if(invertCameraYAxis)
-            mouseY = -mouseY;
         verticalRotation -= mouseY;
         verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
 
