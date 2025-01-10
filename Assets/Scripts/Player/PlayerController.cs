@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour {
     private GameObject animationTie;
     MishSyncAnimations mishSync;
     public bool IsCrouching { get; private set; }
+    public Roles Role { get; set; }
 
     private void Awake()
     {
