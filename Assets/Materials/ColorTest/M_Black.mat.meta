@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Materials/ColorTest/M_Black.mat.meta
 guid: b3f1f98c6b2d2be498a9a35e850cc575
 NativeFormatImporter:
+========
+guid: debbfa18e547f394381d0d7dba968650
+DefaultImporter:
+>>>>>>>> Misho_main:Assets/_AHMETMISHO/AMGameplay.unity.meta
   externalObjects: {}
   mainObjectFileID: 2100000
   userData: 

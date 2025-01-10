@@ -4,7 +4,7 @@ using UnityEngine;
 public class SymptomsManager : MonoBehaviour {
     [SerializeField] private GameObject symptomUICanvas;
     [SerializeField] private List<SymptomsSO> listOfSymptoms;
-    private SymptomsSO caughtSymptom;
+    private List<SymptomsSO> caughtSymptoms = new();
 
     private void Update() {
         ToggleCanvas();
@@ -23,22 +23,20 @@ public class SymptomsManager : MonoBehaviour {
 
     private void GiveSymptom() {
         if(symptomUICanvas.activeSelf && listOfSymptoms.Count > 0) {
-            if(Input.GetKeyDown(KeyCode.Alpha1) && caughtSymptom != listOfSymptoms[0]) {
-                caughtSymptom = listOfSymptoms[0];
+            if(Input.GetKeyDown(KeyCode.Alpha1) && !caughtSymptoms.Contains(listOfSymptoms[0])) {
+                caughtSymptoms.Add(listOfSymptoms[0]);
                 Debug.Log($"You got symptom: {listOfSymptoms[0].Name}");
             }
 
-            if(Input.GetKeyDown(KeyCode.Alpha2) && caughtSymptom != listOfSymptoms[1]) {
-                caughtSymptom = listOfSymptoms[1];
+            if(Input.GetKeyDown(KeyCode.Alpha2) && !caughtSymptoms.Contains(listOfSymptoms[1])) {
+                caughtSymptoms.Add(listOfSymptoms[1]);
                 Debug.Log($"You got symptom: {listOfSymptoms[1].Name}");
             }
 
-            if(Input.GetKeyDown(KeyCode.Alpha0) && caughtSymptom != null) {
-                caughtSymptom = null;
-                Debug.Log("Cleared symptom!");
+            if(Input.GetKeyDown(KeyCode.Alpha0) && caughtSymptoms.Count > 0) {
+                caughtSymptoms.Clear();
+                Debug.Log("Cleared all symptoms!");
             }
-
-            caughtSymptom.TriggerSymptom();
         }
     }
 }
