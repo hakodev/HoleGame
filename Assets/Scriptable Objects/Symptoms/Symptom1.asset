@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: Symptom1
   m_EditorClassIdentifier: 
   Name: Symptom 1
+  Description: 
+  OnSymptomCaught:
+    m_PersistentCalls:
+      m_Calls: []
