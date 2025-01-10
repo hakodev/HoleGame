@@ -39,7 +39,7 @@ public class Interact : AttributesSync, IObserver
 
     RigidbodySynchronizable rbToTrack;
     Rigidbody rb;
-    AnimationSynchronizable animatorSync;
+    //AnimationSynchronizable animatorSync;
 
     private void Awake()
     {
@@ -48,14 +48,14 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) { return; }
         playerController = GetComponent<PlayerController>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
-        animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
+      //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
        // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
     }
-    private void OnEnable()
-    {
-        if (!avatar.IsMe) { return; }
-        animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-    }
+  //  private void OnEnable()
+ //   {
+   //     if (!avatar.IsMe) { return; }
+  //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
+  //  }
     private void Start()
     {
         if (!avatar.IsMe) {

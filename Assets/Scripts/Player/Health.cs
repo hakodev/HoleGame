@@ -14,7 +14,7 @@ public class Health : AttributesSync {
     private PlayerController playerController;
     private Alteruna.Avatar avatar;
    // private Animator animator;
-    private AnimationSynchronizable animatorSync;
+   // private AnimationSynchronizable animatorSync;
     private CharacterController characterController;
     bool dead = false;
     private void Awake() {
@@ -22,7 +22,7 @@ public class Health : AttributesSync {
         characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
-        animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
+    //    animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
     }
 
     private void Start() {
@@ -45,7 +45,7 @@ public class Health : AttributesSync {
         Debug.Log("Player died!");
 
        // animator.SetBool("Dead", true);
-        animatorSync.Animator.SetBool("Dead", true);
+      //  animatorSync.Animator.SetBool("Dead", true);
 
         playerController.MovementEnabled = false;
         dead = true;
@@ -59,14 +59,15 @@ public class Health : AttributesSync {
 
         if (!avatar.IsMe) { return; }
 
-        if (!happenedOnce && animatorSync.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 &&
-   animatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        /*
+        if (!happenedOnce && animatorSync.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && animatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
             animatorSync.Animator.speed = 0f;
-            //animator.speed = 0f;
+            animator.speed = 0f;
             ChangeColliderAfterDeath();
             happenedOnce = true;
         }
+        */
 
     }
 
@@ -77,13 +78,12 @@ public class Health : AttributesSync {
     private void FixAnimatorOffset()
     {
         if (dead) { return; }
-        animatorSync.Animator.transform.localPosition = Vector3.zero;
-        animatorSync.Animator.transform.rotation = transform.rotation;
+      //  animatorSync.Animator.transform.localPosition = Vector3.zero;
+      //  animatorSync.Animator.transform.rotation = transform.rotation;
 
-        Vector3 temp = animatorSync.Animator.transform.Find("mixamorig:Hips").localPosition;
-        animatorSync.Animator.transform.Find("mixamorig:Hips").localPosition = new Vector3(0, temp.y, 0);
-        animatorSync.Animator.transform.Find("Human 2.001").localPosition = Vector3.zero;
-        //animationTie.transform.localPosition = new Vector3(-0.0130000003f, -0.97299999f, 0);
+    //    Vector3 temp = animatorSync.Animator.transform.Find("mixamorig:Hips").localPosition;
+     ////   animatorSync.Animator.transform.Find("mixamorig:Hips").localPosition = new Vector3(0, temp.y, 0);
+       // animatorSync.Animator.transform.Find("Human 2.001").localPosition = Vector3.zero;
     }
     private void ChangeColliderAfterDeath()
     {

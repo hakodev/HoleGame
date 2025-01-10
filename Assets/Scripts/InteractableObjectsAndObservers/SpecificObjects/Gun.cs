@@ -10,8 +10,8 @@ public class Gun : DynamicInteractableObject
     LayerMask otherPlayerLayerMask;
     [SynchronizableField] [SerializeField] int damage;
 
-    Animator playerAnimator;
-    AnimationSynchronizable playerAnimatorSync;
+   // Animator playerAnimator;
+   // AnimationSynchronizable playerAnimatorSync;
     public int Damage() {
         Debug.Log(damage);
         return damage;
@@ -30,14 +30,14 @@ public class Gun : DynamicInteractableObject
     public override void Use()
     {
         playerCamera = transform.root.Find("Camera").GetComponent<Camera>();
-        playerAnimator = transform.root.Find("Animation").GetComponent<Animator>();
-        playerAnimatorSync = transform.root.Find("Animation").GetComponent<AnimationSynchronizable>();
+      //  playerAnimator = transform.root.Find("Animation").GetComponent<Animator>();
+      //  playerAnimatorSync = transform.root.Find("Animation").GetComponent<AnimationSynchronizable>();
         Fire();
     }
     private void Fire()
     {
-        playerAnimator.SetTrigger("ShootingGun");
-        playerAnimatorSync.SetTrigger("ShootingGun");
+     //   playerAnimator.SetTrigger("ShootingGun");
+     //   playerAnimatorSync.SetTrigger("ShootingGun");
 
         // Debug.Log("Fired weapon");
         if (Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, bulletMaxDistance, otherPlayerLayerMask))
