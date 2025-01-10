@@ -27,14 +27,17 @@ public class RoleAssignment : MonoBehaviour {
 
         int randomNum;
 
-        for(int i = 0; i < maxNumOfInfiltrators; i++) {
+        for(int i = 0; i < maxNumOfInfiltrators; i++) { // Give maxNumOfInfiltrators amount of random players the infiltrator role
+
+            if(rolelessPlayers.Count == 0) break; // Just in case
+
             randomNum = Random.Range(0, rolelessPlayers.Count);
 
             rolelessPlayers[randomNum].Role = Roles.Infiltrator;
-            rolelessPlayers.RemoveAt(randomNum);
+            rolelessPlayers.RemoveAt(randomNum); // Remove the player from the roleless list after giving them a role
         }
 
-        foreach(PlayerController player in rolelessPlayers) {
+        foreach(PlayerController player in rolelessPlayers) { // Give the rest the machine role
             player.Role = Roles.Machine;
         }
 
@@ -42,25 +45,19 @@ public class RoleAssignment : MonoBehaviour {
 
         if(avatar.IsMe) { // Display the local player's role
             if(localPlayer.Role == Roles.Infiltrator) {
-                StartCoroutine(DisplayInfiltratorRole());
+                StartCoroutine(DisplayRole(infiltratorCanvas));
             }
 
             if(localPlayer.Role == Roles.Machine) {
-                StartCoroutine(DisplayMachineRole());
+                StartCoroutine(DisplayRole(machineCanvas));
             }
         }
     }
 
-    private IEnumerator DisplayInfiltratorRole() {
-        infiltratorCanvas.DOFade(1f, 1f);
-        yield return new WaitForSeconds(roleDisplayTime);
-        infiltratorCanvas.DOFade(0f, 1f);
-    }
-
-    private IEnumerator DisplayMachineRole() {
-        machineCanvas.DOFade(1f, 1f);
-        yield return new WaitForSeconds(roleDisplayTime);
-        machineCanvas.DOFade(0f, 1f);
+    private IEnumerator DisplayRole(CanvasGroup roleCanvas) {
+        roleCanvas.DOFade(1f, 1f);
+        yield return new WaitForSeconds(roleDisplayTime); // How many seconds to display it on screen
+        roleCanvas.DOFade(0f, 1f);
     }
 }
 
