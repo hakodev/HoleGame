@@ -34,9 +34,14 @@ public class PlayerController : MonoBehaviour {
 
     private void Awake()
     {
-        characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
+        characterController = GetComponent<CharacterController>();
         mishSync = GetComponent<MishSyncAnimations>();
+    }
+    private void Start()
+    {
+        if (!avatar.IsMe) { return; }
+
     }
     private void Update()
     {
@@ -90,12 +95,20 @@ public class PlayerController : MonoBehaviour {
                 if (isRunning)
                 {
                     currentSpeed = runSpeed;
+                    mishSync.SetRunning(true);
+                    mishSync.SetWalking(false);
+
                     mishSync.Running = true;
+                    mishSync.Walking = false;
                 }
                 else
                 {
                     currentSpeed = walkSpeed;
+                    mishSync.SetWalking(true);
+                    mishSync.SetRunning(false);
+
                     mishSync.Walking = true;
+                    mishSync.Running = false;
                 }
             }
 
@@ -103,8 +116,12 @@ public class PlayerController : MonoBehaviour {
         }
         if (!isMoving)
         {
+            mishSync.SetWalking(false);
+            mishSync.SetRunning(false);
+
             mishSync.Walking = false;
             mishSync.Running = false;
+
         }
 
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
@@ -129,6 +146,10 @@ public class PlayerController : MonoBehaviour {
         {
             verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
             mishSync.SetJumping(true);
+            mishSync.SetWalking(false);
+            mishSync.SetRunning(false);
+
+            mishSync.Jumping = true;
             mishSync.Walking = false;
             mishSync.Running = false;
         }

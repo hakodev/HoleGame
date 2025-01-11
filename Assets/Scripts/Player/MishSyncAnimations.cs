@@ -1,6 +1,7 @@
 using Alteruna;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 public class MishSyncAnimations : AttributesSync
 {
     [SynchronizableField] public bool Jumping;
@@ -16,34 +17,41 @@ public class MishSyncAnimations : AttributesSync
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
+    }
+    private void Start()
+    {
         animator = transform.Find("Animation").GetComponent<Animator>(); // Automatically assign Animator if not set
         mishSyncs.Add(this);
 
         mixamo = animator.transform.Find("mixamorig:Hips");
         human = animator.transform.Find("Human 2.001");
-
-        Debug.Log(gameObject.name);
     }
     public void SetJumping(bool newState)
     {
         Jumping = newState;
+        Commit();
+
     }
-    private void Start()
+    public void SetRunning(bool newState)
     {
-      //  Time.timeScale = 0.05f;
+        Running = newState;
+        Commit();
+
     }
+    public void SetWalking(bool newState)
+    {
+        Walking = newState;
+        Commit();
+    }
+
     private void Update()
     {
-        if (!avatar.IsMe) { return; }
-        foreach (MishSyncAnimations player in mishSyncs) 
-        {
-            player.FixAnimatorOffset();
-            player.animator.SetBool("Walking", player.Walking);
-            player.animator.SetBool("Running", player.Running);
-            player.animator.SetBool("Jumping", player.Jumping);
-            Debug.Log(player.gameObject.name);
-        }
+        FixAnimatorOffset();
+        animator.SetBool("Walking", Walking);
+        animator.SetBool("Running", Running);
+        animator.SetBool("Jumping", Jumping);
     }
+
     private new void LateUpdate()
     {
         foreach (MishSyncAnimations player in mishSyncs) 
@@ -53,7 +61,7 @@ public class MishSyncAnimations : AttributesSync
     }
     public void FixAnimatorOffset()
     {
-        if (!avatar.IsMe) { return; }
+        //if (!avatar.IsMe) { return; }
 
         //if (dead) { return; }
         //  animatorSync.Animator.transform.localPosition = Vector3.zero;
