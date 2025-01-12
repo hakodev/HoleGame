@@ -13,6 +13,8 @@ public class MousePainter : MonoBehaviour{
 	public float hardness = 1;
 	
 	PaintManager paintManager;
+
+	public LayerMask notPlayerMask;
 	
 	public void Start()
 	{
@@ -29,7 +31,7 @@ public class MousePainter : MonoBehaviour{
 			Ray ray = cam.ScreenPointToRay(position);
 			RaycastHit hit;
 
-			if (Physics.Raycast(ray, out hit, 100.0f)){
+			if (Physics.Raycast(ray, out hit, 100.0f, notPlayerMask)){
 				Debug.DrawRay(ray.origin, hit.point - ray.origin, Color.red);
 				transform.position = hit.point;
 				Paintable p = hit.collider.GetComponent<Paintable>();

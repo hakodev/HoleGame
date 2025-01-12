@@ -171,7 +171,7 @@ public class Interact : AttributesSync, IObserver
         LayerMask everythingButHeldObject = ~(1 << 11);
 
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject))
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
         {
             SetLayerRecursively(heldObject, 7);
 
@@ -221,6 +221,10 @@ public class Interact : AttributesSync, IObserver
         Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
         currentThrowStrength = 0;
         if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
+        if (heldObject.GetComponent<CoffeeCup>())
+        {
+            heldObject.GetComponent<CoffeeCup>().SpecialInteraction(InteractionEnum.CoffeeStain, this);
+        }
 
         Debug.DrawRay(heldObject.transform.position, rbToTrack.velocity, Color.magenta);
         Debug.DrawRay(heldObject.transform.position, rb.angularVelocity, Color.green);
