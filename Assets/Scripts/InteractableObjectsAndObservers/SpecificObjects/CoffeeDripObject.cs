@@ -29,15 +29,15 @@ public class CoffeeDripObject : MonoBehaviour
 
     public void EnableDrip()
     {
-        StartCoroutine(LerpDrip());
+        StartCoroutine(LerpDrip(finalThreshold, startScale, endScale));
     }
 
-    public void OnDisable()
+    public void DisableDrip()
     {
-
+        StartCoroutine(LerpDrip(0.5f, endScale, new Vector2(0, 0)));
     }
 
-    public IEnumerator LerpDrip()
+    public IEnumerator LerpDrip(float finalThreshold, Vector2 startScale, Vector2 endScale)
     {
         float startThreshold = material.GetFloat("_CoffeeNoiseThreshold");
 
@@ -50,5 +50,7 @@ public class CoffeeDripObject : MonoBehaviour
             t += Time.deltaTime * 0.6f;
             yield return new WaitForEndOfFrame();
         }
+
+        Invoke("DisableDrip", 2);
     }
 }

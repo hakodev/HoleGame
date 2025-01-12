@@ -21,6 +21,20 @@ public class PaintManager : MonoBehaviour{
     Material extendMaterial;
 
     CommandBuffer command;
+    private static PaintManager instance;
+
+    public static PaintManager Instance
+    { 
+        get 
+        { 
+            if(instance == null)
+            {
+                instance = FindAnyObjectByType<PaintManager>();
+            }
+
+            return instance;
+        } 
+    }
 
     public void Awake(){
         

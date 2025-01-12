@@ -2117,7 +2117,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 40.0,
+    "m_Value": 4.0,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
@@ -4264,7 +4264,7 @@
     "m_ObjectId": "76323c6b8d4f4941909a2ea11ff379f9",
     "m_Title": "Ink",
     "m_Position": {
-        "x": -4044.0,
+        "x": -4044.000244140625,
         "y": -787.0
     }
 }
@@ -7748,10 +7748,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1501.000244140625,
-            "y": -116.99996185302735,
-            "width": 129.99998474121095,
-            "height": 142.0
+            "x": -1422.0001220703125,
+            "y": -133.99998474121095,
+            "width": 208.0,
+            "height": 326.0
         }
     },
     "m_Slots": [
@@ -7807,7 +7807,7 @@
     "m_Title": "Glitter",
     "m_Position": {
         "x": -3900.0,
-        "y": 907.0
+        "y": 906.9998779296875
     }
 }
 
