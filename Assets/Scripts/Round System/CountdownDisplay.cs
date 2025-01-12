@@ -1,10 +1,14 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class CountdownTV : MonoBehaviour {
+public class CountdownDisplay : MonoBehaviour {
     private TMP_Text countdown;
-    private int time = 60;
+    [SerializeField] private int time;
+    [SerializeField] private int secondsRemainingToTurnRed;
+    [SerializeField] private UnityEvent OnTimerEnd;
 
     private void Awake() {
         countdown = GetComponent<TMP_Text>();
@@ -26,5 +30,7 @@ public class CountdownTV : MonoBehaviour {
                 countdown.color = Color.red;
             }
         }
+
+        OnTimerEnd?.Invoke();
     }
 }
