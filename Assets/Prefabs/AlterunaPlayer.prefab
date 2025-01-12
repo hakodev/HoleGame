@@ -754,7 +754,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.2
+  m_Radius: 0.24
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -856,6 +856,7 @@ MonoBehaviour:
   LocalMethodBehavior: 1
   Jumping: 0
   animationSmoothing: 1
+  reversingDirectionAnimationSpeedMultiplier: 0
 --- !u!1 &2565612880506949840
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,11 +1030,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -3562,6 +3563,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 8805186453696645239}
+    - target: {fileID: 4856200224544577376, guid: 096c355905c9aa44b9432355780b5385, type: 3}
+      propertyPath: notPlayerMask.m_Bits
+      value: 3007
+      objectReference: {fileID: 0}
     - target: {fileID: 8590169862041753155, guid: 096c355905c9aa44b9432355780b5385, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.39870167
