@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/DrawingStuff.meta
 guid: 15259371ed3ba144aafec92cc13cf84d
+========
+guid: 080919df787cbe34495a4fb74d5a6c64
+>>>>>>>> origin/Friedrich_main:Assets/Textures/Textures/T_Computer.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

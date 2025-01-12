@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Animation/MishImported.meta
 guid: ef417b51c52dcd846813764f56082227
+========
+guid: 244992bd5c611c84f8bd065ca5d3d557
+>>>>>>>> origin/Friedrich_main:Assets/Textures/Textures/T_Mouse.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

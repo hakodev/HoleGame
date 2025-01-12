@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/_AHMETMISHO/LevelDesign.unity.meta
 guid: 7210550e56029df49a0bf41dd7e1bc4b
+========
+guid: 26ee38488722af74680ac133027b4305
+folderAsset: yes
+>>>>>>>> origin/Friedrich_main:Assets/Meshes/Prefab.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

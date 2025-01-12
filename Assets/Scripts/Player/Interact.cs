@@ -333,6 +333,8 @@ public class Interact : AttributesSync, IObserver
             DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+
+
         }
         else
         {
