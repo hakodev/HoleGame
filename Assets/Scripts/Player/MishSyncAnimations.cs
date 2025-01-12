@@ -22,6 +22,7 @@ public class MishSyncAnimations : AttributesSync
     [SerializeField] float animationSmoothing;
     [SynchronizableField]Vector2 currentAnimDot = Vector3.zero;
     [SynchronizableField]Vector2 targetAnimDot = Vector3.zero;
+    [SerializeField] float reversingDirectionAnimationSpeedMultiplier;
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -75,17 +76,18 @@ public class MishSyncAnimations : AttributesSync
     }
     private void UpdateCurrentAnimDot()
     {
-        //there is a weird sliding movement, maybe if direction is completely opposite tp the current to the idle
+        //  if (targetAnimDot!=Vector2.zero && currentAnimDot!=Vector2.zero && Mathf.Abs(currentAnimDot.x - targetAnimDot.x) < 0.01f) currentAnimDot.x = targetAnimDot.x;
+        // if (targetAnimDot!=Vector2.zero && currentAnimDot!=Vector2.zero && Mathf.Abs(currentAnimDot.y - targetAnimDot.y) < 0.01f) currentAnimDot.y = targetAnimDot.y;
 
-        if (targetAnimDot!=Vector2.zero && currentAnimDot!=Vector2.zero && Mathf.Abs(currentAnimDot.x - targetAnimDot.x) < 0.05f) currentAnimDot.x = targetAnimDot.x;
-        if (targetAnimDot!=Vector2.zero && currentAnimDot!=Vector2.zero && Mathf.Abs(currentAnimDot.y - targetAnimDot.y) < 0.05f) currentAnimDot.y = targetAnimDot.y;
-        
+        float reversingMultiplier = 1f;
+        if (targetAnimDot.x != 0 && Mathf.Sign(currentAnimDot.x) != Mathf.Sign(targetAnimDot.x)) reversingMultiplier = reversingDirectionAnimationSpeedMultiplier;
+        if (targetAnimDot.y !=0 && Mathf.Sign(currentAnimDot.y) != Mathf.Sign(targetAnimDot.y)) reversingMultiplier = reversingDirectionAnimationSpeedMultiplier;
         
 
-        if (currentAnimDot.x < targetAnimDot.x) currentAnimDot.x += Time.deltaTime * animationSmoothing;
-        if(currentAnimDot.x>targetAnimDot.x) currentAnimDot.x -= Time.deltaTime * animationSmoothing;  
-        if (currentAnimDot.y < targetAnimDot.y) currentAnimDot.y += Time.deltaTime * animationSmoothing;
-        if (currentAnimDot.y > targetAnimDot.y) currentAnimDot.y -= Time.deltaTime * animationSmoothing;
+        if (currentAnimDot.x < targetAnimDot.x) currentAnimDot.x += Time.deltaTime * animationSmoothing * reversingMultiplier;
+        if(currentAnimDot.x>targetAnimDot.x) currentAnimDot.x -= Time.deltaTime * animationSmoothing * reversingMultiplier;  
+        if (currentAnimDot.y < targetAnimDot.y) currentAnimDot.y += Time.deltaTime * animationSmoothing * reversingMultiplier;
+        if (currentAnimDot.y > targetAnimDot.y) currentAnimDot.y -= Time.deltaTime * animationSmoothing * reversingMultiplier;
 
     }
     private void TranslateStatesIntoAnimationStates()
@@ -93,8 +95,8 @@ public class MishSyncAnimations : AttributesSync
         //misc variables
         if (Shooting)
         {
-            SetShooting(false);
             animator.SetTrigger("Shooting");
+            SetShooting(false);
         }
 
         animator.SetBool("Jumping", Jumping);

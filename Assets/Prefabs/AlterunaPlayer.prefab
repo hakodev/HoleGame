@@ -824,7 +824,6 @@ MonoBehaviour:
   _uidString: de3dc5d3-98de-4284-b100-d333bd162e74
   Reliability: 1
   LocalMethodBehavior: 1
-  debugDeathMaterial: {fileID: 0}
 --- !u!114 &10831237468437592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,7 +855,7 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   Jumping: 0
-  animationSmoothing: 2
+  animationSmoothing: 1
 --- !u!1 &2565612880506949840
 GameObject:
   m_ObjectHideFlags: 0

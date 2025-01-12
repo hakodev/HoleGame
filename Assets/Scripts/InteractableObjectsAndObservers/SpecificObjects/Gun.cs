@@ -41,10 +41,10 @@ public class Gun : DynamicInteractableObject
             {
                 Debug.Log("BULLSEYE!");
                 hit.collider.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.ShotWithGun, this);
-                playerAnim.SetShooting(true);
             }
         }
         currentAmmo--;
+        playerAnim.SetShooting(true);
     }
     private void Reload()
     {
