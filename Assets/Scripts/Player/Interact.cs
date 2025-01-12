@@ -41,6 +41,8 @@ public class Interact : AttributesSync, IObserver
     Rigidbody rb;
     //AnimationSynchronizable animatorSync;
 
+    private Transform currentOutlinedObject;
+
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -108,7 +110,7 @@ public class Interact : AttributesSync, IObserver
             if (finishedPickUp)
             {
                 //isChargingUp = false;
-//                heldObject.GetComponent<Rigidbody>().useGravity = true;
+                //                heldObject.GetComponent<Rigidbody>().useGravity = true;
 
                 if (currentChargeUpTime > minMaxThrowChargeUpTime.x)
                 {
@@ -136,35 +138,93 @@ public class Interact : AttributesSync, IObserver
                 isChargingUp = true;
                 AnimateWindUpChanrgebar();
             }
-            else
+        }
+
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (heldObject != null)
             {
-                RaycastHit hit;
-                if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, dynamicLayerMask))
+                heldObject.GetComponent<DynamicInteractableObject>().Use();
+            }
+
+        }
+
+        RaycastHit hit;
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, interactableLayerMask))
+        {
+            ApplyOutline(hit.transform.gameObject);
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("StationaryInteractableObject"))
+                {
+                    hit.transform.gameObject.GetComponent<StationaryInteractableObject>().Use();
+                }
+
+            }
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
                 {
                     TryPickUp(hit.transform.gameObject);
                     finishedPickUp = false;
                 }
             }
         }
-
-
-        if (Input.GetMouseButtonDown(1))
+        else
         {
-            //if raycast with stationary, prioritize it
-            RaycastHit hit;
-            if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, stationaryLayerMask))
-            {
-                hit.transform.gameObject.GetComponent<StationaryInteractableObject>().Use();
-            }
-            else
-            {
-                if (heldObject != null)
-                {
-                    heldObject.GetComponent<DynamicInteractableObject>().Use();
-                }
-            }
+            ApplyOutline(null);
         }
     }
+
+    private void ApplyOutline(GameObject objectToApply)
+    {
+        List<GameObject> tempChildList = new List<GameObject>();
+        if (objectToApply == currentOutlinedObject)
+        {
+            return;
+        }
+        if (currentOutlinedObject != null && objectToApply != currentOutlinedObject)
+        {
+            ChangeChildrenLayers("Default", tempChildList);
+
+        }
+        
+        if(objectToApply == null) return;
+
+        currentOutlinedObject = objectToApply.transform;
+
+        ChangeChildrenLayers("OutlineLayer", tempChildList);
+    }
+    
+    private void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
+    {
+        GetChildRecursive(currentOutlinedObject.gameObject, tempChildList);
+        foreach (GameObject child in tempChildList)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer(layerName);
+        }
+        tempChildList.Clear();
+
+    }
+
+    private void GetChildRecursive(GameObject obj, List<GameObject> tempChildList)
+    {
+        if (null == obj)
+            return;
+
+        foreach (Transform child in obj.transform)
+        {
+            if (null == child)
+                continue;
+            //child.gameobject contains the current child you can do whatever you want like add it to an array
+            tempChildList.Add(child.gameObject);
+            GetChildRecursive(child.gameObject, tempChildList);
+        }
+    }
+
+
     private void Place()
     {
         SetLayerRecursively(heldObject, 11);

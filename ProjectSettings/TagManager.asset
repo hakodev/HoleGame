@@ -19,7 +19,7 @@ TagManager:
   - PlayerLayer
   - SelfPlayerLayer
   - HeldObject
-  - 
+  - OutlineLayer
   - 
   - 
   - 

@@ -7,40 +7,29 @@ public class CoffeeDripObject : MonoBehaviour
     private Material material;
 
     public float finalThreshold;
+    float startThreshold;
 
     public Vector2 startScale;
     public Vector2 endScale;
 
-
-
     private void Start()
     {
         material = GetComponent<Renderer>().material;
-        
-    }
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            EnableDrip();
-        }
+        startThreshold = material.GetFloat("_CoffeeNoiseThreshold");
     }
 
     public void EnableDrip()
     {
-        StartCoroutine(LerpDrip(finalThreshold, startScale, endScale));
+        StartCoroutine(LerpDripUp());
     }
 
     public void DisableDrip()
     {
-        StartCoroutine(LerpDrip(0.5f, endScale, new Vector2(0, 0)));
+        StartCoroutine(LerpDripDown());
     }
 
-    public IEnumerator LerpDrip(float finalThreshold, Vector2 startScale, Vector2 endScale)
+    public IEnumerator LerpDripUp()
     {
-        float startThreshold = material.GetFloat("_CoffeeNoiseThreshold");
-
         float t = 0;
 
         while (t < 1)
@@ -51,6 +40,22 @@ public class CoffeeDripObject : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        Invoke("DisableDrip", 2);
+        Invoke("DisableDrip",2);
+
+    }
+
+    public IEnumerator LerpDripDown()
+    {
+        float t = 0;
+
+        while (t < 1)
+        {
+            material.SetFloat("_CoffeeNoiseThreshold", Mathf.Lerp(finalThreshold, 0.5f, t));
+            transform.localScale = Vector3.Lerp(new Vector3(endScale.x, endScale.y, transform.localScale.z), new Vector3(0,0, transform.localScale.z), t);
+            t += Time.deltaTime * 0.6f;
+            yield return new WaitForEndOfFrame();
+        }
+
+
     }
 }
