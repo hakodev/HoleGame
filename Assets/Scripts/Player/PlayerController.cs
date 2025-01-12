@@ -61,9 +61,6 @@ public class PlayerController : MonoBehaviour {
         ProcessMovement();
     }
 
-
-
-
     private void ProcessInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
