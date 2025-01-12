@@ -48,17 +48,18 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) { return; }
         playerController = GetComponent<PlayerController>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
-      //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
-       // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
+        //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
+        // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
     }
-  //  private void OnEnable()
- //   {
-   //     if (!avatar.IsMe) { return; }
-  //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-  //  }
+    //  private void OnEnable()
+    //   {
+    //     if (!avatar.IsMe) { return; }
+    //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
+    //  }
     private void Start()
     {
-        if (!avatar.IsMe) {
+        if (!avatar.IsMe)
+        {
             int playerLayer = LayerMask.NameToLayer("PlayerLayer");
             gameObject.layer = playerLayer;
             SetLayerRecursively(gameObject, playerLayer);
@@ -108,7 +109,7 @@ public class Interact : AttributesSync, IObserver
             if (finishedPickUp)
             {
                 //isChargingUp = false;
-//                heldObject.GetComponent<Rigidbody>().useGravity = true;
+                //                heldObject.GetComponent<Rigidbody>().useGravity = true;
 
                 if (currentChargeUpTime > minMaxThrowChargeUpTime.x)
                 {
@@ -233,9 +234,9 @@ public class Interact : AttributesSync, IObserver
         Renderer[] temp = obj.GetComponentsInChildren<Renderer>();
         List<Renderer> renderers = new List<Renderer>();
 
-        for(int i=0; i<temp.Length; i++)
+        for (int i = 0; i < temp.Length; i++)
         {
-            if (temp[i]!=null)
+            if (temp[i] != null)
             {
                 renderers.Add(temp[i]);
             }
@@ -247,7 +248,7 @@ public class Interact : AttributesSync, IObserver
 
             for (int i = 0; i < renderers.Count; i++)
             {
-                if (renderers[i] != null) 
+                if (renderers[i] != null)
                 {
                     combinedBounds.Encapsulate(renderers[i].bounds);
                 }
@@ -297,7 +298,7 @@ public class Interact : AttributesSync, IObserver
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
-       // rbToTrack.enabled = true;
+        // rbToTrack.enabled = true;
         heldObject = null;
         rbToTrack = null;
         rb = null;
@@ -360,7 +361,7 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
-  
+
 
 
     //art stuff
