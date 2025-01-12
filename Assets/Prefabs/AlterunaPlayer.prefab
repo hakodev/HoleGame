@@ -266,7 +266,7 @@ Animator:
   m_GameObject: {fileID: 996233025567766754}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: ffea88ef3d2e65543b961960cd7e4afb, type: 3}
-  m_Controller: {fileID: 9100000, guid: 239214dd3da8b604199588410cb338ef, type: 2}
+  m_Controller: {fileID: 9100000, guid: d9a8166066a15a74ab768dd768e148b5, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -777,9 +777,11 @@ MonoBehaviour:
   runSpeed: 4.5
   crouchSpeed: 1.24
   crouchRunSpeed: 1.65
+  walkSpeedBack: 1.96
+  runSpeedBack: 3.15
   gravityMultiplier: 1.75
-  jumpHeight: 3.8
-  crouchedJumpHeight: 2.3
+  jumpHeight: 2.2
+  crouchedJumpHeight: 4
 --- !u!114 &6819232429365655515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -854,8 +856,7 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   Jumping: 0
-  Walking: 0
-  Running: 0
+  animationSmoothing: 2
 --- !u!1 &2565612880506949840
 GameObject:
   m_ObjectHideFlags: 0
@@ -3145,7 +3146,7 @@ Transform:
   m_GameObject: {fileID: 8545988785631638419}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.03829667, z: -0, w: 0.99926645}
-  m_LocalPosition: {x: 226.30522, y: -1.5, z: 0.5119997}
+  m_LocalPosition: {x: 0.147, y: -0.031, z: 0.647}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

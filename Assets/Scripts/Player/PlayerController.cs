@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float runSpeed;
     [SerializeField] private float crouchSpeed;
     [SerializeField] private float crouchRunSpeed;
+    [SerializeField] private float walkSpeedBack;
+    [SerializeField] private float runSpeedBack;
 
     [Header("Jumping & Physics")]
     [SerializeField] private float gravityMultiplier;
@@ -67,6 +69,7 @@ public class PlayerController : MonoBehaviour {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
         isMoving = horizontalInput != 0 || verticalInput != 0;
+        mishSync.SetInputDirection(new Vector2(horizontalInput, verticalInput));
 
         isRunning = isMoving && Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         IsCrouching = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
@@ -79,14 +82,15 @@ public class PlayerController : MonoBehaviour {
 
         if (IsCrouching)
         {
+            mishSync.SetStance(StanceEnum.Crouching);
+
             //  currentSpeed = isRunning ? crouchRunSpeed : crouchSpeed;
             if (isMoving)
             {
                 //crouching walking animation
                 currentSpeed = crouchSpeed;
             }
-            //  currentjumpHeight = crouchedJumpHeight;
-            currentjumpHeight = jumpHeight;
+            currentjumpHeight = crouchedJumpHeight;
         }
         else
         {
@@ -95,33 +99,22 @@ public class PlayerController : MonoBehaviour {
                 if (isRunning)
                 {
                     currentSpeed = runSpeed;
-                    mishSync.SetRunning(true);
-                    mishSync.SetWalking(false);
-
-                    mishSync.Running = true;
-                    mishSync.Walking = false;
+                    if (verticalInput < 0) currentSpeed = runSpeedBack;
+                    mishSync.SetStance(StanceEnum.Running);
                 }
                 else
                 {
                     currentSpeed = walkSpeed;
-                    mishSync.SetWalking(true);
-                    mishSync.SetRunning(false);
-
-                    mishSync.Walking = true;
-                    mishSync.Running = false;
+                    if (verticalInput < 0) currentSpeed = walkSpeedBack;
+                    mishSync.SetStance(StanceEnum.Walking);
                 }
+            }
+            else
+            {
+                mishSync.SetStance(StanceEnum.Walking);
             }
 
             currentjumpHeight = jumpHeight;
-        }
-        if (!isMoving)
-        {
-            mishSync.SetWalking(false);
-            mishSync.SetRunning(false);
-
-            mishSync.Walking = false;
-            mishSync.Running = false;
-
         }
 
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
@@ -146,12 +139,6 @@ public class PlayerController : MonoBehaviour {
         {
             verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
             mishSync.SetJumping(true);
-            mishSync.SetWalking(false);
-            mishSync.SetRunning(false);
-
-            mishSync.Jumping = true;
-            mishSync.Walking = false;
-            mishSync.Running = false;
         }
         finalMovement += verticalVelocity * Time.deltaTime;
 
