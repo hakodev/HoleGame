@@ -31,6 +31,11 @@ public class PlayerController : MonoBehaviour {
     private Alteruna.Avatar avatar;
     private GameObject animationTie;
     MishSyncAnimations mishSync;
+
+    [Header("Nerd SHIT - Programming")]
+    [SerializeField] Transform cameraTransform;
+    [SerializeField] Transform moveTransform;
+
     public bool IsCrouching { get; private set; }
     public Roles Role { get; set; }
 
@@ -118,7 +123,9 @@ public class PlayerController : MonoBehaviour {
         }
 
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        Vector3 finalMovement = currentSpeed * Time.deltaTime * transform.TransformDirection(moveDirection);
+
+        moveTransform.localRotation = Quaternion.Euler(new Vector3(0, cameraTransform.localEulerAngles.y, 0));
+        Vector3 finalMovement = currentSpeed * Time.deltaTime * moveTransform.TransformDirection(moveDirection);
 
         if (characterController.isGrounded && verticalVelocity.y < 0)
         {

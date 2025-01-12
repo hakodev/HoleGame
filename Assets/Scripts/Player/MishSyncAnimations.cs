@@ -22,6 +22,11 @@ public class MishSyncAnimations : AttributesSync
     [SerializeField] float animationSmoothing;
     [SynchronizableField]Vector2 currentAnimDot = Vector3.zero;
     [SynchronizableField]Vector2 targetAnimDot = Vector3.zero;
+
+    public Vector2 GetTargetAnimDot()
+    {
+        return targetAnimDot;   
+    }
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
