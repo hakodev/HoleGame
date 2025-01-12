@@ -6,15 +6,20 @@
   <members>
     <member name="T:Alteruna.AnimationSynchronizable">
       <summary>
-            Synchronizable Animator component.
-            </summary>
+             Synchronizable Animator component.
+             </summary>
       <remarks>
-            In most cases, you should avoid synchronizing the animations as they are usually not deterministic and can be performed from actions directly.
-            For example, instead of playing walk animation, you should consider animating based on the velocity of the character locally.
-            </remarks>
+            	In most cases, you should avoid synchronizing the animations as they are usually not deterministic and can be performed from actions directly.
+             For example, instead of playing walk animation, you should consider animating based on the velocity of the character locally.
+             </remarks>
     </member>
     <member name="F:Alteruna.AnimationSynchronizable.Animator"></member>
     <member name="M:Alteruna.AnimationSynchronizable.AnimatorUpdate(System.Single)"></member>
+    <member name="F:Alteruna.AnimationSynchronizable.OnlyCommitNewStates">
+      <summary>
+            If true, only commit new states in SetBool, SetInteger, and SetFloat methods.
+            </summary>
+    </member>
     <member name="M:Alteruna.AnimationSynchronizable.Play(System.Int32)"></member>
     <member name="M:Alteruna.AnimationSynchronizable.Play(System.Int32,System.Int32)"></member>
     <member name="M:Alteruna.AnimationSynchronizable.Play(System.Int32,System.Int32,System.Single)"></member>
@@ -23,6 +28,8 @@
     <member name="M:Alteruna.AnimationSynchronizable.Play(System.String,System.Int32,System.Single)"></member>
     <member name="M:Alteruna.AnimationSynchronizable.Rebind"></member>
     <member name="M:Alteruna.AnimationSynchronizable.Reset"></member>
+    <member name="M:Alteruna.AnimationSynchronizable.ResetTrigger(System.Int32)"></member>
+    <member name="M:Alteruna.AnimationSynchronizable.ResetTrigger(System.String)"></member>
     <member name="M:Alteruna.AnimationSynchronizable.SetBool(System.Int32,System.Boolean)"></member>
     <member name="M:Alteruna.AnimationSynchronizable.SetBool(System.String,System.Boolean)"></member>
     <member name="M:Alteruna.AnimationSynchronizable.SetFloat(System.Int32,System.Single)"></member>
@@ -3315,7 +3322,7 @@
             The recording device is set to the default microphone.
             </summary>
     </member>
-    <member name="F:Alteruna.VoiceSynchronizable.Microphone">
+    <member name="P:Alteruna.VoiceSynchronizable.Microphone">
       <summary>
             Audio input method.
             </summary>

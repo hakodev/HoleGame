@@ -1,0 +1,181 @@
+using Alteruna;
+using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using VolFx;
+using UnityEngine.InputSystem.LowLevel;
+public class MishSyncAnimations : AttributesSync
+{
+    [SynchronizableField] public bool Jumping;
+    [SynchronizableField] bool Shooting;
+
+    [SynchronizableField] private StanceEnum stance;
+
+    private Alteruna.Avatar avatar;
+    private Animator animator;
+    private static List<MishSyncAnimations> mishSyncs = new List<MishSyncAnimations>();
+
+    private Transform mixamo;
+    private Transform human;
+
+    [SerializeField] float animationSmoothing;
+    [SynchronizableField]Vector2 currentAnimDot = Vector3.zero;
+    [SynchronizableField]Vector2 targetAnimDot = Vector3.zero;
+    [SerializeField] float reversingDirectionAnimationSpeedMultiplier;
+    private void Awake()
+    {
+        avatar = GetComponent<Alteruna.Avatar>();
+    }
+    private void Start()
+    {
+        animator = transform.Find("Animation").GetComponent<Animator>(); // Automatically assign Animator if not set
+        mishSyncs.Add(this);
+
+        mixamo = animator.transform.Find("mixamorig:Hips");
+        human = animator.transform.Find("Human 2.001");
+
+        stance = StanceEnum.Walking;
+    }
+    public void SetStance(StanceEnum newStance)
+    {
+        stance = newStance;
+        Commit();
+    }
+    public void SetJumping(bool newState)
+    {
+        Jumping = newState;
+        Commit();
+    }
+    public void SetShooting(bool newState)
+    {
+        Shooting = newState;
+        Commit();
+    }
+    public void SetInputDirection(Vector2 newInputDirection)
+    {
+        //open the fluid tree
+        if (stance == StanceEnum.Running) 
+        {
+            targetAnimDot = newInputDirection;
+           // if (newInputDirection.x != 0 && newInputDirection.y != 0) targetAnimDot = new Vector2(targetAnimDot.x * Mathf.Sign(targetAnimDot.x), targetAnimDot.y * Mathf.Sign(targetAnimDot.y));
+        }
+        else
+        {
+            targetAnimDot = newInputDirection / 2;
+          //  if (newInputDirection.x != 0 && newInputDirection.y != 0) targetAnimDot = new Vector2(targetAnimDot.x * Mathf.Sign(targetAnimDot.x), targetAnimDot.y * Mathf.Sign(targetAnimDot.y));
+        }
+        Commit();
+    }
+
+    private void Update()
+    {
+        FixAnimatorOffset();
+        UpdateCurrentAnimDot();
+        TranslateStatesIntoAnimationStates();
+    }
+    private void UpdateCurrentAnimDot()
+    {
+        //  if (targetAnimDot!=Vector2.zero && currentAnimDot!=Vector2.zero && Mathf.Abs(currentAnimDot.x - targetAnimDot.x) < 0.01f) currentAnimDot.x = targetAnimDot.x;
+        // if (targetAnimDot!=Vector2.zero && currentAnimDot!=Vector2.zero && Mathf.Abs(currentAnimDot.y - targetAnimDot.y) < 0.01f) currentAnimDot.y = targetAnimDot.y;
+
+        float reversingMultiplier = 1f;
+        if (targetAnimDot.x != 0 && Mathf.Sign(currentAnimDot.x) != Mathf.Sign(targetAnimDot.x)) reversingMultiplier = reversingDirectionAnimationSpeedMultiplier;
+        if (targetAnimDot.y !=0 && Mathf.Sign(currentAnimDot.y) != Mathf.Sign(targetAnimDot.y)) reversingMultiplier = reversingDirectionAnimationSpeedMultiplier;
+        
+
+        if (currentAnimDot.x < targetAnimDot.x) currentAnimDot.x += Time.deltaTime * animationSmoothing * reversingMultiplier;
+        if(currentAnimDot.x>targetAnimDot.x) currentAnimDot.x -= Time.deltaTime * animationSmoothing * reversingMultiplier;  
+        if (currentAnimDot.y < targetAnimDot.y) currentAnimDot.y += Time.deltaTime * animationSmoothing * reversingMultiplier;
+        if (currentAnimDot.y > targetAnimDot.y) currentAnimDot.y -= Time.deltaTime * animationSmoothing * reversingMultiplier;
+
+    }
+    private void TranslateStatesIntoAnimationStates()
+    {
+        //misc variables
+        if (Shooting)
+        {
+            animator.SetTrigger("Shooting");
+            SetShooting(false);
+        }
+
+        animator.SetBool("Jumping", Jumping);
+
+        //stances
+        foreach (StanceEnum s in Enum.GetValues(typeof(StanceEnum)))
+        {
+            if (stance != s)// && s != StanceEum.Ignore)
+            {
+                animator.SetBool(s.ToString(), false);
+            }
+        }
+        //if (stance != StanceEum.Ignore)
+        animator.SetBool(stance.ToString(), true);
+
+
+        //direction
+
+
+        animator.SetFloat("Horizontal", currentAnimDot.x);
+        animator.SetFloat("Vertical", currentAnimDot.y);
+    }
+
+
+
+    private new void LateUpdate()
+    {
+        foreach (MishSyncAnimations player in mishSyncs) 
+        {
+            FixAnimatorOffset();
+        }
+    }
+    public void FixAnimatorOffset()
+    {
+
+        if (stance== StanceEnum.Dead) { return; }
+
+
+        animator.transform.localPosition = Vector3.zero;
+        animator.transform.rotation = transform.rotation;
+
+        Vector3 temp = mixamo.localPosition;
+        mixamo.localPosition = new Vector3(0, temp.y, 0);
+        human.localPosition = Vector3.zero;
+    }
+}
+
+public enum StanceEnum
+{
+    Dead,
+    Crouching,
+    Walking,
+    Running
+}
+
+/*
+if (!happenedOnce && animatorSync.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && animatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+{
+    animatorSync.Animator.speed = 0f;
+    animator.speed = 0f;
+    ChangeColliderAfterDeath();
+    happenedOnce = true;
+}
+*/
+
+
+
+
+/*
+public enum DirectionalEnum
+{
+    Idle,
+    Forward,
+    Backward,
+    Left,
+    Right,
+    ForwardLeft,
+    ForwardRight,
+    BackwardLeft,
+    BackwardRight,
+}
+*/

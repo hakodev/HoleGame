@@ -28,8 +28,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
                 return avatar;
             }
         }
-
-        Debug.LogWarning($"No avatar found for Owner Index: {ownerIndex}");
         return null;
     }
 }

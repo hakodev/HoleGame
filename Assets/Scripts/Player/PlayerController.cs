@@ -1,7 +1,9 @@
 using UnityEngine;
 using Alteruna;
-
+using NUnit.Framework;
+using System.Collections.Generic;
 public class PlayerController : MonoBehaviour {
+
     [field: SerializeField] public bool MovementEnabled { get; set; } = true;
 
     [Header("Movement")]
@@ -9,6 +11,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float runSpeed;
     [SerializeField] private float crouchSpeed;
     [SerializeField] private float crouchRunSpeed;
+    [SerializeField] private float walkSpeedBack;
+    [SerializeField] private float runSpeedBack;
 
     [Header("Jumping & Physics")]
     [SerializeField] private float gravityMultiplier;
@@ -25,21 +29,24 @@ public class PlayerController : MonoBehaviour {
     private float verticalInput;
 
     private Alteruna.Avatar avatar;
-    private Animator animator;
-    private AnimationSynchronizable animatorSync;
     private GameObject animationTie;
+    MishSyncAnimations mishSync;
     public bool IsCrouching { get; private set; }
-
     public Roles Role { get; set; }
 
-    private void Awake() {
-        characterController = GetComponent<CharacterController>();
+    private void Awake()
+    {
         avatar = GetComponent<Alteruna.Avatar>();
-        animator = transform.Find("Animation").GetComponent<Animator>(); // Automatically assign Animator if not set
-        animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
+        characterController = GetComponent<CharacterController>();
+        mishSync = GetComponent<MishSyncAnimations>();
     }
+    private void Start()
+    {
+        if (!avatar.IsMe) { return; }
 
-    private void Update() {
+    }
+    private void Update()
+    {
 
         if (!avatar.IsMe) { return; }
 
@@ -56,98 +63,94 @@ public class PlayerController : MonoBehaviour {
 
 
 
+
     private void ProcessInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
         isMoving = horizontalInput != 0 || verticalInput != 0;
+        mishSync.SetInputDirection(new Vector2(horizontalInput, verticalInput));
 
         isRunning = isMoving && Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         IsCrouching = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
     }
-    private void ProcessMovement() {
+    private void ProcessMovement()
+    {
 
         float currentSpeed = 0f;
         float currentjumpHeight;
 
-        if(IsCrouching) {
+        if (IsCrouching)
+        {
+            mishSync.SetStance(StanceEnum.Crouching);
+
             //  currentSpeed = isRunning ? crouchRunSpeed : crouchSpeed;
-            if (isMoving) 
+            if (isMoving)
             {
                 //crouching walking animation
                 currentSpeed = crouchSpeed;
             }
-            //  currentjumpHeight = crouchedJumpHeight;
-            currentjumpHeight = jumpHeight;
-        } else {
-            if(isMoving)
+            currentjumpHeight = crouchedJumpHeight;
+        }
+        else
+        {
+            if (isMoving)
             {
                 if (isRunning)
                 {
                     currentSpeed = runSpeed;
-                    animator.SetBool("Running", true);
-                    animator.SetBool("Walking", false);
-
-                    animatorSync.SetBool("Running", true);
-                    animatorSync.SetBool("Walking", false);
+                    if (verticalInput < 0) currentSpeed = runSpeedBack;
+                    mishSync.SetStance(StanceEnum.Running);
                 }
                 else
                 {
                     currentSpeed = walkSpeed;
-                    animator.SetBool("Walking", true);
-                    animator.SetBool("Running", false);
-
-                    animatorSync.SetBool("Walking", true);
-                    animatorSync.SetBool("Running", false);
+                    if (verticalInput < 0) currentSpeed = walkSpeedBack;
+                    mishSync.SetStance(StanceEnum.Walking);
                 }
             }
-           
-            currentjumpHeight = jumpHeight;
-        }
-        if(!isMoving)
-        {
-            animator.SetBool("Running", false);
-            animator.SetBool("Walking", false);
+            else
+            {
+                mishSync.SetStance(StanceEnum.Walking);
+            }
 
-            animatorSync.SetBool("Running", false);
-            animatorSync.SetBool("Walking", false);
+            currentjumpHeight = jumpHeight;
         }
 
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
         Vector3 finalMovement = currentSpeed * Time.deltaTime * transform.TransformDirection(moveDirection);
 
-        if(characterController.isGrounded && verticalVelocity.y < 0) {
+        if (characterController.isGrounded && verticalVelocity.y < 0)
+        {
             verticalVelocity.y = -startingVerticalVelocity;
-        } else {
+        }
+        else
+        {
             verticalVelocity.y += gravity * gravityMultiplier * Time.deltaTime;
         }
 
         if (characterController.isGrounded)
         {
-            animator.SetBool("Jumping", false);
-
-            animatorSync.SetBool("Jumping", false);
+            mishSync.SetJumping(false);
         }
 
         // Handle jumping
-        if (characterController.isGrounded && Input.GetKeyDown(KeyCode.Space)) {
+        if (characterController.isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
             verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
-            animator.SetBool("Jumping", true);
-            animator.SetBool("Running", false);
-            animator.SetBool("Walking", false);
-
-            animatorSync.SetBool("Jumping", true);
-            animatorSync.SetBool("Running", false);
-            animatorSync.SetBool("Walking", false);
+            mishSync.SetJumping(true);
         }
         finalMovement += verticalVelocity * Time.deltaTime;
 
         characterController.Move(finalMovement);
     }
 
-    private void ResetMovementValues() {
+    private void ResetMovementValues()
+    {
         IsCrouching = false;
         horizontalInput = 0f;
         verticalInput = 0f;
     }
 }
+
+
