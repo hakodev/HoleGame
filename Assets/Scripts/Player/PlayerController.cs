@@ -21,10 +21,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float crouchedJumpHeight;
 
     private CharacterController characterController;
-    [HideInInspector]
-    public bool isMoving;
-    [HideInInspector]
-    public bool isRunning;
+    [HideInInspector] public bool isMoving;
+    [HideInInspector] public bool isRunning;
     private const float gravity = -9.81f;
     private const float startingVerticalVelocity = 2f;
     private Vector3 verticalVelocity;
@@ -34,6 +32,11 @@ public class PlayerController : MonoBehaviour
     private Alteruna.Avatar avatar;
     private GameObject animationTie;
     MishSyncAnimations mishSync;
+
+    [Header("Nerd SHIT - Programming")]
+    [SerializeField] Transform cameraTransform;
+    [SerializeField] Transform moveTransform;
+
     public bool IsCrouching { get; private set; }
     public int VotedCount { get; set; }
     public bool IsTaskManager { get; set; } = false;
@@ -65,6 +68,9 @@ public class PlayerController : MonoBehaviour
         ProcessInput();
         ProcessMovement();
     }
+
+
+
 
     private void ProcessInput()
     {
@@ -120,7 +126,9 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        Vector3 finalMovement = currentSpeed * Time.deltaTime * transform.TransformDirection(moveDirection);
+
+        moveTransform.localRotation = Quaternion.Euler(new Vector3(0, cameraTransform.localEulerAngles.y, 0));
+        Vector3 finalMovement = currentSpeed * Time.deltaTime * moveTransform.TransformDirection(moveDirection);
 
         if (characterController.isGrounded && verticalVelocity.y < 0)
         {
@@ -154,4 +162,3 @@ public class PlayerController : MonoBehaviour
         verticalInput = 0f;
     }
 }
-
