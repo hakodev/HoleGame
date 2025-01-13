@@ -382,7 +382,7 @@ public class Interact : AttributesSync, IObserver
     }
     private void Spam2()
     {
-        disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
+        //disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
 
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
