@@ -2,7 +2,9 @@ using UnityEngine;
 using Alteruna;
 using NUnit.Framework;
 using System.Collections.Generic;
-public class PlayerController : MonoBehaviour {
+using System.Data;
+public class PlayerController : MonoBehaviour
+{
 
     [field: SerializeField] public bool MovementEnabled { get; set; } = true;
 
@@ -11,6 +13,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float runSpeed;
     [SerializeField] private float crouchSpeed;
     [SerializeField] private float crouchRunSpeed;
+    [SerializeField] private float walkSpeedBack;
+    [SerializeField] private float runSpeedBack;
 
     [Header("Jumping & Physics")]
     [SerializeField] private float gravityMultiplier;
@@ -29,17 +33,28 @@ public class PlayerController : MonoBehaviour {
     private Alteruna.Avatar avatar;
     private GameObject animationTie;
     MishSyncAnimations mishSync;
-    public bool IsCrouching { get; private set; }
-    public Roles Role { get; set; }
+
     public int VotedCount { get; set; }
     public bool IsTaskManager { get; set; } = false;
     public SymptomsSO Symptom { get; set; }
 
+    [Header("Nerd SHIT - Programming")]
+    [SerializeField] Transform cameraTransform;
+    [SerializeField] Transform moveTransform;
+
+    public bool IsCrouching { get; private set; }
+    public Roles Role { get; set; }
+
     private void Awake()
     {
-        characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
+        characterController = GetComponent<CharacterController>();
         mishSync = GetComponent<MishSyncAnimations>();
+    }
+    private void Start()
+    {
+        if (!avatar.IsMe) { return; }
+
     }
     private void Update()
     {
@@ -65,6 +80,7 @@ public class PlayerController : MonoBehaviour {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
         isMoving = horizontalInput != 0 || verticalInput != 0;
+        mishSync.SetInputDirection(new Vector2(horizontalInput, verticalInput));
 
         isRunning = isMoving && Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         IsCrouching = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
@@ -77,14 +93,15 @@ public class PlayerController : MonoBehaviour {
 
         if (IsCrouching)
         {
+            mishSync.SetStance(StanceEnum.Crouching);
+
             //  currentSpeed = isRunning ? crouchRunSpeed : crouchSpeed;
             if (isMoving)
             {
                 //crouching walking animation
                 currentSpeed = crouchSpeed;
             }
-            //  currentjumpHeight = crouchedJumpHeight;
-            currentjumpHeight = jumpHeight;
+            currentjumpHeight = crouchedJumpHeight;
         }
         else
         {
@@ -93,25 +110,28 @@ public class PlayerController : MonoBehaviour {
                 if (isRunning)
                 {
                     currentSpeed = runSpeed;
-                    mishSync.Running = true;
+                    if (verticalInput < 0) currentSpeed = runSpeedBack;
+                    mishSync.SetStance(StanceEnum.Running);
                 }
                 else
                 {
                     currentSpeed = walkSpeed;
-                    mishSync.Walking = true;
+                    if (verticalInput < 0) currentSpeed = walkSpeedBack;
+                    mishSync.SetStance(StanceEnum.Walking);
                 }
+            }
+            else
+            {
+                mishSync.SetStance(StanceEnum.Walking);
             }
 
             currentjumpHeight = jumpHeight;
         }
-        if (!isMoving)
-        {
-            mishSync.Walking = false;
-            mishSync.Running = false;
-        }
 
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        Vector3 finalMovement = currentSpeed * Time.deltaTime * transform.TransformDirection(moveDirection);
+
+        moveTransform.localRotation = Quaternion.Euler(new Vector3(0, cameraTransform.localEulerAngles.y, 0));
+        Vector3 finalMovement = currentSpeed * Time.deltaTime * moveTransform.TransformDirection(moveDirection);
 
         if (characterController.isGrounded && verticalVelocity.y < 0)
         {
@@ -132,8 +152,6 @@ public class PlayerController : MonoBehaviour {
         {
             verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
             mishSync.SetJumping(true);
-            mishSync.Walking = false;
-            mishSync.Running = false;
         }
         finalMovement += verticalVelocity * Time.deltaTime;
 
