@@ -2,7 +2,8 @@ using UnityEngine;
 using Alteruna;
 using NUnit.Framework;
 using System.Collections.Generic;
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour
+{
 
     [field: SerializeField] public bool MovementEnabled { get; set; } = true;
 
@@ -20,8 +21,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float crouchedJumpHeight;
 
     private CharacterController characterController;
-    private bool isMoving;
-    private bool isRunning;
+    [HideInInspector] public bool isMoving;
+    [HideInInspector] public bool isRunning;
     private const float gravity = -9.81f;
     private const float startingVerticalVelocity = 2f;
     private Vector3 verticalVelocity;
@@ -37,7 +38,9 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] Transform moveTransform;
 
     public bool IsCrouching { get; private set; }
-    public Roles Role { get; set; }
+    public int VotedCount { get; set; }
+    public bool IsTaskManager { get; set; } = false;
+    public SymptomsSO Symptom { get; set; }
 
     private void Awake()
     {
@@ -159,5 +162,3 @@ public class PlayerController : MonoBehaviour {
         verticalInput = 0f;
     }
 }
-
-

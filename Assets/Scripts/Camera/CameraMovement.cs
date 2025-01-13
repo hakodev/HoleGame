@@ -73,12 +73,18 @@ public class CameraMovement : MonoBehaviour {
 
     private void AnimateHeadAndTorso()
     {
-        Vector3 headEuler = playerHead.transform.rotation.eulerAngles;
-        Vector3 torsoEuler = playerTorso.transform.rotation.eulerAngles;
-        float yas = Mathf.Abs(headEuler.x - torsoEuler.x) + Mathf.Abs   (headEuler.y - torsoEuler.y) + Mathf.Abs(headEuler.z - torsoEuler.z);
-        yas = yas % 360;
 
-       //    Debug.Log(yas);
+        playerTorso.transform.parent.Rotate(0, horizontalRotation, 0);
+        playerHead.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+
+
+        /*
+        //Vector3 headEuler = playerHead.transform.rotation.eulerAngles;
+        // Vector3 torsoEuler = playerTorso.transform.rotation.eulerAngles;
+        //float yas = Mathf.Abs(headEuler.x - torsoEuler.x) + Mathf.Abs   (headEuler.y - torsoEuler.y) + Mathf.Abs(headEuler.z - torsoEuler.z);
+        // yas = yas % 360;
+
+        //    Debug.Log(yas);
         Debug.Log(Mathf.Abs(playerHead.transform.rotation.eulerAngles.y - playerTorso.transform.rotation.eulerAngles.y));
 
 
@@ -112,6 +118,7 @@ public class CameraMovement : MonoBehaviour {
 
             // playerHead.transform.Rotate(verticalRotation, horizontalRotation, 0);
         }
+        */
     }
     private void ProcessCameraInput()
     {
