@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Keyboard3 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 89ec00e3bcf8f5340b6a48e19739dfe7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
