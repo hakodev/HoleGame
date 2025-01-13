@@ -41,6 +41,8 @@ public class Interact : AttributesSync, IObserver
     Rigidbody rb;
     //AnimationSynchronizable animatorSync;
 
+    private Transform currentOutlinedObject;
+
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -48,18 +50,17 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) { return; }
         playerController = GetComponent<PlayerController>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
-        //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
-        // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
+      //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
+       // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
     }
-    //  private void OnEnable()
-    //   {
-    //     if (!avatar.IsMe) { return; }
-    //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-    //  }
+  //  private void OnEnable()
+ //   {
+   //     if (!avatar.IsMe) { return; }
+  //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
+  //  }
     private void Start()
     {
-        if (!avatar.IsMe)
-        {
+        if (!avatar.IsMe) {
             int playerLayer = LayerMask.NameToLayer("PlayerLayer");
             gameObject.layer = playerLayer;
             SetLayerRecursively(gameObject, playerLayer);
@@ -137,42 +138,112 @@ public class Interact : AttributesSync, IObserver
                 isChargingUp = true;
                 AnimateWindUpChanrgebar();
             }
-            else
+        }
+
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (heldObject != null)
             {
-                RaycastHit hit;
-                if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, dynamicLayerMask))
+                heldObject.GetComponent<DynamicInteractableObject>().Use();
+            }
+
+        }
+
+        if (heldObject)
+        {
+            HUDDisplay.Instance.SetState(new CarryDisplay(HUDDisplay.Instance));
+        }
+        else
+        {
+            HUDDisplay.Instance.SetState(new EmptyDisplay(HUDDisplay.Instance));
+        }
+
+        RaycastHit hit;
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, interactableLayerMask))
+        {
+            ApplyOutline(hit.transform.gameObject);
+
+
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("StationaryInteractableObject"))
+            {
+                HUDDisplay.Instance.SetState(new StationaryInteract(HUDDisplay.Instance));
+                if (Input.GetMouseButtonDown(1))
+                {
+                    hit.transform.gameObject.GetComponent<StationaryInteractableObject>().Use();
+                }
+
+            }
+ 
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
+            {
+                HUDDisplay.Instance.SetState(new DynamicInteract(HUDDisplay.Instance));
+                if (Input.GetMouseButtonDown(0))
                 {
                     TryPickUp(hit.transform.gameObject);
                     finishedPickUp = false;
                 }
             }
         }
-
-
-        if (Input.GetMouseButtonDown(1))
+        else
         {
-            //if raycast with stationary, prioritize it
-            RaycastHit hit;
-            if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, stationaryLayerMask))
-            {
-                hit.transform.gameObject.GetComponent<StationaryInteractableObject>().Use();
-            }
-            else
-            {
-                if (heldObject != null)
-                {
-                    heldObject.GetComponent<DynamicInteractableObject>().Use();
-                }
-            }
+            ApplyOutline(null);
         }
     }
+
+    private void ApplyOutline(GameObject objectToApply)
+    {
+        List<GameObject> tempChildList = new List<GameObject>();
+        if (objectToApply == currentOutlinedObject)
+        {
+            return;
+        }
+        if (currentOutlinedObject != null && objectToApply != currentOutlinedObject)
+        {
+            ChangeChildrenLayers("Default", tempChildList);
+        }
+        
+        if(objectToApply == null) return;
+
+        currentOutlinedObject = objectToApply.transform;
+
+        ChangeChildrenLayers("OutlineLayer", tempChildList);
+    }
+    
+    private void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
+    {
+        GetChildRecursive(currentOutlinedObject.gameObject, tempChildList);
+        foreach (GameObject child in tempChildList)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer(layerName);
+        }
+        tempChildList.Clear();
+
+    }
+
+    private void GetChildRecursive(GameObject obj, List<GameObject> tempChildList)
+    {
+        if (null == obj)
+            return;
+
+        foreach (Transform child in obj.transform)
+        {
+            if (null == child)
+                continue;
+            //child.gameobject contains the current child you can do whatever you want like add it to an array
+            tempChildList.Add(child.gameObject);
+            GetChildRecursive(child.gameObject, tempChildList);
+        }
+    }
+
+
     private void Place()
     {
         SetLayerRecursively(heldObject, 11);
-        LayerMask everythingButHeldObject = ~(1 << 10 | 1 << 11); //and self player
+        LayerMask everythingButHeldObject = ~(1 << 11);
 
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject))
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
         {
             SetLayerRecursively(heldObject, 7);
 
@@ -222,6 +293,10 @@ public class Interact : AttributesSync, IObserver
         Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
         currentThrowStrength = 0;
         if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
+        if (heldObject.GetComponent<CoffeeCup>())
+        {
+            heldObject.GetComponent<CoffeeCup>().SpecialInteraction(InteractionEnum.CoffeeStain, this);
+        }
 
         Debug.DrawRay(heldObject.transform.position, rbToTrack.velocity, Color.magenta);
         Debug.DrawRay(heldObject.transform.position, rb.angularVelocity, Color.green);
@@ -234,9 +309,9 @@ public class Interact : AttributesSync, IObserver
         Renderer[] temp = obj.GetComponentsInChildren<Renderer>();
         List<Renderer> renderers = new List<Renderer>();
 
-        for (int i = 0; i < temp.Length; i++)
+        for(int i=0; i<temp.Length; i++)
         {
-            if (temp[i] != null)
+            if (temp[i]!=null)
             {
                 renderers.Add(temp[i]);
             }
@@ -248,7 +323,7 @@ public class Interact : AttributesSync, IObserver
 
             for (int i = 0; i < renderers.Count; i++)
             {
-                if (renderers[i] != null)
+                if (renderers[i] != null) 
                 {
                     combinedBounds.Encapsulate(renderers[i].bounds);
                 }
@@ -298,7 +373,7 @@ public class Interact : AttributesSync, IObserver
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
-        // rbToTrack.enabled = true;
+       // rbToTrack.enabled = true;
         heldObject = null;
         rbToTrack = null;
         rb = null;
@@ -361,7 +436,7 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
-
+  
 
 
     //art stuff

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class PaintManager : MonoBehaviour{
 
@@ -20,7 +21,25 @@ public class PaintManager : MonoBehaviour{
     Material paintMaterial;
     Material extendMaterial;
 
+    public GameObject decalPrefab;
+
+    public LayerMask mask;
+
     CommandBuffer command;
+    private static PaintManager instance;
+
+    public static PaintManager Instance
+    { 
+        get 
+        { 
+            if(instance == null)
+            {
+                instance = FindAnyObjectByType<PaintManager>();
+            }
+
+            return instance;
+        } 
+    }
 
     public void Awake(){
         

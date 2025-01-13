@@ -11,5 +11,6 @@ public enum InteractionEnum
     Oiled,
     Watered,
     Caffenated,
-    GrowthFormulaed
+    GrowthFormulaed,
+    CoffeeStain
 }
