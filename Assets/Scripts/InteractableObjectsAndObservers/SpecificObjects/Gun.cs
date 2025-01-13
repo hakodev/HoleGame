@@ -10,7 +10,8 @@ public class Gun : DynamicInteractableObject
     LayerMask otherPlayerLayerMask;
     [SynchronizableField] [SerializeField] int damage;
 
-    MishSyncAnimations playerAnim;
+   // Animator playerAnimator;
+   // AnimationSynchronizable playerAnimatorSync;
     public int Damage() {
         Debug.Log(damage);
         return damage;
@@ -29,19 +30,25 @@ public class Gun : DynamicInteractableObject
     public override void Use()
     {
         playerCamera = transform.root.Find("Camera").GetComponent<Camera>();
-        playerAnim = transform.root.GetComponent<MishSyncAnimations>();
+      //  playerAnimator = transform.root.Find("Animation").GetComponent<Animator>();
+      //  playerAnimatorSync = transform.root.Find("Animation").GetComponent<AnimationSynchronizable>();
         Fire();
     }
     private void Fire()
     {
+     //   playerAnimator.SetTrigger("ShootingGun");
+     //   playerAnimatorSync.SetTrigger("ShootingGun");
+
+        // Debug.Log("Fired weapon");
         if (Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, bulletMaxDistance, otherPlayerLayerMask))
         {
             Debug.Log(hit.collider.gameObject.name + " " + transform.parent.gameObject.name);
             if (hit.collider.gameObject != transform.root.gameObject && hit.collider.gameObject.CompareTag("Player"))
             {
-                Debug.Log("BULLSEYE!");
+                // UserId targetUserId = hit.collider.gameObject.GetComponent<UserId>();
+             //   hit.collider.gameObject.GetComponent<Health>().DamagePlayer(Random.Range(3, 7)); // Change later
+                   Debug.Log("BULLSEYE!");
                 hit.collider.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.ShotWithGun, this);
-                playerAnim.SetShooting(true);
             }
         }
         currentAmmo--;
@@ -49,6 +56,7 @@ public class Gun : DynamicInteractableObject
     }
     private void Reload()
     {
+        //  Debug.Log("Reloading...");
         currentAmmo = maxAmmo;
     }
 }

@@ -6,6 +6,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine.InputSystem.HID;
 using Unity.Burst.CompilerServices;
+using System;
 
 public class Interact : AttributesSync, IObserver
 {
@@ -41,7 +42,11 @@ public class Interact : AttributesSync, IObserver
     Rigidbody rb;
     //AnimationSynchronizable animatorSync;
 
+
     private Transform currentOutlinedObject;
+
+    private DisappearingObjs disappearingObjs;
+
 
     private void Awake()
     {
@@ -49,6 +54,7 @@ public class Interact : AttributesSync, IObserver
 
         if (!avatar.IsMe) { return; }
         playerController = GetComponent<PlayerController>();
+        disappearingObjs = GetComponent<DisappearingObjs>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
       //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
        // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
@@ -110,7 +116,7 @@ public class Interact : AttributesSync, IObserver
             if (finishedPickUp)
             {
                 //isChargingUp = false;
-                //                heldObject.GetComponent<Rigidbody>().useGravity = true;
+//                heldObject.GetComponent<Rigidbody>().useGravity = true;
 
                 if (currentChargeUpTime > minMaxThrowChargeUpTime.x)
                 {
@@ -191,6 +197,7 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
+
     private void ApplyOutline(GameObject objectToApply)
     {
         List<GameObject> tempChildList = new List<GameObject>();
@@ -236,6 +243,11 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
+
+
+    public bool GetHeldObjectDroppedOrThrown() {
+        return heldObject == null;
+    }
 
     private void Place()
     {
@@ -370,6 +382,8 @@ public class Interact : AttributesSync, IObserver
     }
     private void Spam2()
     {
+        disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
+
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
@@ -378,6 +392,7 @@ public class Interact : AttributesSync, IObserver
         rbToTrack = null;
         rb = null;
     }
+
     private void TryPickUp(GameObject pickedUp)
     {
         //   animator.SetTrigger("PickingUp");

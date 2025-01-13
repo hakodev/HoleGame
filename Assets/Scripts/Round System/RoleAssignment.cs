@@ -3,65 +3,80 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoleAssignment : MonoBehaviour {
-    [SerializeField] private PlayerController localPlayer;
-    [SerializeField] private CanvasGroup infiltratorCanvas;
-    [SerializeField] private CanvasGroup machineCanvas;
-    [SerializeField] private float roleDisplayTime;
-    private List<PlayerController> rolelessPlayers = new();
-    private const int maxNumOfInfiltrators = 2;
-    Alteruna.Avatar avatar;
+public class RoleAssignment : MonoBehaviour
+{
 
-    private void Awake() {
-        avatar = localPlayer.gameObject.GetComponent<Alteruna.Avatar>();
-    }
 
-    private void OnEnable() {
+    private List<PlayerRole> rolelessPlayers = new();
+    private int maxNumOfInfiltrators = 1;
+
+    [SerializeField] List<InfiltratorsToPlayers> infiltratorsToPlayers = new List<InfiltratorsToPlayers>();
+
+    private void OnEnable()
+    {
+        FindRolelessPlayers();
+        DetermineMaxNumberOfInfiltrators();
         AssignRoles();
     }
 
-    private void AssignRoles() {
-        PlayerController[] totalPlayers = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+    private void FindRolelessPlayers()
+    {
+        PlayerRole[] totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None);
         rolelessPlayers.AddRange(totalPlayers);
+    }
+    private void DetermineMaxNumberOfInfiltrators()
+    {
+        foreach (InfiltratorsToPlayers ratio in infiltratorsToPlayers)
+        {
+            if (rolelessPlayers.Count >= ratio.robotsCount)
+            {
+                maxNumOfInfiltrators = ratio.infiltratorsCount;
+            }
+        }
+    }
+    private void AssignRoles()
+    {
+
         //Debug.Log($"Total players: {players.Count}");
 
         int randomNum;
 
-        for(int i = 0; i < maxNumOfInfiltrators; i++) { // Give maxNumOfInfiltrators amount of random players the infiltrator role
+        for (int i = 0; i < maxNumOfInfiltrators; i++)
+        { // Give maxNumOfInfiltrators amount of random players the infiltrator role
 
-            if(rolelessPlayers.Count == 0) break; // Just in case
+            if (rolelessPlayers.Count == 0) break; // Just in case
 
             randomNum = Random.Range(0, rolelessPlayers.Count);
 
-            rolelessPlayers[randomNum].Role = Roles.Infiltrator;
+            rolelessPlayers[randomNum].SetRole(Roles.Infiltrator);
             rolelessPlayers.RemoveAt(randomNum); // Remove the player from the roleless list after giving them a role
         }
 
-        foreach(PlayerController player in rolelessPlayers) { // Give the rest the machine role
-            player.Role = Roles.Machine;
+        foreach (PlayerRole player in rolelessPlayers)
+        { // Give the rest the machine role
+            player.SetRole(Roles.Machine);
         }
 
         rolelessPlayers.Clear();
 
-        if(avatar.IsMe) { // Display the local player's role
-            if(localPlayer.Role == Roles.Infiltrator) {
-                StartCoroutine(DisplayRole(infiltratorCanvas));
-            }
-
-            if(localPlayer.Role == Roles.Machine) {
-                StartCoroutine(DisplayRole(machineCanvas));
-            }
-        }
+        //call all players
     }
 
-    private IEnumerator DisplayRole(CanvasGroup roleCanvas) {
-        roleCanvas.DOFade(1f, 1f);
-        yield return new WaitForSeconds(roleDisplayTime); // How many seconds to display it on screen
-        roleCanvas.DOFade(0f, 1f);
+
+}
+public class InfiltratorsToPlayers
+{
+    public int infiltratorsCount;
+    public int robotsCount;
+
+    public InfiltratorsToPlayers(int infiltratorsCount, int robotsCount)
+    {
+        this.infiltratorsCount = infiltratorsCount;
+        this.robotsCount = robotsCount;
     }
 }
-
-public enum Roles {
+public enum Roles
+{
     Machine,
     Infiltrator
 }

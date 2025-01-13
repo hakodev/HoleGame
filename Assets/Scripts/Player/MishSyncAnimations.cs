@@ -20,12 +20,12 @@ public class MishSyncAnimations : AttributesSync
     private Transform human;
 
     [SerializeField] float animationSmoothing;
-    [SynchronizableField]Vector2 currentAnimDot = Vector3.zero;
-    [SynchronizableField]Vector2 targetAnimDot = Vector3.zero;
+    [SynchronizableField] Vector2 currentAnimDot = Vector3.zero;
+    [SynchronizableField] Vector2 targetAnimDot = Vector3.zero;
 
     public Vector2 GetTargetAnimDot()
     {
-        return targetAnimDot;   
+        return targetAnimDot;
     }
     private void Awake()
     {
@@ -59,15 +59,15 @@ public class MishSyncAnimations : AttributesSync
     public void SetInputDirection(Vector2 newInputDirection)
     {
         //open the fluid tree
-        if (stance == StanceEnum.Running) 
+        if (stance == StanceEnum.Running)
         {
             targetAnimDot = newInputDirection;
-           // if (newInputDirection.x != 0 && newInputDirection.y != 0) targetAnimDot = new Vector2(targetAnimDot.x * Mathf.Sign(targetAnimDot.x), targetAnimDot.y * Mathf.Sign(targetAnimDot.y));
+            // if (newInputDirection.x != 0 && newInputDirection.y != 0) targetAnimDot = new Vector2(targetAnimDot.x * Mathf.Sign(targetAnimDot.x), targetAnimDot.y * Mathf.Sign(targetAnimDot.y));
         }
         else
         {
             targetAnimDot = newInputDirection / 2;
-          //  if (newInputDirection.x != 0 && newInputDirection.y != 0) targetAnimDot = new Vector2(targetAnimDot.x * Mathf.Sign(targetAnimDot.x), targetAnimDot.y * Mathf.Sign(targetAnimDot.y));
+            //  if (newInputDirection.x != 0 && newInputDirection.y != 0) targetAnimDot = new Vector2(targetAnimDot.x * Mathf.Sign(targetAnimDot.x), targetAnimDot.y * Mathf.Sign(targetAnimDot.y));
         }
         Commit();
     }
@@ -82,13 +82,13 @@ public class MishSyncAnimations : AttributesSync
     {
         //there is a weird sliding movement, maybe if direction is completely opposite tp the current to the idle
 
-        if (targetAnimDot!=Vector2.zero && currentAnimDot!=Vector2.zero && Mathf.Abs(currentAnimDot.x - targetAnimDot.x) < 0.05f) currentAnimDot.x = targetAnimDot.x;
-        if (targetAnimDot!=Vector2.zero && currentAnimDot!=Vector2.zero && Mathf.Abs(currentAnimDot.y - targetAnimDot.y) < 0.05f) currentAnimDot.y = targetAnimDot.y;
-        
-        
+        if (targetAnimDot != Vector2.zero && currentAnimDot != Vector2.zero && Mathf.Abs(currentAnimDot.x - targetAnimDot.x) < 0.05f) currentAnimDot.x = targetAnimDot.x;
+        if (targetAnimDot != Vector2.zero && currentAnimDot != Vector2.zero && Mathf.Abs(currentAnimDot.y - targetAnimDot.y) < 0.05f) currentAnimDot.y = targetAnimDot.y;
+
+
 
         if (currentAnimDot.x < targetAnimDot.x) currentAnimDot.x += Time.deltaTime * animationSmoothing;
-        if(currentAnimDot.x>targetAnimDot.x) currentAnimDot.x -= Time.deltaTime * animationSmoothing;  
+        if (currentAnimDot.x > targetAnimDot.x) currentAnimDot.x -= Time.deltaTime * animationSmoothing;
         if (currentAnimDot.y < targetAnimDot.y) currentAnimDot.y += Time.deltaTime * animationSmoothing;
         if (currentAnimDot.y > targetAnimDot.y) currentAnimDot.y -= Time.deltaTime * animationSmoothing;
 
@@ -127,7 +127,7 @@ public class MishSyncAnimations : AttributesSync
 
     private new void LateUpdate()
     {
-        foreach (MishSyncAnimations player in mishSyncs) 
+        foreach (MishSyncAnimations player in mishSyncs)
         {
             FixAnimatorOffset();
         }
@@ -135,7 +135,7 @@ public class MishSyncAnimations : AttributesSync
     public void FixAnimatorOffset()
     {
 
-        if (stance== StanceEnum.Dead) { return; }
+        if (stance == StanceEnum.Dead) { return; }
 
 
         animator.transform.localPosition = Vector3.zero;
