@@ -290,7 +290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 179021563873673276, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5650040819078379761, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
       propertyPath: roomMenu
@@ -374,6 +374,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7404781570024824595, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8186812533569261498, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8186812533569261498, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8186812533569261498, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8186812533569261498, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
+      propertyPath: m_BackGroundColor.r
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -479,31 +495,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 452480257649742065, guid: 87b57c890043e574cb9681c45a481370, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 452480257649742065, guid: 87b57c890043e574cb9681c45a481370, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 452480257649742065, guid: 87b57c890043e574cb9681c45a481370, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 452480257706096130, guid: 87b57c890043e574cb9681c45a481370, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 452480257706096130, guid: 87b57c890043e574cb9681c45a481370, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 452480258679028325, guid: 87b57c890043e574cb9681c45a481370, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -878
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 452480258679028325, guid: 87b57c890043e574cb9681c45a481370, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.00018310547
+      objectReference: {fileID: 0}
+    - target: {fileID: 4171336176673648685, guid: 87b57c890043e574cb9681c45a481370, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4171336176673648685, guid: 87b57c890043e574cb9681c45a481370, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4171336176673648685, guid: 87b57c890043e574cb9681c45a481370, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4171336176673648685, guid: 87b57c890043e574cb9681c45a481370, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
