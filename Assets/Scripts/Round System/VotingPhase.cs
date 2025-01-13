@@ -1,6 +1,5 @@
 using DG.Tweening;
 using System.Collections;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,19 +26,23 @@ public class VotingPhase : MonoBehaviour {
         float tempYPos = firstPlayerOptionYPos;
 
         foreach(PlayerController player in totalPlayers) {
-            GameObject newPlayerVoteOption = Instantiate(playerVoteOption, this.transform);
-            newPlayerVoteOption.GetComponentInChildren<TMP_Text>().text = player.gameObject.name;
-            newPlayerVoteOption.transform.position = new Vector3(newPlayerVoteOption.transform.position.x,
-                                                                 tempYPos,
-                                                                 newPlayerVoteOption.transform.position.z);
+            if(player.IsTaskManager) {
+                player.IsTaskManager = false;
+            } else {
+                GameObject newPlayerVoteOption = Instantiate(playerVoteOption, this.transform);
+                newPlayerVoteOption.GetComponentInChildren<TMP_Text>().text = player.gameObject.name;
+                newPlayerVoteOption.transform.position = new Vector3(newPlayerVoteOption.transform.position.x,
+                                                                     tempYPos,
+                                                                     newPlayerVoteOption.transform.position.z);
 
-            newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
-                player.VotedCount++;
-                votingCanvas.SetActive(false);
-                votedCanvas.SetActive(true);
-            });
+                newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
+                    player.VotedCount++;
+                    votingCanvas.SetActive(false);
+                    votedCanvas.SetActive(true);
+                });
 
-            tempYPos -= 100;
+                tempYPos -= 100;
+            }
 
             player.MovementEnabled = false; // Disable movement until end of voting phase
         }
@@ -51,11 +54,10 @@ public class VotingPhase : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        PlayerController pickedPlayer = totalPlayers[0]; // so it compiles
+        PlayerController pickedPlayer = totalPlayers[0]; // temp, and also so it compiles
 
         for(int i = 0; i < totalPlayers.Length; i++) {
             totalPlayers[i].MovementEnabled = true; // Enable movement again
-            pickedPlayer = totalPlayers[i];
 
             if(totalPlayers[i] == totalPlayers[0])
                 continue;

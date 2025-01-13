@@ -266,7 +266,7 @@ Animator:
   m_GameObject: {fileID: 996233025567766754}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: ffea88ef3d2e65543b961960cd7e4afb, type: 3}
-  m_Controller: {fileID: 9100000, guid: d9a8166066a15a74ab768dd768e148b5, type: 2}
+  m_Controller: {fileID: 9100000, guid: 239214dd3da8b604199588410cb338ef, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -309,37 +309,6 @@ Transform:
   m_Children:
   - {fileID: 2959895954426721313}
   m_Father: {fileID: 1451081573125886851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1200997902554451352
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2358912593479362920}
-  m_Layer: 0
-  m_Name: MoveTransform
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2358912593479362920
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1200997902554451352}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7499172478257644583}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1263058145919918313
 GameObject:
@@ -610,7 +579,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4301893482121457496}
-  - component: {fileID: 7871404116929539866}
   m_Layer: 0
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -626,8 +594,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2332573203765004709}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.06519663, z: 0}
+  m_LocalRotation: {x: -0.031188427, y: 0.046532724, z: 0.03175797, w: 0.99792457}
+  m_LocalPosition: {x: 0.019384623, y: -0.06519663, z: -0.12459254}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -636,41 +604,6 @@ Transform:
   - {fileID: 1753168945567113668}
   m_Father: {fileID: 3843719303313104207}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7871404116929539866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2332573203765004709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1312809854, guid: 0ae8d181602a00248a82f64a684a1c88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: 01875522-cc7e-4a54-99bc-e87f377730af
-  BucketBehaviors:
-  - Name: Min
-    NetLOD: 0
-    Frequency: -1
-  - Name: Low
-    NetLOD: 1
-    Frequency: 0
-  - Name: Mid
-    NetLOD: 2
-    Frequency: 0
-  - Name: High
-    NetLOD: 3
-    Frequency: 0
-  - Name: Max
-    NetLOD: 4
-    Frequency: 120
-  Reliability: 2
-  UseGlobalPosition: 0
-  OnlySyncFromRoomOwner: 0
-  refreshRate: 30
-  SyncedAxes: 511
 --- !u!1 &2454829870516999731
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,6 +653,7 @@ GameObject:
   - component: {fileID: 3966897673367325224}
   - component: {fileID: 10831237468437592}
   - component: {fileID: 9170362232215914470}
+  - component: {fileID: 6617774017616053506}
   m_Layer: 0
   m_Name: AlterunaPlayer
   m_TagString: Player
@@ -744,7 +678,6 @@ Transform:
   - {fileID: 703071896717997311}
   - {fileID: 2944699030422447970}
   - {fileID: 2499838082348914692}
-  - {fileID: 2358912593479362920}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1520071485617270120
@@ -845,13 +778,9 @@ MonoBehaviour:
   runSpeed: 4.5
   crouchSpeed: 1.24
   crouchRunSpeed: 1.65
-  walkSpeedBack: 1.96
-  runSpeedBack: 3.15
   gravityMultiplier: 1.75
-  jumpHeight: 2.2
-  crouchedJumpHeight: 4
-  cameraTransform: {fileID: 2499838082348914692}
-  moveTransform: {fileID: 2358912593479362920}
+  jumpHeight: 3.8
+  crouchedJumpHeight: 2.3
 --- !u!114 &6819232429365655515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -894,6 +823,7 @@ MonoBehaviour:
   _uidString: de3dc5d3-98de-4284-b100-d333bd162e74
   Reliability: 1
   LocalMethodBehavior: 1
+  debugDeathMaterial: {fileID: 0}
 --- !u!114 &10831237468437592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -925,7 +855,20 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   Jumping: 0
-  animationSmoothing: 2
+  Walking: 0
+  Running: 0
+--- !u!114 &6617774017616053506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2507407002761147588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3df8fc6c0bb7a49b31ee0dabbcec3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2565612880506949840
 GameObject:
   m_ObjectHideFlags: 0
@@ -1816,10 +1759,6 @@ MonoBehaviour:
   uncrouchedCameraHeight: 0.6
   crouchedCameraHeight: -0.4
   cameraHeightSwitchSpeed: 4
-  playerHead: {fileID: 7090234129164980435}
-  playerTorso: {fileID: 2332573203765004709}
-  mishSync: {fileID: 9170362232215914470}
-  easingTorsoDuration: 1
 --- !u!114 &6911839747530038390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2814,7 +2753,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1348144467305336745}
-  - component: {fileID: 2519058476950181096}
   m_Layer: 0
   m_Name: mixamorig:Head
   m_TagString: Untagged
@@ -2838,41 +2776,6 @@ Transform:
   - {fileID: 6529470221725418415}
   m_Father: {fileID: 2411680652409795500}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2519058476950181096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7090234129164980435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1312809854, guid: 0ae8d181602a00248a82f64a684a1c88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: eab3e051-118f-48eb-bd44-f560b85cae9b
-  BucketBehaviors:
-  - Name: Min
-    NetLOD: 0
-    Frequency: -1
-  - Name: Low
-    NetLOD: 1
-    Frequency: 0
-  - Name: Mid
-    NetLOD: 2
-    Frequency: 0
-  - Name: High
-    NetLOD: 3
-    Frequency: 0
-  - Name: Max
-    NetLOD: 4
-    Frequency: 120
-  Reliability: 2
-  UseGlobalPosition: 0
-  OnlySyncFromRoomOwner: 0
-  refreshRate: 30
-  SyncedAxes: 511
 --- !u!1 &7301682153797664888
 GameObject:
   m_ObjectHideFlags: 0
@@ -3255,7 +3158,7 @@ Transform:
   m_GameObject: {fileID: 8545988785631638419}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.03829667, z: -0, w: 0.99926645}
-  m_LocalPosition: {x: 0.147, y: -0.031, z: 0.647}
+  m_LocalPosition: {x: 226.30522, y: -1.5, z: 0.5119997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
