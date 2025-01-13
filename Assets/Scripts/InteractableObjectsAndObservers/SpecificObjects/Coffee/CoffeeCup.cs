@@ -10,9 +10,12 @@ public class CoffeeCup : DynamicInteractableObject
 
     private bool isThrown = false;
 
+    AudioSource hitSource;
+
     private void Start()
     {
         coffeeFill = transform.GetChild(0).gameObject;
+        hitSource = GetComponent<AudioSource>();
     }
     public override void SpecialInteraction(InteractionEnum interaction, Component caller)
     {
@@ -30,7 +33,7 @@ public class CoffeeCup : DynamicInteractableObject
         while (t < 1)
         {
             coffeeFill.transform.localPosition = Vector3.Lerp(new Vector3(coffeeFill.transform.localPosition.x, 0, coffeeFill.transform.localPosition.z),
-                new Vector3(coffeeFill.transform.localPosition.x, 1.1f, coffeeFill.transform.localPosition.z), t);
+                new Vector3(coffeeFill.transform.localPosition.x, 1f, coffeeFill.transform.localPosition.z), t);
             t += Time.deltaTime * 0.3f;
             yield return new WaitForEndOfFrame();
         }
@@ -40,6 +43,7 @@ public class CoffeeCup : DynamicInteractableObject
 
     private void OnCollisionEnter(Collision info)
     {
+        hitSource.Play();
         // find collision point and normal. You may want to average over all contacts
         var point = info.contacts[0].point;
         var dir = -info.contacts[0].normal; // you need vector pointing TOWARDS the collision, not away from it

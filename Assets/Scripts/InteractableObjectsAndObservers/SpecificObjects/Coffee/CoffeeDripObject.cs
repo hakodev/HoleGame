@@ -12,7 +12,8 @@ public class CoffeeDripObject : MonoBehaviour
     public Vector2 startScale;
     public Vector2 endScale;
 
-    private bool isDripping = false;
+    [HideInInspector]
+    public bool isDripping = false;
 
     private void Start()
     {
@@ -22,8 +23,6 @@ public class CoffeeDripObject : MonoBehaviour
 
     public void EnableDrip()
     {
-        if (isDripping) return;
-
         StartCoroutine(LerpDripUp());
     }
 

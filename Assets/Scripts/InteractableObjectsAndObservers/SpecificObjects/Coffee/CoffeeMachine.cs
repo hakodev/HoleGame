@@ -7,11 +7,15 @@ public class CoffeeMachine : StationaryInteractableObject
     private CoffeeCupCollider cupCollider;
     private CoffeeDripObject coffeeDripObject;
 
+    private AudioSource[] sources;
+
     private void Start()
     {
         cupCollider = GetComponentInChildren<CoffeeCupCollider>();
         cupCollider.enabled = false;
         coffeeDripObject = GetComponentInChildren<CoffeeDripObject>();
+        
+        sources = GetComponents<AudioSource>();
     }
     public override void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
     {
@@ -19,7 +23,12 @@ public class CoffeeMachine : StationaryInteractableObject
     }
     public override void Use()
     {
-        //play sound
+        if (coffeeDripObject.isDripping) return;
+
+        foreach (var source in sources)
+        {
+            source.Play();
+        }
         coffeeDripObject.EnableDrip();
         cupCollider.enabled = true;
     }
