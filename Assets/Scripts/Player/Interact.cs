@@ -150,22 +150,35 @@ public class Interact : AttributesSync, IObserver
 
         }
 
+        if (heldObject)
+        {
+            HUDDisplay.Instance.SetState(new CarryDisplay(HUDDisplay.Instance));
+        }
+        else
+        {
+            HUDDisplay.Instance.SetState(new EmptyDisplay(HUDDisplay.Instance));
+        }
+
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, interactableLayerMask))
         {
             ApplyOutline(hit.transform.gameObject);
 
-            if (Input.GetMouseButtonDown(1))
+
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("StationaryInteractableObject"))
             {
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("StationaryInteractableObject"))
+                HUDDisplay.Instance.SetState(new StationaryInteract(HUDDisplay.Instance));
+                if (Input.GetMouseButtonDown(1))
                 {
                     hit.transform.gameObject.GetComponent<StationaryInteractableObject>().Use();
                 }
 
             }
-            if (Input.GetMouseButtonDown(0))
+ 
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
             {
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
+                HUDDisplay.Instance.SetState(new DynamicInteract(HUDDisplay.Instance));
+                if (Input.GetMouseButtonDown(0))
                 {
                     TryPickUp(hit.transform.gameObject);
                     finishedPickUp = false;

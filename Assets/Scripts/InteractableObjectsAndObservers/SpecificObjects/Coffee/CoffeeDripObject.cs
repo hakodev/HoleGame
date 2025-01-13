@@ -12,6 +12,8 @@ public class CoffeeDripObject : MonoBehaviour
     public Vector2 startScale;
     public Vector2 endScale;
 
+    private bool isDripping = false;
+
     private void Start()
     {
         material = GetComponent<Renderer>().material;
@@ -20,6 +22,8 @@ public class CoffeeDripObject : MonoBehaviour
 
     public void EnableDrip()
     {
+        if (isDripping) return;
+
         StartCoroutine(LerpDripUp());
     }
 
@@ -30,6 +34,8 @@ public class CoffeeDripObject : MonoBehaviour
 
     public IEnumerator LerpDripUp()
     {
+        isDripping = true;
+
         float t = 0;
 
         while (t < 1)
@@ -56,6 +62,6 @@ public class CoffeeDripObject : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-
+        isDripping = false;
     }
 }

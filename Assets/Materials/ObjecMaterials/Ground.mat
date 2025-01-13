@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CoffeeMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: 1af0647ef3fe7be4e9638ecd01cf0f4a, type: 3}
+  m_Name: Ground
+  m_Shader: {fileID: -6465566751694194690, guid: 3751000ad07e15f47896c5df4c639e7e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,16 +24,24 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_01612b2f09a24a9c9879c83799445b96:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_3c9e15eb8c374e0495f36ea3d57473ab:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_41271c3c5f484ca2a435c65087a81705:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _CoffeeNormal:
-        m_Texture: {fileID: 2800000, guid: 3fa4f0eaad3da1e42a1478c3d09fa81c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -56,6 +64,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MaskTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -68,8 +80,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_dddf6abe781f4d9283617c8fb47c8c98_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 3fa4f0eaad3da1e42a1478c3d09fa81c, type: 3}
+    - _RoughnessTexture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -90,6 +102,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Vector1_0de750b9c41b4a5daef844a1599f5ac7: 0
+    - Vector1_2871f666316541908d110962eef07f02: 19.2
+    - Vector1_2c6f3ce4bba145b09c0a22fced0d7f85: 1.88
+    - Vector1_7bf270fe91494824b4209d2dc1faae23: 0
+    - Vector1_8e760635099b4147956bb9600d13cac2: 0.1
+    - Vector1_b160a6374fb04a77b114bb611b8c55e4: 0
+    - Vector1_b5cc7f6f25194a778cb438f45fbbce66: 0.7
+    - Vector1_f6677799b193415b8be7686b658a6e85: 10
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
@@ -98,19 +118,13 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _CoffeeNoiseScale: 25.58
-    - _CoffeeNoiseThreshold: 0.55
-    - _ColorTransitionY: -0.88
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EdgeSize: -0.23
     - _EnvironmentReflections: 1
-    - _FoamScale: 43.9
-    - _FoamThreshold: 0.15
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -126,20 +140,20 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _TextureSpeed: 0.63
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_1bf9c5e6f5c34360a490da1c94e6a7c1: {r: 0.9433962, g: 0.90334636, b: 0.90334636, a: 0}
+    - Color_863351f5ceea4c998ef51baab6dd758b: {r: 1, g: 1, b: 1, a: 1}
+    - Vector2_55edcb19ba1d459dbb3c027e66abbc1e: {r: 1, g: 1, b: 0, a: 0}
+    - Vector2_e97cb9b7b5564bc9857e7669e2d0b82f: {r: 1, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorMain: {r: 0.7924528, g: 0.45499587, b: 0.3252047, a: 1}
-    - _ColorSecondary: {r: 1, g: 0.691825, b: 0.4764151, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _TransparencyBounds: {r: 0.63, g: 2, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &1642592145174623921
+--- !u!114 &4452818310848757018
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
