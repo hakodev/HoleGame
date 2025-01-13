@@ -52,6 +52,7 @@ public class Gun : DynamicInteractableObject
             }
         }
         currentAmmo--;
+        //playerAnim.SetShooting(true);
     }
     private void Reload()
     {

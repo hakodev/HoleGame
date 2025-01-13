@@ -18,8 +18,8 @@ TagManager:
   - StationaryInteractableObject
   - PlayerLayer
   - SelfPlayerLayer
-  - 
-  - 
+  - HeldObject
+  - OutlineLayer
   - 
   - 
   - 

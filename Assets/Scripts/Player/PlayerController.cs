@@ -21,8 +21,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float crouchedJumpHeight;
 
     private CharacterController characterController;
-    private bool isMoving;
-    private bool isRunning;
+    [HideInInspector] public bool isMoving;
+    [HideInInspector] public bool isRunning;
     private const float gravity = -9.81f;
     private const float startingVerticalVelocity = 2f;
     private Vector3 verticalVelocity;
@@ -162,4 +162,3 @@ public class PlayerController : MonoBehaviour
         verticalInput = 0f;
     }
 }
-
