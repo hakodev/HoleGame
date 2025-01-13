@@ -1,20 +1,18 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class DisappearingObjs : MonoBehaviour {
     Alteruna.Avatar avatar;
-    private PlayerController playerController;
+    private PlayerController player;
+    [SerializeField] private SymptomsSO disappearingObjsSymptom;
 
     private void Awake() {
-        playerController = GetComponent<PlayerController>();
+        player = GetComponent<PlayerController>();
     }
 
     public void CheckIfPlayerHasDisappearingObjectsSymptom(GameObject heldObject) {
-        //heldObj = heldObject;
+        if(player.Symptom == disappearingObjsSymptom && avatar.IsMe) {
+            heldObject.transform.DOScale(new Vector3(0f, 0f, 0f), 1f);
+        }
     }
-
-    //private void DisappearDroppedOrThrownIntractable() {
-    //    if(avatar.IsMe) {
-    //        
-    //    }
-    //}
 }
