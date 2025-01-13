@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour {
     public Roles Role { get; set; }
     public int VotedCount { get; set; }
     public bool IsTaskManager { get; set; } = false;
+    public SymptomsSO Symptom { get; set; }
 
     private void Awake()
     {

@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 3966897673367325224}
   - component: {fileID: 10831237468437592}
   - component: {fileID: 9170362232215914470}
+  - component: {fileID: 6617774017616053506}
   m_Layer: 0
   m_Name: AlterunaPlayer
   m_TagString: Player
@@ -856,6 +857,18 @@ MonoBehaviour:
   Jumping: 0
   Walking: 0
   Running: 0
+--- !u!114 &6617774017616053506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2507407002761147588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3df8fc6c0bb7a49b31ee0dabbcec3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2565612880506949840
 GameObject:
   m_ObjectHideFlags: 0
