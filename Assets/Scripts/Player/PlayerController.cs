@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour {
 
     public bool IsCrouching { get; private set; }
     public Roles Role { get; set; }
+    public int VotedCount { get; set; }
+    public bool IsTaskManager { get; set; } = false;
 
     private void Awake()
     {
