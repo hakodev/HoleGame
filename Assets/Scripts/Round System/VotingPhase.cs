@@ -12,9 +12,14 @@ public class VotingPhase : MonoBehaviour {
     [SerializeField] private GameObject votingCanvas;
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
+    [SerializeField] private GameObject symptomsNotifCanvas;
 
     private void OnEnable() {
         totalPlayers = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+    }
+
+    public PlayerController[] GetTotalPlayers() {
+        return totalPlayers;
     }
 
     public void InitiateVotingPhase() {
@@ -41,7 +46,7 @@ public class VotingPhase : MonoBehaviour {
                     votedCanvas.SetActive(true);
                 });
 
-                tempYPos -= 100;
+                tempYPos -= 100f;
             }
 
             player.MovementEnabled = false; // Disable movement until end of voting phase
@@ -54,10 +59,15 @@ public class VotingPhase : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        PlayerController pickedPlayer = totalPlayers[0]; // temp, and also so it compiles
+        PlayerController pickedPlayer = null;
 
         for(int i = 0; i < totalPlayers.Length; i++) {
+            PlayerRole currentPlayer = totalPlayers[i].GetComponent<PlayerRole>();
+
             totalPlayers[i].MovementEnabled = true; // Enable movement again
+
+            if(currentPlayer.GetRole() == Roles.Infiltrator)
+                StartCoroutine(DisplaySymptomNotif());
 
             if(totalPlayers[i] == totalPlayers[0])
                 continue;
@@ -75,5 +85,11 @@ public class VotingPhase : MonoBehaviour {
         taskManagerPickedDisplayCanvas.DOFade(1f, 1f);
         yield return new WaitForSeconds(4f); // How many seconds to display it on screen
         taskManagerPickedDisplayCanvas.DOFade(0f, 1f);
+    }
+
+    private IEnumerator DisplaySymptomNotif() {
+        symptomsNotifCanvas.SetActive(true);
+        yield return new WaitForSeconds(10f); // How many seconds to display it on screen
+        symptomsNotifCanvas.SetActive(false);
     }
 }
