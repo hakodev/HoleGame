@@ -75,10 +75,10 @@ public class CameraMovement : MonoBehaviour {
     //just fucking fuck it
     private void AnimateHeadAndTorso()
     {
-        Vector3 headEuler = playerHead.transform.rotation.eulerAngles;
-        Vector3 torsoEuler = playerTorso.transform.rotation.eulerAngles;
-        float yas = Mathf.Abs(headEuler.x - torsoEuler.x) + Mathf.Abs   (headEuler.y - torsoEuler.y) + Mathf.Abs(headEuler.z - torsoEuler.z);
-        yas = yas % 360;
+        //Vector3 headEuler = playerHead.transform.rotation.eulerAngles;
+       // Vector3 torsoEuler = playerTorso.transform.rotation.eulerAngles;
+        //float yas = Mathf.Abs(headEuler.x - torsoEuler.x) + Mathf.Abs   (headEuler.y - torsoEuler.y) + Mathf.Abs(headEuler.z - torsoEuler.z);
+       // yas = yas % 360;
 
         //    Debug.Log(yas);
 

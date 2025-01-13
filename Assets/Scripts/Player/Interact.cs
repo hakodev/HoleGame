@@ -6,6 +6,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine.InputSystem.HID;
 using Unity.Burst.CompilerServices;
+using System;
 
 public class Interact : AttributesSync, IObserver
 {
@@ -41,25 +42,27 @@ public class Interact : AttributesSync, IObserver
     Rigidbody rb;
     //AnimationSynchronizable animatorSync;
 
+    private DisappearingObjs disappearingObjs;
+
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
 
         if (!avatar.IsMe) { return; }
         playerController = GetComponent<PlayerController>();
+        disappearingObjs = GetComponent<DisappearingObjs>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
-        //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
-        // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
+      //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
+       // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
     }
-    //  private void OnEnable()
-    //   {
-    //     if (!avatar.IsMe) { return; }
-    //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-    //  }
+  //  private void OnEnable()
+ //   {
+   //     if (!avatar.IsMe) { return; }
+  //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
+  //  }
     private void Start()
     {
-        if (!avatar.IsMe)
-        {
+        if (!avatar.IsMe) {
             int playerLayer = LayerMask.NameToLayer("PlayerLayer");
             gameObject.layer = playerLayer;
             SetLayerRecursively(gameObject, playerLayer);
@@ -109,7 +112,7 @@ public class Interact : AttributesSync, IObserver
             if (finishedPickUp)
             {
                 //isChargingUp = false;
-                //                heldObject.GetComponent<Rigidbody>().useGravity = true;
+//                heldObject.GetComponent<Rigidbody>().useGravity = true;
 
                 if (currentChargeUpTime > minMaxThrowChargeUpTime.x)
                 {
@@ -166,10 +169,15 @@ public class Interact : AttributesSync, IObserver
             }
         }
     }
+
+    public bool GetHeldObjectDroppedOrThrown() {
+        return heldObject == null;
+    }
+
     private void Place()
     {
         SetLayerRecursively(heldObject, 11);
-        LayerMask everythingButHeldObject = ~(1 << 10 | 1 << 11); //and self player
+        LayerMask everythingButHeldObject = ~(1 << 11);
 
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject))
@@ -234,9 +242,9 @@ public class Interact : AttributesSync, IObserver
         Renderer[] temp = obj.GetComponentsInChildren<Renderer>();
         List<Renderer> renderers = new List<Renderer>();
 
-        for (int i = 0; i < temp.Length; i++)
+        for(int i=0; i<temp.Length; i++)
         {
-            if (temp[i] != null)
+            if (temp[i]!=null)
             {
                 renderers.Add(temp[i]);
             }
@@ -248,7 +256,7 @@ public class Interact : AttributesSync, IObserver
 
             for (int i = 0; i < renderers.Count; i++)
             {
-                if (renderers[i] != null)
+                if (renderers[i] != null) 
                 {
                     combinedBounds.Encapsulate(renderers[i].bounds);
                 }
@@ -295,14 +303,17 @@ public class Interact : AttributesSync, IObserver
     }
     private void Spam2()
     {
+        disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
+
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
-        // rbToTrack.enabled = true;
+       // rbToTrack.enabled = true;
         heldObject = null;
         rbToTrack = null;
         rb = null;
     }
+
     private void TryPickUp(GameObject pickedUp)
     {
         //   animator.SetTrigger("PickingUp");
@@ -361,7 +372,7 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
-
+  
 
 
     //art stuff

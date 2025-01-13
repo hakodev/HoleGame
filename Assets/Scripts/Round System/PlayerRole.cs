@@ -1,0 +1,53 @@
+using Alteruna;
+using DG.Tweening;
+using System.Collections;
+using UnityEngine;
+
+public class PlayerRole : AttributesSync
+{
+    [Header("design")]
+    [SerializeField] private float roleDisplayTime;
+
+    [Header("nerd shit - programming")]
+    Alteruna.Avatar avatar;
+    [SynchronizableField] Roles role;
+
+    [SerializeField] CanvasGroup infiltratorCanvas;
+    [SerializeField] CanvasGroup machineCanvas;
+
+    private void Awake()
+    {
+        avatar = GetComponent<Alteruna.Avatar>();
+
+    }
+    public void DisplayRole()
+    {
+        if (!avatar.IsMe) { return; }
+        // Display the local player's role
+        if (role == Roles.Infiltrator)
+        {
+            StartCoroutine(DisplayRole(infiltratorCanvas));
+        }
+
+        if (role == Roles.Machine)
+        {
+            StartCoroutine(DisplayRole(machineCanvas));
+        }
+
+    }
+    private IEnumerator DisplayRole(CanvasGroup roleCanvas)
+    {
+        roleCanvas.DOFade(1f, 1f);
+        yield return new WaitForSeconds(roleDisplayTime); // How many seconds to display it on screen
+        roleCanvas.DOFade(0f, 1f);
+    }
+
+    public Roles GetRole()
+    {
+        return role;
+    }
+    public void SetRole(Roles newRole)
+    {
+        role = newRole;
+    }
+}
