@@ -113,7 +113,6 @@ GameObject:
   - component: {fileID: 4654941033971830888}
   - component: {fileID: 894868455983485613}
   - component: {fileID: 1940203094101633994}
-  - component: {fileID: 7855598348195584612}
   m_Layer: 5
   m_Name: CountdownVoteEnd_20
   m_TagString: Untagged
@@ -239,23 +238,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &7855598348195584612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1995483481627348194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d6006cf6a14a744fb59274e46ca7048, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 20
-  secondsRemainingToTurnRed: 10
-  OnTimerEnd:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &2607243874446099919
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,7 +385,6 @@ GameObject:
   - component: {fileID: 5786320166081925123}
   - component: {fileID: 6667717963646489892}
   - component: {fileID: 1498540320078599913}
-  - component: {fileID: 6666683740925535691}
   m_Layer: 5
   m_Name: VotingPanel
   m_TagString: Untagged
@@ -470,21 +451,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6666683740925535691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6680218281569798758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2701840edf6e39643b68ea08ebdd8c76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerVoteOption: {fileID: 4703291767131715157, guid: d8f2a44d382a1174789845646ff2c920, type: 3}
-  firstPlayerOptionYPos: -250
-  pickedPlayerNameText: {fileID: 0}
-  votingCanvas: {fileID: 1590994383568067082}
-  votedCanvas: {fileID: 0}
-  taskManagerPickedDisplayCanvas: {fileID: 0}

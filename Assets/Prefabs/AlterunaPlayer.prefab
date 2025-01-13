@@ -717,8 +717,6 @@ GameObject:
   - component: {fileID: 9156419535061637383}
   - component: {fileID: 7518534502350208058}
   - component: {fileID: 6819232429365655515}
-  - component: {fileID: 3966897673367325224}
-  - component: {fileID: 10831237468437592}
   - component: {fileID: 9170362232215914470}
   - component: {fileID: 3021465343479778412}
   m_Layer: 0
@@ -880,37 +878,6 @@ MonoBehaviour:
   minMaxThrowStrength: {x: 3, y: 20}
   minMaxThrowChargeUpTime: {x: 0.3, y: 1}
   smoothingHeldObjectMovement: 0.025
---- !u!114 &3966897673367325224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2507407002761147588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21d48dbaf57b143478b10a34fcf84087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: de3dc5d3-98de-4284-b100-d333bd162e74
-  Reliability: 1
-  LocalMethodBehavior: 1
-  debugDeathMaterial: {fileID: 0}
---- !u!114 &10831237468437592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2507407002761147588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cff906527f6ee64c8142ae1e335d155, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visualizeSelfHealth: {fileID: 7364238379685084473}
-  visualizePublicHealth: {fileID: 4238203918320626503}
 --- !u!114 &9170362232215914470
 MonoBehaviour:
   m_ObjectHideFlags: 0
