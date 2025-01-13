@@ -252,7 +252,7 @@ public class Interact : AttributesSync, IObserver
     private void Place()
     {
         SetLayerRecursively(heldObject, 11);
-        LayerMask everythingButHeldObject = ~(1 << 11 | 1 << 10);
+        LayerMask everythingButHeldObject = ~(1 << 11 | 10);
 
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
