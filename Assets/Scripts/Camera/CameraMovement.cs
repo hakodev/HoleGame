@@ -71,8 +71,6 @@ public class CameraMovement : MonoBehaviour {
 
     }
 
-
-    //just fucking fuck it
     private void AnimateHeadAndTorso()
     {
         //Vector3 headEuler = playerHead.transform.rotation.eulerAngles;
@@ -80,13 +78,10 @@ public class CameraMovement : MonoBehaviour {
         //float yas = Mathf.Abs(headEuler.x - torsoEuler.x) + Mathf.Abs   (headEuler.y - torsoEuler.y) + Mathf.Abs(headEuler.z - torsoEuler.z);
        // yas = yas % 360;
 
-        //    Debug.Log(yas);
+       //    Debug.Log(yas);
+        Debug.Log(Mathf.Abs(playerHead.transform.rotation.eulerAngles.y - playerTorso.transform.rotation.eulerAngles.y));
 
-        float angie = Mathf.Abs(playerHead.transform.localRotation.eulerAngles.y - playerTorso.transform.localRotation.eulerAngles.y);
-        playerTorso.transform.parent.localRotation = Quaternion.Euler(0, horizontalRotation, 0);
-        playerHead.transform.rotation = transform.rotation;
 
-        /*
         if (mishSync.GetTargetAnimDot() != Vector2.zero)
         {
             //if moves
@@ -103,32 +98,20 @@ public class CameraMovement : MonoBehaviour {
             //iff doesnt move
             //playerHead.transform.localRotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
 
-            //playerHead.transform.Rotate(verticalRotation, horizontalRotation, 0);
-            playerHead.transform.rotation = transform.rotation;
-
+            playerHead.transform.Rotate(verticalRotation, horizontalRotation, 0);
         }
 
-        float angie = Mathf.Abs(playerHead.transform.localRotation.eulerAngles.y - playerTorso.transform.localRotation.eulerAngles.y);
-        Debug.Log(angie);
 
-        if (angie > 80 || angie < -80)
+        if (Mathf.Abs(playerHead.transform.rotation.eulerAngles.y - playerTorso.transform.rotation.eulerAngles.y) > 80)
         {
             //playerTorso.transform.DORotate(new Vector3(0, horizontalRotation, 0), easingTorsoDuration).SetEase(Ease.InOutSine);
             //playerHead.transform.localRotation = Quaternion.Euler(verticalRotation, playerHead.transform.localRotation.y, playerHead.transform.localRotation.z);
+
+            playerTorso.transform.parent.Rotate(0, horizontalRotation, 0);
+            playerHead.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+
             // playerHead.transform.Rotate(verticalRotation, horizontalRotation, 0);
-
-            // playerTorso.transform.parent.DORotate(new Vector3(0, horizontalRotation, 0), easingTorsoDuration).SetEase(Ease.InOutSine);
-            // playerHead.transform.Rotate(verticalRotation, 0, 0);
-
-            //playerHead.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
-             playerTorso.transform.parent.localRotation = Quaternion.Euler(0, horizontalRotation, 0);
-
-            playerHead.transform.rotation = transform.rotation;             //playerTorso.transform.parent.Rotate(0, horizontalRotation, 0);
-
-
-
         }
-        */
     }
     private void ProcessCameraInput()
     {
