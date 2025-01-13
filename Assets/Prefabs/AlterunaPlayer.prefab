@@ -847,9 +847,13 @@ MonoBehaviour:
   runSpeed: 4.5
   crouchSpeed: 1.24
   crouchRunSpeed: 1.65
+  walkSpeedBack: 1.96
+  runSpeedBack: 3.15
   gravityMultiplier: 1.75
   jumpHeight: 2.2
   crouchedJumpHeight: 4
+  cameraTransform: {fileID: 2499838082348914692}
+  moveTransform: {fileID: 2358912593479362920}
 --- !u!114 &6819232429365655515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -924,8 +928,7 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   Jumping: 0
-  Walking: 0
-  Running: 0
+  animationSmoothing: 4
 --- !u!114 &3021465343479778412
 MonoBehaviour:
   m_ObjectHideFlags: 0

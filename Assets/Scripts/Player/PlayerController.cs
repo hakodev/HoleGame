@@ -2,7 +2,6 @@ using UnityEngine;
 using Alteruna;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Data;
 public class PlayerController : MonoBehaviour
 {
 
@@ -34,16 +33,14 @@ public class PlayerController : MonoBehaviour
     private GameObject animationTie;
     MishSyncAnimations mishSync;
 
-    public int VotedCount { get; set; }
-    public bool IsTaskManager { get; set; } = false;
-    public SymptomsSO Symptom { get; set; }
-
     [Header("Nerd SHIT - Programming")]
     [SerializeField] Transform cameraTransform;
     [SerializeField] Transform moveTransform;
 
     public bool IsCrouching { get; private set; }
-    public Roles Role { get; set; }
+    public int VotedCount { get; set; }
+    public bool IsTaskManager { get; set; } = false;
+    public SymptomsSO Symptom { get; set; }
 
     private void Awake()
     {
@@ -165,5 +162,4 @@ public class PlayerController : MonoBehaviour
         verticalInput = 0f;
     }
 }
-
 
