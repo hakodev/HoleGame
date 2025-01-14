@@ -12,6 +12,8 @@ public class CoffeeCup : DynamicInteractableObject
 
     AudioSource hitSource;
 
+    public float coffeeFillHeight;
+
     private void Start()
     {
         coffeeFill = transform.GetChild(0).gameObject;
@@ -33,7 +35,7 @@ public class CoffeeCup : DynamicInteractableObject
         while (t < 1)
         {
             coffeeFill.transform.localPosition = Vector3.Lerp(new Vector3(coffeeFill.transform.localPosition.x, 0, coffeeFill.transform.localPosition.z),
-                new Vector3(coffeeFill.transform.localPosition.x, 1f, coffeeFill.transform.localPosition.z), t);
+                new Vector3(coffeeFill.transform.localPosition.x, coffeeFillHeight, coffeeFill.transform.localPosition.z), t);
             t += Time.deltaTime * 0.3f;
             yield return new WaitForEndOfFrame();
         }

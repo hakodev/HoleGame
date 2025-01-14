@@ -157,6 +157,7 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   coffeeFilled: 0
+  coffeeFillHeight: 1.1
 --- !u!54 &6143959401256544494
 Rigidbody:
   m_ObjectHideFlags: 0
