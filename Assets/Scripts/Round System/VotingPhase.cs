@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Alteruna;
+public class VotingPhase : AttributesSync {
 
-public class VotingPhase : MonoBehaviour {
     private List<PlayerRole> totalPlayers;
+
     [SerializeField] private GameObject playerVoteButton;
     [SerializeField] private float firstPlayerOptionYPos;
     [SerializeField] TMP_Text pickedPlayerNameText;
@@ -15,6 +17,12 @@ public class VotingPhase : MonoBehaviour {
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
     [SerializeField] GameObject symptomsNotifCanvas;
 
+    Alteruna.Avatar avatar;
+
+    private void Awake()
+    {
+        avatar = GetComponent<Alteruna.Avatar>();
+    }
     private void Start() {
         totalPlayers = RoleAssignment.GetTotalPlayers();
 
@@ -29,8 +37,9 @@ public class VotingPhase : MonoBehaviour {
         CustomMethods.foundRecursively = null;
     }
 
+    [SynchronizableMethod]
     public void InitiateVotingPhase() {
-
+        if(!avatar.IsMe) { return; }
         
         votingCanvas.SetActive(true);
 
@@ -63,9 +72,11 @@ public class VotingPhase : MonoBehaviour {
         
     }
 
+    [SynchronizableMethod]
     public void EndVotingPhase() {
-        
-           votingCanvas.SetActive(false);
+        if (!avatar.IsMe) { return; }
+
+        votingCanvas.SetActive(false);
            votedCanvas.SetActive(false);
            Cursor.lockState = CursorLockMode.Locked;
            Cursor.visible = false;

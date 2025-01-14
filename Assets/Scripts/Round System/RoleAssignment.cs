@@ -10,7 +10,7 @@ public class RoleAssignment : AttributesSync
 
 
     private static List<PlayerRole> rolelessPlayers = new();
-    private static List<PlayerRole> totalPlayers = new();
+    [SynchronizableField] private static List<PlayerRole> totalPlayers = new();
 
     private int maxNumOfInfiltrators = 1;
     Alteruna.Avatar avatar;
@@ -99,7 +99,7 @@ public class RoleAssignment : AttributesSync
 
             // totalPlayers[randomNum].SetRole(Roles.Machine);
             // totalPlayers[randomNum].DisplayRole();
-            Debug.Log(rolelessPlayers[randomNum].gameObject.name + rolelessPlayers[randomNum].GetRole());
+           // Debug.Log(rolelessPlayers[randomNum].gameObject.name + rolelessPlayers[randomNum].GetRole());
             rolelessPlayers.RemoveAt(randomNum); // Remove the player from the roleless list after giving them a role
         }
 
@@ -110,7 +110,7 @@ public class RoleAssignment : AttributesSync
 
            // player.SetRole(Roles.Machine);
            // player.DisplayRole();
-            Debug.Log(player.gameObject.name + player.GetRole());
+        //    Debug.Log(player.gameObject.name + player.GetRole());
 
         }
 
