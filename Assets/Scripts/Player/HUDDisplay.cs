@@ -8,8 +8,9 @@ public class HUDDisplay : MonoBehaviour
 
     private HUDState state;
 
-    private static HUDDisplay instance;
-    public static HUDDisplay Instance
+    //private static HUDDisplay instance;
+
+    /*    public static HUDDisplay Instance
     {
         get
         {
@@ -19,8 +20,8 @@ public class HUDDisplay : MonoBehaviour
             }
             return instance;
         }
-    }
-    
+    }*/
+
     public void SetState(HUDState stateToSet)
     {
         state = stateToSet;

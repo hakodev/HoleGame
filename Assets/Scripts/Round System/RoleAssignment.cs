@@ -8,11 +8,39 @@ public class RoleAssignment : MonoBehaviour
 
 
     private List<PlayerRole> rolelessPlayers = new();
+    private List<PlayerRole> totalPlayers = new List<PlayerRole>();
+
     private int maxNumOfInfiltrators = 1;
+    Alteruna.Avatar avatar;
 
-    [SerializeField] List<InfiltratorsToPlayers> infiltratorsToPlayers = new List<InfiltratorsToPlayers>();
+    [SerializeField] List<Vector2> InfiltratorsToPlayers;
+    //x - alll players
+    //y - humans
+    //all int numbers
 
-    private void OnEnable()
+    private void Awake()
+    {
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
+    }
+    private void Start()
+    {
+        if (!avatar.IsOwner)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+    private void Update()
+    {
+        if(avatar.IsOwner)
+        {
+            if (Input.GetKeyUp(KeyCode.G))
+            {
+                RoomStarted();
+            }
+        }
+    }
+    public void RoomStarted()
     {
         FindRolelessPlayers();
         DetermineMaxNumberOfInfiltrators();
@@ -21,16 +49,15 @@ public class RoleAssignment : MonoBehaviour
 
     private void FindRolelessPlayers()
     {
-        PlayerRole[] totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None);
         rolelessPlayers.AddRange(totalPlayers);
     }
     private void DetermineMaxNumberOfInfiltrators()
     {
-        foreach (InfiltratorsToPlayers ratio in infiltratorsToPlayers)
+        foreach (Vector2 ratio in InfiltratorsToPlayers)
         {
-            if (rolelessPlayers.Count >= ratio.robotsCount)
+            if (rolelessPlayers.Count >= ratio.x)
             {
-                maxNumOfInfiltrators = ratio.infiltratorsCount;
+                maxNumOfInfiltrators = (int)ratio.y;
             }
         }
     }
@@ -49,30 +76,20 @@ public class RoleAssignment : MonoBehaviour
             randomNum = Random.Range(0, rolelessPlayers.Count);
 
             rolelessPlayers[randomNum].SetRole(Roles.Infiltrator);
+            rolelessPlayers[randomNum].DisplayRole();
             rolelessPlayers.RemoveAt(randomNum); // Remove the player from the roleless list after giving them a role
         }
 
         foreach (PlayerRole player in rolelessPlayers)
         { // Give the rest the machine role
             player.SetRole(Roles.Machine);
+            player.DisplayRole();
         }
 
         rolelessPlayers.Clear();
 
         //call all players
-    }
-
-
-}
-public class InfiltratorsToPlayers
-{
-    public int infiltratorsCount;
-    public int robotsCount;
-
-    public InfiltratorsToPlayers(int infiltratorsCount, int robotsCount)
-    {
-        this.infiltratorsCount = infiltratorsCount;
-        this.robotsCount = robotsCount;
+        gameObject.SetActive(false);
     }
 }
 public enum Roles
