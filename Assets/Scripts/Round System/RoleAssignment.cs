@@ -10,7 +10,7 @@ public class RoleAssignment : AttributesSync
 
 
     private static List<PlayerRole> rolelessPlayers = new();
-    private static List<PlayerRole> totalPlayers = new List<PlayerRole>();
+    private static List<PlayerRole> totalPlayers = new();
 
     private int maxNumOfInfiltrators = 1;
     Alteruna.Avatar avatar;
@@ -56,6 +56,10 @@ public class RoleAssignment : AttributesSync
         }
     }
 
+    public static List<PlayerRole> GetTotalPlayers() {
+        return totalPlayers;
+    }
+
     private void FindRolelessPlayers()
     {
         rolelessPlayers.AddRange(totalPlayers);
@@ -81,22 +85,22 @@ public class RoleAssignment : AttributesSync
         for (int i = 0; i < maxNumOfInfiltrators; i++)
         { // Give maxNumOfInfiltrators amount of random players the infiltrator role
 
-            if (totalPlayers.Count == 0) break; // Just in case
+            if (rolelessPlayers.Count == 0) break; // Just in case
 
-            randomNum = Random.Range(0, totalPlayers.Count);
+            randomNum = Random.Range(0, rolelessPlayers.Count);
 
-             totalPlayers[randomNum].BroadcastRemoteMethod("SetRole", Roles.Infiltrator);
-            totalPlayers[randomNum].BroadcastRemoteMethod("DisplayRole");
+            rolelessPlayers[randomNum].BroadcastRemoteMethod("SetRole", Roles.Infiltrator);
+            rolelessPlayers[randomNum].BroadcastRemoteMethod("DisplayRole");
 
             //            totalPlayers[randomNum].DisplayRole();
 
             // totalPlayers[randomNum].SetRole(Roles.Machine);
             // totalPlayers[randomNum].DisplayRole();
-            Debug.Log(totalPlayers[randomNum].gameObject.name + totalPlayers[randomNum].GetRole());
-            totalPlayers.RemoveAt(randomNum); // Remove the player from the roleless list after giving them a role
+            Debug.Log(rolelessPlayers[randomNum].gameObject.name + rolelessPlayers[randomNum].GetRole());
+            rolelessPlayers.RemoveAt(randomNum); // Remove the player from the roleless list after giving them a role
         }
 
-        foreach(PlayerRole player in totalPlayers)
+        foreach(PlayerRole player in rolelessPlayers)
         { // Give the rest the machine role
             player.BroadcastRemoteMethod("SetRole", Roles.Machine);
             player.BroadcastRemoteMethod("DisplayRole");
@@ -107,7 +111,7 @@ public class RoleAssignment : AttributesSync
 
         }
 
-        totalPlayers.Clear();
+        rolelessPlayers.Clear();
 
         //call all players
         gameObject.SetActive(false);

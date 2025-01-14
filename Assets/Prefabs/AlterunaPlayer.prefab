@@ -717,7 +717,6 @@ GameObject:
   - component: {fileID: 9156419535061637383}
   - component: {fileID: 7518534502350208058}
   - component: {fileID: 6819232429365655515}
-  - component: {fileID: 10831237468437592}
   - component: {fileID: 9170362232215914470}
   - component: {fileID: 3021465343479778412}
   - component: {fileID: 2946068601770951158}
@@ -877,7 +876,6 @@ MonoBehaviour:
   clientHand: {fileID: 8545988785631638419}
   serverHand: {fileID: 8625206230334767510}
   playerCamera: {fileID: 8805186453696645239}
-  hudDisplay: {fileID: 0}
   grabReach: 6
   placeReach: 3
   primaryButton: 323
@@ -885,20 +883,6 @@ MonoBehaviour:
   minMaxThrowStrength: {x: 3, y: 20}
   minMaxThrowChargeUpTime: {x: 0.3, y: 1}
   smoothingHeldObjectMovement: 0.025
---- !u!114 &10831237468437592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2507407002761147588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cff906527f6ee64c8142ae1e335d155, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visualizeSelfHealth: {fileID: 7364238379685084473}
-  visualizePublicHealth: {fileID: 4238203918320626503}
 --- !u!114 &9170362232215914470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1953,7 +1937,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -4329,6 +4313,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: AhmetUI
       objectReference: {fileID: 0}
+    - target: {fileID: 8375887404614809819, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
+      propertyPath: symptomsNotifCanvas
+      value: 
+      objectReference: {fileID: 7986345306470846294}
+    - target: {fileID: 8375887404614809819, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
+      propertyPath: pickedPlayerNameText
+      value: 
+      objectReference: {fileID: 8636452893064026543}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4349,3 +4341,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1134162587162712719, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
   m_PrefabInstance: {fileID: 7722038903492551007}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7986345306470846294 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 432068238686694921, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
+  m_PrefabInstance: {fileID: 7722038903492551007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8636452893064026543 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2085423216369760496, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
+  m_PrefabInstance: {fileID: 7722038903492551007}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

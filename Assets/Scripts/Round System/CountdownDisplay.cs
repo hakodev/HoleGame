@@ -25,7 +25,7 @@ public class CountdownDisplay : MonoBehaviour {
             time--;
             countdown.text = time.ToString();
 
-            if(time <= 20) {
+            if(time <= secondsRemainingToTurnRed) {
                 countdown.color = Color.red;
             }
         }

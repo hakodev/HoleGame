@@ -1,25 +1,24 @@
 using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class VotingPhase : MonoBehaviour {
-    private PlayerController[] totalPlayers;
+    private List<PlayerRole> totalPlayers;
     [SerializeField] private GameObject playerVoteButton;
     [SerializeField] private float firstPlayerOptionYPos;
-    [SerializeField] private TMP_Text pickedPlayerNameText;
+    private TMP_Text pickedPlayerNameText;
     [SerializeField] private GameObject votingCanvas;
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
-    [SerializeField] private GameObject symptomsNotifCanvas;
+    private GameObject symptomsNotifCanvas;
 
-    private void OnEnable() {
-        totalPlayers = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
-    }
-
-    public PlayerController[] GetTotalPlayers() {
-        return totalPlayers;
+    private void Start() {
+        totalPlayers = RoleAssignment.GetTotalPlayers();
+        pickedPlayerNameText = GameObject.Find("PickedPlayerNameText").GetComponent<TMP_Text>();
+        symptomsNotifCanvas = GameObject.Find("SymptomsNotifCanvas");
     }
 
     public void InitiateVotingPhase() {
@@ -30,7 +29,7 @@ public class VotingPhase : MonoBehaviour {
 
         float tempYPos = firstPlayerOptionYPos;
 
-        foreach(PlayerController player in totalPlayers) {
+        foreach(PlayerRole player in totalPlayers) {
             if(player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
             } else {
@@ -49,7 +48,7 @@ public class VotingPhase : MonoBehaviour {
                 tempYPos -= 100f;
             }
 
-            player.MovementEnabled = false; // Disable movement until end of voting phase
+            player.gameObject.GetComponent<PlayerController>().MovementEnabled = false; // Disable movement until end of voting phase
         }
     }
 
@@ -59,12 +58,12 @@ public class VotingPhase : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        PlayerController pickedPlayer = null;
+        PlayerRole pickedPlayer = null;
 
-        for(int i = 0; i < totalPlayers.Length; i++) {
+        for(int i = 0; i < totalPlayers.Count; i++) {
             PlayerRole currentPlayer = totalPlayers[i].GetComponent<PlayerRole>();
 
-            totalPlayers[i].MovementEnabled = true; // Enable movement again
+            totalPlayers[i].gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
             if(currentPlayer.GetRole() == Roles.Infiltrator)
                 StartCoroutine(DisplaySymptomNotif());
