@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5820510061760249672}
   - component: {fileID: 47534728892021010}
   - component: {fileID: 7088785499241151457}
-  - component: {fileID: 5258948164734413655}
   m_Layer: 5
   m_Name: RoleDisplayCanvas
   m_TagString: Untagged
@@ -104,18 +103,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5258948164734413655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 524497936632874212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5cd62d94ce8b5540b1159b641fa6bae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3207878124887896791
 GameObject:
   m_ObjectHideFlags: 0

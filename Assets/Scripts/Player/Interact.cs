@@ -1,12 +1,7 @@
-using System.Buffers.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using Alteruna;
-using DG.Tweening;
 using System.Collections.Generic;
-using UnityEngine.InputSystem.HID;
-using Unity.Burst.CompilerServices;
-using System;
+
 
 public class Interact : AttributesSync, IObserver
 {
@@ -19,6 +14,7 @@ public class Interact : AttributesSync, IObserver
 
     [SerializeField] Camera playerCamera;
     PlayerController playerController;
+    [SerializeField] HUDDisplay hudDisplay;
 
 
     [Header("Designer Values")]
@@ -158,11 +154,11 @@ public class Interact : AttributesSync, IObserver
 
         if (heldObject)
         {
-            HUDDisplay.Instance.SetState(new CarryDisplay(HUDDisplay.Instance));
+            hudDisplay.SetState(new CarryDisplay(hudDisplay));
         }
         else
         {
-            HUDDisplay.Instance.SetState(new EmptyDisplay(HUDDisplay.Instance));
+            hudDisplay.SetState(new EmptyDisplay(hudDisplay));
         }
 
         RaycastHit hit;
@@ -173,7 +169,7 @@ public class Interact : AttributesSync, IObserver
 
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("StationaryInteractableObject"))
             {
-                HUDDisplay.Instance.SetState(new StationaryInteract(HUDDisplay.Instance));
+                hudDisplay.SetState(new StationaryInteract(hudDisplay));
                 if (Input.GetMouseButtonDown(1))
                 {
                     hit.transform.gameObject.GetComponent<StationaryInteractableObject>().Use();
@@ -183,7 +179,7 @@ public class Interact : AttributesSync, IObserver
  
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
             {
-                HUDDisplay.Instance.SetState(new DynamicInteract(HUDDisplay.Instance));
+                hudDisplay.SetState(new DynamicInteract(hudDisplay));
                 if (Input.GetMouseButtonDown(0))
                 {
                     TryPickUp(hit.transform.gameObject);
@@ -252,7 +248,7 @@ public class Interact : AttributesSync, IObserver
     private void Place()
     {
         SetLayerRecursively(heldObject, 11);
-        LayerMask everythingButHeldObject = ~(1 << 11 | 1 << 10);
+        LayerMask everythingButHeldObject = ~(1 << 11 | 10);
 
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
