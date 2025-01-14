@@ -12,6 +12,7 @@ public class DisappearingObjs : MonoBehaviour {
 
     public void CheckIfPlayerHasDisappearingObjectsSymptom(GameObject heldObject) {
         if(player.Symptom == disappearingObjsSymptom && avatar.IsMe) {
+            heldObject.GetComponent<Collider>().enabled = false;
             heldObject.transform.DOScale(new Vector3(0f, 0f, 0f), 1f);
         }
     }
