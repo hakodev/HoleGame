@@ -3,14 +3,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using Alteruna;
+using System.Collections.Generic;
 
 public class CountdownDisplay : AttributesSync {
     private TMP_Text countdown;
     [SynchronizableField] [SerializeField] private int time;
     [SynchronizableField] static Color countdownColor = Color.green;
+    [SynchronizableField] bool hasInitiatedTheScreen = false;
     [SerializeField] private int secondsRemainingToTurnRed;
     [SerializeField] private UnityEvent OnTimerEnd;
-    bool hasInitiatedTheScreen = false;
+
+    private List<PlayerRole> totalPlayers;
+
 
     private void Awake() {
         countdown = GetComponent<TMP_Text>();
@@ -54,7 +58,8 @@ public class CountdownDisplay : AttributesSync {
             }
             countdown.color = countdownColor;
         }
-        Debug.Log(time);
+        Debug.Log(time + "should ivoke the player's things");
         OnTimerEnd?.Invoke();
+
     }
 }

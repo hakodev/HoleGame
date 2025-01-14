@@ -9,21 +9,29 @@ public class VotingPhase : MonoBehaviour {
     private List<PlayerRole> totalPlayers;
     [SerializeField] private GameObject playerVoteButton;
     [SerializeField] private float firstPlayerOptionYPos;
-    private TMP_Text pickedPlayerNameText;
+    [SerializeField] TMP_Text pickedPlayerNameText;
     [SerializeField] private GameObject votingCanvas;
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
-    private GameObject symptomsNotifCanvas;
+    [SerializeField] GameObject symptomsNotifCanvas;
 
     private void Start() {
         totalPlayers = RoleAssignment.GetTotalPlayers();
-        pickedPlayerNameText = GameObject.Find("PickedPlayerNameText").GetComponent<TMP_Text>();
-        symptomsNotifCanvas = GameObject.Find("SymptomsNotifCanvas");
+
+        /*   
+        CustomMethods.FindChildRecursivelyQuick(transform, "PickedPlayerNameText");
+        pickedPlayerNameText = CustomMethods.foundRecursively.GetComponent<TMP_Text>();
+
+        CustomMethods.FindChildRecursivelyQuick(transform, "SymptomsNotifCanvas");
+        symptomsNotifCanvas = CustomMethods.foundRecursively;
+        */
+
+        CustomMethods.foundRecursively = null;
     }
 
     public void InitiateVotingPhase() {
 
-        /*
+        
         votingCanvas.SetActive(true);
 
         Cursor.lockState = CursorLockMode.None; // Unlock the mouse for the voting
@@ -52,35 +60,37 @@ public class VotingPhase : MonoBehaviour {
 
             player.gameObject.GetComponent<PlayerController>().MovementEnabled = false; // Disable movement until end of voting phase
         }
-        */
+        
     }
 
     public void EndVotingPhase() {
-        votingCanvas.SetActive(false);
-        votedCanvas.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        
+           votingCanvas.SetActive(false);
+           votedCanvas.SetActive(false);
+           Cursor.lockState = CursorLockMode.Locked;
+           Cursor.visible = false;
 
-        PlayerRole pickedPlayer = null;
+           PlayerRole pickedPlayer = null;
 
-        for(int i = 0; i < totalPlayers.Count; i++) {
-            PlayerRole currentPlayer = totalPlayers[i].GetComponent<PlayerRole>();
+           for(int i = 0; i < totalPlayers.Count; i++) {
+               PlayerRole currentPlayer = totalPlayers[i].GetComponent<PlayerRole>();
 
-            totalPlayers[i].gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
+               totalPlayers[i].gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
-            if(currentPlayer.GetRole() == Roles.Infiltrator)
-                StartCoroutine(DisplaySymptomNotif());
+               if(currentPlayer.GetRole() == Roles.Infiltrator)
+                   StartCoroutine(DisplaySymptomNotif());
 
-            if(totalPlayers[i] == totalPlayers[0])
-                continue;
+               if(totalPlayers[i] == totalPlayers[0])
+                   continue;
 
-            if(totalPlayers[i].VotedCount > totalPlayers[i - 1].VotedCount)
-                pickedPlayer = totalPlayers[i];
-        }
+               if(totalPlayers[i].VotedCount > totalPlayers[i - 1].VotedCount)
+                   pickedPlayer = totalPlayers[i];
+           }
 
-        pickedPlayerNameText.text = pickedPlayer.gameObject.name;
-        pickedPlayer.IsTaskManager = true;
-        StartCoroutine(DisplayTaskManager());
+           pickedPlayerNameText.text = pickedPlayer.gameObject.name;
+           pickedPlayer.IsTaskManager = true;
+           StartCoroutine(DisplayTaskManager());
+        
     }
 
     private IEnumerator DisplayTaskManager() {

@@ -1,7 +1,5 @@
 using Alteruna;
 using System.Collections.Generic;
-using System.Drawing;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class StickyNote : DynamicInteractableObject
