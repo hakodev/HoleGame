@@ -20,6 +20,7 @@ public class PlayerRole : AttributesSync
         avatar = GetComponent<Alteruna.Avatar>();
 
     }
+    [SynchronizableMethod]
     public void DisplayRole()
     {
         if (!avatar.IsMe) { return; }
@@ -46,10 +47,10 @@ public class PlayerRole : AttributesSync
     {
         return role;
     }
+    [SynchronizableMethod]
     public void SetRole(Roles newRole)
     {
         role = newRole;
-        DisplayRole();
     }
 }
     
