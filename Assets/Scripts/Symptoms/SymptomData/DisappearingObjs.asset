@@ -17,17 +17,4 @@ MonoBehaviour:
     drop or throw them.
   OnSymptomTriggered:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6617774017616053506, guid: 6dbbd034cc3a9e14fadcf4228cf58db5, type: 3}
-        m_TargetAssemblyTypeName: DisappearingObjs, Assembly-CSharp
-        m_MethodName: DisappearDroppedOrThrownIntractable
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  IsEffected: 0
+      m_Calls: []

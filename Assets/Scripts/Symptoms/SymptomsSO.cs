@@ -6,12 +6,6 @@ public class SymptomsSO : ScriptableObject {
     public string Name;
     [TextArea(1, 3)]
     public string Description;
-    [Space, SerializeField]
-    private UnityEvent OnSymptomTriggered;
-    public bool IsEffected;
-
-    public void TriggerSymptom() {
-        OnSymptomTriggered?.Invoke();
-        IsEffected = true;
-    }
+    [Space]
+    public UnityEvent OnSymptomTriggered;
 }

@@ -256,7 +256,7 @@ GameObject:
   - component: {fileID: 8204229187963829579}
   - component: {fileID: 3994402365008273813}
   - component: {fileID: 219285432067782719}
-  - component: {fileID: 738904884069963271}
+  - component: {fileID: 206825767957582304}
   m_Layer: 5
   m_Name: CountdownStartDowntime_60
   m_TagString: Untagged
@@ -383,7 +383,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &738904884069963271
+--- !u!114 &206825767957582304
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2923793777255632284}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d6006cf6a14a744fb59274e46ca7048, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ba9b60d2b76a4b4187317657620a018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   time: 60
@@ -401,20 +401,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: VotingPhase, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: InitiateVotingPhase
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -435,7 +423,7 @@ GameObject:
   - component: {fileID: 770377545512456505}
   - component: {fileID: 3123367086819970843}
   - component: {fileID: 4378200082803138495}
-  - component: {fileID: 4273853277078250316}
+  - component: {fileID: 3340237127107246800}
   m_Layer: 5
   m_Name: CountdownPickTaskMan_20
   m_TagString: Untagged
@@ -562,7 +550,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &4273853277078250316
+--- !u!114 &3340237127107246800
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -571,17 +559,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 4461445914414772249}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d6006cf6a14a744fb59274e46ca7048, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ba9b60d2b76a4b4187317657620a018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   time: 20
-  secondsRemainingToTurnRed: 10
+  secondsRemainingToTurnRed: 5
   OnTimerEnd:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: VotingPhase, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: EndVotingPhase
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -738,7 +726,7 @@ GameObject:
   - component: {fileID: 1343732162218621028}
   - component: {fileID: 1249257651292998122}
   - component: {fileID: 4030759391244349709}
-  - component: {fileID: 6470784833652758287}
+  - component: {fileID: 3941125981678598996}
   m_Layer: 5
   m_Name: CountdowntDowntime_60
   m_TagString: Untagged
@@ -865,7 +853,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6470784833652758287
+--- !u!114 &3941125981678598996
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -874,7 +862,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5953536155292194226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d6006cf6a14a744fb59274e46ca7048, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ba9b60d2b76a4b4187317657620a018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   time: 60
@@ -883,20 +871,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: VotingPhase, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: InitiateVotingPhase
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -904,7 +880,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &6214401428848743175
 GameObject:
