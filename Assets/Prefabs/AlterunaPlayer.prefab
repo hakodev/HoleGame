@@ -877,7 +877,6 @@ MonoBehaviour:
   clientHand: {fileID: 8545988785631638419}
   serverHand: {fileID: 8625206230334767510}
   playerCamera: {fileID: 8805186453696645239}
-  hudDisplay: {fileID: 0}
   grabReach: 6
   placeReach: 3
   primaryButton: 323
@@ -1941,6 +1940,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6223943137824756081}
+  - {fileID: 1768891096572665019}
   m_Father: {fileID: 7499172478257644583}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8805186453696645239
@@ -2319,6 +2319,37 @@ Transform:
   - {fileID: 5871376018984954413}
   m_Father: {fileID: 1725702680917214583}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4582748893306016771
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1768891096572665019}
+  m_Layer: 0
+  m_Name: PositionForStickies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1768891096572665019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4582748893306016771}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.327}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2499838082348914692}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4696171061017830215
 GameObject:
   m_ObjectHideFlags: 0
@@ -2495,7 +2526,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5566316108457619241
 RectTransform:
   m_ObjectHideFlags: 0

@@ -8,15 +8,18 @@ public class StickyNote : DynamicInteractableObject
 {
     Rigidbody rb;
     RigidbodySynchronizable rbToTrack;
-    [SynchronizableField] bool isPlaced = false;
+    [SynchronizableField] public bool isPlaced = false;
     [SynchronizableField] bool isThrown = false;
     [SynchronizableField] bool isGameStart = true;
     [SynchronizableField] Vector3 placedLocalPos;
      [SynchronizableField] Vector3 placedLocalRot;
     int selfLayer;
 
+    Vector3 finalPosition;
+    Vector3 originalPos;
+    public bool isInteractedWith = false;
     //disable object colliding with it's child
-    //  enalbe ticking to self player if it is thrown
+    //enalbe ticking to self player if it is thrown
     //make paper physics fall as if gliding
     //if object has a sticky note parent it behaves weirdly when thrown after being picked up
     private void Awake()
@@ -27,7 +30,6 @@ public class StickyNote : DynamicInteractableObject
     private void Start()
     {
         selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
-
     }
 
     public override void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
@@ -44,6 +46,8 @@ public class StickyNote : DynamicInteractableObject
         if (interaction == InteractionEnum.PickedUpStickyNote)
         {
             isPlaced = false;
+            originalPos = transform.position;
+            
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -58,7 +62,26 @@ public class StickyNote : DynamicInteractableObject
 
     public override void Use()
     {
-
+        if (!isInteractedWith)
+        {
+            transform.root.GetComponent<PlayerController>().enabled = false;
+            transform.root.GetComponentInChildren<CameraMovement>().enabled = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            finalPosition = transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f;
+            transform.position = finalPosition;
+            isInteractedWith = true;
+        }
+        else
+        {
+            transform.root.GetComponent<PlayerController>().enabled = true;
+            transform.root.GetComponentInChildren<CameraMovement>().enabled = true;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            transform.position = originalPos;
+            isInteractedWith = false;
+        }
+     
     }
     private void Update()
     {
