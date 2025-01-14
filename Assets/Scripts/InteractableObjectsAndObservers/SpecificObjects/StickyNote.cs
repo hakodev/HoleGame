@@ -1,7 +1,6 @@
 using Alteruna;
 using System.Collections.Generic;
 using System.Drawing;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class StickyNote : DynamicInteractableObject
@@ -153,7 +152,7 @@ public class StickyNote : DynamicInteractableObject
 
 
         //assign correct position and rotation
-        gameObject.transform.forward = hitNormal;
+        gameObject.transform.forward = -hitNormal;
         rbToTrack.SetRotation(transform.rotation);
 
         if (isGameStart)

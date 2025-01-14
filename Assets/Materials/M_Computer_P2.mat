@@ -22,7 +22,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Computer_P2
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_Parent: {fileID: -4071241853822502686, guid: 4cdb6ed3fdec29d4ca80952abeddd7aa, type: 3}
+  m_Parent: {fileID: -4071241853822502686, guid: 43c58c5bb23f69e4cae89b012438ef93, type: 3}
   m_ModifiedSerializedProperties: 2
   m_ValidKeywords:
   - _EMISSION
@@ -59,7 +59,7 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.7353569, g: 0.7353569, b: 0.7353569, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

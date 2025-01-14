@@ -167,7 +167,6 @@ public class Interact : AttributesSync, IObserver
         {
             ApplyOutline(hit.transform.gameObject);
 
-
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("StationaryInteractableObject"))
             {
                 hudDisplay.SetState(new StationaryInteract(hudDisplay));
@@ -177,7 +176,8 @@ public class Interact : AttributesSync, IObserver
                 }
 
             }
- 
+
+
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
             {
                 hudDisplay.SetState(new DynamicInteract(hudDisplay));
@@ -270,7 +270,7 @@ public class Interact : AttributesSync, IObserver
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
             rbToTrack.SetPosition(heldObject.transform.position);
 
-            heldObject.transform.forward = hit.normal;
+            heldObject.transform.forward = -hit.normal;
             rbToTrack.SetRotation(heldObject.transform.rotation);
 
 
@@ -394,6 +394,11 @@ public class Interact : AttributesSync, IObserver
     {
         //   animator.SetTrigger("PickingUp");
         //   animatorSync.SetTrigger("PickingUp");
+
+        if (heldObject != null)
+        {
+            return;
+        }
 
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
