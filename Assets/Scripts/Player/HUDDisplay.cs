@@ -22,6 +22,7 @@ public class HUDDisplay : MonoBehaviour
         }
     }*/
 
+
     public void SetState(HUDState stateToSet)
     {
         state = stateToSet;

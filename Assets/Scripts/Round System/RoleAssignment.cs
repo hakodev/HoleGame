@@ -1,14 +1,16 @@
+using Alteruna;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class RoleAssignment : MonoBehaviour
+public class RoleAssignment : AttributesSync
 {
 
 
-    private List<PlayerRole> rolelessPlayers = new();
-    private List<PlayerRole> totalPlayers = new List<PlayerRole>();
+    private static List<PlayerRole> rolelessPlayers = new();
+    private static List<PlayerRole> totalPlayers = new List<PlayerRole>();
 
     private int maxNumOfInfiltrators = 1;
     Alteruna.Avatar avatar;
@@ -18,14 +20,21 @@ public class RoleAssignment : MonoBehaviour
     //y - humans
     //all int numbers
 
+    [SynchronizableField] public static int playerNumber=0;
+
     private void Awake()
     {
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
+        foreach (PlayerRole role in totalPlayers)
+        {
+            Debug.Log(role.gameObject.name);
+        }
+        playerNumber++;
     }
     private void Start()
     {
-        if (!avatar.IsOwner)
+        if (playerNumber != 1)
         {
             gameObject.SetActive(false);
         }
@@ -36,15 +45,11 @@ public class RoleAssignment : MonoBehaviour
         {
             if (Input.GetKeyUp(KeyCode.G))
             {
-                RoomStarted();
+                FindRolelessPlayers();
+                DetermineMaxNumberOfInfiltrators();
+                AssignRoles();
             }
         }
-    }
-    public void RoomStarted()
-    {
-        FindRolelessPlayers();
-        DetermineMaxNumberOfInfiltrators();
-        AssignRoles();
     }
 
     private void FindRolelessPlayers()
@@ -83,7 +88,6 @@ public class RoleAssignment : MonoBehaviour
         foreach (PlayerRole player in rolelessPlayers)
         { // Give the rest the machine role
             player.SetRole(Roles.Machine);
-            player.DisplayRole();
         }
 
         rolelessPlayers.Clear();

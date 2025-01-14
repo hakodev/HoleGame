@@ -232,6 +232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3843719303313104207}
   - component: {fileID: 577414602818965045}
+  - component: {fileID: 6868925618655156184}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -278,6 +279,41 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6868925618655156184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996233025567766754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1312809854, guid: 0ae8d181602a00248a82f64a684a1c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 3709d40f-d781-4bd0-8f0b-b38d3cf7786c
+  BucketBehaviors:
+  - Name: Min
+    NetLOD: 0
+    Frequency: -1
+  - Name: Low
+    NetLOD: 1
+    Frequency: 0
+  - Name: Mid
+    NetLOD: 2
+    Frequency: 0
+  - Name: High
+    NetLOD: 3
+    Frequency: 0
+  - Name: Max
+    NetLOD: 4
+    Frequency: 120
+  Reliability: 2
+  UseGlobalPosition: 0
+  OnlySyncFromRoomOwner: 0
+  refreshRate: 30
+  SyncedAxes: 511
 --- !u!1 &1021256990823845827
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,7 +646,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4301893482121457496}
-  - component: {fileID: 7871404116929539866}
   m_Layer: 0
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -636,41 +671,6 @@ Transform:
   - {fileID: 1753168945567113668}
   m_Father: {fileID: 3843719303313104207}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7871404116929539866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2332573203765004709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1312809854, guid: 0ae8d181602a00248a82f64a684a1c88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: 01875522-cc7e-4a54-99bc-e87f377730af
-  BucketBehaviors:
-  - Name: Min
-    NetLOD: 0
-    Frequency: -1
-  - Name: Low
-    NetLOD: 1
-    Frequency: 0
-  - Name: Mid
-    NetLOD: 2
-    Frequency: 0
-  - Name: High
-    NetLOD: 3
-    Frequency: 0
-  - Name: Max
-    NetLOD: 4
-    Frequency: 120
-  Reliability: 2
-  UseGlobalPosition: 0
-  OnlySyncFromRoomOwner: 0
-  refreshRate: 30
-  SyncedAxes: 511
 --- !u!1 &2454829870516999731
 GameObject:
   m_ObjectHideFlags: 0
@@ -1074,6 +1074,7 @@ GameObject:
   - component: {fileID: 6792361362184223897}
   - component: {fileID: 2805003889776000229}
   - component: {fileID: 6858191903165202107}
+  - component: {fileID: 2758335906243166258}
   m_Layer: 0
   m_Name: SelfCanvas
   m_TagString: Untagged
@@ -1166,6 +1167,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2758335906243166258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2872438336331527543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b632ea5cff80a294588ce8ef97400de8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3033159285523025256
 GameObject:
   m_ObjectHideFlags: 0
@@ -2370,10 +2383,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3348934198500754819}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 419.5}
-  m_SizeDelta: {x: -1600, y: -1020}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -120}
+  m_SizeDelta: {x: 948.4965, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8506443448858340810
 CanvasRenderer:
@@ -2414,8 +2427,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2488,6 +2501,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5cd62d94ce8b5540b1159b641fa6bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 730544ee-9e13-4d10-bac7-be5f2f195f1b
+  Reliability: 1
+  LocalMethodBehavior: 1
   InfiltratorsToPlayers:
   - {x: 1, y: 1}
   - {x: 6, y: 2}

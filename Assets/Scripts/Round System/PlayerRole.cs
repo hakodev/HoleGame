@@ -49,5 +49,7 @@ public class PlayerRole : AttributesSync
     public void SetRole(Roles newRole)
     {
         role = newRole;
+        DisplayRole();
     }
 }
+    
