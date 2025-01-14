@@ -14,7 +14,7 @@ public class Interact : AttributesSync, IObserver
 
     [SerializeField] Camera playerCamera;
     PlayerController playerController;
-    [SerializeField] HUDDisplay hudDisplay;
+    private HUDDisplay hudDisplay;
 
 
     [Header("Designer Values")]
@@ -46,6 +46,7 @@ public class Interact : AttributesSync, IObserver
 
     private void Awake()
     {
+        hudDisplay = GetComponentInChildren<HUDDisplay>();
         avatar = GetComponent<Alteruna.Avatar>();
 
         if (!avatar.IsMe) { return; }
