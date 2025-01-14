@@ -15,6 +15,8 @@ public class RoleAssignment : AttributesSync
     private int maxNumOfInfiltrators = 1;
     Alteruna.Avatar avatar;
 
+    [SynchronizableField] public static bool hasGameStarted=false;
+
     [SerializeField] List<Vector2> InfiltratorsToPlayers;
     //x - alll players
     //y - humans
@@ -49,6 +51,7 @@ public class RoleAssignment : AttributesSync
         {
             if (Input.GetKeyUp(KeyCode.G))
             {
+                hasGameStarted = true;
                 FindRolelessPlayers();
                 DetermineMaxNumberOfInfiltrators();
                 AssignRoles();

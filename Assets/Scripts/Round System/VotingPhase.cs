@@ -22,6 +22,8 @@ public class VotingPhase : MonoBehaviour {
     }
 
     public void InitiateVotingPhase() {
+
+        /*
         votingCanvas.SetActive(true);
 
         Cursor.lockState = CursorLockMode.None; // Unlock the mouse for the voting
@@ -50,6 +52,7 @@ public class VotingPhase : MonoBehaviour {
 
             player.gameObject.GetComponent<PlayerController>().MovementEnabled = false; // Disable movement until end of voting phase
         }
+        */
     }
 
     public void EndVotingPhase() {
