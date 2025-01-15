@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Test Scenes/Ivan.unity
-    guid: 7b8dd2f219eef354f929a9a6b0d90d9c
-  - enabled: 0
     path: Assets/Scenes/Test Scenes/TheBigMerge.unity
     guid: adbdc6017f5b2fd458f22b1fcbd8f3e9
   m_configObjects:

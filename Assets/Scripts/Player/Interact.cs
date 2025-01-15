@@ -152,11 +152,11 @@ public class Interact : AttributesSync, IObserver
 
         if (heldObject)
         {
-            hudDisplay.SetState(new CarryDisplay(hudDisplay));
+         //   hudDisplay.SetState(new CarryDisplay(hudDisplay));
         }
         else
         {
-            hudDisplay.SetState(new EmptyDisplay(hudDisplay));
+         //   hudDisplay.SetState(new EmptyDisplay(hudDisplay));
         }
 
         RaycastHit hit;
@@ -166,7 +166,7 @@ public class Interact : AttributesSync, IObserver
 
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("StationaryInteractableObject"))
             {
-                hudDisplay.SetState(new StationaryInteract(hudDisplay));
+             //   hudDisplay.SetState(new StationaryInteract(hudDisplay));
                 if (Input.GetMouseButtonDown(1))
                 {
                     hit.transform.gameObject.GetComponent<StationaryInteractableObject>().Use();
@@ -177,7 +177,7 @@ public class Interact : AttributesSync, IObserver
 
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
             {
-                hudDisplay.SetState(new DynamicInteract(hudDisplay));
+             //   hudDisplay.SetState(new DynamicInteract(hudDisplay));
                 if (Input.GetMouseButtonDown(0))
                 {
                     TryPickUp(hit.transform.gameObject);
