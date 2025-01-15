@@ -6,6 +6,4 @@ public class SymptomsSO : ScriptableObject {
     public string Name;
     [TextArea(1, 3)]
     public string Description;
-    [Space]
-    public UnityEvent OnSymptomTriggered;
 }

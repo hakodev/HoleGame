@@ -720,7 +720,7 @@ GameObject:
   - component: {fileID: 9170362232215914470}
   - component: {fileID: 3021465343479778412}
   - component: {fileID: 2946068601770951158}
-  - component: {fileID: 8770053332773083543}
+  - component: {fileID: 5924480814082202480}
   - component: {fileID: 3107467936883577313}
   m_Layer: 0
   m_Name: AlterunaPlayer
@@ -938,7 +938,7 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   debugDeathMaterial: {fileID: 0}
---- !u!114 &8770053332773083543
+--- !u!114 &5924480814082202480
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -947,10 +947,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2507407002761147588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f3df8fc6c0bb7a49b31ee0dabbcec3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 068c888ea364c6240b7ec7f97d577341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disappearingObjsSymptom: {fileID: 0}
 --- !u!114 &3107467936883577313
 MonoBehaviour:
   m_ObjectHideFlags: 0
