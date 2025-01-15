@@ -395,6 +395,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9b60d2b76a4b4187317657620a018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 17ef79d7-4ccb-4899-a0cf-ff78f48374d4
+  Reliability: 1
+  LocalMethodBehavior: 1
   time: 60
   secondsRemainingToTurnRed: 20
   OnTimerEnd:
@@ -562,6 +566,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9b60d2b76a4b4187317657620a018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 17da9728-4bb2-4c6c-87bd-7c08144fcef8
+  Reliability: 1
+  LocalMethodBehavior: 1
   time: 20
   secondsRemainingToTurnRed: 5
   OnTimerEnd:
@@ -865,6 +873,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9b60d2b76a4b4187317657620a018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: e801ab7b-0a82-4707-a777-22c78e59bcd0
+  Reliability: 1
+  LocalMethodBehavior: 1
   time: 60
   secondsRemainingToTurnRed: 10
   OnTimerEnd:

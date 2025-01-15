@@ -23,8 +23,8 @@ public class SymptomNotifText : MonoBehaviour {
     }
 
     private void DisplayNotificationText() {
-        notificationText.text = "New Symptom Caught!\n\n" +
-                               $"{currentSymptom.Name}\n" +
+        notificationText.text = "The machines have caught a new symptom!\n\n" +
+                               $"\"{currentSymptom.Name}\"\n" +
                                $"{currentSymptom.Description}\n\n" +
                                 "Tread carefully...";
     }

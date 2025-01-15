@@ -64,12 +64,7 @@ public class VotingPhase : MonoBehaviour {
         PlayerRole pickedPlayer = null;
 
         for(int i = 0; i < totalPlayers.Count; i++) {
-            PlayerRole currentPlayer = totalPlayers[i].GetComponent<PlayerRole>();
-
             totalPlayers[i].gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
-
-            if(currentPlayer.GetRole() == Roles.Infiltrator)
-                StartCoroutine(DisplaySymptomNotif());
 
             if(totalPlayers[i] == totalPlayers[0])
                 continue;
@@ -81,6 +76,7 @@ public class VotingPhase : MonoBehaviour {
         pickedPlayerNameText.text = pickedPlayer.gameObject.name;
         pickedPlayer.IsTaskManager = true;
         StartCoroutine(DisplayTaskManager());
+        StartCoroutine(DisplaySymptomNotif());
     }
 
     private IEnumerator DisplayTaskManager() {
