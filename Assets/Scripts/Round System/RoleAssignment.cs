@@ -2,6 +2,7 @@ using Alteruna;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -45,13 +46,19 @@ public class RoleAssignment : AttributesSync
             
         }
     }
+    [SynchronizableMethod]
+    public void SetHasGameStarted(bool newState)
+    {
+        hasGameStarted = newState; 
+    }
+
     private void Update()
     {
         if(avatar.IsOwner)
         {
             if (Input.GetKeyUp(KeyCode.G))
             {
-                hasGameStarted = true;
+                BroadcastRemoteMethod("SetHasGameStarted", true);
                 FindRolelessPlayers();
                 DetermineMaxNumberOfInfiltrators();
                 AssignRoles();
@@ -117,7 +124,8 @@ public class RoleAssignment : AttributesSync
         rolelessPlayers.Clear();
 
         //call all players
-        gameObject.SetActive(false);
+       // gameObject.SetActive(false);
+       GetComponent<TextMeshProUGUI>().enabled = false;
     }
 }
 public enum Roles

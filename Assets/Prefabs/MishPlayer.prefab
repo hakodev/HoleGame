@@ -978,6 +978,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2701840edf6e39643b68ea08ebdd8c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 4599dcbc-ccc9-4874-913f-b3a92f9d2b36
+  Reliability: 1
+  LocalMethodBehavior: 1
   playerVoteButton: {fileID: 4703291767131715157, guid: d8f2a44d382a1174789845646ff2c920, type: 3}
   firstPlayerOptionYPos: -250
   pickedPlayerNameText: {fileID: 8636452893064026543}
