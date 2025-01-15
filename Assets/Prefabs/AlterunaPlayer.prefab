@@ -1408,7 +1408,8 @@ MonoBehaviour:
   _uidString: ee4562f5-aa72-4c2f-8b34-37055fd0dac8
   Reliability: 1
   LocalMethodBehavior: 1
-  disappearingObjsSymptom: {fileID: 0}
+  symptoms:
+  - {fileID: 11400000, guid: ae5174f17a3d121439392e943ad806f8, type: 2}
 --- !u!114 &3107467936883577313
 MonoBehaviour:
   m_ObjectHideFlags: 0

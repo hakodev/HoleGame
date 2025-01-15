@@ -19,6 +19,7 @@ public class SymptomsManager : AttributesSync {
         }
 
         Instance = this;
+        currentSymptom = symptoms[0]; // test, remove later
     }
 
     public SymptomsSO GetSymptom() {
