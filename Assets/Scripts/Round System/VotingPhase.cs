@@ -37,6 +37,7 @@ public class VotingPhase : AttributesSync {
         CustomMethods.foundRecursively = null;
     }
 
+    /*
     [SynchronizableMethod]
     public void InitiateVotingPhase() {
         if(!avatar.IsMe) { return; }
@@ -52,7 +53,7 @@ public class VotingPhase : AttributesSync {
             if(player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
             } else {
-                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, this.transform);
+                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, transform);
                 newPlayerVoteOption.GetComponentInChildren<TMP_Text>().text = player.gameObject.name;
                 newPlayerVoteOption.transform.position = new Vector3(newPlayerVoteOption.transform.position.x,
                                                                      tempYPos,
@@ -115,4 +116,5 @@ public class VotingPhase : AttributesSync {
         yield return new WaitForSeconds(10f); // How many seconds to display it on screen
         symptomsNotifCanvas.SetActive(false);
     }
+    */
 }

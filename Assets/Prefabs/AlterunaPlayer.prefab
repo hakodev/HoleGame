@@ -1116,6 +1116,7 @@ MonoBehaviour:
   roleDisplayTime: 4
   infiltratorCanvas: {fileID: 7139580202237596055}
   machineCanvas: {fileID: 1713490942899560347}
+  IsTaskManager: 0
 --- !u!114 &2946068601770951158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1164,11 +1165,11 @@ MonoBehaviour:
   LocalMethodBehavior: 1
   playerVoteButton: {fileID: 4703291767131715157, guid: d8f2a44d382a1174789845646ff2c920, type: 3}
   firstPlayerOptionYPos: -250
-  pickedPlayerNameText: {fileID: 0}
+  pickedPlayerNameText: {fileID: 8636452893064026543}
   votingCanvas: {fileID: 5915103847170756967}
   votedCanvas: {fileID: 7136468963131397977}
   taskManagerPickedDisplayCanvas: {fileID: 7400850545661369036}
-  symptomsNotifCanvas: {fileID: 0}
+  symptomsNotifCanvas: {fileID: 7405063049912927643}
 --- !u!1 &2565612880506949840
 GameObject:
   m_ObjectHideFlags: 0
@@ -2302,10 +2303,6 @@ MonoBehaviour:
   uncrouchedCameraHeight: 0.6
   crouchedCameraHeight: -0.4
   cameraHeightSwitchSpeed: 4
-  playerHead: {fileID: 7090234129164980435}
-  playerTorso: {fileID: 2332573203765004709}
-  mishSync: {fileID: 9170362232215914470}
-  easingTorsoDuration: 1
 --- !u!114 &6911839747530038390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4548,12 +4545,25 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6168340578074938522, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6168340578074938522, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6168340578074938522, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8375887404614809819, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
       propertyPath: pickedPlayerNameText
       value: 
       objectReference: {fileID: 8636452893064026543}
     m_RemovedComponents:
     - {fileID: 8375887404614809819, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
+    - {fileID: 7194487775542024884, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4995614110405108956, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
@@ -4594,6 +4604,11 @@ Transform:
 --- !u!225 &7400850545661369036 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 981550677837577107, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
+  m_PrefabInstance: {fileID: 7722038903492551007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7405063049912927643 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1003775930793321668, guid: c18124d641bddd04da1ecaa90ac7c7e8, type: 3}
   m_PrefabInstance: {fileID: 7722038903492551007}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &8636452893064026543 stripped

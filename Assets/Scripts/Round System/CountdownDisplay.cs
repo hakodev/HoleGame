@@ -1,35 +1,30 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using Alteruna;
 using System.Collections.Generic;
-using System.Threading;
+
 
 public class CountdownDisplay : AttributesSync {
-    private TMP_Text countdown;
 
     [SerializeField] private int secondsRemainingToTurnRed;
 
-    [SynchronizableField][SerializeField] private int time;
-    private int maxTime;
+    [SynchronizableField] public int time;
+    public int maxTime;
     [SynchronizableField] static Color countdownColor = Color.green;
-    bool hasInitiatedTheScreen = false;
+    [SynchronizableField] static bool hasInitiatedTheScreen = false;
 
     private List<GameObject> totalPlayers = new List<GameObject>();
     private List<VotingPhase> playerVotingPhase = new List<VotingPhase>();
 
+    [SerializeField] TextMeshProUGUI countdown;
     [SerializeField] GameObject StartDowntime;
     [SerializeField] GameObject PickTaskManager;
     [SerializeField] GameObject CountDown;
 
-    Alteruna.Avatar avatarOwner;
 
     private void Awake() {
-        countdown = GetComponent<TMP_Text>();
         maxTime = time;
-     //   avatarOwner.OnPossessed.AddListener();
-
     }
     private void Start()
     {
@@ -37,102 +32,101 @@ public class CountdownDisplay : AttributesSync {
     }
     private IEnumerator CheckIfGameStarted()
     {
-        while (true)
+        while (!hasInitiatedTheScreen)
         {
             yield return new WaitForSeconds(1);
-
-         //   if (RoleAssignment.hasGameStarted || !hasInitiatedTheScreen)
-           // {
-           //     Debug.Log(RoleAssignment.hasGameStarted + " " + hasInitiatedTheScreen);
-           // }
-
 
 
             if (RoleAssignment.hasGameStarted && !hasInitiatedTheScreen)
             {
                 List<PlayerRole> temp = RoleAssignment.GetTotalPlayers();
-                foreach (PlayerRole role in temp) 
+                foreach (PlayerRole role in temp)
                 {
                     totalPlayers.Add(role.gameObject);
                     playerVotingPhase.Add(totalPlayers[totalPlayers.Count - 1].GetComponent<VotingPhase>());
                 }
+
+
                 hasInitiatedTheScreen = true;
-                countdown.text = time.ToString();
-                countdown.color = countdownColor;
-                StartCoroutine(TickDown());
+
+               if(gameObject.activeSelf) StartCoroutine(TickDown());
+                Debug.Log("calling the damn tickdown");
             }
         }
     }
 
-    
-    public void StartNewTimer(string heheCorrectObject)
+
+    //these are meant to be called from the same object to itself so just use BoradcastRemoteMethod("nameofthing")
+    [SynchronizableMethod]
+    private void DeactivateUnusedTimers()//(string deactivatedObject)
     {
-        if(avatarOwner) { return; }
-        if (heheCorrectObject != gameObject.name) { return; }
+        gameObject.SetActive(false);
+    }
 
-        Debug.Log(heheCorrectObject + " " + gameObject.name);
 
-        StartCoroutine(TickDown());
-
+    [SynchronizableMethod]
+    private void ActivateTimer()
+    {
+        CountdownDisplay affectedDisplay = null;
+        if (gameObject == StartDowntime)
+        {
+            PickTaskManager.SetActive(true);
+            affectedDisplay = PickTaskManager.GetComponent<CountdownDisplay>();
+        }
         if (gameObject == PickTaskManager)
         {
-            StartDowntime.SetActive(false);
-            CountDown.SetActive(false);
+            CountDown.SetActive(true);
+            affectedDisplay = CountDown.GetComponent<CountdownDisplay>();
         }
         if (gameObject == CountDown)
         {
-            StartDowntime.SetActive(false);
-            PickTaskManager.SetActive(false);
+            PickTaskManager.SetActive(true);
+            affectedDisplay = PickTaskManager.GetComponent<CountdownDisplay>();
         }
+
+
+        time = maxTime;
+        affectedDisplay.time = affectedDisplay.maxTime;
+        if (affectedDisplay.gameObject.activeSelf) StartCoroutine(affectedDisplay.TickDown());
     }
 
+    private void UpdateUI()
+    {
+        countdown.text = time.ToString();
 
-    private IEnumerator TickDown() {
-        while(time > 0) {
+        if (time <= secondsRemainingToTurnRed)
+        {
+            countdownColor = Color.red;
+        }
+        else
+        {
+            countdownColor = Color.green;
+        }
+        countdown.color = countdownColor;
+    }
+
+    //check voting phase
+    public IEnumerator TickDown() {
+        Debug.Log("start of tick " + gameObject.name + " " + time + " " + maxTime);
+        Debug.Log(time);
+        if(time > 0) Debug.Log("wha");
+        while(time > 0) {   
+            Debug.Log("timer tickin");
             yield return new WaitForSeconds(1);
-            time--;
-            countdown.text = time.ToString();
+            Debug.Log("timer tickin");
 
-            if(time <= secondsRemainingToTurnRed) {
-                countdownColor = Color.red;
-            }
-            else
-            {
-                countdownColor = Color.green;
-            }
-            countdown.color = countdownColor;
+            time--;
+            UpdateUI();
         }
 
+        BroadcastRemoteMethod(nameof(ActivateTimer));
+        BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
+        /*
         foreach(VotingPhase player in playerVotingPhase)
         {
             player.BroadcastRemoteMethod("InitiateVotingPhase");
         }
-
-
-
-        if (gameObject== StartDowntime)
-        {
-            PickTaskManager.SetActive(true);
-            PickTaskManager.GetComponent<CountdownDisplay>().StartNewTimer("CountdownPickTaskMan_20");
-        }
-
-        if(gameObject== PickTaskManager)
-        {
-            CountDown.SetActive(true);
-            //CountDown.GetComponent<CountdownDisplay>().BroadcastRemoteMethod("StartNewTimer", "CountdowntDowntime_60");
-            CountDown.GetComponent<CountdownDisplay>().StartNewTimer("CountdowntDowntime_60");
-
-        }
-
-        if (gameObject == CountDown)
-        {
-            PickTaskManager.SetActive(true);
-            //PickTaskManager.GetComponent<CountdownDisplay>().BroadcastRemoteMethod("StartNewTimer", "CountdownPickTaskMan_20");
-            PickTaskManager.GetComponent<CountdownDisplay>().StartNewTimer("CountdownPickTaskMan_20");
-        }
-
-        time = maxTime;
-        gameObject.SetActive(false); //just in case
-
+        */
+        yield break;
     }
 }

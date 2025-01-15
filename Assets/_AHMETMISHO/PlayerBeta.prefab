@@ -306,7 +306,6 @@ GameObject:
   - component: {fileID: 9099224671634067315}
   - component: {fileID: 7741144603493463230}
   - component: {fileID: 8008204029239558690}
-  - component: {fileID: 4055766640202376438}
   - component: {fileID: 5473956130749796272}
   - component: {fileID: -5838508583788880476}
   - component: {fileID: -8551004118363987141}
@@ -431,9 +430,15 @@ MonoBehaviour:
   runSpeed: 4.5
   crouchSpeed: 1.24
   crouchRunSpeed: 1.65
+  walkSpeedBack: 0
+  runSpeedBack: 0
   gravityMultiplier: 1.75
   jumpHeight: 3.8
   crouchedJumpHeight: 2.3
+  isMoving: 0
+  isRunning: 0
+  cameraTransform: {fileID: 0}
+  moveTransform: {fileID: 0}
 --- !u!114 &8008204029239558690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,24 +464,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &4055766640202376438
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2749392638969127140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21d48dbaf57b143478b10a34fcf84087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: 0af7a04a-dfc4-43a2-9f2b-d3fccb252ce0
-  Reliability: 1
-  LocalMethodBehavior: 1
-  currentHealth: 100
-  debugDeathMaterial: {fileID: 2100000, guid: 7f69ef4acb83c374dbdf7f185249fa7e, type: 2}
 --- !u!114 &5473956130749796272
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,6 +24,8 @@ public class RoleAssignment : AttributesSync
     //all int numbers
 
     [SynchronizableField] public static int playerNumber=0;
+    public static int playerID=-10; //client based id
+
 
     private void Awake()
     {
@@ -34,6 +36,7 @@ public class RoleAssignment : AttributesSync
     private void Start()
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
+        if(playerID==-10) playerID = playerNumber; //sets proper number
         foreach (PlayerRole role in totalPlayers)
         {
             Debug.Log(role.gameObject.name);
