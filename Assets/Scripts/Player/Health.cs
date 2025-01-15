@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using Alteruna;
-using Unity.Netcode;
 using System.Collections.Generic;
 
 public class Health : AttributesSync {
