@@ -244,7 +244,7 @@ MonoBehaviour:
     Users: 
   _maxPlayers: 10
   AvatarSpawning: 1
-  AvatarPrefab: {fileID: 1520071485617270120, guid: 8638dd5035dcdec448eb76e6f7ebac3c, type: 3}
+  AvatarPrefab: {fileID: 1520071485617270120, guid: 6dbbd034cc3a9e14fadcf4228cf58db5, type: 3}
   AvatarSpawnLocation: {fileID: 1458968289}
   SpawnAvatarPerIndex: 0
   AvatarSpawnLocations: []
@@ -611,10 +611,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d6166ef4617844592225cc69612d75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  symptomUICanvas: {fileID: 0}
-  listOfSymptoms:
-  - {fileID: 11400000, guid: 125c370785a1db740a48f71a56927d35, type: 2}
-  - {fileID: 11400000, guid: 1b0a16616f6d7bc478a1a47517025cd1, type: 2}
 --- !u!4 &345355970
 Transform:
   m_ObjectHideFlags: 0

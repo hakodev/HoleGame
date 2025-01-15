@@ -1294,7 +1294,7 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   Jumping: 0
-  animationSmoothing: 4
+  animationSmoothing: 2.5
 --- !u!114 &3021465343479778412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2670,10 +2670,6 @@ MonoBehaviour:
   uncrouchedCameraHeight: 0.6
   crouchedCameraHeight: -0.4
   cameraHeightSwitchSpeed: 4
-  playerHead: {fileID: 7090234129164980435}
-  playerTorso: {fileID: 2332573203765004709}
-  mishSync: {fileID: 9170362232215914470}
-  easingTorsoDuration: 1
 --- !u!114 &6911839747530038390
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -113,8 +113,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: e23d1576-6b19-4de8-bbb3-10328a151739
-  Reliability: 1
+  _uidString: 6b948cfd-6f00-42f1-bc41-ddad8db30feb
+  Reliability: 2
   LocalMethodBehavior: 1
 --- !u!54 &-1499890886430890787
 Rigidbody:
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 64a20eac-d14b-45b4-9b67-985529a5bced
+  _uidString: 0e84a7f5-4a30-40c6-92ca-ca96e3ef1f64
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
