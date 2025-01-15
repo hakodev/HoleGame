@@ -56,9 +56,8 @@ public class CoffeeCup : DynamicInteractableObject
         RaycastHit hitInfo;
         // cast a ray twice as far as your step back. This seems to work in all
         // situations, at least when speeds are not ridiculously big
-
         Vector3 pos = point - (-dir * 0.1f);
-
+        
         if (info.collider.Raycast(new Ray(point, dir), out hitInfo, 2))
         {
             // this is the collider surface normal

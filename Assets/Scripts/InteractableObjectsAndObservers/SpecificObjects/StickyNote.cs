@@ -100,9 +100,6 @@ public class StickyNote : DynamicInteractableObject
         placedLocalRot = transform.localEulerAngles;
         placedLocalPos = transform.localPosition;
 
-
-        //make sure sticky notes can stack when spawned without parenting causing issues
-
         if(transform.parent != null)
         {
             if (transform.parent.gameObject.name.Contains("StickyNote"))
@@ -115,7 +112,8 @@ public class StickyNote : DynamicInteractableObject
                 }
             }
         }
-       
+        //make sure sticky notes can stack when spawned without parenting causing issues
+        
 
 
         //states of sticky note management
