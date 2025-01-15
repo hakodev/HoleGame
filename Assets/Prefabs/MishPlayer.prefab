@@ -2060,7 +2060,7 @@ MonoBehaviour:
   crouchedCameraHeight: -0.4
   cameraHeightSwitchSpeed: 4
   playerHead: {fileID: 7090234129164980435}
-  playerTorso: {fileID: 2332573203765004709}
+  playerTorso: {fileID: 996233025567766754}
   mishSync: {fileID: 9170362232215914470}
   easingTorsoDuration: 1
 --- !u!114 &6911839747530038390
