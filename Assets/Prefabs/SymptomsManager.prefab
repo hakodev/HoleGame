@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1994405468114898128}
   - component: {fileID: -7740782463099497724}
-  - component: {fileID: 7689799370590566775}
   m_Layer: 0
   m_Name: SymptomsManager
   m_TagString: Untagged
@@ -45,16 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 068c888ea364c6240b7ec7f97d577341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7689799370590566775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7970158968596613682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f3df8fc6c0bb7a49b31ee0dabbcec3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  disappearingObjsSymptom: {fileID: 11400000, guid: ae5174f17a3d121439392e943ad806f8, type: 2}
+  Multiplayer: {fileID: 0}
+  _uidString: a7212bbc-1178-4e16-aff3-5ff1ab82461a
+  Reliability: 1
+  LocalMethodBehavior: 1
+  symptoms:
+  - {fileID: 11400000, guid: ae5174f17a3d121439392e943ad806f8, type: 2}

@@ -1404,6 +1404,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 068c888ea364c6240b7ec7f97d577341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: ee4562f5-aa72-4c2f-8b34-37055fd0dac8
+  Reliability: 1
+  LocalMethodBehavior: 1
+  disappearingObjsSymptom: {fileID: 0}
 --- !u!114 &3107467936883577313
 MonoBehaviour:
   m_ObjectHideFlags: 0

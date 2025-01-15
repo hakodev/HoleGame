@@ -378,6 +378,8 @@ public class Interact : AttributesSync, IObserver
     {
         //disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
 
+        SymptomsManager.Instance.TriggerSymptom(heldObject); // should despawn items on drop if the symptom is applied
+
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
