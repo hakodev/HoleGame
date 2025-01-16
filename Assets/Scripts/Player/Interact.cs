@@ -254,6 +254,7 @@ public class Interact : AttributesSync, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
         {
+            heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
             SetLayerRecursively(heldObject, 7);
 
             //placing anim
@@ -295,6 +296,7 @@ public class Interact : AttributesSync, IObserver
         //specifics to thtowing
 
         Spam1();
+        heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
@@ -402,6 +404,8 @@ public class Interact : AttributesSync, IObserver
 
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
+
+
         Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
         if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
         {
@@ -409,6 +413,7 @@ public class Interact : AttributesSync, IObserver
             heldObject = pickedUp;
             rb = heldObject.GetComponent<Rigidbody>();
             rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
+            DIO.isPickedUp = true;
 
             if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
