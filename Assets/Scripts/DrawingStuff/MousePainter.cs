@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class MousePainter : MonoBehaviour{
 	public Camera cam;
@@ -11,6 +12,8 @@ public class MousePainter : MonoBehaviour{
 	public float radius = 1;
 	public float strength = 1;
 	public float hardness = 1;
+
+	public float range = 6;
 	
 	PaintManager paintManager;
 
@@ -21,26 +24,24 @@ public class MousePainter : MonoBehaviour{
 		paintManager = FindAnyObjectByType<PaintManager>();
 	}
 
-	public void Update(){
+	public void Paint()
+	{
+        Vector3 position = Input.mousePosition;
+        Ray ray = cam.ScreenPointToRay(position);
+        RaycastHit hit;
 
-		bool click;
-		click = mouseSingleClick ? Input.GetMouseButtonDown(0) : Input.GetMouseButton(0);
+        if (Physics.Raycast(ray, out hit, range, notPlayerMask))
+        {
+            Paintable p = hit.collider.GetComponent<Paintable>();
+            if (p != null)
+            {
+                PaintManager.Instance.paint(p, hit.point, radius, hardness, strength, paintColor);
+            }
+        }
 
-		if (click){
-			Vector3 position = Input.mousePosition;
-			Ray ray = cam.ScreenPointToRay(position);
-			RaycastHit hit;
 
-			if (Physics.Raycast(ray, out hit, 100.0f, notPlayerMask)){
-				Debug.DrawRay(ray.origin, hit.point - ray.origin, Color.red);
-				transform.position = hit.point;
-				Paintable p = hit.collider.GetComponent<Paintable>();
-				if(p != null){
-					PaintManager.Instance.paint(p, hit.point, radius, hardness, strength, paintColor);
-				}
-			}
-		}
 
-	}
+
+    }
 
 }
