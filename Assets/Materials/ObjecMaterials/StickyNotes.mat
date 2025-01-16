@@ -115,7 +115,7 @@ Material:
     - Vector1_2c6f3ce4bba145b09c0a22fced0d7f85: 0
     - Vector1_7bf270fe91494824b4209d2dc1faae23: 0
     - Vector1_8e760635099b4147956bb9600d13cac2: 0.1
-    - Vector1_b5cc7f6f25194a778cb438f45fbbce66: 20
+    - Vector1_b5cc7f6f25194a778cb438f45fbbce66: 0.44
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
@@ -153,7 +153,7 @@ Material:
     - Vector2_e97cb9b7b5564bc9857e7669e2d0b82f: {r: 1, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 0.99001354, b: 0.9009434, a: 1}
     - _Color: {r: 1, g: 0.99001354, b: 0.9009434, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 1, g: 0.9383208, b: 0.5990566, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -167,6 +167,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - Android
     - iPhone
+    - Standalone
   - serializedVersion: 4
     name: testing_PC_RPA
     pixelLightCount: 2
@@ -221,6 +222,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - Android
     - iPhone
+    - Standalone
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
     Android: 0

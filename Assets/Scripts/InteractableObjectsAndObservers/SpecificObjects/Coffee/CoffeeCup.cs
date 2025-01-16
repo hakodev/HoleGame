@@ -56,6 +56,8 @@ public class CoffeeCup : DynamicInteractableObject
         RaycastHit hitInfo;
         // cast a ray twice as far as your step back. This seems to work in all
         // situations, at least when speeds are not ridiculously big
+        Vector3 pos = point - (-dir * 0.1f);
+        
         if (info.collider.Raycast(new Ray(point, dir), out hitInfo, 2))
         {
             // this is the collider surface normal
@@ -68,7 +70,7 @@ public class CoffeeCup : DynamicInteractableObject
         if (isThrown && coffeeFilled)
         {
             if (((1 << info.gameObject.layer) & PaintManager.Instance.mask) == 0) return;
-            Instantiate(PaintManager.Instance.decalPrefab, info.contacts[0].point, Quaternion.LookRotation(normal));
+            Instantiate(PaintManager.Instance.decalPrefab, pos, Quaternion.LookRotation(-normal));
             
         }
     }

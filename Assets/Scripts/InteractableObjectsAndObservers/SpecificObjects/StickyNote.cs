@@ -1,7 +1,6 @@
 using Alteruna;
 using System.Collections.Generic;
 using System.Drawing;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class StickyNote : DynamicInteractableObject
@@ -101,17 +100,20 @@ public class StickyNote : DynamicInteractableObject
         placedLocalRot = transform.localEulerAngles;
         placedLocalPos = transform.localPosition;
 
-
-        //make sure sticky notes can stack when spawned without parenting causing issues
-        if (transform.parent.gameObject.name.Contains("StickyNote"))
+        if(transform.parent != null)
         {
-            if (isGameStart)
+            if (transform.parent.gameObject.name.Contains("StickyNote"))
             {
-                 placedLocalPos = new Vector3(0, 0, 1);
-                 placedLocalRot = new Vector3(0, 0, 0);
-                 transform.localScale = Vector3.one;
+                if (isGameStart)
+                {
+                    placedLocalPos = new Vector3(0, 0, 1);
+                    placedLocalRot = new Vector3(0, 0, 0);
+                    transform.localScale = Vector3.one;
+                }
             }
         }
+        //make sure sticky notes can stack when spawned without parenting causing issues
+        
 
 
         //states of sticky note management
@@ -153,7 +155,7 @@ public class StickyNote : DynamicInteractableObject
 
 
         //assign correct position and rotation
-        gameObject.transform.forward = hitNormal;
+        gameObject.transform.forward = -hitNormal;
         rbToTrack.SetRotation(transform.rotation);
 
         if (isGameStart)
