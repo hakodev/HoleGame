@@ -1,60 +1,75 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using Alteruna;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+
 
 public class CountdownDisplay : AttributesSync {
-    private TMP_Text countdown;
-    [SynchronizableField] [SerializeField] private int time;
-    [SynchronizableField] static Color countdownColor = Color.green;
+
     [SerializeField] private int secondsRemainingToTurnRed;
-    [SerializeField] private UnityEvent OnTimerEnd;
-    bool hasInitiatedTheScreen = false;
+
+    [SynchronizableField] public int time;
+    public int maxTime;
+    [SynchronizableField] static Color countdownColor = Color.green;
+
+
+    [SerializeField] TextMeshProUGUI countdown;
+
+    [SerializeField] private CountDownDisplayManager manager;
 
     private void Awake() {
-        countdown = GetComponent<TMP_Text>();
+        maxTime = time;
     }
-    private void Start()
+   
+
+
+    //these are meant to be called from the same object to itself so just use BoradcastRemoteMethod("nameofthing")
+    [SynchronizableMethod]
+    private void DeactivateUnusedTimers()//(string deactivatedObject)
     {
-        StartCoroutine(CheckIfGameStarted());
+        gameObject.SetActive(false);
     }
-    private IEnumerator CheckIfGameStarted()
+
+
+    
+
+    private void UpdateUI()
     {
-        while (true)
+        countdown.text = time.ToString();
+
+        if (time <= secondsRemainingToTurnRed)
         {
-            yield return new WaitForSeconds(1);
-
-            if (RoleAssignment.hasGameStarted && !hasInitiatedTheScreen)
-            {
-                hasInitiatedTheScreen = true;
-                countdown.text = time.ToString();
-                countdown.color = countdownColor;
-                StartCoroutine(TickDown());
-            }
+            countdownColor = Color.red;
         }
+        else
+        {
+            countdownColor = Color.green;
+        }
+        countdown.color = countdownColor;
     }
 
+    //check voting phase
+    public IEnumerator TickDown() {
 
-
-    private IEnumerator TickDown() {
-        while(time > 0) {
-            yield return new WaitForSeconds(1);
-
-
+        while(time > 0)
+        {
             time--;
-            countdown.text = time.ToString();
-
-            if(time <= secondsRemainingToTurnRed) {
-                countdownColor = Color.red;
-            }
-            else
-            {
-                countdownColor = Color.green;
-            }
-            countdown.color = countdownColor;
+            UpdateUI();
+            yield return new WaitForSeconds(1);
         }
-        Debug.Log(time);
-        OnTimerEnd?.Invoke();
+
+        manager.BroadcastRemoteMethod("ActivateTimer", parameters: gameObject.name);
+
+        time = maxTime;
+        BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
+        /*
+        foreach(VotingPhase player in playerVotingPhase)
+        {
+            player.BroadcastRemoteMethod("InitiateVotingPhase");
+        }
+        */
+
     }
 }

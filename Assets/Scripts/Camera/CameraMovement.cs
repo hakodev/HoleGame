@@ -1,5 +1,12 @@
 
+<<<<<<< HEAD
 using UnityEngine;
+=======
+
+using UnityEngine;
+using Unity.Netcode;
+using Alteruna;
+>>>>>>> origin/Misho2
 public class CameraMovement : MonoBehaviour
 {
     [Header("Mouse Input")]
@@ -104,9 +111,13 @@ public class CameraMovement : MonoBehaviour
 }
 
 
+<<<<<<< HEAD
 
 /*
 
+=======
+/*
+>>>>>>> origin/Misho2
 using UnityEngine;
 using Alteruna;
 using DG.Tweening;
@@ -181,9 +192,10 @@ public class CameraMovement : MonoBehaviour {
 
     private void AnimateHeadAndTorso()
     {
+        //transform.root.Rotate(verticalRotation, horizontalRotation, 0);
 
-        playerTorso.transform.parent.Rotate(0, horizontalRotation, 0);
-        playerHead.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+           playerTorso.transform.Rotate(new Vector3(0, horizontalRotation, 0));
+           playerHead.transform.Rotate(new Vector3(verticalRotation, 0, 0));
 
 
         /*
@@ -253,7 +265,7 @@ public class CameraMovement : MonoBehaviour {
         //horizontalRotation = Mathf.Clamp(horizontalRotation, -90f, 90f);
 
 
-        transform.localRotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
+        transform.localRotation = Quaternion.Euler(new Vector3(verticalRotation, horizontalRotation, 0));
     }
        
 

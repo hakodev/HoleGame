@@ -724,7 +724,7 @@ GameObject:
   - component: {fileID: 8770053332773083543}
   - component: {fileID: 4747016970920604293}
   m_Layer: 0
-  m_Name: MishPlayer
+  m_Name: oldMish
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

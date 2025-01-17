@@ -2,6 +2,7 @@ using Alteruna;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ public class RoleAssignment : AttributesSync
 
 
     private static List<PlayerRole> rolelessPlayers = new();
-    private static List<PlayerRole> totalPlayers = new();
+    [SynchronizableField] private static List<PlayerRole> totalPlayers = new();
 
     private int maxNumOfInfiltrators = 1;
     Alteruna.Avatar avatar;
@@ -23,6 +24,8 @@ public class RoleAssignment : AttributesSync
     //all int numbers
 
     [SynchronizableField] public static int playerNumber=0;
+    public static int playerID=-10; //client based id
+
 
     private void Awake()
     {
@@ -33,6 +36,7 @@ public class RoleAssignment : AttributesSync
     private void Start()
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
+        if(playerID==-10) playerID = playerNumber; //sets proper number
         foreach (PlayerRole role in totalPlayers)
         {
             Debug.Log(role.gameObject.name);
@@ -45,13 +49,19 @@ public class RoleAssignment : AttributesSync
             
         }
     }
+    [SynchronizableMethod]
+    public void SetHasGameStarted(bool newState)
+    {
+        hasGameStarted = newState; 
+    }
+
     private void Update()
     {
         if(avatar.IsOwner)
         {
             if (Input.GetKeyUp(KeyCode.G))
             {
-                hasGameStarted = true;
+                BroadcastRemoteMethod("SetHasGameStarted", true);
                 FindRolelessPlayers();
                 DetermineMaxNumberOfInfiltrators();
                 AssignRoles();
@@ -99,7 +109,7 @@ public class RoleAssignment : AttributesSync
 
             // totalPlayers[randomNum].SetRole(Roles.Machine);
             // totalPlayers[randomNum].DisplayRole();
-            Debug.Log(rolelessPlayers[randomNum].gameObject.name + rolelessPlayers[randomNum].GetRole());
+           // Debug.Log(rolelessPlayers[randomNum].gameObject.name + rolelessPlayers[randomNum].GetRole());
             rolelessPlayers.RemoveAt(randomNum); // Remove the player from the roleless list after giving them a role
         }
 
@@ -110,14 +120,15 @@ public class RoleAssignment : AttributesSync
 
            // player.SetRole(Roles.Machine);
            // player.DisplayRole();
-            Debug.Log(player.gameObject.name + player.GetRole());
+        //    Debug.Log(player.gameObject.name + player.GetRole());
 
         }
 
         rolelessPlayers.Clear();
 
         //call all players
-        gameObject.SetActive(false);
+       // gameObject.SetActive(false);
+       GetComponent<TextMeshProUGUI>().enabled = false;
     }
 }
 public enum Roles

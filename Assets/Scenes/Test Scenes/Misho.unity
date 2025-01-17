@@ -119,6 +119,22 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &35075951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5953536155292194226, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+  m_PrefabInstance: {fileID: 41249548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &35075954 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4030759391244349709, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+  m_PrefabInstance: {fileID: 41249548}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35075951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &41249548
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -129,15 +145,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: time
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: CountDown
+      value: 
+      objectReference: {fileID: 35075951}
+    - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: countdown
+      value: 
+      objectReference: {fileID: 1114277609}
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: _uidString
-      value: a917ff01-31bc-42e8-93ac-56f34d318bf9
+      value: 5247e24b-4a8d-429a-80af-1119a962f371
       objectReference: {fileID: 0}
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: StartDowntime
+      value: 
+      objectReference: {fileID: 1114277607}
+    - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: PickTaskManager
+      value: 
+      objectReference: {fileID: 1804293564}
+    - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: secondsRemainingToTurnRed
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: OnTimerEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -160,9 +192,25 @@ PrefabInstance:
       value: CountdownTV
       objectReference: {fileID: 0}
     - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: CountDown
+      value: 
+      objectReference: {fileID: 35075951}
+    - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: countdown
+      value: 
+      objectReference: {fileID: 1804293566}
+    - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: _uidString
-      value: d63ea0f3-3544-4af5-9916-1d6c773fe191
+      value: 29ac4df2-19cf-4dd0-9d42-447145714313
       objectReference: {fileID: 0}
+    - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: StartDowntime
+      value: 
+      objectReference: {fileID: 1114277607}
+    - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: PickTaskManager
+      value: 
+      objectReference: {fileID: 1804293564}
     - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: OnTimerEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -172,9 +220,25 @@ PrefabInstance:
       value: EndVotingPhase
       objectReference: {fileID: 0}
     - target: {fileID: 3941125981678598996, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: CountDown
+      value: 
+      objectReference: {fileID: 35075951}
+    - target: {fileID: 3941125981678598996, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: countdown
+      value: 
+      objectReference: {fileID: 35075954}
+    - target: {fileID: 3941125981678598996, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: _uidString
-      value: 2291bb92-ff3b-49f5-9435-42b4a592a71a
+      value: de7682b3-2020-419d-9d9a-4ebfca20951a
       objectReference: {fileID: 0}
+    - target: {fileID: 3941125981678598996, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: StartDowntime
+      value: 
+      objectReference: {fileID: 1114277607}
+    - target: {fileID: 3941125981678598996, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: PickTaskManager
+      value: 
+      objectReference: {fileID: 1804293564}
     - target: {fileID: 3941125981678598996, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: OnTimerEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -288,7 +352,7 @@ MonoBehaviour:
     Users: 
   _maxPlayers: 10
   AvatarSpawning: 1
-  AvatarPrefab: {fileID: 1520071485617270120, guid: 6dbbd034cc3a9e14fadcf4228cf58db5, type: 3}
+  AvatarPrefab: {fileID: 1520071485617270120, guid: 8638dd5035dcdec448eb76e6f7ebac3c, type: 3}
   AvatarSpawnLocation: {fileID: 1458968289}
   SpawnAvatarPerIndex: 0
   AvatarSpawnLocations: []
@@ -635,7 +699,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 345355970}
-  - component: {fileID: 345355969}
   m_Layer: 0
   m_Name: SymptomsManager
   m_TagString: Untagged
@@ -643,18 +706,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &345355969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 345355968}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4d6166ef4617844592225cc69612d75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &345355970
 Transform:
   m_ObjectHideFlags: 0
@@ -1849,6 +1900,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1114277607 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2923793777255632284, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+  m_PrefabInstance: {fileID: 41249548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1114277609 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 219285432067782719, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+  m_PrefabInstance: {fileID: 41249548}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114277607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1328359841
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2393,6 +2460,22 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 836ab703248542d4ab65799db30c3fe7, type: 3}
+--- !u!1 &1804293564 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4461445914414772249, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+  m_PrefabInstance: {fileID: 41249548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1804293566 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4378200082803138495, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+  m_PrefabInstance: {fileID: 41249548}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804293564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1861756514
 Mesh:
   m_ObjectHideFlags: 0
