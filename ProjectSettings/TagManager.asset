@@ -8,6 +8,8 @@ TagManager:
   - playerCamera
   - DowntimeDisplay
   - VotingDisplay
+  - drawnOn
+  - NetworkManager
   layers:
   - Default
   - TransparentFX

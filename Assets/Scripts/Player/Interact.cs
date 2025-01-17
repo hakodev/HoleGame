@@ -43,13 +43,17 @@ public class Interact : AttributesSync, IObserver
 
     private DisappearingObjs disappearingObjs;
 
+    private Alteruna.Spawner spawner;
 
     private void Awake()
     {
         hudDisplay = GetComponentInChildren<HUDDisplay>();
         avatar = GetComponent<Alteruna.Avatar>();
+        spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
+
 
         if (!avatar.IsMe) { return; }
+
         playerController = GetComponent<PlayerController>();
         disappearingObjs = GetComponent<DisappearingObjs>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
@@ -426,6 +430,12 @@ public class Interact : AttributesSync, IObserver
             Debug.Log("You can't pick up that");
         }
     }
+
+    private void Drop()
+    {
+        Spam1();
+        Spam2();
+    }
     private void ResetMomentum()
     {
         rb.linearVelocity = Vector3.zero;
@@ -469,7 +479,7 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
-
+    GameObject spawnedGun;
     public void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
     {
         if (interaction == InteractionEnum.ShotWithGun)
@@ -480,7 +490,41 @@ public class Interact : AttributesSync, IObserver
             health.DamagePlayer(gun.Damage());
             Debug.Log(gun.Damage());
         }
+
+        if(interaction == InteractionEnum.GivenTaskManagerRole)
+        {
+            //could it be thinkin it's a prefab still
+            Debug.Log(heldObject);
+            if (heldObject != null) Drop();
+            spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
+            spawnedGun.transform.parent = transform;
+            TryPickUp(spawnedGun);
+        }
+        if(interaction == InteractionEnum.RemoveGun)
+        {
+            if(spawnedGun != null && heldObject == spawnedGun && avatar.IsMe)
+            {
+                spawner.Despawn(spawnedGun);
+            }
+        }
     }
+
+
+    /*
+    [SynchronizableMethod]
+    private void SyncSpawnGun()
+    {
+        GameObject spawnedGun = Instantiate(gunPrefab, transform);
+        if(heldObject!=null) Drop();
+        TryPickUp(gunPrefab);
+    }
+    [SynchronizableMethod]
+    private void SyncRemoveGun()
+    {
+        if (heldObject != null) Drop();
+        Destroy(spawnedGun);
+    }
+    */
 }
 
 

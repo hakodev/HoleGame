@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Alteruna;
+using System.Linq;
 public class VotingPhase : AttributesSync {
 
     private List<PlayerRole> totalPlayers;
@@ -19,6 +20,7 @@ public class VotingPhase : AttributesSync {
     [SerializeField] GameObject votingPhaseObject;
     Alteruna.Avatar avatar;
 
+    [SynchronizableField] int randomlyPickedPlayer;
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -41,26 +43,24 @@ public class VotingPhase : AttributesSync {
     
     public void InitiateVotingPhase() {
         if (!avatar.IsMe) { return; }
-        Debug.Log(totalPlayers.Count);
 
         votingCanvas.SetActive(true);
-
-        Cursor.lockState = CursorLockMode.None; // Unlock the mouse for the voting
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
-        float tempYPos = -120;
+        player.VotedCount = 0;
 
             if(player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
+            player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
             } else {
 
                 int i = 0;
                 foreach(PlayerRole otherPlayer in totalPlayers)
                 {
-                    i++;
                     if (otherPlayer == player) { continue; }
+                i++;
 
-                    GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
+                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
                     newPlayerVoteOption.GetComponentInChildren<TMP_Text>().text = otherPlayer.gameObject.name;
 
                     RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
@@ -76,35 +76,70 @@ public class VotingPhase : AttributesSync {
 
             player.gameObject.GetComponent<PlayerController>().MovementEnabled = false; // Disable movement until end of voting phase
         }
-        
-    
 
 
-    //i can pick no one, or wait
+
     //if highest ppl have equal votes, then sb is picked at random
     //give gun to CEO through the specialInteractionSystem
-    //
-    [SynchronizableMethod]
+
+    [SynchronizableField] static string taskManagerName = "";
     public void EndVotingPhase()
     {
+        if (!avatar.IsMe) { return; }
+
         votingCanvas.SetActive(false);
         votedCanvas.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
+        if (Multiplayer.GetUser().IsHost) EndVotingPhaseHost();
 
-        PlayerRole pickedPlayer = totalPlayers[0];
-        for (int i = 1; i < totalPlayers.Count; i++)
-        {
-            if (totalPlayers[i] == player) { continue; }
-            if (totalPlayers[i].VotedCount > pickedPlayer.VotedCount) pickedPlayer = totalPlayers[i];
-        }
+        pickedPlayerNameText.text = taskManagerName;
 
-        pickedPlayerNameText.text = pickedPlayer.gameObject.name;
-        pickedPlayer.IsTaskManager = true;
         StartCoroutine(DisplayTaskManager());
         StartCoroutine(DisplaySymptomNotif());
+
+        //heldObject = smth
+    }
+    //local script only accessed by the host, touchin
+    private void EndVotingPhaseHost()
+    {
+        PlayerRole pickedPlayer = totalPlayers[0];
+        List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
+
+        for (int i = 1; i < totalPlayers.Count; i++)
+        {
+            if (totalPlayers[i] == player) { continue; } //same player
+
+            if (totalPlayers[i].VotedCount > pickedPlayer.VotedCount) //more votes
+            {
+                pickedPlayer = totalPlayers[i];
+                equallyVotedPlayers.Clear();
+                equallyVotedPlayers.Add(pickedPlayer);
+            }
+
+            if (totalPlayers[i].VotedCount == pickedPlayer.VotedCount) //equivotes
+            {
+                equallyVotedPlayers.Add(totalPlayers[i]);
+            }
+        }
+
+
+        if (equallyVotedPlayers.Count > 1)
+        {
+            randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
+            pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
+            Debug.Log(Multiplayer.GetUser().Index);
+        }
+
+            Debug.Log("yes " + pickedPlayer.gameObject.name);
+            pickedPlayer.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+        
+
+
+        pickedPlayer.IsTaskManager = true;
+        taskManagerName = pickedPlayer.gameObject.name;
     }
 
     private IEnumerator DisplayTaskManager() {

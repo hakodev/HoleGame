@@ -721,8 +721,8 @@ GameObject:
   - component: {fileID: 9170362232215914470}
   - component: {fileID: 3021465343479778412}
   - component: {fileID: 2946068601770951158}
-  - component: {fileID: 8770053332773083543}
   - component: {fileID: 4747016970920604293}
+  - component: {fileID: 924005708743982461}
   m_Layer: 0
   m_Name: MishPlayer
   m_TagString: Player
@@ -955,19 +955,6 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   debugDeathMaterial: {fileID: 0}
---- !u!114 &8770053332773083543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2507407002761147588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f3df8fc6c0bb7a49b31ee0dabbcec3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  disappearingObjsSymptom: {fileID: 0}
 --- !u!114 &4747016970920604293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -991,6 +978,19 @@ MonoBehaviour:
   taskManagerPickedDisplayCanvas: {fileID: 7400850545661369036}
   symptomsNotifCanvas: {fileID: 1157109357063489440}
   votingPhaseObject: {fileID: 4699666043176787022}
+--- !u!114 &924005708743982461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2507407002761147588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3df8fc6c0bb7a49b31ee0dabbcec3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disappearingObjsSymptom: {fileID: 11400000, guid: ae5174f17a3d121439392e943ad806f8, type: 2}
 --- !u!1 &2565612880506949840
 GameObject:
   m_ObjectHideFlags: 0

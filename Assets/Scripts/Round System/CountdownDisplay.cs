@@ -82,6 +82,7 @@ public class CountdownDisplay : AttributesSync {
         countdown.color = countdownColor;
     }
 
+    
     private void UpdateTickDown()
     {
         if (time > 0) 

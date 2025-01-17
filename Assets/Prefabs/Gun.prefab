@@ -135,8 +135,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8349825907078539650}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.056812197, y: 0.2809997, z: -5.229317}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -166,10 +166,10 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 2
 --- !u!114 &2730662021482031466
 MonoBehaviour:
@@ -224,9 +224,9 @@ MonoBehaviour:
   _uidString: a835fa9e-ec5f-48ec-ba3f-e82ea032758a
   Reliability: 2
   LocalMethodBehavior: 1
-  maxAmmo: 6
+  maxAmmo: 999
   bulletMaxDistance: 100
-  damage: 50
+  damage: 100
 --- !u!1 &8443463744637490244
 GameObject:
   m_ObjectHideFlags: 0

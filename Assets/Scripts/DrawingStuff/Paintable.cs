@@ -1,6 +1,7 @@
 using UnityEngine;
+using Alteruna;
 
-public class Paintable : MonoBehaviour {
+public class Paintable : AttributesSync {
 	const int TEXTURE_SIZE = 1024;
 
 	public float extendsIslandOffset = 1;
@@ -14,6 +15,7 @@ public class Paintable : MonoBehaviour {
 	
 	PaintManager paintManager;
 
+
 	int maskTextureID = Shader.PropertyToID("_MaskTexture");
 
 	public RenderTexture getMask() => maskRenderTexture;
@@ -22,7 +24,20 @@ public class Paintable : MonoBehaviour {
 	public RenderTexture getSupport() => supportTexture;
 	public Renderer getRenderer() => rend;
 
-	public void Start() {
+	/*
+    string oldTag;
+    [SynchronizableMethod]
+	public void SetTag(string newTag)
+	{
+		oldTag = gameObject.tag;
+		gameObject.tag = newTag;
+	}
+	[SynchronizableMethod]
+	public void ResetTag() {
+		gameObject.tag = oldTag;
+	}
+	*/
+    public void Start() {
 		paintManager = FindAnyObjectByType<PaintManager>();
 		maskRenderTexture = new RenderTexture(TEXTURE_SIZE, TEXTURE_SIZE, 0);
 		maskRenderTexture.filterMode = FilterMode.Bilinear;
