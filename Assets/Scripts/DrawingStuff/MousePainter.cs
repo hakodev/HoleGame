@@ -1,6 +1,8 @@
 using UnityEngine;
 using Alteruna;
-public class MousePainter : AttributesSync
+using System;
+using System.Drawing;
+public class MousePainter : MonoBehaviour
 {
     public Camera cam;
     [Space]
@@ -18,11 +20,14 @@ public class MousePainter : AttributesSync
 
     public LayerMask notPlayerMask;
     Paintable p;
+    Alteruna.Avatar avatar;
 
     public void Start()
     {
         paintManager = FindAnyObjectByType<PaintManager>();
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
     }
+
 
     public void Paint()
     {
@@ -35,17 +40,19 @@ public class MousePainter : AttributesSync
             p = hit.collider.GetComponent<Paintable>();
             if (p != null)
             {
-                BroadcastRemoteMethod(nameof(PaintOnAllClients), hit.point, radius, hardness, strength, paintColor);
+                CommunicationBridgeUID puid = p.GetComponent<CommunicationBridgeUID>();
+                Guid id = puid.GetUID();
+
+                paintManager.BroadcastRemoteMethod("paint", id, hit.point.x, hit.point.y, hit.point.z, radius, hardness, strength, paintColor);
+                
             }
         }
+
     }
-    [SynchronizableMethod]
-    private void PaintOnAllClients(Vector3 point, float radius, float hardness, float strength, UnityEngine.Color paintColor)
-    {
-        PaintManager.Instance.paint(p, point, radius, hardness, strength, paintColor);
-    }
+
     private void Update()
     {
+        Debug.Log(paintManager.gameObject.name);
         if (Input.GetMouseButton(0))
         {
             Paint();

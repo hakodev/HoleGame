@@ -6,12 +6,17 @@ public class Paintable : AttributesSync {
 
 	public float extendsIslandOffset = 1;
 
-	RenderTexture extendIslandsRenderTexture;
-	RenderTexture uvIslandsRenderTexture;
-	RenderTexture maskRenderTexture;
-	RenderTexture supportTexture;
 	
-	Renderer rend;
+    RenderTexture extendIslandsRenderTexture;
+
+    RenderTexture uvIslandsRenderTexture;
+
+    RenderTexture maskRenderTexture;
+
+    RenderTexture supportTexture;
+
+
+    Renderer rend;
 	
 	PaintManager paintManager;
 
@@ -39,7 +44,6 @@ public class Paintable : AttributesSync {
 
 		rend = GetComponent<Renderer>();
         rend.material.SetTexture(maskTextureID, extendIslandsRenderTexture);
-		
 
 		paintManager.initTextures(this);
 	}

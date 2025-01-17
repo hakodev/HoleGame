@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Alteruna;
+using System.Xml;
+using System;
 
 public class PaintManager : AttributesSync{
 
@@ -50,6 +52,7 @@ public class PaintManager : AttributesSync{
         command.name = "CommmandBuffer - " + this.gameObject.name;
     }
 
+    
     public void initTextures(Paintable paintable){
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
@@ -70,8 +73,10 @@ public class PaintManager : AttributesSync{
     }
 
     [SynchronizableMethod]
-    public void paint(Alteruna.IUniqueID PUID, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
-        Paintable paintable = Multiplayer.GetGameObjectById(PUID).GetComponent<Paintable>();
+    public void paint(Guid guid, float x, float y, float z, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
+        Debug.Log(gameObject.name + "isPaint");
+        Vector3 pos = new Vector3(x, y, z);
+        Paintable paintable = Multiplayer.GetGameObjectById(guid).GetComponent<Paintable>();
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
         RenderTexture extend = paintable.getExtend();
