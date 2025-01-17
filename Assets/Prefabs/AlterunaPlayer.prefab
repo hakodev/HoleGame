@@ -4238,6 +4238,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6223943137824756081}
+  - component: {fileID: 4729692751746840699}
   m_Layer: 0
   m_Name: clientHand
   m_TagString: Untagged
@@ -4260,6 +4261,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2499838082348914692}
   m_LocalEulerAnglesHint: {x: 0, y: -4.39, z: 0}
+--- !u!114 &4729692751746840699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8545988785631638419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e786e432fa2d9e34a9cf1355e391c632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 8805186453696645239}
+  mouseSingleClick: 0
+  paintColor: {r: 0.9433962, g: 0.22694907, b: 0.22694907, a: 0}
+  radius: 1
+  strength: 1
+  hardness: 1
+  range: 6
+  notPlayerMask:
+    serializedVersion: 2
+    m_Bits: 6591
 --- !u!1 &8625206230334767510
 GameObject:
   m_ObjectHideFlags: 0
