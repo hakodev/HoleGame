@@ -1,4 +1,5 @@
 using Alteruna;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +10,7 @@ public class CountDownDisplayManager : AttributesSync {
     [SerializeField] GameObject PickTaskManager;
     [SerializeField] GameObject CountDown;
 
-
-    private List<GameObject> totalPlayers = new List<GameObject>();
-    private List<VotingPhase> playerVotingPhase = new List<VotingPhase>();
-
-    [SynchronizableField] static bool hasInitiatedTheScreen = false;
+    public static bool hasInitiatedTheTimer = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
@@ -22,44 +19,38 @@ public class CountDownDisplayManager : AttributesSync {
     }
     private IEnumerator CheckIfGameStarted()
     {
-        while (!hasInitiatedTheScreen)
+        while (!hasInitiatedTheTimer)
         {
             yield return new WaitForSeconds(1);
 
+            if (RoleAssignment.playerID != 1) { continue; }
 
-            if (RoleAssignment.hasGameStarted && !hasInitiatedTheScreen)
+            if (RoleAssignment.hasGameStarted && !hasInitiatedTheTimer)
             {
-                List<PlayerRole> temp = RoleAssignment.GetTotalPlayers();
-                foreach (PlayerRole role in temp)
-                {
-                    totalPlayers.Add(role.gameObject);
-                    playerVotingPhase.Add(totalPlayers[totalPlayers.Count - 1].GetComponent<VotingPhase>());
-                }
 
-
-                hasInitiatedTheScreen = true;
-
-                if (gameObject.activeSelf)
-                {
-                    StartCoroutine(StartDowntime.GetComponent<CountdownDisplay>().TickDown());
-                }
-                Debug.Log("calling the damn tickdown");
+                BroadcastRemoteMethod(nameof(StartGameForAll));
             }
         }
     }
 
-    // Update is called once per frame
+    [SynchronizableMethod]
+    private void StartGameForAll()
+    {
+        hasInitiatedTheTimer = true;
+    }
     void Update()
     {
-     
-        
+       // Testing();
     }
 
-    [SynchronizableMethod]
-    private void DeactivateUnusedTimers()//(string deactivatedObject)
+    private void Testing()
     {
-        gameObject.SetActive(false);
+        //detects if this is local player
+        if (Multiplayer.GetUser().Index == RoleAssignment.playerID-1) {
+            Debug.Log("user " + Multiplayer.GetUser().Index);
+        }
     }
+
 
 
     [SynchronizableMethod]
@@ -85,10 +76,18 @@ public class CountDownDisplayManager : AttributesSync {
         
 
 
-        affectedDisplay.time = affectedDisplay.maxTime;
-
-        StartCoroutine(affectedDisplay.TickDown());
-        
-            
+        affectedDisplay.time = affectedDisplay.maxTime;  
     }
 }
+
+
+
+/*
+List<Alteruna.User> users = Multiplayer.GetUsers();
+foreach (Alteruna.User user in users)
+{
+    Debug.Log("user " + user.Name + " " + user.Index);
+
+}
+*/
+

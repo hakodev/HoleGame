@@ -8,6 +8,8 @@ public enum InteractionEnum
     PlacedStickyNote,
     ThrownStickyNote,
     PickedUpStickyNote,
+    GivenTaskManagerRole,
+    RemoveGun,
     Oiled,
     Watered,
     Caffenated,

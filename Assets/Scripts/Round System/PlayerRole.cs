@@ -16,7 +16,7 @@ public class PlayerRole : AttributesSync
     [SerializeField] CanvasGroup machineCanvas;
 
 
-    public int VotedCount { get; set; }
+    [SynchronizableField] public int VotedCount=0;
     [SynchronizableField] public bool IsTaskManager = false;
 
     private void Awake()

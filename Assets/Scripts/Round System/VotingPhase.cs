@@ -5,23 +5,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Alteruna;
+using System.Linq;
 public class VotingPhase : AttributesSync {
 
     private List<PlayerRole> totalPlayers;
+    private PlayerRole player;
 
     [SerializeField] private GameObject playerVoteButton;
-    [SerializeField] private float firstPlayerOptionYPos;
     [SerializeField] TMP_Text pickedPlayerNameText;
     [SerializeField] private GameObject votingCanvas;
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
-    [SerializeField] GameObject symptomsNotifCanvas;
-
+    [SerializeField] CanvasGroup symptomsNotifCanvas;
+    [SerializeField] GameObject votingPhaseObject;
     Alteruna.Avatar avatar;
 
+    [SynchronizableField] int randomlyPickedPlayer;
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
+        player = GetComponent<PlayerRole>();
     }
     private void Start() {
         totalPlayers = RoleAssignment.GetTotalPlayers();
@@ -34,90 +37,109 @@ public class VotingPhase : AttributesSync {
         symptomsNotifCanvas = CustomMethods.foundRecursively;
         */
 
-        CustomMethods.foundRecursively = null;
+       // CustomMethods.foundRecursively = null;
     }
 
-    /*
-    [SynchronizableMethod]
+    
     public void InitiateVotingPhase() {
-        if(!avatar.IsMe) { return; }
-        
+        if (!avatar.IsMe) { return; }
+
         votingCanvas.SetActive(true);
-
-        Cursor.lockState = CursorLockMode.None; // Unlock the mouse for the voting
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        player.VotedCount = 0;
 
-        float tempYPos = firstPlayerOptionYPos;
-
-        foreach(PlayerRole player in totalPlayers) {
             if(player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
+            player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
             } else {
-                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, transform);
-                newPlayerVoteOption.GetComponentInChildren<TMP_Text>().text = player.gameObject.name;
-                newPlayerVoteOption.transform.position = new Vector3(newPlayerVoteOption.transform.position.x,
-                                                                     tempYPos,
-                                                                     newPlayerVoteOption.transform.position.z);
 
-                newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
-                    player.VotedCount++;
-                    votingCanvas.SetActive(false);
-                    votedCanvas.SetActive(true);
-                });
+                int i = 0;
+                foreach(PlayerRole otherPlayer in totalPlayers)
+                {
+                    if (otherPlayer == player) { continue; }
+                i++;
 
-                tempYPos -= 100f;
+                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
+                    newPlayerVoteOption.GetComponentInChildren<TMP_Text>().text = otherPlayer.gameObject.name;
+
+                    RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
+                    rect.anchoredPosition += rect.anchoredPosition * i;
+
+                    newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
+                            otherPlayer.VotedCount++;
+                            votingCanvas.SetActive(false);
+                            votedCanvas.SetActive(true);
+                    });
+                }
             }
 
             player.gameObject.GetComponent<PlayerController>().MovementEnabled = false; // Disable movement until end of voting phase
         }
-        
-    }
 
-    [SynchronizableMethod]
-    public void EndVotingPhase() {
+
+
+    //if highest ppl have equal votes, then sb is picked at random
+    //give gun to CEO through the specialInteractionSystem
+
+    [SynchronizableField] static string taskManagerName = "";
+    public void EndVotingPhase()
+    {
         if (!avatar.IsMe) { return; }
 
         votingCanvas.SetActive(false);
-           votedCanvas.SetActive(false);
-           Cursor.lockState = CursorLockMode.Locked;
-           Cursor.visible = false;
+        votedCanvas.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
-           PlayerRole pickedPlayer = null;
+        if (Multiplayer.GetUser().IsHost) EndVotingPhaseHost();
 
-<<<<<<< HEAD
-        for(int i = 0; i < totalPlayers.Count; i++) {
-            totalPlayers[i].gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
+        pickedPlayerNameText.text = taskManagerName;
 
-            if(totalPlayers[i] == totalPlayers[0])
-                continue;
-=======
-           for(int i = 0; i < totalPlayers.Count; i++) {
-               PlayerRole currentPlayer = totalPlayers[i].GetComponent<PlayerRole>();
-
-               totalPlayers[i].gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
-
-               if(currentPlayer.GetRole() == Roles.Infiltrator)
-                   StartCoroutine(DisplaySymptomNotif());
-
-               if(totalPlayers[i] == totalPlayers[0])
-                   continue;
->>>>>>> origin/Misho2
-
-               if(totalPlayers[i].VotedCount > totalPlayers[i - 1].VotedCount)
-                   pickedPlayer = totalPlayers[i];
-           }
-
-<<<<<<< HEAD
-        pickedPlayerNameText.text = pickedPlayer.gameObject.name;
-        pickedPlayer.IsTaskManager = true;
         StartCoroutine(DisplayTaskManager());
         StartCoroutine(DisplaySymptomNotif());
-=======
-           pickedPlayerNameText.text = pickedPlayer.gameObject.name;
-           pickedPlayer.IsTaskManager = true;
-           StartCoroutine(DisplayTaskManager());
+
+        //heldObject = smth
+    }
+    //local script only accessed by the host, touchin
+    private void EndVotingPhaseHost()
+    {
+        PlayerRole pickedPlayer = totalPlayers[0];
+        List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
+
+        for (int i = 1; i < totalPlayers.Count; i++)
+        {
+            if (totalPlayers[i] == player) { continue; } //same player
+
+            if (totalPlayers[i].VotedCount > pickedPlayer.VotedCount) //more votes
+            {
+                pickedPlayer = totalPlayers[i];
+                equallyVotedPlayers.Clear();
+                equallyVotedPlayers.Add(pickedPlayer);
+            }
+
+            if (totalPlayers[i].VotedCount == pickedPlayer.VotedCount) //equivotes
+            {
+                equallyVotedPlayers.Add(totalPlayers[i]);
+            }
+        }
+
+
+        if (equallyVotedPlayers.Count > 1)
+        {
+            randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
+            pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
+            Debug.Log(Multiplayer.GetUser().Index);
+        }
+
+            Debug.Log("yes " + pickedPlayer.gameObject.name);
+            pickedPlayer.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
         
->>>>>>> origin/Misho2
+
+
+        pickedPlayer.IsTaskManager = true;
+        taskManagerName = pickedPlayer.gameObject.name;
     }
 
     private IEnumerator DisplayTaskManager() {
@@ -127,9 +149,11 @@ public class VotingPhase : AttributesSync {
     }
 
     private IEnumerator DisplaySymptomNotif() {
-        symptomsNotifCanvas.SetActive(true);
-        yield return new WaitForSeconds(10f); // How many seconds to display it on screen
-        symptomsNotifCanvas.SetActive(false);
+        //symptomsNotifCanvas.SetActive(true);
+        symptomsNotifCanvas.DOFade(1f, 0.1f);
+        yield return new WaitForSeconds(4f); // How many seconds to display it on screen
+        symptomsNotifCanvas.DOFade(0f, 2f);
+       // symptomsNotifCanvas.SetActive(false);
     }
-    */
+    
 }

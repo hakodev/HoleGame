@@ -364,11 +364,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9b60d2b76a4b4187317657620a018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 20
+  Multiplayer: {fileID: 0}
+  _uidString: 
+  Reliability: 1
+  LocalMethodBehavior: 1
   secondsRemainingToTurnRed: 5
-  OnTimerEnd:
-    m_PersistentCalls:
-      m_Calls: []
+  time: 20
+  maxTime: 0
+  countdown: {fileID: 0}
+  manager: {fileID: 0}
 --- !u!1 &4685784660766334998
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,12 +673,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2701840edf6e39643b68ea08ebdd8c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: d0974b9c-b6bb-443d-8f5f-8433ffbca001
+  Reliability: 1
+  LocalMethodBehavior: 1
   playerVoteButton: {fileID: 4703291767131715157, guid: d8f2a44d382a1174789845646ff2c920, type: 3}
   firstPlayerOptionYPos: -250
+  pickedPlayerNameText: {fileID: 0}
   votingCanvas: {fileID: 6206994946430575835}
   votedCanvas: {fileID: 7439051782045000421}
   taskManagerPickedDisplayCanvas: {fileID: 7097704643784716144}
   symptomsNotifCanvas: {fileID: 0}
+  votingPhaseObject: {fileID: 0}
 --- !u!1 &6206994946430575835
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,14 +41,21 @@ public class Interact : AttributesSync, IObserver
 
     private Transform currentOutlinedObject;
 
+    private DisappearingObjs disappearingObjs;
+
+    private Alteruna.Spawner spawner;
 
     private void Awake()
     {
         hudDisplay = GetComponentInChildren<HUDDisplay>();
         avatar = GetComponent<Alteruna.Avatar>();
+        spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
+
 
         if (!avatar.IsMe) { return; }
+
         playerController = GetComponent<PlayerController>();
+        disappearingObjs = GetComponent<DisappearingObjs>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
       //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
        // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
@@ -152,11 +159,11 @@ public class Interact : AttributesSync, IObserver
 
         if (heldObject)
         {
-         //   hudDisplay.SetState(new CarryDisplay(hudDisplay));
+            hudDisplay.SetState(new CarryDisplay(hudDisplay));
         }
         else
         {
-         //   hudDisplay.SetState(new EmptyDisplay(hudDisplay));
+            hudDisplay.SetState(new EmptyDisplay(hudDisplay));
         }
 
         RaycastHit hit;
@@ -164,20 +171,20 @@ public class Interact : AttributesSync, IObserver
         {
             ApplyOutline(hit.transform.gameObject);
 
+
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("StationaryInteractableObject"))
             {
-             //   hudDisplay.SetState(new StationaryInteract(hudDisplay));
+                hudDisplay.SetState(new StationaryInteract(hudDisplay));
                 if (Input.GetMouseButtonDown(1))
                 {
                     hit.transform.gameObject.GetComponent<StationaryInteractableObject>().Use();
                 }
 
             }
-
-
+ 
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
             {
-             //   hudDisplay.SetState(new DynamicInteract(hudDisplay));
+                hudDisplay.SetState(new DynamicInteract(hudDisplay));
                 if (Input.GetMouseButtonDown(0))
                 {
                     TryPickUp(hit.transform.gameObject);
@@ -251,7 +258,6 @@ public class Interact : AttributesSync, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
         {
-            heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
             SetLayerRecursively(heldObject, 7);
 
             //placing anim
@@ -268,7 +274,7 @@ public class Interact : AttributesSync, IObserver
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
             rbToTrack.SetPosition(heldObject.transform.position);
 
-            heldObject.transform.forward = -hit.normal;
+            heldObject.transform.forward = hit.normal;
             rbToTrack.SetRotation(heldObject.transform.rotation);
 
 
@@ -293,7 +299,6 @@ public class Interact : AttributesSync, IObserver
         //specifics to thtowing
 
         Spam1();
-        heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
@@ -378,9 +383,7 @@ public class Interact : AttributesSync, IObserver
     }
     private void Spam2()
     {
-        //disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
-
-        SymptomsManager.Instance.TriggerSymptom(heldObject); // should despawn items on drop if the symptom is applied
+        disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
 
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
@@ -396,14 +399,7 @@ public class Interact : AttributesSync, IObserver
         //   animator.SetTrigger("PickingUp");
         //   animatorSync.SetTrigger("PickingUp");
 
-        if (heldObject != null)
-        {
-            return;
-        }
-
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
-
-
 
         Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
         if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
@@ -412,7 +408,6 @@ public class Interact : AttributesSync, IObserver
             heldObject = pickedUp;
             rb = heldObject.GetComponent<Rigidbody>();
             rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
-            DIO.isPickedUp = true;
 
             if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
@@ -435,6 +430,12 @@ public class Interact : AttributesSync, IObserver
             Debug.Log("You can't pick up that");
         }
     }
+
+    private void Drop()
+    {
+        Spam1();
+        Spam2();
+    }
     private void ResetMomentum()
     {
         rb.linearVelocity = Vector3.zero;
@@ -446,14 +447,6 @@ public class Interact : AttributesSync, IObserver
     {
         if (heldObject != null)
         {
-            if (heldObject.name.Contains("StickyNote"))
-            {
-                if (heldObject.GetComponent<StickyNote>().isInteractedWith)
-                {
-                    return;
-                }
-                
-            }
             Vector3 targetPosition = clientHand.transform.position;
             Quaternion targetRotation = playerCamera.transform.rotation;
 
@@ -486,7 +479,7 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
-
+    GameObject spawnedGun;
     public void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
     {
         if (interaction == InteractionEnum.ShotWithGun)
@@ -497,7 +490,41 @@ public class Interact : AttributesSync, IObserver
             health.DamagePlayer(gun.Damage());
             Debug.Log(gun.Damage());
         }
+
+        if(interaction == InteractionEnum.GivenTaskManagerRole)
+        {
+            //could it be thinkin it's a prefab still
+            Debug.Log(heldObject);
+            if (heldObject != null) Drop();
+            spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
+            spawnedGun.transform.parent = transform;
+            TryPickUp(spawnedGun);
+        }
+        if(interaction == InteractionEnum.RemoveGun)
+        {
+            if(spawnedGun != null && heldObject == spawnedGun && avatar.IsMe)
+            {
+                spawner.Despawn(spawnedGun);
+            }
+        }
     }
+
+
+    /*
+    [SynchronizableMethod]
+    private void SyncSpawnGun()
+    {
+        GameObject spawnedGun = Instantiate(gunPrefab, transform);
+        if(heldObject!=null) Drop();
+        TryPickUp(gunPrefab);
+    }
+    [SynchronizableMethod]
+    private void SyncRemoveGun()
+    {
+        if (heldObject != null) Drop();
+        Destroy(spawnedGun);
+    }
+    */
 }
 
 

@@ -49,6 +49,7 @@ public class Gun : DynamicInteractableObject
              //   hit.collider.gameObject.GetComponent<Health>().DamagePlayer(Random.Range(3, 7)); // Change later
                    Debug.Log("BULLSEYE!");
                 hit.collider.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.ShotWithGun, this);
+                transform.root.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
             }
         }
         currentAmmo--;

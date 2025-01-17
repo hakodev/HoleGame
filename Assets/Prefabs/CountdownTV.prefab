@@ -396,26 +396,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 17ef79d7-4ccb-4899-a0cf-ff78f48374d4
+  _uidString: 5b94b3ef-1d57-45f3-ac10-20c557fabed3
   Reliability: 1
   LocalMethodBehavior: 1
-  time: 60
   secondsRemainingToTurnRed: 20
-  OnTimerEnd:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: VotingPhase, Assembly-CSharp
-        m_MethodName: InitiateVotingPhase
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+  time: 60
+  maxTime: 0
+  countdown: {fileID: 219285432067782719}
+  manager: {fileID: 8452327915512505430}
 --- !u!1 &4461445914414772249
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,26 +555,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 17da9728-4bb2-4c6c-87bd-7c08144fcef8
+  _uidString: 9812fdcd-d9bf-41e5-920c-532a8be82ba7
   Reliability: 1
   LocalMethodBehavior: 1
-  time: 20
   secondsRemainingToTurnRed: 5
-  OnTimerEnd:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: VotingPhase, Assembly-CSharp
-        m_MethodName: EndVotingPhase
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  time: 20
+  maxTime: 0
+  countdown: {fileID: 4378200082803138495}
+  manager: {fileID: 8452327915512505430}
 --- !u!1 &5575463496622474358
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,26 +850,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: e801ab7b-0a82-4707-a777-22c78e59bcd0
+  _uidString: 2ddea9ce-7ae0-434d-ba4c-1f28b4655ca1
   Reliability: 1
   LocalMethodBehavior: 1
-  time: 60
   secondsRemainingToTurnRed: 10
-  OnTimerEnd:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: VotingPhase, Assembly-CSharp
-        m_MethodName: InitiateVotingPhase
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  time: 60
+  maxTime: 0
+  countdown: {fileID: 4030759391244349709}
+  manager: {fileID: 8452327915512505430}
 --- !u!1 &6214401428848743175
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,6 +870,7 @@ GameObject:
   - component: {fileID: 7824328601092657750}
   - component: {fileID: 4034944378018940907}
   - component: {fileID: 7267073473395779133}
+  - component: {fileID: 8452327915512505430}
   m_Layer: 5
   m_Name: TVCanvas
   m_TagString: Untagged
@@ -998,6 +963,25 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &8452327915512505430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6214401428848743175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bddfd4e9dc3c99b4d9cbd2de29c92fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 776b457c-759d-40be-a31c-d904d0613381
+  Reliability: 1
+  LocalMethodBehavior: 1
+  StartDowntime: {fileID: 2923793777255632284}
+  PickTaskManager: {fileID: 4461445914414772249}
+  CountDown: {fileID: 5953536155292194226}
 --- !u!1 &8471050316220897476
 GameObject:
   m_ObjectHideFlags: 0

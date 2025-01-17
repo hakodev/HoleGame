@@ -2,8 +2,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using Alteruna;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 
 
 public class CountdownDisplay : AttributesSync {
@@ -11,13 +9,19 @@ public class CountdownDisplay : AttributesSync {
     [SerializeField] private int secondsRemainingToTurnRed;
 
     [SynchronizableField] public int time;
+    public static int sendTimeToUI;
+
+    private float deltaTime=0;
     public int maxTime;
-    [SynchronizableField] static Color countdownColor = Color.green;
+    [SynchronizableField] public static Color countdownColor = Color.green;
 
 
     [SerializeField] TextMeshProUGUI countdown;
 
     [SerializeField] private CountDownDisplayManager manager;
+
+
+
 
     private void Awake() {
         maxTime = time;
@@ -32,9 +36,37 @@ public class CountdownDisplay : AttributesSync {
         gameObject.SetActive(false);
     }
 
+    [SynchronizableMethod]
+    private void InitiateVotingPhaseForAllPlayers()
+    {
+        VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
+        foreach (VotingPhase player in allVotingPhases)
+        {
+            Debug.Log(player.gameObject.name);
+            player.InitiateVotingPhase();
+        }
+    }
+    [SynchronizableMethod]
+    private void EndVotingPhaseForAllPlayers()
+    {
+        VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
+        foreach (VotingPhase player in allVotingPhases)
+        {
+            Debug.Log(player.gameObject.name);
+            player.EndVotingPhase();
+        }
+    }
+
+    private void Update() {
+        if (CountDownDisplayManager.hasInitiatedTheTimer)
+        {
+            UpdateTickDown();
+            UpdateUI();
+            sendTimeToUI = time;
+        }
+    }
 
     
-
     private void UpdateUI()
     {
         countdown.text = time.ToString();
@@ -50,26 +82,26 @@ public class CountdownDisplay : AttributesSync {
         countdown.color = countdownColor;
     }
 
-    //check voting phase
-    public IEnumerator TickDown() {
-
-        while(time > 0)
+    
+    private void UpdateTickDown()
+    {
+        if (time > 0) 
         {
-            time--;
-            UpdateUI();
-            yield return new WaitForSeconds(1);
+            deltaTime += Time.deltaTime;
+            if (deltaTime >= 1)
+            {
+                deltaTime = 0;
+                if (Multiplayer.GetUser().IsHost) time--;
+                //Debug.Log(gameObject.name);
+            }
         }
-
-        manager.BroadcastRemoteMethod("ActivateTimer", parameters: gameObject.name);
-
-        time = maxTime;
-        BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
-        /*
-        foreach(VotingPhase player in playerVotingPhase)
+        else
         {
-            player.BroadcastRemoteMethod("InitiateVotingPhase");
+            manager.BroadcastRemoteMethod("ActivateTimer", parameters: gameObject.name);
+            BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
+            
+            if(gameObject.tag == "DowntimeDisplay") BroadcastRemoteMethod(nameof(InitiateVotingPhaseForAllPlayers));
+            if (gameObject.tag == "VotingDisplay") BroadcastRemoteMethod(nameof(EndVotingPhaseForAllPlayers));
         }
-        */
-
     }
 }
