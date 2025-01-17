@@ -1,12 +1,5 @@
-
-<<<<<<< HEAD
 using UnityEngine;
-=======
 
-using UnityEngine;
-using Unity.Netcode;
-using Alteruna;
->>>>>>> origin/Misho2
 public class CameraMovement : MonoBehaviour
 {
     [Header("Mouse Input")]
@@ -111,11 +104,6 @@ public class CameraMovement : MonoBehaviour
 }
 
 
-<<<<<<< HEAD
-
-/*
-
-=======
 /*
 >>>>>>> origin/Misho2
 using UnityEngine;

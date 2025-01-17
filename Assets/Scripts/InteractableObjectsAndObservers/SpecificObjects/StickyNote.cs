@@ -1,9 +1,5 @@
 using Alteruna;
 using System.Collections.Generic;
-<<<<<<< HEAD
-using System.Drawing;
-=======
->>>>>>> origin/Misho2
 using UnityEngine;
 
 public class StickyNote : DynamicInteractableObject

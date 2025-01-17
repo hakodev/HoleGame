@@ -41,8 +41,6 @@ public class Interact : AttributesSync, IObserver
 
     private Transform currentOutlinedObject;
 
-    private DisappearingObjs disappearingObjs;
-
     private Alteruna.Spawner spawner;
 
     private void Awake()
@@ -55,7 +53,6 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) { return; }
 
         playerController = GetComponent<PlayerController>();
-        disappearingObjs = GetComponent<DisappearingObjs>();
         //animator = transform.Find("Animation").GetComponent<Animator>();
       //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
        // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
@@ -383,7 +380,7 @@ public class Interact : AttributesSync, IObserver
     }
     private void Spam2()
     {
-        disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
+        SymptomsManager.Instance.TriggerSymptom(heldObject);
 
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);

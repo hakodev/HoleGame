@@ -24,7 +24,6 @@ public class SymptomNotifText : MonoBehaviour {
     private void DisplayNotificationText() {
         notificationText.text = "The machines have caught a new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
-                               $"{SymptomsManager.Instance.GetSymptom().Description}\n\n" +
-                                "Tread carefully...";
+                               $"{SymptomsManager.Instance.GetSymptom().Description}";
     }
 }
