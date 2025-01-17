@@ -1,16 +1,22 @@
 using UnityEngine;
+using Alteruna;
 
-public class Paintable : MonoBehaviour {
+public class Paintable : AttributesSync {
 	const int TEXTURE_SIZE = 1024;
 
 	public float extendsIslandOffset = 1;
 
-	RenderTexture extendIslandsRenderTexture;
-	RenderTexture uvIslandsRenderTexture;
-	RenderTexture maskRenderTexture;
-	RenderTexture supportTexture;
 	
-	Renderer rend;
+    RenderTexture extendIslandsRenderTexture;
+
+    RenderTexture uvIslandsRenderTexture;
+
+    RenderTexture maskRenderTexture;
+
+    RenderTexture supportTexture;
+
+
+    Renderer rend;
 	
 	PaintManager paintManager;
 
@@ -38,7 +44,6 @@ public class Paintable : MonoBehaviour {
 
 		rend = GetComponent<Renderer>();
         rend.material.SetTexture(maskTextureID, extendIslandsRenderTexture);
-		
 
 		paintManager.initTextures(this);
 	}

@@ -26,7 +26,7 @@ public class Marker : DynamicInteractableObject
             {
                 painter.cam =transform.root.GetComponentInChildren<Camera>();
             }
-            painter.Paint();
+            //painter.Paint();
         }
     }
 

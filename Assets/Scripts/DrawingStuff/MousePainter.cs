@@ -1,47 +1,62 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
+using Alteruna;
+using System;
+using System.Drawing;
+public class MousePainter : MonoBehaviour
+{
+    public Camera cam;
+    [Space]
+    public bool mouseSingleClick;
+    [Space]
+    public UnityEngine.Color paintColor;
 
-public class MousePainter : MonoBehaviour{
-	public Camera cam;
-	[Space]
-	public bool mouseSingleClick;
-	[Space]
-	public Color paintColor;
-	
-	public float radius = 1;
-	public float strength = 1;
-	public float hardness = 1;
+    public float radius = 1;
+    public float strength = 1;
+    public float hardness = 1;
 
-	public float range = 6;
-	
-	PaintManager paintManager;
+    public float range = 6;
 
-	public LayerMask notPlayerMask;
-	
-	public void Start()
-	{
-		paintManager = FindAnyObjectByType<PaintManager>();
-	}
+    PaintManager paintManager;
 
-	public void Paint()
-	{
+    public LayerMask notPlayerMask;
+    Paintable p;
+    Alteruna.Avatar avatar;
+
+    public void Start()
+    {
+        paintManager = FindAnyObjectByType<PaintManager>();
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
+    }
+
+
+    public void Paint()
+    {
         Vector3 position = Input.mousePosition;
         Ray ray = cam.ScreenPointToRay(position);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, range, notPlayerMask))
         {
-            Paintable p = hit.collider.GetComponent<Paintable>();
+            p = hit.collider.GetComponent<Paintable>();
             if (p != null)
             {
-                PaintManager.Instance.paint(p, hit.point, radius, hardness, strength, paintColor);
+                CommunicationBridgeUID puid = p.GetComponent<CommunicationBridgeUID>();
+                Guid id = puid.GetUID();
+
+                paintManager.BroadcastRemoteMethod("paint", id, hit.point.x, hit.point.y, hit.point.z, radius, hardness, strength, paintColor);
+                
             }
         }
 
+    }
 
-
-
+    private void Update()
+    {
+        Debug.Log(paintManager.gameObject.name);
+        if (Input.GetMouseButton(0))
+        {
+            Paint();
+        }
     }
 
 }
