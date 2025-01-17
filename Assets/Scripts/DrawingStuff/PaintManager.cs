@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using Alteruna;
 
-public class PaintManager : MonoBehaviour{
+public class PaintManager : AttributesSync{
 
     public Shader texturePaint;
     public Shader extendIslands;
@@ -68,8 +69,9 @@ public class PaintManager : MonoBehaviour{
         command.Clear();
     }
 
-
-    public void paint(Paintable paintable, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
+    [SynchronizableMethod]
+    public void paint(Alteruna.IUniqueID PUID, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
+        Paintable paintable = Multiplayer.GetGameObjectById(PUID).GetComponent<Paintable>();
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
         RenderTexture extend = paintable.getExtend();

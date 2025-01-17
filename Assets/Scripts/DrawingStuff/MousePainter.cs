@@ -1,54 +1,55 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
+using Alteruna;
+public class MousePainter : AttributesSync
+{
+    public Camera cam;
+    [Space]
+    public bool mouseSingleClick;
+    [Space]
+    public UnityEngine.Color paintColor;
 
-public class MousePainter : MonoBehaviour{
-	public Camera cam;
-	[Space]
-	public bool mouseSingleClick;
-	[Space]
-	public Color paintColor;
-	
-	public float radius = 1;
-	public float strength = 1;
-	public float hardness = 1;
+    public float radius = 1;
+    public float strength = 1;
+    public float hardness = 1;
 
-	public float range = 6;
-	
-	PaintManager paintManager;
+    public float range = 6;
 
-	public LayerMask notPlayerMask;
-	
-	public void Start()
-	{
-		paintManager = FindAnyObjectByType<PaintManager>();
-	}
+    PaintManager paintManager;
 
-	public void Update()
-	{
-        bool click;
-        click = mouseSingleClick ? Input.GetMouseButtonDown(0) : Input.GetMouseButton(0);
+    public LayerMask notPlayerMask;
+    Paintable p;
 
-        if (click)
-        {
-            Vector3 position = Input.mousePosition;
-            Ray ray = cam.ScreenPointToRay(position);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 100.0f, notPlayerMask))
-            {
-                Debug.DrawRay(ray.origin, hit.point - ray.origin, Color.red);
-                Paintable p = hit.collider.GetComponent<Paintable>();
-                if (p != null)
-                {
-                    PaintManager.Instance.paint(p, hit.point, radius, hardness, strength, paintColor);
-                }
-            }
-        }
-
-
-
+    public void Start()
+    {
+        paintManager = FindAnyObjectByType<PaintManager>();
     }
 
+    public void Paint()
+    {
+        Vector3 position = Input.mousePosition;
+        Ray ray = cam.ScreenPointToRay(position);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, range, notPlayerMask))
+        {
+            p = hit.collider.GetComponent<Paintable>();
+            if (p != null)
+            {
+                BroadcastRemoteMethod(nameof(PaintOnAllClients), hit.point, radius, hardness, strength, paintColor);
+            }
+        }
+    }
+    [SynchronizableMethod]
+    private void PaintOnAllClients(Vector3 point, float radius, float hardness, float strength, UnityEngine.Color paintColor)
+    {
+        PaintManager.Instance.paint(p, point, radius, hardness, strength, paintColor);
+    }
+    private void Update()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Paint();
+        }
+    }
 
 }

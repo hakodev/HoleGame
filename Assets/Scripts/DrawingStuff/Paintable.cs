@@ -1,6 +1,7 @@
 using UnityEngine;
+using Alteruna;
 
-public class Paintable : MonoBehaviour {
+public class Paintable : AttributesSync {
 	const int TEXTURE_SIZE = 1024;
 
 	public float extendsIslandOffset = 1;
