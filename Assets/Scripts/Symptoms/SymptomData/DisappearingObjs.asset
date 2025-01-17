@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Despawning Objects
   Description: Causes objects in your hand to fade out of existence the moment you
-    drop or throw them.
+    place or throw them.
   OnSymptomTriggered:
     m_PersistentCalls:
       m_Calls: []

@@ -145,7 +145,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: time
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: CountDown
@@ -190,6 +190,10 @@ PrefabInstance:
     - target: {fileID: 2766645290795301525, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: m_Name
       value: CountdownTV
+      objectReference: {fileID: 0}
+    - target: {fileID: 2923793777255632284, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: m_TagString
+      value: DowntimeDisplay
       objectReference: {fileID: 0}
     - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: CountDown
@@ -250,6 +254,14 @@ PrefabInstance:
     - target: {fileID: 4273853277078250316, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: OnTimerEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4461445914414772249, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: m_TagString
+      value: VotingDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 5953536155292194226, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
+      propertyPath: m_TagString
+      value: DowntimeDisplay
       objectReference: {fileID: 0}
     - target: {fileID: 6470784833652758287, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: OnTimerEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target

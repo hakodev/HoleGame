@@ -6,6 +6,8 @@ TagManager:
   tags:
   - SceneParentForPlacedObjects
   - playerCamera
+  - DowntimeDisplay
+  - VotingDisplay
   layers:
   - Default
   - TransparentFX

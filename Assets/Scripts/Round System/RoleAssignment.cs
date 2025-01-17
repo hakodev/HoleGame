@@ -8,15 +8,13 @@ using UnityEngine;
 
 public class RoleAssignment : AttributesSync
 {
-
-
     private static List<PlayerRole> rolelessPlayers = new();
-    [SynchronizableField] private static List<PlayerRole> totalPlayers = new();
+    private static List<PlayerRole> totalPlayers = new();
 
     private int maxNumOfInfiltrators = 1;
     Alteruna.Avatar avatar;
 
-    [SynchronizableField] public static bool hasGameStarted=false;
+    public static bool hasGameStarted=false;
 
     [SerializeField] List<Vector2> InfiltratorsToPlayers;
     //x - alll players

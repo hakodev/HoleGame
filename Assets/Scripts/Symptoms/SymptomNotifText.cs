@@ -25,8 +25,7 @@ public class SymptomNotifText : MonoBehaviour {
     private void DisplayNotificationText() {
         notificationText.text = "New Symptom Caught!\n\n" +
                                $"{currentSymptom.Name}\n" +
-                               $"{currentSymptom.Description}\n\n" +
-                                "Tread carefully...";
+                               $"{currentSymptom.Description}\n\n";
     }
 
     private SymptomsSO GetCurrentSymptom() {
