@@ -145,7 +145,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: time
-      value: 4
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: CountDown
@@ -169,7 +169,7 @@ PrefabInstance:
       objectReference: {fileID: 1804293564}
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: secondsRemainingToTurnRed
-      value: 2
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 206825767957582304, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: OnTimerEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -201,7 +201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: time
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: CountDown
@@ -225,7 +225,7 @@ PrefabInstance:
       objectReference: {fileID: 1804293564}
     - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: secondsRemainingToTurnRed
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3340237127107246800, guid: eb6fd067848244f4683784dbb482bcf7, type: 3}
       propertyPath: OnTimerEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -522,6 +522,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 345355970}
+  - component: {fileID: 345355971}
   m_Layer: 0
   m_Name: SymptomsManager
   m_TagString: Untagged
@@ -544,6 +545,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &345355971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345355968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 068c888ea364c6240b7ec7f97d577341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 154094071}
+  _uidString: e3d98571-04e8-42bb-8340-72b874b3decd
+  Reliability: 1
+  LocalMethodBehavior: 1
+  symptoms:
+  - {fileID: 11400000, guid: ae5174f17a3d121439392e943ad806f8, type: 2}
 --- !u!43 &348298023
 Mesh:
   m_ObjectHideFlags: 0
@@ -720,6 +739,10 @@ PrefabInstance:
     - target: {fileID: 1614584847509148156, guid: 449eb03eb599b0b46bcf08da5124acf2, type: 3}
       propertyPath: m_Name
       value: PaintManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2773552468571822916, guid: 449eb03eb599b0b46bcf08da5124acf2, type: 3}
+      propertyPath: _uidString
+      value: 52082723-486d-41d9-b2b6-1d7b8f6fd9d9
       objectReference: {fileID: 0}
     - target: {fileID: 8225874117706926075, guid: 449eb03eb599b0b46bcf08da5124acf2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2584,6 +2607,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5368504852881058705, guid: 6051cebc5ab601d4b8a55438074a6339, type: 3}
+      propertyPath: AvatarPrefab
+      value: 
+      objectReference: {fileID: 22722286681070130, guid: 8be13fad5012f4942ab85369c8538da1, type: 3}
     - target: {fileID: 5368504852881058705, guid: 6051cebc5ab601d4b8a55438074a6339, type: 3}
       propertyPath: AvatarSpawnLocation
       value: 

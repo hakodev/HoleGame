@@ -1,10 +1,11 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Prefabs/StickyNote 1.prefab.meta
-guid: 4630ebada748626419aef98230d14992
-========
+<<<<<<<< HEAD:Assets/Prefabs/oldMish.prefab.meta
 guid: bf35d991658990841a9a87e63deb983a
->>>>>>>> origin/Misho2:Assets/Prefabs/oldMish.prefab.meta
 PrefabImporter:
+========
+guid: fbb5a37cfe0416647b53495325609ad5
+DefaultImporter:
+>>>>>>>> Ivan3:Assets/Scenes/Test Scenes/New Scene.unity.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
