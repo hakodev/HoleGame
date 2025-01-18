@@ -16,6 +16,7 @@ public class VotingPhase : AttributesSync {
     [SerializeField] private GameObject votingCanvas;
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
+    [SerializeField] private CanvasGroup randomlyVotedPlayerCanvas;
     [SerializeField] CanvasGroup symptomsNotifCanvas;
     [SerializeField] GameObject votingPhaseObject;
     Alteruna.Avatar avatar;
@@ -28,19 +29,10 @@ public class VotingPhase : AttributesSync {
     }
     private void Start() {
         totalPlayers = RoleAssignment.GetTotalPlayers();
-
-        /*   
-        CustomMethods.FindChildRecursivelyQuick(transform, "PickedPlayerNameText");
-        pickedPlayerNameText = CustomMethods.foundRecursively.GetComponent<TMP_Text>();
-
-        CustomMethods.FindChildRecursivelyQuick(transform, "SymptomsNotifCanvas");
-        symptomsNotifCanvas = CustomMethods.foundRecursively;
-        */
-
-       // CustomMethods.foundRecursively = null;
     }
 
-    
+
+    private bool hasVoted = false;
     public void InitiateVotingPhase() {
         if (!avatar.IsMe) { return; }
 
@@ -48,8 +40,9 @@ public class VotingPhase : AttributesSync {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         player.VotedCount = 0;
+        hasVoted = false;
 
-            if(player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
+            if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
             player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
             } else {
@@ -70,6 +63,7 @@ public class VotingPhase : AttributesSync {
                             otherPlayer.VotedCount++;
                             votingCanvas.SetActive(false);
                             votedCanvas.SetActive(true);
+                            hasVoted = true;
                     });
                 }
             }
@@ -82,10 +76,18 @@ public class VotingPhase : AttributesSync {
     //if highest ppl have equal votes, then sb is picked at random
     //give gun to CEO through the specialInteractionSystem
 
-    [SynchronizableField] static string taskManagerName = "";
+    //randomly votred
+
+    [SynchronizableField] string taskManagerNameInHost = "";
     public void EndVotingPhase()
     {
         if (!avatar.IsMe) { return; }
+
+        if (!hasVoted)
+        {
+
+        }
+
 
         votingCanvas.SetActive(false);
         votedCanvas.SetActive(false);
@@ -95,7 +97,7 @@ public class VotingPhase : AttributesSync {
 
         if (Multiplayer.GetUser().IsHost) EndVotingPhaseHost();
 
-        pickedPlayerNameText.text = taskManagerName;
+        pickedPlayerNameText.text = totalPlayers[0].gameObject.GetComponent<VotingPhase>().taskManagerNameInHost;
 
         StartCoroutine(DisplayTaskManager());
         StartCoroutine(DisplaySymptomNotif());
@@ -139,7 +141,22 @@ public class VotingPhase : AttributesSync {
 
 
         pickedPlayer.IsTaskManager = true;
-        taskManagerName = pickedPlayer.gameObject.name;
+        StartCoroutine(DisplayRandomlyVotedCanvas());
+        taskManagerNameInHost = pickedPlayer.gameObject.name;
+    }
+
+    private void VoteRandomly()
+    {
+        List<PlayerRole> votableCandidates = new List<PlayerRole>();
+        for (int i = 1; i < totalPlayers.Count; i++)
+        {
+            if (totalPlayers[i] == player) { continue; }
+            votableCandidates.Add(totalPlayers[i]);
+        }
+
+        int randomlyPickedPlayerIndex = Random.Range(0, votableCandidates.Count);
+        PlayerRole randomlyVotedPlayer = votableCandidates[randomlyPickedPlayerIndex];
+        //trigger canvas
     }
 
     private IEnumerator DisplayTaskManager() {
@@ -155,5 +172,11 @@ public class VotingPhase : AttributesSync {
         symptomsNotifCanvas.DOFade(0f, 2f);
        // symptomsNotifCanvas.SetActive(false);
     }
-    
+    private IEnumerator DisplayRandomlyVotedCanvas()
+    {
+        randomlyVotedPlayerCanvas.DOFade(1f, 1f);
+        yield return new WaitForSeconds(4f); // How many seconds to display it on screen
+        randomlyVotedPlayerCanvas.DOFade(0f, 1f);
+    }
+
 }

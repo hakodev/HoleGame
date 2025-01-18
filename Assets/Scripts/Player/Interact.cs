@@ -51,20 +51,10 @@ public class Interact : AttributesSync, IObserver
         avatar = GetComponent<Alteruna.Avatar>();
         spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
 
-
-        if (!avatar.IsMe) { return; }
-
         playerController = GetComponent<PlayerController>();
         disappearingObjs = GetComponent<DisappearingObjs>();
-        //animator = transform.Find("Animation").GetComponent<Animator>();
-      //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
-       // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
     }
-  //  private void OnEnable()
- //   {
-   //     if (!avatar.IsMe) { return; }
-  //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-  //  }
+
     private void Start()
     {
         if (!avatar.IsMe) {
@@ -75,8 +65,6 @@ public class Interact : AttributesSync, IObserver
         }
         else
         {
-            //animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-
             dynamicLayerMask = LayerMask.GetMask("DynamicInteractableObject");
             stationaryLayerMask = LayerMask.GetMask("StationaryInteractableObject");
             interactableLayerMask = dynamicLayerMask | stationaryLayerMask;
@@ -261,7 +249,7 @@ public class Interact : AttributesSync, IObserver
             SetLayerRecursively(heldObject, 7);
 
             //placing anim
-            Spam1();
+            PrepareForDroppingItem();
 
             //specific to placing
             Vector3 bounds = GetRenderersSize(heldObject);
@@ -286,7 +274,7 @@ public class Interact : AttributesSync, IObserver
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             }
 
-            Spam2();
+            FinishDroppingItem();
             //Debug.Break();
         }
         else
@@ -298,7 +286,7 @@ public class Interact : AttributesSync, IObserver
     {
         //specifics to thtowing
 
-        Spam1();
+        PrepareForDroppingItem();
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
@@ -314,7 +302,7 @@ public class Interact : AttributesSync, IObserver
         Debug.DrawRay(heldObject.transform.position, rbToTrack.velocity, Color.magenta);
         Debug.DrawRay(heldObject.transform.position, rb.angularVelocity, Color.green);
 
-        Spam2();
+        FinishDroppingItem();
     }
 
     private Vector3 GetRenderersSize(GameObject obj)
@@ -369,7 +357,7 @@ public class Interact : AttributesSync, IObserver
 
         return closest;
     }
-    private void Spam1()
+    private void PrepareForDroppingItem()
     {
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
@@ -381,7 +369,7 @@ public class Interact : AttributesSync, IObserver
 
 
     }
-    private void Spam2()
+    private void FinishDroppingItem()
     {
         disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
 
@@ -433,8 +421,8 @@ public class Interact : AttributesSync, IObserver
 
     private void Drop()
     {
-        Spam1();
-        Spam2();
+        PrepareForDroppingItem();
+        FinishDroppingItem();
     }
     private void ResetMomentum()
     {
