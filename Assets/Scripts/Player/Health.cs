@@ -46,45 +46,6 @@ public class Health : AttributesSync {
       //  dead = true;
     }
 
-   // bool happenedOnce = false;
-    private void Update()
-    {
-      // FixAnimatorOffset();
-
-//        if (!avatar.IsMe) { return; }
-
-        /*
-        if (!happenedOnce && animatorSync.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && animatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
-        {
-            animatorSync.Animator.speed = 0f;
-            animator.speed = 0f;
-            ChangeColliderAfterDeath();
-            happenedOnce = true;
-        }
-        */
-
-    }
-
-    private new void LateUpdate()
-    {
-     // FixAnimatorOffset();
-    }
-    private void FixAnimatorOffset()
-    {
-    //    if (dead) { return; }
-      //  animatorSync.Animator.transform.localPosition = Vector3.zero;
-      //  animatorSync.Animator.transform.rotation = transform.rotation;
-
-    //    Vector3 temp = animatorSync.Animator.transform.Find("mixamorig:Hips").localPosition;
-     ////   animatorSync.Animator.transform.Find("mixamorig:Hips").localPosition = new Vector3(0, temp.y, 0);
-       // animatorSync.Animator.transform.Find("Human 2.001").localPosition = Vector3.zero;
-    }
-    /*
-    private void ChangeColliderAfterDeath()
-    {
-        characterController.enabled = false;
-    }
-    */
     public float GetHealth()
     {
         return currentHealth;

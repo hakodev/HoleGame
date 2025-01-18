@@ -1,8 +1,6 @@
 
-
 using UnityEngine;
-using Unity.Netcode;
-using Alteruna;
+
 public class CameraMovement : MonoBehaviour
 {
     [Header("Mouse Input")]
