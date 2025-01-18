@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 068c888ea364c6240b7ec7f97d577341
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Multiplayer: {instanceID: 0}
+  - disappearingObjsSymptom: {fileID: 11400000, guid: ae5174f17a3d121439392e943ad806f8, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

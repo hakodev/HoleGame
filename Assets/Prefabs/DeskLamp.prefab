@@ -416,7 +416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
   _uidString: fdb96521-5afa-4a83-8d36-973f06bebe07
-  Reliability: 1
+  Reliability: 2
   LocalMethodBehavior: 1
 --- !u!65 &6263194753712056303
 BoxCollider:
