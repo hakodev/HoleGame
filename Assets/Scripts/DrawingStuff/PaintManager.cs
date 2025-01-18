@@ -43,7 +43,6 @@ public class PaintManager : AttributesSync{
             return instance;
         } 
     }
-
     public void Awake(){
         
         paintMaterial = new Material(texturePaint);
@@ -51,9 +50,9 @@ public class PaintManager : AttributesSync{
         command = new CommandBuffer();
         command.name = "CommmandBuffer - " + this.gameObject.name;
     }
-
-    
+  
     public void initTextures(Paintable paintable){
+        //Paintable paintable = Multiplayer.GetGameObjectById(guid).GetComponent<Paintable>();
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
         RenderTexture extend = paintable.getExtend();
@@ -73,10 +72,13 @@ public class PaintManager : AttributesSync{
     }
 
     [SynchronizableMethod]
-    public void paint(Guid guid, float x, float y, float z, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
-        Debug.Log(gameObject.name + "isPaint");
-        Vector3 pos = new Vector3(x, y, z);
+    public void paint(Guid guid, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
+        Debug.Log(Multiplayer.GetUser().Name);
+        Debug.Log(pos);
+        Debug.Log(radius);
+        Debug.Log(color.Value);
         Paintable paintable = Multiplayer.GetGameObjectById(guid).GetComponent<Paintable>();
+        Debug.Log(paintable.gameObject.name);
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
         RenderTexture extend = paintable.getExtend();
@@ -104,6 +106,7 @@ public class PaintManager : AttributesSync{
 
         Graphics.ExecuteCommandBuffer(command);
         command.Clear();
+
     }
 
 }
