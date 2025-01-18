@@ -84,7 +84,7 @@ public class VotingPhase : AttributesSync {
 
     //randomly votred
 
-    [SynchronizableField] public string taskManagerNameInHost = "";
+    [SynchronizableField, HideInInspector] public string taskManagerNameInHost = "";
     public void EndVotingPhase()
     {
         if (!avatar.IsMe) { return; }
