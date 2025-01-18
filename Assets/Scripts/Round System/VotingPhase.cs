@@ -47,9 +47,10 @@ public class VotingPhase : AttributesSync {
         player.VotedCount = 0;
         hasVoted = false;
 
-            if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
+        player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
+
+        if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
-            //player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
             } else {
 
                 int i = 0;
