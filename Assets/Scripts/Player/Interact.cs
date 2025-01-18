@@ -41,6 +41,7 @@ public class Interact : AttributesSync, IObserver
 
     private Transform currentOutlinedObject;
 
+
     private Alteruna.Spawner spawner;
 
     private void Awake()
@@ -370,7 +371,7 @@ public class Interact : AttributesSync, IObserver
     }
     private void FinishDroppingItem()
     {
-        SymptomsManager.Instance.TriggerSymptom(heldObject);
+        //disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
 
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
@@ -488,7 +489,7 @@ public class Interact : AttributesSync, IObserver
         if (interaction == InteractionEnum.ShotWithGun)
         {
             Gun gun = (Gun)caller;
-            Debug.Log("Special Interaction Gun Player");
+          //  Debug.Log("Special Interaction Gun Player");
             Health health = gameObject.GetComponent<Health>();
             health.DamagePlayer(gun.Damage());
             Debug.Log(gun.Damage());
@@ -497,7 +498,7 @@ public class Interact : AttributesSync, IObserver
         if(interaction == InteractionEnum.GivenTaskManagerRole)
         {
             //could it be thinkin it's a prefab still
-            Debug.Log("KIKIKIKIKIKIKIKKI " + gameObject.name + Multiplayer.GetUser().Name);
+           // Debug.Log("KIKIKIKIKIKIKIKKI " + gameObject.name + Multiplayer.GetUser().Name);
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
             TryPickUp(spawnedGun);
@@ -510,23 +511,6 @@ public class Interact : AttributesSync, IObserver
             }
         }
     }
-
-
-    /*
-    [SynchronizableMethod]
-    private void SyncSpawnGun()
-    {
-        GameObject spawnedGun = Instantiate(gunPrefab, transform);
-        if(heldObject!=null) Drop();
-        TryPickUp(gunPrefab);
-    }
-    [SynchronizableMethod]
-    private void SyncRemoveGun()
-    {
-        if (heldObject != null) Drop();
-        Destroy(spawnedGun);
-    }
-    */
 }
 
 

@@ -35,10 +35,10 @@ public class RoleAssignment : AttributesSync
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
         if(playerID==-10) playerID = playerNumber; //sets proper number
-        foreach (PlayerRole role in totalPlayers)
-        {
-            Debug.Log(role.gameObject.name);
-        }
+       // foreach (PlayerRole role in totalPlayers)
+       // {
+       //     Debug.Log(role.gameObject.name);
+      //  }
 
         if (playerNumber != 1)
         {

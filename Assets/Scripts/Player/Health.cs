@@ -1,13 +1,14 @@
 using UnityEngine;
 using Alteruna;
+using DG.Tweening;
+using System.Collections;
 
 
 public class Health : AttributesSync {
 
    [SynchronizableField] private float currentHealth = 100f;
     private const float maxHealth = 100f;
-    [SerializeField] private Material debugDeathMaterial; // remove when done testing
-
+    [SerializeField] CanvasGroup deadScreen;
 
     private PlayerController playerController;
     private Alteruna.Avatar avatar;
@@ -53,5 +54,12 @@ public class Health : AttributesSync {
     public float GetMaxHealth()
     {
         return maxHealth;
+    }
+
+    private IEnumerator DisplayTaskManager()
+    {
+        deadScreen.DOFade(1f, 1f);
+        yield return new WaitForSeconds(4f); // How many seconds to display it on screen
+        deadScreen.DOFade(0f, 1f);
     }
 }
