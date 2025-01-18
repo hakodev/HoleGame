@@ -5671,6 +5671,22 @@ PrefabInstance:
       value: e9b7b410-329a-4e6b-8363-8127e7cba8e2
       objectReference: {fileID: 0}
     - target: {fileID: 4856200224544577376, guid: 096c355905c9aa44b9432355780b5385, type: 3}
+      propertyPath: decalPrefab
+      value: 
+      objectReference: {fileID: 3311990219371351680, guid: cb4d99207b43f96468823b6c096193f8, type: 3}
+    - target: {fileID: 4856200224544577376, guid: 096c355905c9aa44b9432355780b5385, type: 3}
+      propertyPath: mask.m_Bits
+      value: 7103
+      objectReference: {fileID: 0}
+    - target: {fileID: 4856200224544577376, guid: 096c355905c9aa44b9432355780b5385, type: 3}
+      propertyPath: texturePaint
+      value: 
+      objectReference: {fileID: 4800000, guid: 5b5993a459e851644b79b618fb45e331, type: 3}
+    - target: {fileID: 4856200224544577376, guid: 096c355905c9aa44b9432355780b5385, type: 3}
+      propertyPath: extendIslands
+      value: 
+      objectReference: {fileID: 4800000, guid: 151a34b346c2c584cacdf6d942738660, type: 3}
+    - target: {fileID: 4856200224544577376, guid: 096c355905c9aa44b9432355780b5385, type: 3}
       propertyPath: notPlayerMask.m_Bits
       value: 7103
       objectReference: {fileID: 0}
