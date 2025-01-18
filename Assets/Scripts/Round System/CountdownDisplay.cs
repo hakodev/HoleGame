@@ -42,7 +42,7 @@ public class CountdownDisplay : AttributesSync {
         VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
         foreach (VotingPhase player in allVotingPhases)
         {
-            Debug.Log(player.gameObject.name);
+           // Debug.Log(player.gameObject.name);
             player.InitiateVotingPhase();
         }
     }
@@ -52,7 +52,7 @@ public class CountdownDisplay : AttributesSync {
         VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
         foreach (VotingPhase player in allVotingPhases)
         {
-            Debug.Log(player.gameObject.name);
+            //Debug.Log(player.gameObject.name);
             player.EndVotingPhase();
         }
     }

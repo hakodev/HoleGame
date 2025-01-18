@@ -38,20 +38,6 @@ public class CountDownDisplayManager : AttributesSync {
     {
         hasInitiatedTheTimer = true;
     }
-    void Update()
-    {
-       // Testing();
-    }
-
-    private void Testing()
-    {
-        //detects if this is local player
-        if (Multiplayer.GetUser().Index == RoleAssignment.playerID-1) {
-            Debug.Log("user " + Multiplayer.GetUser().Index);
-        }
-    }
-
-
 
     [SynchronizableMethod]
     public void ActivateTimer(string objectCalled)
@@ -79,15 +65,4 @@ public class CountDownDisplayManager : AttributesSync {
         affectedDisplay.time = affectedDisplay.maxTime;  
     }
 }
-
-
-
-/*
-List<Alteruna.User> users = Multiplayer.GetUsers();
-foreach (Alteruna.User user in users)
-{
-    Debug.Log("user " + user.Name + " " + user.Index);
-
-}
-*/
 
