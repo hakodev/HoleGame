@@ -41,8 +41,6 @@ public class Interact : AttributesSync, IObserver
 
     private Transform currentOutlinedObject;
 
-    private DisappearingObjs disappearingObjs;
-
     private Alteruna.Spawner spawner;
 
     private void Awake()
@@ -52,7 +50,6 @@ public class Interact : AttributesSync, IObserver
         spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
 
         playerController = GetComponent<PlayerController>();
-        disappearingObjs = GetComponent<DisappearingObjs>();
     }
 
     private void Start()
@@ -371,7 +368,7 @@ public class Interact : AttributesSync, IObserver
     }
     private void FinishDroppingItem()
     {
-        disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
+        SymptomsManager.Instance.TriggerSymptom(heldObject);
 
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
