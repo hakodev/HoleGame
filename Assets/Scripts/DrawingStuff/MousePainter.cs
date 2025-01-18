@@ -1,5 +1,7 @@
 using UnityEngine;
 using Alteruna;
+using System;
+using System.Drawing;
 public class MousePainter : AttributesSync
 {
     public Camera cam;
@@ -18,12 +20,15 @@ public class MousePainter : AttributesSync
 
     public LayerMask notPlayerMask;
     Paintable p;
+    Alteruna.Avatar avatar;
 
     public void Start()
     {
         paintManager = FindAnyObjectByType<PaintManager>();
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
     }
 
+    [SynchronizableMethod]
     public void Paint()
     {
         Vector3 position = Input.mousePosition;
@@ -35,26 +40,21 @@ public class MousePainter : AttributesSync
             p = hit.collider.GetComponent<Paintable>();
             if (p != null)
             {
-                Debug.Log(p.UID);
-               // p.BroadcastRemoteMethod(nameof(p.SetTag), "drawnOn");
-                BroadcastRemoteMethod(nameof(PaintOnAllClients),p.UID, hit.point, radius, hardness, strength, paintColor);
-                //p.BroadcastRemoteMethod(nameof(p.ResetTag));
+                CommunicationBridgeUID puid = p.GetComponent<CommunicationBridgeUID>();
+                Guid id = puid.GetUID();
+
+                paintManager.BroadcastRemoteMethod("paint", id, hit.point, radius, hardness, strength, paintColor);
+                
             }
         }
+
     }
 
-    [SynchronizableMethod]
-    private void PaintOnAllClients(Alteruna.IUniqueID PUID, Vector3 point, float radius, float hardness, float strength, UnityEngine.Color paintColor)
-    {
-        Paintable pop = Multiplayer.GetGameObjectById(PUID).GetComponent<Paintable>();   
-        Debug.Log(pop.gameObject.name);
-        PaintManager.Instance.paint(pop, point, radius, hardness, strength, paintColor);
-    }
     private void Update()
     {
         if (Input.GetMouseButton(0))
         {
-            Paint();
+            BroadcastRemoteMethod("Paint");
         }
     }
 

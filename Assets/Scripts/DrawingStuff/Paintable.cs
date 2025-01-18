@@ -1,20 +1,27 @@
 using UnityEngine;
 using Alteruna;
+using System.Xml;
+using System;
+using UnityEditor;
 
 public class Paintable : AttributesSync {
 	const int TEXTURE_SIZE = 1024;
 
 	public float extendsIslandOffset = 1;
 
-	RenderTexture extendIslandsRenderTexture;
-	RenderTexture uvIslandsRenderTexture;
-	RenderTexture maskRenderTexture;
-	RenderTexture supportTexture;
 	
-	Renderer rend;
+    RenderTexture extendIslandsRenderTexture;
+
+    RenderTexture uvIslandsRenderTexture;
+
+    RenderTexture maskRenderTexture;
+
+    RenderTexture supportTexture;
+
+
+    Renderer rend;
 	
 	PaintManager paintManager;
-
 
 	int maskTextureID = Shader.PropertyToID("_MaskTexture");
 
@@ -24,20 +31,9 @@ public class Paintable : AttributesSync {
 	public RenderTexture getSupport() => supportTexture;
 	public Renderer getRenderer() => rend;
 
-	/*
-    string oldTag;
-    [SynchronizableMethod]
-	public void SetTag(string newTag)
-	{
-		oldTag = gameObject.tag;
-		gameObject.tag = newTag;
-	}
-	[SynchronizableMethod]
-	public void ResetTag() {
-		gameObject.tag = oldTag;
-	}
-	*/
-    public void Start() {
+	public Material material;
+
+	public void Start() {
 		paintManager = FindAnyObjectByType<PaintManager>();
 		maskRenderTexture = new RenderTexture(TEXTURE_SIZE, TEXTURE_SIZE, 0);
 		maskRenderTexture.filterMode = FilterMode.Bilinear;
@@ -52,10 +48,12 @@ public class Paintable : AttributesSync {
 		supportTexture.filterMode =  FilterMode.Bilinear;
 
 		rend = GetComponent<Renderer>();
-        rend.material.SetTexture(maskTextureID, extendIslandsRenderTexture);
-		
 
-		paintManager.initTextures(this);
+        rend.material.SetTexture(maskTextureID, extendIslandsRenderTexture);
+        //CommunicationBridgeUID puid = GetComponent<CommunicationBridgeUID>();
+        //Guid id = puid.GetUID();
+
+        paintManager.initTextures(this);
 	}
 
 	public void OnDisable(){

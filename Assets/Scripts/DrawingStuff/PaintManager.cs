@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using Alteruna;
+using System.Xml;
+using System;
 
-public class PaintManager : MonoBehaviour{
+public class PaintManager : AttributesSync{
 
     public Shader texturePaint;
     public Shader extendIslands;
@@ -40,7 +43,6 @@ public class PaintManager : MonoBehaviour{
             return instance;
         } 
     }
-
     public void Awake(){
         
         paintMaterial = new Material(texturePaint);
@@ -48,8 +50,9 @@ public class PaintManager : MonoBehaviour{
         command = new CommandBuffer();
         command.name = "CommmandBuffer - " + this.gameObject.name;
     }
-
+  
     public void initTextures(Paintable paintable){
+        //Paintable paintable = Multiplayer.GetGameObjectById(guid).GetComponent<Paintable>();
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
         RenderTexture extend = paintable.getExtend();
@@ -68,8 +71,14 @@ public class PaintManager : MonoBehaviour{
         command.Clear();
     }
 
-
-    public void paint(Paintable paintable, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
+    [SynchronizableMethod]
+    public void paint(Guid guid, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
+        Debug.Log(Multiplayer.GetUser().Name);
+        Debug.Log(pos);
+        Debug.Log(radius);
+        Debug.Log(color.Value);
+        Paintable paintable = Multiplayer.GetGameObjectById(guid).GetComponent<Paintable>();
+        Debug.Log(paintable.gameObject.name);
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
         RenderTexture extend = paintable.getExtend();
@@ -97,6 +106,7 @@ public class PaintManager : MonoBehaviour{
 
         Graphics.ExecuteCommandBuffer(command);
         command.Clear();
+
     }
 
 }
