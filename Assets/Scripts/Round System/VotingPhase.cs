@@ -16,12 +16,15 @@ public class VotingPhase : AttributesSync {
     [SerializeField] private GameObject votingCanvas;
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
-    [SerializeField] private CanvasGroup randomlyVotedPlayerCanvas;
+    [SerializeField] private GameObject randomlyVotedPlayer;
     [SerializeField] CanvasGroup symptomsNotifCanvas;
     [SerializeField] GameObject votingPhaseObject;
     Alteruna.Avatar avatar;
 
-    [SynchronizableField] int randomlyPickedPlayer;
+
+    int randomlyPickedPlayer;
+    List<VotingPhase> votingPlayers;
+    [SynchronizableField] int pickedPlayerIndex;
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -36,6 +39,8 @@ public class VotingPhase : AttributesSync {
     public void InitiateVotingPhase() {
         if (!avatar.IsMe) { return; }
 
+        votingPlayers = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None).ToList<VotingPhase>();
+
         votingCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -44,7 +49,7 @@ public class VotingPhase : AttributesSync {
 
             if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
-            player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
+            //player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
             } else {
 
                 int i = 0;
@@ -78,14 +83,15 @@ public class VotingPhase : AttributesSync {
 
     //randomly votred
 
-    [SynchronizableField] string taskManagerNameInHost = "";
+    [SynchronizableField] public string taskManagerNameInHost = "";
     public void EndVotingPhase()
     {
         if (!avatar.IsMe) { return; }
 
         if (!hasVoted)
         {
-
+            hasVoted = true;
+            VoteRandomly();
         }
 
 
@@ -95,20 +101,18 @@ public class VotingPhase : AttributesSync {
         Cursor.visible = false;
         player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
-        if (Multiplayer.GetUser().IsHost) EndVotingPhaseHost();
-
-        pickedPlayerNameText.text = totalPlayers[0].gameObject.GetComponent<VotingPhase>().taskManagerNameInHost;
-
-        StartCoroutine(DisplayTaskManager());
-        StartCoroutine(DisplaySymptomNotif());
-
-        //heldObject = smth
+        if (avatar.IsMe && Multiplayer.GetUser().IsHost) EndVotingPhaseHost();
     }
-    //local script only accessed by the host, touchin
+
+
     private void EndVotingPhaseHost()
     {
+        if (!Multiplayer.GetUser().IsHost || RoleAssignment.playerID-1!=0) { return; }
+        if (!avatar.IsMe) { return; }
+
         PlayerRole pickedPlayer = totalPlayers[0];
         List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
+
 
         for (int i = 1; i < totalPlayers.Count; i++)
         {
@@ -118,7 +122,7 @@ public class VotingPhase : AttributesSync {
             {
                 pickedPlayer = totalPlayers[i];
                 equallyVotedPlayers.Clear();
-                equallyVotedPlayers.Add(pickedPlayer);
+                equallyVotedPlayers.Add(totalPlayers[i]);
             }
 
             if (totalPlayers[i].VotedCount == pickedPlayer.VotedCount) //equivotes
@@ -128,35 +132,54 @@ public class VotingPhase : AttributesSync {
         }
 
 
-        if (equallyVotedPlayers.Count > 1)
-        {
-            randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
-            pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
-            Debug.Log(Multiplayer.GetUser().Index);
-        }
-
-            Debug.Log("yes " + pickedPlayer.gameObject.name);
-            pickedPlayer.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
-        
-
-
+        randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
+        pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
         pickedPlayer.IsTaskManager = true;
-        StartCoroutine(DisplayRandomlyVotedCanvas());
-        taskManagerNameInHost = pickedPlayer.gameObject.name;
+
+        for (int i = 0; i < totalPlayers.Count; i++)
+        {
+            if (totalPlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
+        }
+        Debug.Log("DADADA " + gameObject.name + Multiplayer.GetUser().Name);
+
+        foreach (VotingPhase voter in votingPlayers)
+        {
+            voter.taskManagerNameInHost = pickedPlayer.gameObject.name;
+            voter.pickedPlayerIndex = pickedPlayerIndex;
+            voter.BroadcastRemoteMethod(nameof(voter.EndVotingPhaseFinale));
+        }
+    }
+
+    [SynchronizableMethod]
+    public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
+    {
+        if(!avatar.IsMe) { return; }
+        pickedPlayerNameText.text = taskManagerNameInHost;
+        if (player.IsTaskManager)
+        {
+            GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+        }
+        StartCoroutine(DisplayTaskManager());
+        StartCoroutine(DisplaySymptomNotif());
     }
 
     private void VoteRandomly()
     {
         List<PlayerRole> votableCandidates = new List<PlayerRole>();
-        for (int i = 1; i < totalPlayers.Count; i++)
+        for (int i = 0; i < totalPlayers.Count; i++)
         {
             if (totalPlayers[i] == player) { continue; }
             votableCandidates.Add(totalPlayers[i]);
         }
 
+
         int randomlyPickedPlayerIndex = Random.Range(0, votableCandidates.Count);
         PlayerRole randomlyVotedPlayer = votableCandidates[randomlyPickedPlayerIndex];
-        //trigger canvas
+        randomlyVotedPlayer.VotedCount++;
+
+        Debug.Log("randomly Chosen " + randomlyVotedPlayer.gameObject.name);
+
+        StartCoroutine(DisplayRandomlyVotedCanvas());
     }
 
     private IEnumerator DisplayTaskManager() {
@@ -174,9 +197,9 @@ public class VotingPhase : AttributesSync {
     }
     private IEnumerator DisplayRandomlyVotedCanvas()
     {
-        randomlyVotedPlayerCanvas.DOFade(1f, 1f);
-        yield return new WaitForSeconds(4f); // How many seconds to display it on screen
-        randomlyVotedPlayerCanvas.DOFade(0f, 1f);
+        randomlyVotedPlayer.SetActive(true);
+        yield return new WaitForSeconds(6f); // How many seconds to display it on screen
+        randomlyVotedPlayer.SetActive(false);
     }
 
 }

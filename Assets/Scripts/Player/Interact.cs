@@ -482,10 +482,9 @@ public class Interact : AttributesSync, IObserver
         if(interaction == InteractionEnum.GivenTaskManagerRole)
         {
             //could it be thinkin it's a prefab still
-            Debug.Log(heldObject);
+            Debug.Log("KIKIKIKIKIKIKIKKI " + gameObject.name + Multiplayer.GetUser().Name);
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
-            spawnedGun.transform.parent = transform;
             TryPickUp(spawnedGun);
         }
         if(interaction == InteractionEnum.RemoveGun)

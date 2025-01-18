@@ -1,10 +1,7 @@
 using Alteruna;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
 using System;
-using VolFx;
-using UnityEngine.InputSystem.LowLevel;
 public class MishSyncAnimations : AttributesSync
 {
     [SynchronizableField] public bool Jumping;
@@ -53,6 +50,8 @@ public class MishSyncAnimations : AttributesSync
     }
     public void SetShooting(bool newState)
     {
+        if (stance == StanceEnum.Dead) { return; }
+
         Shooting = newState;
         Commit();
     }
@@ -77,6 +76,7 @@ public class MishSyncAnimations : AttributesSync
         FixAnimatorOffset();
         UpdateCurrentAnimDot();
         TranslateStatesIntoAnimationStates();
+        FreezeAtEndOfDeath();
     }
     private void UpdateCurrentAnimDot()
     {
@@ -124,6 +124,16 @@ public class MishSyncAnimations : AttributesSync
     }
 
 
+    bool playedDeadAnimOnce = false;
+    private void FreezeAtEndOfDeath()
+    {
+        if (!playedDeadAnimOnce && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        {
+            playedDeadAnimOnce = true;
+            animator.speed = 0f;
+        }
+    }
+
 
     private new void LateUpdate()
     {
@@ -154,31 +164,3 @@ public enum StanceEnum
     Walking,
     Running
 }
-
-/*
-if (!happenedOnce && animatorSync.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && animatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
-{
-    animatorSync.Animator.speed = 0f;
-    animator.speed = 0f;
-    ChangeColliderAfterDeath();
-    happenedOnce = true;
-}
-*/
-
-
-
-
-/*
-public enum DirectionalEnum
-{
-    Idle,
-    Forward,
-    Backward,
-    Left,
-    Right,
-    ForwardLeft,
-    ForwardRight,
-    BackwardLeft,
-    BackwardRight,
-}
-*/
