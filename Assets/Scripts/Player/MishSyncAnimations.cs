@@ -20,6 +20,8 @@ public class MishSyncAnimations : AttributesSync
     [SynchronizableField] Vector2 currentAnimDot = Vector3.zero;
     [SynchronizableField] Vector2 targetAnimDot = Vector3.zero;
 
+    public StanceEnum GetCurrentStance() => stance;
+
     public Vector2 GetTargetAnimDot()
     {
         return targetAnimDot;
