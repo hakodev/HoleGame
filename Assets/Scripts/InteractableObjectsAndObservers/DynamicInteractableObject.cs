@@ -17,7 +17,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
      Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
 
     float timeSinceLastSignificantMovement = 0;
-
+    [SynchronizableField] bool asleep = false;
 
     protected virtual void Awake()
     {
@@ -34,10 +34,16 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         CheckForMovement();
     }
 
+
     private void SelfSleepIfUnmoving()
     {
-        if (transform.root.tag != "SelfPlayerLayer" && transform.root.tag != "Player")
+        if (asleep) { return; }
+        if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
+
+
+        if (transform.root.tag != "Player")
         {
+            Debug.Log(transform.root.tag);
             if (rbDynamic.linearVelocity.magnitude < 0.1f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
@@ -50,7 +56,10 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     private void CheckForMovement()
     {
-        if (rbDynamic.linearVelocity.magnitude >= 0.2f)
+        if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
+
+
+        if (rbDynamic.linearVelocity.magnitude >= 0.2f || transform.root.tag == "Player")
         {
             timeSinceLastSignificantMovement = 0;
             BroadcastRemoteMethod(nameof(DynamicAwake));
@@ -59,17 +68,20 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void DynamicSleep()
     {
-        rbSyncDynamic.SyncEveryNUpdates = 9999999;
-        rbSyncDynamic.FullSyncEveryNSync = 9999999;
-     //   Debug.Log("sleep " + transform.root.gameObject.name);
+        asleep = true;
+        rbSyncDynamic.SyncEveryNUpdates = 999;
+        rbSyncDynamic.FullSyncEveryNSync = 999;
+        // Debug.Log("sleep " + transform.root.gameObject.name);
+        Debug.Log("asleep " + gameObject.name + asleep);
     }
     [SynchronizableMethod]
     public void DynamicAwake()
     {
-      //  Debug.Log(rbDynamic + " " + rbSyncDynamic);
+        asleep = false;
+        //  Debug.Log(rbDynamic + " " + rbSyncDynamic);
         rbSyncDynamic.SyncEveryNUpdates = 1;
         rbSyncDynamic.FullSyncEveryNSync = 1;
-      //  Debug.Log("awooga " + transform.root.gameObject.name);
+        Debug.Log("awake " + gameObject.name + asleep);
     }
     
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()

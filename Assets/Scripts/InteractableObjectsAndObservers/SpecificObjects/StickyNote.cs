@@ -23,13 +23,13 @@ public class StickyNote : DynamicInteractableObject
     //if object has a sticky note parent it behaves weirdly when thrown after being picked up
     protected override void Awake()
     {
-      //  base.Awake();
+        base.Awake();
         rb = GetComponent<Rigidbody>();
         rbToTrack = GetComponent<RigidbodySynchronizable>();
     }
     protected override void Start()
     {
-      //  base.Start();
+        base.Start();
         selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
     }
 
@@ -93,7 +93,7 @@ public class StickyNote : DynamicInteractableObject
 
     protected override void Update()
     {
-       // base.Update();
+        base.Update();
         if (isPlaced && transform.parent != null && !transform.parent.gameObject.name.Contains("Hand"))
         {
             StasisInPlace();

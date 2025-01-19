@@ -19,7 +19,7 @@ public class Gun : DynamicInteractableObject
 
     protected override void Start()
     {
-      //  base.Start();
+        base.Start();
         currentAmmo = maxAmmo;
         otherPlayerLayerMask = LayerMask.GetMask("PlayerLayer");
     }

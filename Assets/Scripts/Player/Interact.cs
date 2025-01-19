@@ -1,6 +1,7 @@
 using UnityEngine;
 using Alteruna;
 using System.Collections.Generic;
+using UnityEngine.XR;
 
 
 public class Interact : AttributesSync, IObserver
@@ -248,7 +249,7 @@ public class Interact : AttributesSync, IObserver
 
 
             //placing anim
-            PrepareForDroppingItem();
+            BroadcastRemoteMethod(nameof(PrepareForDroppingItem));
 
             //specific to placing
             Vector3 bounds = GetRenderersSize(heldObject);
@@ -285,7 +286,7 @@ public class Interact : AttributesSync, IObserver
     {
         //specifics to thtowing
 
-        PrepareForDroppingItem();
+        BroadcastRemoteMethod(nameof(PrepareForDroppingItem));
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
         //specifics t thowing
@@ -357,10 +358,12 @@ public class Interact : AttributesSync, IObserver
 
         return closest;
     }
+    [SynchronizableMethod]
     private void PrepareForDroppingItem()
     {
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
-        DIO.BroadcastRemoteMethod("DynamicAwake");
+       // DIO.BroadcastRemoteMethod("DynamicAwake");
+        DIO.DynamicAwake();
 
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
@@ -383,6 +386,13 @@ public class Interact : AttributesSync, IObserver
         rbSync = null;
         rb = null;
     }
+    [SynchronizableMethod]
+    private void PrepareForPickingUp()
+    {
+        rb.freezeRotation = true;
+        rb.useGravity = false;
+        heldObject.transform.SetParent(clientHand.transform, true);
+    }
 
     private void TryPickUp(GameObject pickedUp)
     {
@@ -395,21 +405,22 @@ public class Interact : AttributesSync, IObserver
         Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
         if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null && pickedUp.transform.root.tag!="Player")
         {
+            DIO.BroadcastRemoteMethod("DynamicAwake");
+            DIO.isPickedUp = true;
+
             //get all necessary variales
             heldObject = pickedUp;
             rb = heldObject.GetComponent<Rigidbody>();
             rbSync = heldObject.GetComponent<RigidbodySynchronizable>();
-            DIO.isPickedUp = true;
 
-            DIO.BroadcastRemoteMethod("DynamicAwake");
+
             if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
             //reset physics
-            rb.freezeRotation = true;
-            rb.useGravity = false;
+
             ResetMomentum();
 
-            heldObject.transform.SetParent(clientHand.transform, true);
+            BroadcastRemoteMethod(nameof(PrepareForPickingUp));
 
             //actually move
             UpdateHeldObjectPhysics();
@@ -426,7 +437,7 @@ public class Interact : AttributesSync, IObserver
 
     private void Drop()
     {
-        PrepareForDroppingItem();
+        BroadcastRemoteMethod(nameof(PrepareForDroppingItem));
         FinishDroppingItem();
     }
     private void ResetMomentum()

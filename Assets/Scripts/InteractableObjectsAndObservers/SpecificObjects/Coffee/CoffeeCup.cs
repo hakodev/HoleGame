@@ -18,7 +18,7 @@ public class CoffeeCup : DynamicInteractableObject
 
     protected override void Start()
     {
-      //  base.Start();
+        base.Start();
         coffeeFill = transform.GetChild(0).gameObject;
         hitSource = GetComponent<AudioSource>();
     }
