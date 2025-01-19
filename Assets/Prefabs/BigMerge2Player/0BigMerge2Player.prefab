@@ -1233,7 +1233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
   _uidString: 2f194280-9514-4e4a-b01e-8aeb09d19a5b
-  Reliability: 1
+  Reliability: 2
   LocalMethodBehavior: 1
   Jumping: 0
   animationSmoothing: 4
