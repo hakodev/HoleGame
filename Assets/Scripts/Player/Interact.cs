@@ -358,6 +358,9 @@ public class Interact : AttributesSync, IObserver
     }
     private void PrepareForDroppingItem()
     {
+        DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
+        DIO.BroadcastRemoteMethod("DynamicAwake");
+
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
         heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
@@ -371,7 +374,7 @@ public class Interact : AttributesSync, IObserver
     private void FinishDroppingItem()
     {
         //disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
-
+        
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
@@ -384,6 +387,7 @@ public class Interact : AttributesSync, IObserver
     private void TryPickUp(GameObject pickedUp)
     {
         if (heldObject != null) { return; }
+
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
         Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
@@ -393,9 +397,9 @@ public class Interact : AttributesSync, IObserver
             heldObject = pickedUp;
             rb = heldObject.GetComponent<Rigidbody>();
             rbSync = heldObject.GetComponent<RigidbodySynchronizable>();
-            rbSync.Awake();
             DIO.isPickedUp = true;
 
+            DIO.BroadcastRemoteMethod("DynamicAwake");
             if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
             //reset physics

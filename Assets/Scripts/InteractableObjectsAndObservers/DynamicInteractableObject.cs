@@ -9,56 +9,65 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
     public abstract void Use();
 
-    RigidbodySynchronizable rbSync;
-    Rigidbody rb;
+    RigidbodySynchronizable rbSyncDynamic;
+    Rigidbody rbDynamic;
 
     [Header("removed serialize fields for speed. Nsync Objects is Here. x - when object is inactive(high number), y - when object is active(low number), also in the script both are 30 2, for ease of access")]
      Vector2 syncEveryNUpdates = new Vector2(30, 2);
      Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
 
+    float timeSinceLastSignificantMovement = 0;
 
-    private void Awake()
-    {
-        rbSync = GetComponent<RigidbodySynchronizable>();
-        rb = GetComponent<Rigidbody>();
-    }
-    private void Start()
-    {
-        rbSync.SyncEveryNUpdates = (int)syncEveryNUpdates.x;
-        rbSync.FullSyncEveryNSync = (int)fullSyncEveryNSyncs.x;
-    }
-      float timeSinceLastSignificantMovement = 0;
 
-     private void Update()
-      {
+    protected virtual void Awake()
+    {
+        rbSyncDynamic = GetComponent<RigidbodySynchronizable>();
+        rbDynamic = GetComponent<Rigidbody>();
+    }
+    protected virtual void Start()
+    {
+    //    BroadcastRemoteMethod(nameof(DynamicSleep));
+    }
+    protected virtual void Update()
+    {
         SelfSleepIfUnmoving();
         CheckForMovement();
-       }
+    }
 
-    
     private void SelfSleepIfUnmoving()
     {
         if (transform.root.tag != "SelfPlayerLayer" && transform.root.tag != "Player")
         {
-            if (rb.linearVelocity.magnitude < 0.02f)
+            if (rbDynamic.linearVelocity.magnitude < 0.1f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
-                if (timeSinceLastSignificantMovement > 5)
+                if (timeSinceLastSignificantMovement > 1)
                 {
-                    rbSync.SyncEveryNUpdates = (int)syncEveryNUpdates.x;
-                    rbSync.FullSyncEveryNSync = (int)fullSyncEveryNSyncs.x;
+                    BroadcastRemoteMethod(nameof(DynamicSleep));
                 }
             }
         }
     }
     private void CheckForMovement()
     {
-        if (rb.linearVelocity.magnitude >= 0.02f)
+        if (rbDynamic.linearVelocity.magnitude >= 0.2f)
         {
             timeSinceLastSignificantMovement = 0;
-            rbSync.SyncEveryNUpdates = (int)syncEveryNUpdates.y;
-            rbSync.FullSyncEveryNSync = (int)fullSyncEveryNSyncs.y;
+            BroadcastRemoteMethod(nameof(DynamicAwake));
         }
+    }
+    [SynchronizableMethod]
+    public void DynamicSleep()
+    {
+    //    rbSyncDynamic.SyncEveryNUpdates = 30;
+     //   rbSyncDynamic.FullSyncEveryNSync = 30;
+    }
+    [SynchronizableMethod]
+    public void DynamicAwake()
+    {
+      //  Debug.Log(rbDynamic + " " + rbSyncDynamic);
+      //  rbSyncDynamic.SyncEveryNUpdates = 2;
+    //    rbSyncDynamic.FullSyncEveryNSync = 2;
     }
     
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()

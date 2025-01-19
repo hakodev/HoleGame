@@ -14,8 +14,9 @@ public class Marker : DynamicInteractableObject
 
     }
 
-    private void Update()
+    protected override void Update()
     {
+     //   base.Update();
         if (Input.GetMouseButton(1) && isPickedUp) 
         {
             if (painter == null)

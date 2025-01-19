@@ -14,8 +14,9 @@ public class CoffeeCup : DynamicInteractableObject
 
     public float coffeeFillHeight;
 
-    private void Start()
+    protected override void Start()
     {
+      //  base.Start();
         coffeeFill = transform.GetChild(0).gameObject;
         hitSource = GetComponent<AudioSource>();
     }
