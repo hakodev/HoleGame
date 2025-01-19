@@ -1163,7 +1163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 16f52981-5d14-42ea-9264-80cd687b6573
+  _uidString: 095d5bb4-18f7-4e5c-8ab7-5ff1db1e345e
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
@@ -1249,7 +1249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 6be4d59f-8899-4e7d-bd80-7bbab04fdebb
+  _uidString: ba9059b5-1747-4707-900b-61ee9dee230d
   Reliability: 1
   LocalMethodBehavior: 1
   clientHand: {fileID: 8545988785631638419}
@@ -1289,7 +1289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 2f194280-9514-4e4a-b01e-8aeb09d19a5b
+  _uidString: f84caa86-b42a-48fd-b090-668ab0862c58
   Reliability: 1
   LocalMethodBehavior: 1
   Jumping: 0
