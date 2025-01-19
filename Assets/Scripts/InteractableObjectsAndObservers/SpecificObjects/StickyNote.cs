@@ -74,7 +74,8 @@ public class StickyNote : DynamicInteractableObject
 
 
             positionForStickies = transform.parent.parent.Find("PositionForStickies");
-            DrawPosition(positionForStickies.position + positionForStickies.forward * 0.4f);
+            Vector3 temp = positionForStickies.position + positionForStickies.forward * 0.4f;
+            BroadcastRemoteMethod(nameof(DrawPosition), temp.x, temp.y, temp.z);
 
 
         }
@@ -84,14 +85,15 @@ public class StickyNote : DynamicInteractableObject
             transform.root.GetComponentInChildren<CameraMovement>().enabled = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            DrawPosition(originalPos);
+            BroadcastRemoteMethod(nameof(DrawPosition), originalPos.x, originalPos.y, originalPos.z);
         }
 
     }
-
-    public void DrawPosition(Vector3 finalPos)
+    [SynchronizableMethod]
+    public void DrawPosition(float x, float y, float z)
     {
-        transform.position = finalPos;
+        finalPosition = new Vector3(x, y, z);
+        transform.position = finalPosition;
         isInteractedWith = !isInteractedWith;
     }
 
