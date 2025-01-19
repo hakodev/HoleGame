@@ -40,15 +40,15 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         if (asleep) { return; }
         if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
 
-
-        if (transform.root.tag != "Player")
+        if (currentlyOwnedByAvatar==null)
         {
             Debug.Log(transform.root.tag);
             if (rbDynamic.linearVelocity.magnitude < 0.1f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
-                if (timeSinceLastSignificantMovement > 1)
+                if (timeSinceLastSignificantMovement > 1f)
                 {
+                    timeSinceLastSignificantMovement = 0;
                     BroadcastRemoteMethod(nameof(DynamicSleep));
                 }
             }
@@ -56,10 +56,11 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     private void CheckForMovement()
     {
+        if (!asleep) { return; }
         if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
 
 
-        if (rbDynamic.linearVelocity.magnitude >= 0.2f || transform.root.tag == "Player")
+        if (rbDynamic.linearVelocity.magnitude >= 0.2f || currentlyOwnedByAvatar!=null)
         {
             timeSinceLastSignificantMovement = 0;
             BroadcastRemoteMethod(nameof(DynamicAwake));
@@ -68,6 +69,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void DynamicSleep()
     {
+        timeSinceLastSignificantMovement = 0;
         asleep = true;
         rbSyncDynamic.SyncEveryNUpdates = 999;
         rbSyncDynamic.FullSyncEveryNSync = 999;
@@ -91,7 +93,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void SetCurrentlyOwnedByAvatar(int newIndex)
     {
-        currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
+        if(newIndex!=-1)currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
+        if (newIndex == -1) currentlyOwnedByAvatar = null;
         Debug.Log("SetCUrrentlyOwnedAvatar " + currentlyOwnedByAvatar); //important debug log
     }
 

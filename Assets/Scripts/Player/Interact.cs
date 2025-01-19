@@ -249,10 +249,9 @@ public class Interact : AttributesSync, IObserver
 
 
             //placing anim
-            BroadcastRemoteMethod(nameof(PrepareForDroppingItem));
-
-            //specific to placing
-            Vector3 bounds = GetRenderersSize(heldObject);
+            PrepareForDroppingItem();
+                        //specific to placing
+                        Vector3 bounds = GetRenderersSize(heldObject);
             Vector3 alignsBestWith = GetClosestAxis(hit.normal);
             Vector3 temp = new Vector3(Mathf.Abs(bounds.x * alignsBestWith.normalized.x), Mathf.Abs(bounds.y * alignsBestWith.normalized.y), Mathf.Abs(bounds.z * alignsBestWith.normalized.z));
 
@@ -286,7 +285,7 @@ public class Interact : AttributesSync, IObserver
     {
         //specifics to thtowing
 
-        BroadcastRemoteMethod(nameof(PrepareForDroppingItem));
+        PrepareForDroppingItem();
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
         //specifics t thowing
@@ -358,12 +357,11 @@ public class Interact : AttributesSync, IObserver
 
         return closest;
     }
-    [SynchronizableMethod]
     private void PrepareForDroppingItem()
     {
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
        // DIO.BroadcastRemoteMethod("DynamicAwake");
-        DIO.DynamicAwake();
+        DIO.BroadcastRemoteMethod("DynamicAwake");
 
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
@@ -385,13 +383,6 @@ public class Interact : AttributesSync, IObserver
         heldObject = null;
         rbSync = null;
         rb = null;
-    }
-    [SynchronizableMethod]
-    private void PrepareForPickingUp()
-    {
-        rb.freezeRotation = true;
-        rb.useGravity = false;
-        heldObject.transform.SetParent(clientHand.transform, true);
     }
 
     private void TryPickUp(GameObject pickedUp)
@@ -420,8 +411,6 @@ public class Interact : AttributesSync, IObserver
 
             ResetMomentum();
 
-            BroadcastRemoteMethod(nameof(PrepareForPickingUp));
-
             //actually move
             UpdateHeldObjectPhysics();
 
@@ -437,7 +426,7 @@ public class Interact : AttributesSync, IObserver
 
     private void Drop()
     {
-        BroadcastRemoteMethod(nameof(PrepareForDroppingItem));
+        PrepareForDroppingItem();
         FinishDroppingItem();
     }
     private void ResetMomentum()
