@@ -7,6 +7,8 @@ public class StickyNote : DynamicInteractableObject
 {
     Rigidbody rb;
     RigidbodySynchronizable rbToTrack;
+    Transform positionForStickies;
+
     [SynchronizableField] public bool isPlaced = false;
     [SynchronizableField] bool isThrown = false;
     [SynchronizableField] bool isGameStart = true;
@@ -69,7 +71,10 @@ public class StickyNote : DynamicInteractableObject
             transform.root.GetComponentInChildren<CameraMovement>().enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            BroadcastRemoteMethod(nameof(DrawPosition), transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f);
+
+
+            positionForStickies = transform.parent.parent.Find("PositionForStickies");
+            DrawPosition(positionForStickies.position + positionForStickies.forward * 0.4f);
 
 
         }
@@ -79,12 +84,11 @@ public class StickyNote : DynamicInteractableObject
             transform.root.GetComponentInChildren<CameraMovement>().enabled = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            BroadcastRemoteMethod(nameof(DrawPosition), originalPos);
+            DrawPosition(originalPos);
         }
 
     }
 
-    [SynchronizableMethod]
     public void DrawPosition(Vector3 finalPos)
     {
         transform.position = finalPos;

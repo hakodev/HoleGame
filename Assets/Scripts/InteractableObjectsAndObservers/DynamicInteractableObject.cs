@@ -42,7 +42,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
         if (currentlyOwnedByAvatar==null)
         {
-            Debug.Log(transform.root.tag);
             if (rbDynamic.linearVelocity.magnitude < 0.1f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
@@ -74,7 +73,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         rbSyncDynamic.SyncEveryNUpdates = 999;
         rbSyncDynamic.FullSyncEveryNSync = 999;
         // Debug.Log("sleep " + transform.root.gameObject.name);
-        Debug.Log("asleep " + gameObject.name + asleep);
     }
     [SynchronizableMethod]
     public void DynamicAwake()
@@ -83,7 +81,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //  Debug.Log(rbDynamic + " " + rbSyncDynamic);
         rbSyncDynamic.SyncEveryNUpdates = 1;
         rbSyncDynamic.FullSyncEveryNSync = 1;
-        Debug.Log("awake " + gameObject.name + asleep);
     }
     
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
@@ -95,7 +92,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     {
         if(newIndex!=-1)currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
         if (newIndex == -1) currentlyOwnedByAvatar = null;
-        Debug.Log("SetCUrrentlyOwnedAvatar " + currentlyOwnedByAvatar); //important debug log
     }
 
     public Alteruna.Avatar GetAvatarByOwnerIndex(int ownerIndex)
