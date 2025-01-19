@@ -67,9 +67,9 @@ public class StickyNote : DynamicInteractableObject
             transform.root.GetComponentInChildren<CameraMovement>().enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            finalPosition = transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f;
-            transform.position = finalPosition;
-            isInteractedWith = true;
+            BroadcastRemoteMethod(nameof(DrawPosition), transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f);
+
+
         }
         else
         {
@@ -77,11 +77,18 @@ public class StickyNote : DynamicInteractableObject
             transform.root.GetComponentInChildren<CameraMovement>().enabled = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            transform.position = originalPos;
-            isInteractedWith = false;
+            BroadcastRemoteMethod(nameof(DrawPosition),originalPos);
         }
      
     }
+
+    [SynchronizableMethod]
+    public void DrawPosition(Vector3 finalPos)
+    {
+        transform.position = finalPos;
+        isInteractedWith = !isInteractedWith;
+    }
+
     private void Update()
     {
         if (isPlaced && transform.parent != null && !transform.parent.gameObject.name.Contains("Hand"))
