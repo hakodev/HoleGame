@@ -15,6 +15,10 @@ public class PlayerRole : AttributesSync
     [SerializeField] CanvasGroup infiltratorCanvas;
     [SerializeField] CanvasGroup machineCanvas;
 
+
+    [SynchronizableField] public int VotedCount=0;
+    [SynchronizableField] public bool IsTaskManager = false;
+
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();

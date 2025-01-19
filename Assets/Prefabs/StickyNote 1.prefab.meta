@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/MultiplayerManager.prefab.meta
+guid: 80348cf2f416d434683263a8d593ed46
+========
 guid: 37667e5c27fa87a4bb09228baf12941e
+>>>>>>>> Ivan3:Assets/Prefabs/StickyNote 1.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

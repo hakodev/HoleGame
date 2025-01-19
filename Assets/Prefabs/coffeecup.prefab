@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 5c7f3258-f5ce-4a2f-b44f-759f75717dbd
-  Reliability: 1
+  _uidString: d875c6d0-0661-42f2-b600-6381235fb8ec
+  Reliability: 2
   LocalMethodBehavior: 1
   coffeeFilled: 0
   coffeeFillHeight: 1.1
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 66bd6815-7bdd-436f-802e-f4967ddbae5d
+  _uidString: 378b5ee3-5396-459a-b313-2e75cb4b6e86
   BucketBehaviors:
   - Name: Min
     NetLOD: 0

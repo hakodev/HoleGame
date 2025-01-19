@@ -1,4 +1,3 @@
-using Alteruna;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,8 +34,15 @@ public class CustomMethods
             FindChildRecursively(branchesToCheck, searchedName);
         }
     }
-    
-    private static void SetActiveMeshColliderRecursivelyQueue(Queue<Transform> branchesToCheck, bool newState)
+    public static void FindChildRecursivelyQuick(Transform start, string searchedName)
+    {
+        Queue<Transform> branches = new Queue<Transform>();
+        branches.Enqueue(start);
+        FindChildRecursively(branches, searchedName);
+    }
+
+
+private static void SetActiveMeshColliderRecursivelyQueue(Queue<Transform> branchesToCheck, bool newState)
     {
         Transform currentCheck = branchesToCheck.Dequeue();
 

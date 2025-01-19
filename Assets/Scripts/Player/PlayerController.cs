@@ -38,9 +38,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform moveTransform;
 
     public bool IsCrouching { get; private set; }
-    public int VotedCount { get; set; }
-    public bool IsTaskManager { get; set; } = false;
-    public SymptomsSO Symptom { get; set; }
 
     private void Awake()
     {

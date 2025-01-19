@@ -1100,7 +1100,6 @@ GameObject:
   - component: {fileID: 9170362232215914470}
   - component: {fileID: 3021465343479778412}
   - component: {fileID: 2946068601770951158}
-  - component: {fileID: 8770053332773083543}
   m_Layer: 0
   m_Name: AlterunaPlayer
   m_TagString: Player
@@ -1314,6 +1313,8 @@ MonoBehaviour:
   roleDisplayTime: 4
   infiltratorCanvas: {fileID: 7139580202237596055}
   machineCanvas: {fileID: 1713490942899560347}
+  VotedCount: 0
+  IsTaskManager: 0
 --- !u!114 &2946068601770951158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1331,19 +1332,6 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   debugDeathMaterial: {fileID: 0}
---- !u!114 &8770053332773083543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2507407002761147588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f3df8fc6c0bb7a49b31ee0dabbcec3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  disappearingObjsSymptom: {fileID: 0}
 --- !u!1 &2565612880506949840
 GameObject:
   m_ObjectHideFlags: 0
@@ -2670,10 +2658,6 @@ MonoBehaviour:
   uncrouchedCameraHeight: 0.6
   crouchedCameraHeight: -0.4
   cameraHeightSwitchSpeed: 4
-  playerHead: {fileID: 7090234129164980435}
-  playerTorso: {fileID: 2332573203765004709}
-  mishSync: {fileID: 9170362232215914470}
-  easingTorsoDuration: 1
 --- !u!114 &6911839747530038390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5666,6 +5650,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 8805186453696645239}
+    - target: {fileID: 4856200224544577376, guid: 096c355905c9aa44b9432355780b5385, type: 3}
+      propertyPath: radius
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 4856200224544577376, guid: 096c355905c9aa44b9432355780b5385, type: 3}
       propertyPath: _uidString
       value: e9b7b410-329a-4e6b-8363-8127e7cba8e2
