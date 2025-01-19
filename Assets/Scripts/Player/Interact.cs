@@ -401,9 +401,10 @@ public class Interact : AttributesSync, IObserver
 
             //get all necessary variales
             heldObject = pickedUp;
+            heldObject.transform.SetParent(clientHand.transform, false);
+
             rb = heldObject.GetComponent<Rigidbody>();
             rbSync = heldObject.GetComponent<RigidbodySynchronizable>();
-
 
             if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
