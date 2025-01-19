@@ -23,6 +23,11 @@ public class StickyNote : DynamicInteractableObject
     //enalbe ticking to self player if it is thrown
     //make paper physics fall as if gliding
     //if object has a sticky note parent it behaves weirdly when thrown after being picked up
+
+    private MousePainter mousePainter;
+    private Camera tempCamRef;
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -65,17 +70,16 @@ public class StickyNote : DynamicInteractableObject
 
     public override void Use()
     {
+        mousePainter = transform.root.GetComponentInChildren<MousePainter>();
+        tempCamRef = transform.root.GetComponentInChildren<Camera>();
+
         if (!isInteractedWith)
         {
             transform.root.GetComponent<PlayerController>().enabled = false;
             transform.root.GetComponentInChildren<CameraMovement>().enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-
-
-            positionForStickies = transform.parent.parent.Find("PositionForStickies");
-            Vector3 temp = positionForStickies.position + positionForStickies.forward * 0.4f;
-            BroadcastRemoteMethod(nameof(DrawPosition), temp.x, temp.y, temp.z);
+            BroadcastRemoteMethod(nameof(DrawPosition), transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f);
 
 
         }
@@ -85,15 +89,15 @@ public class StickyNote : DynamicInteractableObject
             transform.root.GetComponentInChildren<CameraMovement>().enabled = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            BroadcastRemoteMethod(nameof(DrawPosition), originalPos.x, originalPos.y, originalPos.z);
+            BroadcastRemoteMethod(nameof(DrawPosition), originalPos);
         }
 
     }
+
     [SynchronizableMethod]
-    public void DrawPosition(float x, float y, float z)
+    public void DrawPosition(Vector3 finalPos)
     {
-        finalPosition = new Vector3(x, y, z);
-        transform.position = finalPosition;
+        transform.position = finalPos;
         isInteractedWith = !isInteractedWith;
     }
 
@@ -104,7 +108,13 @@ public class StickyNote : DynamicInteractableObject
         {
             StasisInPlace();
         }
+
+        if (isInteractedWith && Input.GetMouseButton(0))
+        {
+            mousePainter.Paint();
+        }
     }
+
     private void Stick()
     {
         //physics
