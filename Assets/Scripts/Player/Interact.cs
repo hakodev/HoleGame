@@ -246,6 +246,7 @@ public class Interact : AttributesSync, IObserver
             heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
             SetLayerRecursively(heldObject, 7);
 
+
             //placing anim
             PrepareForDroppingItem();
 
@@ -368,7 +369,6 @@ public class Interact : AttributesSync, IObserver
 
         rb.freezeRotation = false;
         rb.useGravity = true;
-
 
     }
     private void FinishDroppingItem()

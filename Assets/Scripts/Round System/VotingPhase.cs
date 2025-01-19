@@ -179,8 +179,8 @@ public class VotingPhase : AttributesSync {
         }
 
 
-        int randomlyPickedPlayerIndex = randomlyPickedPlayer = Random.Range(0, votableCandidates.Count);
-        PlayerRole randomlyVotedPlayer = votableCandidates[randomlyPickedPlayerIndex];
+         randomlyPickedPlayer = Random.Range(0, votableCandidates.Count);
+        PlayerRole randomlyVotedPlayer = votableCandidates[randomlyPickedPlayer];
         randomlyVotedPlayer.VotedCount++;
 
         Debug.Log("randomly Chosen " + randomlyVotedPlayer.gameObject.name);
