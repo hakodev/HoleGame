@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 151989850684757979}
   - component: {fileID: 8586918755359574564}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: DrawingPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,7 +126,6 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   extendsIslandOffset: 1
-  material: {fileID: 0}
 --- !u!1 &8435629609084543377
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,7 +150,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8435629609084543377}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.71309626, z: -0, w: 0.70106614}
+  m_LocalRotation: {x: 0, y: -0.71309745, z: 0, w: 0.70106494}
   m_LocalPosition: {x: 28.47, y: -1.73, z: -13.671448}
   m_LocalScale: {x: 3.190404, y: 2.7346313, z: 2.7346323}
   m_ConstrainProportionsScale: 0
@@ -246,9 +245,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: 07bbfe0173d3a0149b77122f8a8aaa91, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7336445423269797523}
-    - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: 07bbfe0173d3a0149b77122f8a8aaa91, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 700760163942790365}
   m_SourcePrefab: {fileID: 100100000, guid: 07bbfe0173d3a0149b77122f8a8aaa91, type: 3}
 --- !u!4 &8340588720313780003 stripped
@@ -261,27 +257,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -8391222552659086748, guid: 07bbfe0173d3a0149b77122f8a8aaa91, type: 3}
   m_PrefabInstance: {fileID: 8373599345455636680}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &7336445423269797523
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9203496926590374572}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.7446035, y: 1.1310112, z: 0.05764095}
-  m_Center: {x: 0, y: 1.244085, z: 0}
 --- !u!114 &700760163942790365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,4 +274,3 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   extendsIslandOffset: 1
-  material: {fileID: 2100000, guid: 15220f331c726464da04a4a943be60a6, type: 2}
