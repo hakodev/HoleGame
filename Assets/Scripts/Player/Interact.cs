@@ -34,7 +34,7 @@ public class Interact : AttributesSync, IObserver
     bool finishedPickUp = true;
     bool isChargingUp = false;
 
-    RigidbodySynchronizable rbToTrack;
+    RigidbodySynchronizable rbSync;
     Rigidbody rb;
     //AnimationSynchronizable animatorSync;
 
@@ -86,7 +86,6 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) { return; }
 
         ProcessInput();
-        HighlightInteractable();
 
         if (isChargingUp) currentChargeUpTime += Time.deltaTime;
     }
@@ -259,10 +258,10 @@ public class Interact : AttributesSync, IObserver
             float divider = 2;
             if (heldObject.gameObject.name.Contains("StickyNote")) divider = 20;
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
-            rbToTrack.SetPosition(heldObject.transform.position);
+            rbSync.SetPosition(heldObject.transform.position);
 
             heldObject.transform.forward = -hit.normal;
-            rbToTrack.SetRotation(heldObject.transform.rotation);
+            rbSync.SetRotation(heldObject.transform.rotation);
 
 
             if (heldObject.name.Contains("StickyNote"))
@@ -290,7 +289,7 @@ public class Interact : AttributesSync, IObserver
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
-        rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
+        rbSync.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
         Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
         currentThrowStrength = 0;
         if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
@@ -299,7 +298,7 @@ public class Interact : AttributesSync, IObserver
             heldObject.GetComponent<CoffeeCup>().SpecialInteraction(InteractionEnum.CoffeeStain, this);
         }
 
-        Debug.DrawRay(heldObject.transform.position, rbToTrack.velocity, Color.magenta);
+        Debug.DrawRay(heldObject.transform.position, rbSync.velocity, Color.magenta);
         Debug.DrawRay(heldObject.transform.position, rb.angularVelocity, Color.green);
 
         FinishDroppingItem();
@@ -378,23 +377,14 @@ public class Interact : AttributesSync, IObserver
 
        // rbToTrack.enabled = true;
         heldObject = null;
-        rbToTrack = null;
+        rbSync = null;
         rb = null;
     }
 
     private void TryPickUp(GameObject pickedUp)
     {
-        //   animator.SetTrigger("PickingUp");
-        //   animatorSync.SetTrigger("PickingUp");
-
-        if (heldObject != null)
-        {
-            return;
-        }
-
+        if (heldObject != null) { return; }
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
-
-
 
         Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
         if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
@@ -402,7 +392,8 @@ public class Interact : AttributesSync, IObserver
             //get all necessary variales
             heldObject = pickedUp;
             rb = heldObject.GetComponent<Rigidbody>();
-            rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
+            rbSync = heldObject.GetComponent<RigidbodySynchronizable>();
+            rbSync.Awake();
             DIO.isPickedUp = true;
 
             if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
@@ -436,8 +427,8 @@ public class Interact : AttributesSync, IObserver
     {
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rbToTrack.velocity = Vector3.zero;
-        rbToTrack.angularVelocity = Vector3.zero;
+        rbSync.velocity = Vector3.zero;
+        rbSync.angularVelocity = Vector3.zero;
     }
     private void UpdateHeldObjectPhysics()
     {
@@ -445,10 +436,7 @@ public class Interact : AttributesSync, IObserver
         {
             if (heldObject.name.Contains("StickyNote"))
             {
-                if (heldObject.GetComponent<StickyNote>().isInteractedWith)
-                {
-                    return;
-                }
+                if (heldObject.GetComponent<StickyNote>().isInteractedWith){ return; }
                 
             }
             Vector3 targetPosition = clientHand.transform.position;
@@ -457,8 +445,8 @@ public class Interact : AttributesSync, IObserver
             heldObject.transform.position = targetPosition;
             heldObject.transform.rotation = targetRotation;
 
-            rbToTrack.SetPosition(targetPosition);
-            rbToTrack.SetRotation(targetRotation);
+            rbSync.SetPosition(targetPosition);
+            rbSync.SetRotation(targetRotation);
         }
     }
 
@@ -473,14 +461,6 @@ public class Interact : AttributesSync, IObserver
     private void AnimateReleaseChargebar()
     {
 
-    }
-    private void HighlightInteractable()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, interactableLayerMask))
-        {
-            // Highlight shader or whatever
-        }
     }
 
     GameObject spawnedGun;

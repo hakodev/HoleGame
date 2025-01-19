@@ -6,27 +6,28 @@ using Alteruna;
 public class CountdownDisplay : AttributesSync {
 
     [SerializeField] private int secondsRemainingToTurnRed;
-
-    [SynchronizableField] public int time;
-    public static int sendTimeToUI;
-
-    private float deltaTime=0;
-    public int maxTime;
-    [SynchronizableField] public static Color countdownColor = Color.green;
-
-
     [SerializeField] TextMeshProUGUI countdown;
-
+    TextMeshProUGUI flavorTextMesh;
     [SerializeField] private CountDownDisplayManager manager;
 
+    [SynchronizableField] public int time;
+    [SynchronizableField] public static Color countdownColor = Color.green;
+    private float deltaTime=0;
+    public int maxTime;
 
+
+    public static int sendTimeToUI;
+    public static string sendFlavorTextToUI;
 
 
     private void Awake() {
         maxTime = time;
+        flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
     }
-   
-
+    private void Start()
+    {
+        sendFlavorTextToUI = flavorTextMesh.text;
+    }
 
     //these are meant to be called from the same object to itself so just use BoradcastRemoteMethod("nameofthing")
     [SynchronizableMethod]

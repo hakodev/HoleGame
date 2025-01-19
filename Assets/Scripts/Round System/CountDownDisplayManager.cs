@@ -2,6 +2,7 @@ using Alteruna;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CountDownDisplayManager : AttributesSync {
@@ -48,18 +49,22 @@ public class CountDownDisplayManager : AttributesSync {
         {
             PickTaskManager.SetActive(true);
             affectedDisplay = PickTaskManager.GetComponent<CountdownDisplay>();
+            CountdownDisplay.sendFlavorTextToUI = affectedDisplay.transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>().text;
         }
         if (objectCalled == PickTaskManager.name)
         {
             CountDown.SetActive(true);
             affectedDisplay = CountDown.GetComponent<CountdownDisplay>();
+            CountdownDisplay.sendFlavorTextToUI = affectedDisplay.transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>().text;
+
         }
         if (objectCalled == CountDown.name)
         {
             PickTaskManager.SetActive(true);
             affectedDisplay = PickTaskManager.GetComponent<CountdownDisplay>();
+            CountdownDisplay.sendFlavorTextToUI = affectedDisplay.transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>().text;
         }
-        
+
 
 
         affectedDisplay.time = affectedDisplay.maxTime;  
