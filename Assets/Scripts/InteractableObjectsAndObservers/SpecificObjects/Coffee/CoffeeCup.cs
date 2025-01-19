@@ -1,6 +1,8 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
+using UnityEngine.ProBuilder;
 
 public class CoffeeCup : DynamicInteractableObject
 {
@@ -71,8 +73,14 @@ public class CoffeeCup : DynamicInteractableObject
         if (isThrown && coffeeFilled)
         {
             if (((1 << info.gameObject.layer) & PaintManager.Instance.mask) == 0) return;
-            Instantiate(PaintManager.Instance.decalPrefab, pos, Quaternion.LookRotation(-normal));
-            
+
+            BroadcastRemoteMethod(nameof(CreateDecalPrefab), pos, normal);
         }
+    }
+
+    [SynchronizableMethod]
+    void CreateDecalPrefab(Vector3 pos, Vector3 normal)
+    {
+        Instantiate(PaintManager.Instance.decalPrefab, pos, Quaternion.LookRotation(-normal));
     }
 }
