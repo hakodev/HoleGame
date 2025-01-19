@@ -42,7 +42,6 @@ public class Interact : AttributesSync, IObserver
     private Transform currentOutlinedObject;
 
 
-
     private void Awake()
     {
         hudDisplay = GetComponentInChildren<HUDDisplay>();
