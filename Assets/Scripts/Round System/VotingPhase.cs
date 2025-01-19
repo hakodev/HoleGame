@@ -37,7 +37,11 @@ public class VotingPhase : AttributesSync {
 
     private bool hasVoted = false;
     public void InitiateVotingPhase() {
+        totalPlayers = RoleAssignment.GetTotalPlayers();
+
         if (!avatar.IsMe) { return; }
+        //if (totalPlayers.Count <= 1) { return; }
+
 
         votingPlayers = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None).ToList<VotingPhase>();
 
@@ -88,6 +92,7 @@ public class VotingPhase : AttributesSync {
     public void EndVotingPhase()
     {
         if (!avatar.IsMe) { return; }
+       // if (totalPlayers.Count <= 1) { return; }
 
         if (!hasVoted)
         {
@@ -111,7 +116,7 @@ public class VotingPhase : AttributesSync {
         if (!Multiplayer.GetUser().IsHost || RoleAssignment.playerID-1!=0) { return; }
         if (!avatar.IsMe) { return; }
 
-        PlayerRole pickedPlayer = totalPlayers[0];
+            PlayerRole pickedPlayer = totalPlayers[0];
         List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
 
 
@@ -133,7 +138,7 @@ public class VotingPhase : AttributesSync {
         }
 
         randomlyPickedPlayer = 0;
-        if(equallyVotedPlayers!=null && equallyVotedPlayers.Count >1) randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
+        randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
         pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
         pickedPlayer.IsTaskManager = true;
 
@@ -174,8 +179,7 @@ public class VotingPhase : AttributesSync {
         }
 
 
-        int randomlyPickedPlayerIndex=0;
-        if(votableCandidates!=null && votableCandidates.Count>1) randomlyPickedPlayer = Random.Range(0, votableCandidates.Count);
+        int randomlyPickedPlayerIndex = randomlyPickedPlayer = Random.Range(0, votableCandidates.Count);
         PlayerRole randomlyVotedPlayer = votableCandidates[randomlyPickedPlayerIndex];
         randomlyVotedPlayer.VotedCount++;
 

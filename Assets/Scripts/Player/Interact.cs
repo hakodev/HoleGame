@@ -391,7 +391,7 @@ public class Interact : AttributesSync, IObserver
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
         Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
-        if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
+        if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null && pickedUp.transform.root.tag!="Player")
         {
             //get all necessary variales
             heldObject = pickedUp;

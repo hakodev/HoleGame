@@ -10,11 +10,12 @@ public class RoleAssignment : AttributesSync
 {
     private static List<PlayerRole> rolelessPlayers = new();
     private static List<PlayerRole> totalPlayers = new();
+    public static bool hasGameStarted = false;
 
     private int maxNumOfInfiltrators = 1;
     Alteruna.Avatar avatar;
+    CanvasGroup youNeedFriends;
 
-    public static bool hasGameStarted=false;
 
     [SerializeField] List<Vector2> InfiltratorsToPlayers;
     //x - alll players
@@ -28,7 +29,7 @@ public class RoleAssignment : AttributesSync
     private void Awake()
     {
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
-
+        youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
         playerNumber++;
     }
     private void Start()
@@ -59,10 +60,17 @@ public class RoleAssignment : AttributesSync
         {
             if (Input.GetKeyUp(KeyCode.G))
             {
-                BroadcastRemoteMethod("SetHasGameStarted", true);
-                FindRolelessPlayers();
-                DetermineMaxNumberOfInfiltrators();
-                AssignRoles();
+                if (totalPlayers.Count > 1)
+                {
+                    BroadcastRemoteMethod("SetHasGameStarted", true);
+                    FindRolelessPlayers();
+                    DetermineMaxNumberOfInfiltrators();
+                    AssignRoles();
+                }
+                else
+                {
+                    StartCoroutine(DisplayFriends());
+                }
             }
         }
     }
@@ -127,6 +135,12 @@ public class RoleAssignment : AttributesSync
         //call all players
        // gameObject.SetActive(false);
        GetComponent<TextMeshProUGUI>().enabled = false;
+    }
+    private IEnumerator DisplayFriends()
+    {
+        youNeedFriends.DOFade(1f, 1f);
+        yield return new WaitForSeconds(2f); // How many seconds to display it on screen
+        youNeedFriends.DOFade(0f, 1f);
     }
 }
 public enum Roles
