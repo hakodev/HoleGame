@@ -387,6 +387,8 @@ public class Interact : AttributesSync, IObserver
     private void TryPickUp(GameObject pickedUp)
     {
         if (heldObject != null) { return; }
+        RaycastHit hit;
+        if (!Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask)) { return; }
 
         DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 

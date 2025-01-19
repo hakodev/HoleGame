@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
-    [SynchronizableField] Alteruna.Avatar currentlyOwnedByAvatar;
+    Alteruna.Avatar currentlyOwnedByAvatar;
 
     public bool isPickedUp;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
@@ -26,7 +26,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     protected virtual void Start()
     {
-    //    BroadcastRemoteMethod(nameof(DynamicSleep));
+        BroadcastRemoteMethod(nameof(DynamicSleep));
     }
     protected virtual void Update()
     {
@@ -59,15 +59,17 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void DynamicSleep()
     {
-    //    rbSyncDynamic.SyncEveryNUpdates = 30;
-     //   rbSyncDynamic.FullSyncEveryNSync = 30;
+        rbSyncDynamic.SyncEveryNUpdates = 9999999;
+        rbSyncDynamic.FullSyncEveryNSync = 9999999;
+     //   Debug.Log("sleep " + transform.root.gameObject.name);
     }
     [SynchronizableMethod]
     public void DynamicAwake()
     {
       //  Debug.Log(rbDynamic + " " + rbSyncDynamic);
-      //  rbSyncDynamic.SyncEveryNUpdates = 2;
-    //    rbSyncDynamic.FullSyncEveryNSync = 2;
+        rbSyncDynamic.SyncEveryNUpdates = 1;
+        rbSyncDynamic.FullSyncEveryNSync = 1;
+      //  Debug.Log("awooga " + transform.root.gameObject.name);
     }
     
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()

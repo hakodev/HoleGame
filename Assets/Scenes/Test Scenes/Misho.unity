@@ -1448,6 +1448,79 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 31.567225, y: 1, z: 29.960339}
   m_Center: {x: -4.71206, y: 0, z: 0.28308487}
+--- !u!1001 &798166855
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.515
+      objectReference: {fileID: 0}
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.782
+      objectReference: {fileID: 0}
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -4.8917084
+      objectReference: {fileID: 0}
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 858516863371319017, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3542336959700607711, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: _uidString
+      value: f9a8a519-3dc7-4c4c-ba2d-a2fcd6572f04
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143708966965000808, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: _uidString
+      value: a39b4fe8-e257-47c9-aaf7-c273c265d2ea
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143708966965000808, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: SyncEveryNUpdates
+      value: 9999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143708966965000808, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: FullSyncEveryNSync
+      value: 99999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8349825907078539650, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: m_Name
+      value: Gun (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
 --- !u!1 &803080987
 GameObject:
   m_ObjectHideFlags: 0
@@ -2629,6 +2702,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4143708966965000808, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: SyncEveryNUpdates
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143708966965000808, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
+      propertyPath: FullSyncEveryNSync
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8349825907078539650, guid: 7f60ea7402361824fb0d947f42394e53, type: 3}
       propertyPath: m_Name
       value: Gun
@@ -3094,3 +3175,4 @@ SceneRoots:
   - {fileID: 1745906816}
   - {fileID: 871016570}
   - {fileID: 1622468043}
+  - {fileID: 798166855}
