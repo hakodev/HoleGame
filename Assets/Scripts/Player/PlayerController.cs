@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Handle jumping
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && mishSync.GetCurrentStance()!=StanceEnum.Dead)
         {
             Jump();
         }

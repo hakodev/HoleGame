@@ -1,7 +1,5 @@
 using Alteruna;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -20,7 +18,7 @@ public class CountDownDisplayManager : AttributesSync {
     }
     private IEnumerator CheckIfGameStarted()
     {
-            while (!hasInitiatedTheTimer)
+        while (!hasInitiatedTheTimer)
         {
             yield return new WaitForSeconds(1);
 
@@ -38,6 +36,7 @@ public class CountDownDisplayManager : AttributesSync {
     private void StartGameForAll()
     {
         hasInitiatedTheTimer = true;
+        Commit();
     }
 
     [SynchronizableMethod]

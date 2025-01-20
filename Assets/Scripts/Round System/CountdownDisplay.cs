@@ -29,12 +29,12 @@ public class CountdownDisplay : AttributesSync {
         //flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
         //sendFlavorTextToUI = flavorTextMesh.text;
     }
-    
+    /*
     private new void OnEnable()
     {
         base.OnEnable();
         sendFlavorTextToUI = flavorTextMesh.text;
-    }
+    }*/
     
     //these are meant to be called from the same object to itself so just use BoradcastRemoteMethod("nameofthing")
     [SynchronizableMethod]

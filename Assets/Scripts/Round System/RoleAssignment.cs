@@ -61,8 +61,8 @@ public class RoleAssignment : AttributesSync
             if (Input.GetKeyUp(KeyCode.G))
             {
                 if (totalPlayers.Count > 1)
-                {
-                    BroadcastRemoteMethod("SetHasGameStarted", true);
+                { 
+                    BroadcastRemoteMethod(nameof(SetHasGameStarted), true);
                     FindRolelessPlayers();
                     DetermineMaxNumberOfInfiltrators();
                     AssignRoles();
@@ -96,9 +96,6 @@ public class RoleAssignment : AttributesSync
     }
     private void AssignRoles()
     {
-
-        //Debug.Log($"Total players: {players.Count}");
-
         int randomNum;
 
         for (int i = 0; i < maxNumOfInfiltrators; i++)
@@ -111,11 +108,6 @@ public class RoleAssignment : AttributesSync
             rolelessPlayers[randomNum].BroadcastRemoteMethod("SetRole", Roles.Infiltrator);
             rolelessPlayers[randomNum].BroadcastRemoteMethod("DisplayRole");
 
-            //            totalPlayers[randomNum].DisplayRole();
-
-            // totalPlayers[randomNum].SetRole(Roles.Machine);
-            // totalPlayers[randomNum].DisplayRole();
-           // Debug.Log(rolelessPlayers[randomNum].gameObject.name + rolelessPlayers[randomNum].GetRole());
             rolelessPlayers.RemoveAt(randomNum); // Remove the player from the roleless list after giving them a role
         }
 
@@ -123,17 +115,10 @@ public class RoleAssignment : AttributesSync
         { // Give the rest the machine role
             player.BroadcastRemoteMethod("SetRole", Roles.Machine);
             player.BroadcastRemoteMethod("DisplayRole");
-
-           // player.SetRole(Roles.Machine);
-           // player.DisplayRole();
-        //    Debug.Log(player.gameObject.name + player.GetRole());
-
         }
 
         rolelessPlayers.Clear();
 
-        //call all players
-       // gameObject.SetActive(false);
        GetComponent<TextMeshProUGUI>().enabled = false;
     }
     private IEnumerator DisplayFriends()
