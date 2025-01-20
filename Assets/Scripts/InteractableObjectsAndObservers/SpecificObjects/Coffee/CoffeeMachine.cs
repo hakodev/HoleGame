@@ -23,6 +23,12 @@ public class CoffeeMachine : StationaryInteractableObject
     }
     public override void Use()
     {
+        BroadcastRemoteMethod(nameof(Pour));
+    }
+
+    [SynchronizableMethod]
+    public void Pour()
+    {
         if (coffeeDripObject.isDripping) return;
 
         foreach (var source in sources)
