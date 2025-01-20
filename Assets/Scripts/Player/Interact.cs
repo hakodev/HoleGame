@@ -391,7 +391,7 @@ public class Interact : AttributesSync, IObserver
         if (heldObject != null) { return; }
 
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask)) 
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun) 
         {
             DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
@@ -510,7 +510,6 @@ public class Interact : AttributesSync, IObserver
             Debug.Log("KAKAKAKA");
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
-            Debug.Break();
             TryPickUp(spawnedGun);
         }
     }
