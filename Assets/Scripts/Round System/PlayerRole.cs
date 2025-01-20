@@ -56,8 +56,7 @@ public class PlayerRole : AttributesSync
     public void SetRole(Roles newRole)
     {
         role = newRole;
-        if(RoleAssignment.playerID - 1 == Multiplayer.GetUser().Index)
-            localClientRole = newRole;
+        localClientRole = newRole;
     }
 }
     

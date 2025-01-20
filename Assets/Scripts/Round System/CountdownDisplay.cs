@@ -22,11 +22,17 @@ public class CountdownDisplay : AttributesSync {
 
     private void Awake() {
         maxTime = time;
-        flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
+       // flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
     }
     private void Start()
     {
         sendFlavorTextToUI = flavorTextMesh.text;
+    }
+
+    private new void OnEnable()
+    {
+        base.OnEnable();
+        flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
     }
 
     //these are meant to be called from the same object to itself so just use BoradcastRemoteMethod("nameofthing")

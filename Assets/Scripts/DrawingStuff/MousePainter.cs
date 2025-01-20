@@ -2,11 +2,9 @@ using UnityEngine;
 using Alteruna;
 using System;
 using System.Drawing;
-public class MousePainter : AttributesSync
-{
+public class MousePainter : MonoBehaviour {
+
     public Camera cam;
-    [Space]
-    public bool mouseSingleClick;
     [Space]
     public UnityEngine.Color paintColor;
 
@@ -20,16 +18,13 @@ public class MousePainter : AttributesSync
 
     public LayerMask notPlayerMask;
     Paintable p;
-    Alteruna.Avatar avatar;
 
     public void Start()
     {
         paintManager = FindAnyObjectByType<PaintManager>();
-        avatar = transform.root.GetComponent<Alteruna.Avatar>();
     }
 
-    [SynchronizableMethod]
-    public void Paint()
+    public void Paint(Camera cam)
     {
         Vector3 position = Input.mousePosition;
         Ray ray = cam.ScreenPointToRay(position);
@@ -52,10 +47,9 @@ public class MousePainter : AttributesSync
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            BroadcastRemoteMethod("Paint");
-        }
+
+           
+        
     }
 
 }

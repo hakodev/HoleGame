@@ -31,7 +31,6 @@ public class Paintable : AttributesSync {
 	public RenderTexture getSupport() => supportTexture;
 	public Renderer getRenderer() => rend;
 
-	public Material material;
 
 	public void Start() {
 		paintManager = FindAnyObjectByType<PaintManager>();

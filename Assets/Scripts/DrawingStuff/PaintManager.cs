@@ -48,7 +48,6 @@ public class PaintManager : AttributesSync{
         paintMaterial = new Material(texturePaint);
         extendMaterial = new Material(extendIslands);
         command = new CommandBuffer();
-        command.name = "CommmandBuffer - " + this.gameObject.name;
     }
   
     public void initTextures(Paintable paintable){
@@ -74,35 +73,43 @@ public class PaintManager : AttributesSync{
     [SynchronizableMethod]
     public void paint(Guid guid, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
         Debug.Log(Multiplayer.GetUser().Name);
-        Debug.Log(pos);
-        Debug.Log(radius);
-        Debug.Log(color.Value);
+
         Paintable paintable = Multiplayer.GetGameObjectById(guid).GetComponent<Paintable>();
-        Debug.Log(paintable.gameObject.name);
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
         RenderTexture extend = paintable.getExtend();
         RenderTexture support = paintable.getSupport();
         Renderer rend = paintable.getRenderer();
 
+        RenderTexture kur = new RenderTexture(1024, 1024, 0);
+       
+
         paintMaterial.SetFloat(prepareUVID, 0);
         paintMaterial.SetVector(positionID, pos);
         paintMaterial.SetFloat(hardnessID, hardness);
         paintMaterial.SetFloat(strengthID, strength);
         paintMaterial.SetFloat(radiusID, radius);
-        paintMaterial.SetTexture(textureID, support);
+        paintMaterial.SetTexture(textureID,support);
         paintMaterial.SetColor(colorID, color ?? Color.red);
         extendMaterial.SetFloat(uvOffsetID, paintable.extendsIslandOffset);
         extendMaterial.SetTexture(uvIslandsID, uvIslands);
 
+        Debug.Log("prepUV " + paintMaterial.GetFloat(prepareUVID));
+        Debug.Log(paintMaterial.GetVector(positionID));
+        Debug.Log(paintMaterial.GetFloat(hardnessID));
+        Debug.Log(paintMaterial.GetFloat(strengthID));
+        Debug.Log(paintMaterial.GetFloat(radiusID));
+
+        Debug.Log(command.name);
         command.SetRenderTarget(mask);
         command.DrawRenderer(rend, paintMaterial, 0);
-
+        
         command.SetRenderTarget(support);
         command.Blit(mask, support);
 
         command.SetRenderTarget(extend);
         command.Blit(mask, extend, extendMaterial);
+        
 
         Graphics.ExecuteCommandBuffer(command);
         command.Clear();

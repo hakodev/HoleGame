@@ -20,7 +20,7 @@ public class CountDownDisplayManager : AttributesSync {
     }
     private IEnumerator CheckIfGameStarted()
     {
-        while (!hasInitiatedTheTimer)
+            while (!hasInitiatedTheTimer)
         {
             yield return new WaitForSeconds(1);
 

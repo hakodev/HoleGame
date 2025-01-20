@@ -11,23 +11,30 @@ public class StickyNote : DynamicInteractableObject
     [SynchronizableField] bool isThrown = false;
     [SynchronizableField] bool isGameStart = true;
     [SynchronizableField] Vector3 placedLocalPos;
-     [SynchronizableField] Vector3 placedLocalRot;
+    [SynchronizableField] Vector3 placedLocalRot;
     int selfLayer;
 
     Vector3 finalPosition;
     Vector3 originalPos;
-    public bool isInteractedWith = false;
+    [SynchronizableField] public bool isInteractedWith = false;
     //disable object colliding with it's child
     //enalbe ticking to self player if it is thrown
     //make paper physics fall as if gliding
     //if object has a sticky note parent it behaves weirdly when thrown after being picked up
-    private void Awake()
+
+    private MousePainter mousePainter;
+    private Camera tempCamRef;
+
+    protected override void Awake()
     {
+        base.Awake();
         rb = GetComponent<Rigidbody>();
         rbToTrack = GetComponent<RigidbodySynchronizable>();
+       
     }
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
     }
 
@@ -46,7 +53,7 @@ public class StickyNote : DynamicInteractableObject
         {
             isPlaced = false;
             originalPos = transform.position;
-            
+
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -61,15 +68,18 @@ public class StickyNote : DynamicInteractableObject
 
     public override void Use()
     {
+        mousePainter = transform.root.GetComponentInChildren<MousePainter>();
+        tempCamRef = transform.root.GetComponentInChildren<Camera>();
+
         if (!isInteractedWith)
         {
             transform.root.GetComponent<PlayerController>().enabled = false;
             transform.root.GetComponentInChildren<CameraMovement>().enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            finalPosition = transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f;
-            transform.position = finalPosition;
-            isInteractedWith = true;
+            BroadcastRemoteMethod(nameof(DrawPosition), transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f);
+
+
         }
         else
         {
@@ -77,18 +87,34 @@ public class StickyNote : DynamicInteractableObject
             transform.root.GetComponentInChildren<CameraMovement>().enabled = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            transform.position = originalPos;
-            isInteractedWith = false;
+            BroadcastRemoteMethod(nameof(DrawPosition), originalPos);
         }
-     
+
     }
-    private void Update()
+
+    [SynchronizableMethod]
+    public void DrawPosition(Vector3 finalPos)
     {
+        transform.position = finalPos;
+        isInteractedWith = !isInteractedWith;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
         if (isPlaced && transform.parent != null && !transform.parent.gameObject.name.Contains("Hand"))
         {
             StasisInPlace();
         }
+
+        if (isInteractedWith && Input.GetMouseButton(0))
+        {
+            mousePainter.Paint(tempCamRef);
+        }
     }
+
+
+
     private void Stick()
     {
         //physics
@@ -100,7 +126,7 @@ public class StickyNote : DynamicInteractableObject
         placedLocalRot = transform.localEulerAngles;
         placedLocalPos = transform.localPosition;
 
-        if(transform.parent != null)
+        if (transform.parent != null)
         {
             if (transform.parent.gameObject.name.Contains("StickyNote"))
             {
@@ -113,7 +139,7 @@ public class StickyNote : DynamicInteractableObject
             }
         }
         //make sure sticky notes can stack when spawned without parenting causing issues
-        
+
 
 
         //states of sticky note management
@@ -160,7 +186,7 @@ public class StickyNote : DynamicInteractableObject
 
         if (isGameStart)
         {
-            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 2f;
+            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 12f;
         }
         else
         {
