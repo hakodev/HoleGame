@@ -522,7 +522,8 @@ public class Interact : AttributesSync, IObserver
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
             pickedUp = spawnedGun;
-            BroadcastRemoteMethod(nameof(TryPickUp), spawnedGun);
+
+            BroadcastRemoteMethod(nameof(TryPickUp));
         }
     }
 }

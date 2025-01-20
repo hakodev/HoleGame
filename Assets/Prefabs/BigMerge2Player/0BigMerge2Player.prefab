@@ -1154,7 +1154,7 @@ MonoBehaviour:
   _uidString: 16889806-cf43-4de6-b0ef-366232eecc01
   Reliability: 1
   LocalMethodBehavior: 1
-  deadScreen: {fileID: 0}
+  deadScreen: {fileID: 7316368481631313987}
 --- !u!114 &3393442953825086244
 MonoBehaviour:
   m_ObjectHideFlags: 0

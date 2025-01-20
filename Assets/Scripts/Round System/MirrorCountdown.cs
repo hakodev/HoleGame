@@ -14,7 +14,7 @@ public class MirrorCountdown : MonoBehaviour
     private void LateUpdate()
     {
         countdown.text = CountdownDisplay.sendTimeToUI.ToString();
-        //      flavorText.text = CountdownDisplay.sendFlavorTextToUI;
-        //      countdown.color = CountdownDisplay.countdownColor;
+              flavorText.text = CountdownDisplay.sendFlavorTextToUI;
+              countdown.color = CountdownDisplay.countdownColor;
     }
 }
