@@ -8,7 +8,7 @@ public class MirrorCountdown : MonoBehaviour
 
     private void Start()
     {
-       // flavorText = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
+        flavorText = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
     }
 
     private void LateUpdate()

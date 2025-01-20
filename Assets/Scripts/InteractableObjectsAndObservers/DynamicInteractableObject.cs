@@ -25,7 +25,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     protected virtual void Start()
     {
-        BroadcastRemoteMethod(nameof(DynamicSleep));
+    //    BroadcastRemoteMethod(nameof(DynamicSleep));
     }
     protected virtual void Update()
     {
@@ -40,7 +40,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
         if (currentlyOwnedByAvatar==null)
         {
-            if (rbDynamic.linearVelocity.magnitude < 0.05f)
+            if (rbDynamic.linearVelocity.magnitude < 0.1f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
                 if (timeSinceLastSignificantMovement > 5f)
@@ -61,7 +61,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         if (currentlyOwnedByAvatar == null || !currentlyOwnedByAvatar.IsMe) { return; }
 
 
-        if (rbDynamic.linearVelocity.magnitude >= 0.05f || currentlyOwnedByAvatar!=null)
+        if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar!=null)
         {
         //    Debug.Log("awake");
             timeSinceLastSignificantMovement = 0;

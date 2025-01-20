@@ -380,7 +380,7 @@ public class Interact : AttributesSync, IObserver
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
-        // rbToTrack.enabled = true;
+        rbToTrack.enabled = true;
         heldObject = null;
         rbToTrack = null;
         rb = null;
@@ -402,7 +402,7 @@ public class Interact : AttributesSync, IObserver
                 rb = heldObject.GetComponent<Rigidbody>();
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
                 DIO.isPickedUp = true;
-                rbToTrack.ApplyAsTransform = true;
+                //rbToTrack.ApplyAsTransform = true;
 
                 if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
