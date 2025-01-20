@@ -36,6 +36,8 @@ public class Interact : AttributesSync, IObserver
 
     RigidbodySynchronizable rbToTrack;
     Rigidbody rb;
+    private Alteruna.Spawner spawner;
+
     //AnimationSynchronizable animatorSync;
 
 
@@ -46,18 +48,10 @@ public class Interact : AttributesSync, IObserver
     {
         hudDisplay = GetComponentInChildren<HUDDisplay>();
         avatar = GetComponent<Alteruna.Avatar>();
-
-        if (!avatar.IsMe) { return; }
+        spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
         playerController = GetComponent<PlayerController>();
-        //animator = transform.Find("Animation").GetComponent<Animator>();
-        //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
-        // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
     }
-    //  private void OnEnable()
-    //   {
-    //     if (!avatar.IsMe) { return; }
-    //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-    //  }
+
     private void Start()
     {
         if (!avatar.IsMe)
@@ -487,16 +481,39 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
+    private void Drop()
+    {
+        PrepareForDropping();
+        FinishDropping();
+    }
 
+    GameObject spawnedGun;
     public void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
     {
         if (interaction == InteractionEnum.ShotWithGun)
         {
             Gun gun = (Gun)caller;
-            Debug.Log("Special Interaction Gun Player");
+            //  Debug.Log("Special Interaction Gun Player");
             Health health = gameObject.GetComponent<Health>();
             health.DamagePlayer(gun.Damage());
             Debug.Log(gun.Damage());
+        }
+
+        if (interaction == InteractionEnum.GivenTaskManagerRole)
+        {
+            //could it be thinkin it's a prefab still
+            // Debug.Log("KIKIKIKIKIKIKIKKI " + gameObject.name + Multiplayer.GetUser().Name);
+            if (heldObject != null) Drop();
+            spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
+            TryPickUp(spawnedGun);
+        }
+        if (interaction == InteractionEnum.RemoveGun)
+        {
+            if (spawnedGun != null && heldObject == spawnedGun && avatar.IsMe)
+            {
+                Drop();
+                spawner.Despawn(spawnedGun);
+            }
         }
     }
 }
