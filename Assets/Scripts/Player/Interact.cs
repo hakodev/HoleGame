@@ -36,6 +36,8 @@ public class Interact : AttributesSync, IObserver
 
     RigidbodySynchronizable rbToTrack;
     Rigidbody rb;
+    private Alteruna.Spawner spawner;
+
     //AnimationSynchronizable animatorSync;
 
 
@@ -46,18 +48,10 @@ public class Interact : AttributesSync, IObserver
     {
         hudDisplay = GetComponentInChildren<HUDDisplay>();
         avatar = GetComponent<Alteruna.Avatar>();
-
-        if (!avatar.IsMe) { return; }
+        spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
         playerController = GetComponent<PlayerController>();
-        //animator = transform.Find("Animation").GetComponent<Animator>();
-        //  animatorSync = transform.Find("Animation").GetComponent<AnimationSynchronizable>();
-        // animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
     }
-    //  private void OnEnable()
-    //   {
-    //     if (!avatar.IsMe) { return; }
-    //      animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-    //  }
+
     private void Start()
     {
         if (!avatar.IsMe)
@@ -257,7 +251,7 @@ public class Interact : AttributesSync, IObserver
             SetLayerRecursively(heldObject, 7);
 
             //placing anim
-            Spam1();
+            PrepareForDropping();
 
             //specific to placing
             Vector3 bounds = GetRenderersSize(heldObject);
@@ -282,7 +276,7 @@ public class Interact : AttributesSync, IObserver
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             }
 
-            Spam2();
+            FinishDropping();
             //Debug.Break();
         }
         else
@@ -294,7 +288,7 @@ public class Interact : AttributesSync, IObserver
     {
         //specifics to thtowing
 
-        Spam1();
+        PrepareForDropping();
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
         //specifics t thowing
@@ -311,7 +305,7 @@ public class Interact : AttributesSync, IObserver
         Debug.DrawRay(heldObject.transform.position, rbToTrack.velocity, Color.magenta);
         Debug.DrawRay(heldObject.transform.position, rb.angularVelocity, Color.green);
 
-        Spam2();
+        FinishDropping();
     }
 
     private Vector3 GetRenderersSize(GameObject obj)
@@ -366,7 +360,7 @@ public class Interact : AttributesSync, IObserver
 
         return closest;
     }
-    private void Spam1()
+    private void PrepareForDropping()
     {
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
@@ -378,7 +372,7 @@ public class Interact : AttributesSync, IObserver
 
 
     }
-    private void Spam2()
+    private void FinishDropping()
     {
         //disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
 
@@ -393,46 +387,41 @@ public class Interact : AttributesSync, IObserver
 
     private void TryPickUp(GameObject pickedUp)
     {
-        //   animator.SetTrigger("PickingUp");
-        //   animatorSync.SetTrigger("PickingUp");
+        if (heldObject != null) { return; }
 
-        if (heldObject != null)
+        RaycastHit hit;
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask)) 
         {
-            return;
-        }
-
-        DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
-
-
-
-        Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
-        if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
-        {
-            //get all necessary variales
-            heldObject = pickedUp;
-            rb = heldObject.GetComponent<Rigidbody>();
-            rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
-            DIO.isPickedUp = true;
-
-            if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
-
-            //reset physics
-            rb.freezeRotation = true;
-            rb.useGravity = false;
-            ResetMomentum();
-
-            heldObject.transform.SetParent(clientHand.transform, true);
-
-            //actually move
-            UpdateHeldObjectPhysics();
-
-            DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
+            DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
-            HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
-        }
-        else
-        {
-            Debug.Log("You can't pick up that");
+            if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
+            {
+                //get all necessary variales
+                heldObject = pickedUp;
+                rb = heldObject.GetComponent<Rigidbody>();
+                rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
+                DIO.isPickedUp = true;
+
+                if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
+
+                //reset physics
+                rb.freezeRotation = true;
+                rb.useGravity = false;
+                ResetMomentum();
+
+                heldObject.transform.SetParent(clientHand.transform, true);
+
+                //actually move
+                UpdateHeldObjectPhysics();
+
+                DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
+                Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
+                HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+            }
+            else
+            {
+                Debug.Log("You can't pick up that");
+            }
         }
     }
     private void ResetMomentum()
@@ -487,16 +476,39 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
+    private void Drop()
+    {
+        PrepareForDropping();
+        FinishDropping();
+    }
 
+    GameObject spawnedGun;
     public void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
     {
         if (interaction == InteractionEnum.ShotWithGun)
         {
             Gun gun = (Gun)caller;
-            Debug.Log("Special Interaction Gun Player");
+            //  Debug.Log("Special Interaction Gun Player");
             Health health = gameObject.GetComponent<Health>();
             health.DamagePlayer(gun.Damage());
             Debug.Log(gun.Damage());
+        }
+
+        if (interaction == InteractionEnum.GivenTaskManagerRole)
+        {
+            //could it be thinkin it's a prefab still
+            // Debug.Log("KIKIKIKIKIKIKIKKI " + gameObject.name + Multiplayer.GetUser().Name);
+            if (heldObject != null) Drop();
+            spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
+            TryPickUp(spawnedGun);
+        }
+        if (interaction == InteractionEnum.RemoveGun)
+        {
+            if (spawnedGun != null && heldObject == spawnedGun && avatar.IsMe)
+            {
+                Drop();
+                spawner.Despawn(spawnedGun);
+            }
         }
     }
 }
