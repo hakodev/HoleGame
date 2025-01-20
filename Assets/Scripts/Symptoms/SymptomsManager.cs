@@ -33,21 +33,4 @@ public class SymptomsManager : AttributesSync {
     public void SetSymptom(SymptomsSO newSymptom) {
         currentSymptom = newSymptom;
     }
-
-    public void TriggerSymptom(GameObject heldObject = null) {
-        // Setting heldObject to null here so we can use this method
-        // without an argument in cases where the symptom isn't Sym0
-
-        if(currentSymptom == symptoms[0]) { // DespawningItems
-            heldObject.GetComponent<Collider>().enabled = false;
-            heldObject.transform.DOScale(new Vector3(0f, 0f, 0f), 1f);
-            Debug.Log("Despawn symptom triggered!");
-        } else if(currentSymptom == symptoms[1]) {
-            // Code here
-        } else if(currentSymptom == symptoms[2]) {
-            // Code here
-        } else {
-            Debug.Log("No symptom to trigger");
-        }
-    }
 }

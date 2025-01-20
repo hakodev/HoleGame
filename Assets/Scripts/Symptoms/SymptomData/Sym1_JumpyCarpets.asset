@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e39a8b125dc8f041bb08526c6d59fad, type: 3}
   m_Name: Sym1_JumpyCarpets
   m_EditorClassIdentifier: 
-  Name: Symptom name here
+  Name: Jumpy Carpets
   Description: Symptom description here, keep it short
