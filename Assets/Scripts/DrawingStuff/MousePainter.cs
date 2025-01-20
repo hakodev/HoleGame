@@ -6,8 +6,6 @@ public class MousePainter : MonoBehaviour {
 
     public Camera cam;
     [Space]
-    public bool mouseSingleClick;
-    [Space]
     public UnityEngine.Color paintColor;
 
     public float radius = 1;
@@ -20,15 +18,13 @@ public class MousePainter : MonoBehaviour {
 
     public LayerMask notPlayerMask;
     Paintable p;
-    Alteruna.Avatar avatar;
 
     public void Start()
     {
         paintManager = FindAnyObjectByType<PaintManager>();
-        avatar = transform.root.GetComponent<Alteruna.Avatar>();
     }
 
-    public void Paint()
+    public void Paint(Camera cam)
     {
         Vector3 position = Input.mousePosition;
         Ray ray = cam.ScreenPointToRay(position);
@@ -42,7 +38,7 @@ public class MousePainter : MonoBehaviour {
                 CommunicationBridgeUID puid = p.GetComponent<CommunicationBridgeUID>();
                 Guid id = puid.GetUID();
 
-                paintManager.BroadcastRemoteMethod("paint", id, hit.point, radius, hardness, strength, paintColor);
+                paintManager.BroadcastRemoteMethod("paint", id, hit.point.x, hit.point.y, hit.point.z, radius, hardness, strength, paintColor);
                 
             }
         }
@@ -51,11 +47,9 @@ public class MousePainter : MonoBehaviour {
 
     private void Update()
     {
-        if (!avatar.IsMe) { return; }
-        if (Input.GetMouseButton(0))
-        {
-            Paint();
-        }
+
+           
+        
     }
 
 }

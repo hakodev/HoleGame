@@ -7,8 +7,6 @@ public class StickyNote : DynamicInteractableObject
 {
     Rigidbody rb;
     RigidbodySynchronizable rbToTrack;
-    Transform positionForStickies;
-
     [SynchronizableField] public bool isPlaced = false;
     [SynchronizableField] bool isThrown = false;
     [SynchronizableField] bool isGameStart = true;
@@ -27,16 +25,16 @@ public class StickyNote : DynamicInteractableObject
     private MousePainter mousePainter;
     private Camera tempCamRef;
 
-
     protected override void Awake()
     {
-        base.Awake();
+     //   base.Awake();
         rb = GetComponent<Rigidbody>();
         rbToTrack = GetComponent<RigidbodySynchronizable>();
+       
     }
     protected override void Start()
     {
-        base.Start();
+       // base.Start();
         selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
     }
 
@@ -70,8 +68,10 @@ public class StickyNote : DynamicInteractableObject
 
     public override void Use()
     {
-        mousePainter = transform.root.GetComponentInChildren<MousePainter>();
-        tempCamRef = transform.root.GetComponentInChildren<Camera>();
+        if (!currentlyOwnedByAvatar.IsMe) { return; }
+        mousePainter = currentlyOwnedByAvatar.transform.GetComponentInChildren<MousePainter>();
+        tempCamRef = currentlyOwnedByAvatar.transform.GetComponentInChildren<Camera>();
+        Transform stickTrans = tempCamRef.transform.Find("PositionForStickies");
 
         if (!isInteractedWith)
         {
@@ -79,7 +79,9 @@ public class StickyNote : DynamicInteractableObject
             transform.root.GetComponentInChildren<CameraMovement>().enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            BroadcastRemoteMethod(nameof(DrawPosition), transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f);
+
+
+            DrawPosition(stickTrans.position + stickTrans.forward * 0.4f);
 
 
         }
@@ -89,12 +91,11 @@ public class StickyNote : DynamicInteractableObject
             transform.root.GetComponentInChildren<CameraMovement>().enabled = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            BroadcastRemoteMethod(nameof(DrawPosition), originalPos);
+            DrawPosition(originalPos);
         }
 
     }
 
-    [SynchronizableMethod]
     public void DrawPosition(Vector3 finalPos)
     {
         transform.position = finalPos;
@@ -103,7 +104,7 @@ public class StickyNote : DynamicInteractableObject
 
     protected override void Update()
     {
-        base.Update();
+    //   base.Update();
         if (isPlaced && transform.parent != null && !transform.parent.gameObject.name.Contains("Hand"))
         {
             StasisInPlace();
@@ -111,10 +112,9 @@ public class StickyNote : DynamicInteractableObject
 
         if (isInteractedWith && Input.GetMouseButton(0))
         {
-            mousePainter.Paint();
+            mousePainter.Paint(tempCamRef);
         }
     }
-
     private void Stick()
     {
         //physics

@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform moveTransform;
 
     public bool IsCrouching { get; private set; }
-    private bool stanceSet = false;
 
     private void Awake()
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
-    Alteruna.Avatar currentlyOwnedByAvatar;
+    protected Alteruna.Avatar currentlyOwnedByAvatar;
 
     public bool isPickedUp;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);

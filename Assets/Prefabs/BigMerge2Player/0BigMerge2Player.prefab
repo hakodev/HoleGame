@@ -1011,7 +1011,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 8609542860471924445}
-  mouseSingleClick: 0
   paintColor: {r: 0.7924528, g: 0.6915272, b: 0.6915272, a: 1}
   radius: 0.02
   strength: 1
@@ -4953,13 +4952,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3236587178184389603, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4633327339603992012, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4711645302495925324, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4843545598206597202, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_Name
       value: SelfCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4925377010999560658, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9089725276660507912, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5761148926820105163, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+    - {fileID: 6837576049919114187, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 228610010739220044, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       insertIndex: 0

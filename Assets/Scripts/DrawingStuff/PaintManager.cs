@@ -71,8 +71,10 @@ public class PaintManager : AttributesSync{
     }
 
     [SynchronizableMethod]
-    public void paint(Guid guid, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
+    public void paint(Guid guid, float x, float y, float z, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
         Debug.Log(Multiplayer.GetUser().Name);
+        Vector3 pos = new Vector3(x, y, z);
+
         Paintable paintable = Multiplayer.GetGameObjectById(guid).GetComponent<Paintable>();
         RenderTexture mask = paintable.getMask();
         RenderTexture uvIslands = paintable.getUVIslands();
