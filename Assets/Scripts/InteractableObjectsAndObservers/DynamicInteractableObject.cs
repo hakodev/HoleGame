@@ -5,7 +5,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 {
     protected Alteruna.Avatar currentlyOwnedByAvatar;
 
-    public bool isPickedUp;
+    [SynchronizableField] public bool isPickedUp;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
     public abstract void Use();
 
@@ -16,7 +16,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
      Vector2 syncEveryNUpdates = new Vector2(30, 2);
      Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
 
-    [SynchronizableField] float timeSinceLastSignificantMovement = 0;
+    [SynchronizableField]float timeSinceLastSignificantMovement = 0;
 
     protected virtual void Awake()
     {
@@ -45,7 +45,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
                 timeSinceLastSignificantMovement += Time.deltaTime;
                 if (timeSinceLastSignificantMovement > 5f)
                 {
-                    Debug.Log("sleep");
+                //    Debug.Log("sleep");
                     timeSinceLastSignificantMovement = 0;
                     BroadcastRemoteMethod(nameof(DynamicSleep));
                 }
@@ -63,7 +63,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
         if (rbDynamic.linearVelocity.magnitude >= 0.05f || currentlyOwnedByAvatar!=null)
         {
-            Debug.Log("awake");
+        //    Debug.Log("awake");
             timeSinceLastSignificantMovement = 0;
             BroadcastRemoteMethod(nameof(DynamicAwake));
         }

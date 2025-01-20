@@ -387,46 +387,41 @@ public class Interact : AttributesSync, IObserver
 
     private void TryPickUp(GameObject pickedUp)
     {
-        //   animator.SetTrigger("PickingUp");
-        //   animatorSync.SetTrigger("PickingUp");
+        if (heldObject != null) { return; }
 
-        if (heldObject != null)
+        RaycastHit hit;
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask)) 
         {
-            return;
-        }
-
-        DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
-
-
-
-        Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
-        if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
-        {
-            //get all necessary variales
-            heldObject = pickedUp;
-            rb = heldObject.GetComponent<Rigidbody>();
-            rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
-            DIO.isPickedUp = true;
-
-            if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
-
-            //reset physics
-            rb.freezeRotation = true;
-            rb.useGravity = false;
-            ResetMomentum();
-
-            heldObject.transform.SetParent(clientHand.transform, true);
-
-            //actually move
-            UpdateHeldObjectPhysics();
-
-            DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
+            DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
-            HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
-        }
-        else
-        {
-            Debug.Log("You can't pick up that");
+            if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
+            {
+                //get all necessary variales
+                heldObject = pickedUp;
+                rb = heldObject.GetComponent<Rigidbody>();
+                rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
+                DIO.isPickedUp = true;
+
+                if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
+
+                //reset physics
+                rb.freezeRotation = true;
+                rb.useGravity = false;
+                ResetMomentum();
+
+                heldObject.transform.SetParent(clientHand.transform, true);
+
+                //actually move
+                UpdateHeldObjectPhysics();
+
+                DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
+                Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
+                HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+            }
+            else
+            {
+                Debug.Log("You can't pick up that");
+            }
         }
     }
     private void ResetMomentum()
