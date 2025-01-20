@@ -17,7 +17,7 @@ public class VotingPhase : AttributesSync {
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
     [SerializeField] private GameObject randomlyVotedPlayer;
-    [SerializeField] CanvasGroup symptomsNotifCanvas;
+    [SerializeField] GameObject symptomsNotifCanvas;
     [SerializeField] GameObject votingPhaseObject;
     Alteruna.Avatar avatar;
 
@@ -60,9 +60,9 @@ public class VotingPhase : AttributesSync {
                 foreach(PlayerRole otherPlayer in totalALivePlayers)
                 {
                     if (otherPlayer == player) { continue; }
-                i++;
+                    i++;
 
-                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
+                    GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
                     newPlayerVoteOption.GetComponentInChildren<TMP_Text>().text = otherPlayer.gameObject.name;
 
                     RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
@@ -197,11 +197,11 @@ public class VotingPhase : AttributesSync {
     }
 
     private IEnumerator DisplaySymptomNotif() {
-        //symptomsNotifCanvas.SetActive(true);
-        symptomsNotifCanvas.DOFade(1f, 0.1f);
+        symptomsNotifCanvas.SetActive(true);
+       // symptomsNotifCanvas.DOFade(1f, 0.1f);
         yield return new WaitForSeconds(4f); // How many seconds to display it on screen
-        symptomsNotifCanvas.DOFade(0f, 2f);
-       // symptomsNotifCanvas.SetActive(false);
+      //  symptomsNotifCanvas.DOFade(0f, 2f);
+        symptomsNotifCanvas.SetActive(false);
     }
     private IEnumerator DisplayRandomlyVotedCanvas()
     {
