@@ -11,6 +11,7 @@ public class PlayerRole : AttributesSync
     [Header("nerd shit - programming")]
     Alteruna.Avatar avatar;
     [SynchronizableField] Roles role;
+    public static Roles localClientRole;
 
     [SerializeField] CanvasGroup infiltratorCanvas;
     [SerializeField] CanvasGroup machineCanvas;
@@ -55,6 +56,8 @@ public class PlayerRole : AttributesSync
     public void SetRole(Roles newRole)
     {
         role = newRole;
+        if(RoleAssignment.playerID - 1 == Multiplayer.GetUser().Index)
+            localClientRole = newRole;
     }
 }
     

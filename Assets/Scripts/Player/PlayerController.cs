@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 verticalVelocity;
     private float horizontalInput;
     private float verticalInput;
+    private float currentjumpHeight;
 
     private Alteruna.Avatar avatar;
     private GameObject animationTie;
@@ -83,7 +84,7 @@ public class PlayerController : MonoBehaviour
     {
 
         float currentSpeed = 0f;
-        float currentjumpHeight;
+        
 
         if (IsCrouching)
         {
@@ -142,14 +143,20 @@ public class PlayerController : MonoBehaviour
         }
 
         // Handle jumping
-        if (characterController.isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
-            mishSync.SetJumping(true);
+            Jump();
         }
         finalMovement += verticalVelocity * Time.deltaTime;
 
         characterController.Move(finalMovement);
+    }
+
+    public void Jump() {
+        if(characterController.isGrounded) {
+            verticalVelocity.y = Mathf.Sqrt(currentjumpHeight * -2f * gravity);
+            mishSync.SetJumping(true);
+        }
     }
 
     private void ResetMovementValues()

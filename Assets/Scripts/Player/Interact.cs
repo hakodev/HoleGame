@@ -370,12 +370,16 @@ public class Interact : AttributesSync, IObserver
     }
     private void FinishDroppingItem()
     {
-        //disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
-
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
-       // rbToTrack.enabled = true;
+        // Is the despawning item symptom on and is the dropper a machine?
+        if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0] &&
+           gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine) {
+            SymptomsManager.Instance.TriggerSymptom(heldObject);
+        }
+
+        // rbToTrack.enabled = true;
         heldObject = null;
         rbSync = null;
         rb = null;

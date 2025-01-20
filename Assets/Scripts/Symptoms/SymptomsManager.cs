@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SymptomsManager : AttributesSync {
-    Alteruna.Avatar avatar;
     public static SymptomsManager Instance { get; private set; }
     [Header("MAKE SURE THE SYMPTOMS ARE LISTED IN THE FOLLOWING ORDER!\n" +
             "Sym0\n" +
@@ -20,7 +19,6 @@ public class SymptomsManager : AttributesSync {
         }
 
         Instance = this;
-        currentSymptom = symptoms[0]; // test, remove later
     }
 
     public SymptomsSO GetSymptom() {
@@ -39,7 +37,6 @@ public class SymptomsManager : AttributesSync {
     public void TriggerSymptom(GameObject heldObject = null) {
         // Setting heldObject to null here so we can use this method
         // without an argument in cases where the symptom isn't Sym0
-        if(!avatar.IsMe) return;
 
         if(currentSymptom == symptoms[0]) { // DespawningItems
             heldObject.GetComponent<Collider>().enabled = false;
