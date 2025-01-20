@@ -70,8 +70,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     {
         timeSinceLastSignificantMovement = 0;
         asleep = true;
-        rbSyncDynamic.SyncEveryNUpdates = 1;
-        rbSyncDynamic.FullSyncEveryNSync = 1;
+        rbSyncDynamic.SyncEveryNUpdates = 999;
+        rbSyncDynamic.FullSyncEveryNSync = 999;
         // Debug.Log("sleep " + transform.root.gameObject.name);
     }
     [SynchronizableMethod]
