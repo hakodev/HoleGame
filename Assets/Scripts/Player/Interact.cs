@@ -367,6 +367,7 @@ public class Interact : AttributesSync, IObserver
         heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
         ResetMomentum();
 
+        rbToTrack.ApplyAsTransform = true;
         rb.freezeRotation = false;
         rb.useGravity = true;
 
@@ -401,6 +402,7 @@ public class Interact : AttributesSync, IObserver
                 rb = heldObject.GetComponent<Rigidbody>();
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
                 DIO.isPickedUp = true;
+                rbToTrack.ApplyAsTransform = true;
 
                 if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
