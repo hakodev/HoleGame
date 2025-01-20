@@ -39,7 +39,7 @@ public class MousePainter : MonoBehaviour {
                 Guid id = puid.GetUID();
 
                 paintManager.BroadcastRemoteMethod("paint", id, hit.point, radius, hardness, strength, paintColor);
-                
+               
             }
         }
 

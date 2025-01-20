@@ -4,6 +4,8 @@ public class Marker : DynamicInteractableObject
 {
     public MousePainter painter;
     Camera cam;
+    [SynchronizableField]
+    private int userID;
 
     private void Start()
     {
@@ -18,7 +20,7 @@ public class Marker : DynamicInteractableObject
 
     public override void Use()
     {
-
+        userID = Multiplayer.GetUser().Index;
     }
 
     protected override void Update()
@@ -26,6 +28,7 @@ public class Marker : DynamicInteractableObject
         base.Update();
         if (Input.GetMouseButton(1) && isPickedUp) 
         {
+            if(userID != Multiplayer.GetUser().Index) { return; }
             if (cam == null)
             {
                 cam = transform.root.GetComponentInChildren<Camera>();
