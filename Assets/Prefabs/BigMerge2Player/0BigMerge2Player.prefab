@@ -1249,8 +1249,8 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   roleDisplayTime: 4
-  infiltratorCanvas: {fileID: 0}
-  machineCanvas: {fileID: 0}
+  infiltratorCanvas: {fileID: 4472240945044558356}
+  machineCanvas: {fileID: 5918003947969120752}
   VotedCount: 0
   IsTaskManager: 0
 --- !u!114 &7886903507939173138
