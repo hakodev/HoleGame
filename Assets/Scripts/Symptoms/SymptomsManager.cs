@@ -1,16 +1,17 @@
 using Alteruna;
-using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SymptomsManager : AttributesSync {
     public static SymptomsManager Instance { get; private set; }
+
     [Header("MAKE SURE THE SYMPTOMS ARE LISTED IN THE FOLLOWING ORDER!\n" +
             "Sym0\n" +
             "Sym1\n" +
             "Sym2")]
     [SerializeField] private List<SymptomsSO> symptoms;
     private SymptomsSO currentSymptom = null;
+    [SynchronizableField] private int randNum;
 
     private void Awake() {
         if(Instance != null && Instance != this) {
@@ -30,7 +31,12 @@ public class SymptomsManager : AttributesSync {
     }
 
     [SynchronizableMethod]
-    public void SetSymptom(SymptomsSO newSymptom) {
-        currentSymptom = newSymptom;
+    public void SetSymptom(int index) {
+        currentSymptom = symptoms[index];
+    }
+
+    public int GetRandomNum() {
+        randNum = Random.Range(0, symptoms.Count);
+        return randNum;
     }
 }
