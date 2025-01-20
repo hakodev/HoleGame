@@ -40,7 +40,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
         if (currentlyOwnedByAvatar==null)
         {
-            if (rbDynamic.linearVelocity.magnitude < 0.1f)
+            if (rbDynamic.linearVelocity.magnitude < 0.05f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
                 if (timeSinceLastSignificantMovement > 5f)
@@ -61,7 +61,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         if (currentlyOwnedByAvatar == null || !currentlyOwnedByAvatar.IsMe) { return; }
 
 
-        if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar!=null)
+        if (rbDynamic.linearVelocity.magnitude >= 0.05f || currentlyOwnedByAvatar!=null)
         {
             Debug.Log("awake");
             timeSinceLastSignificantMovement = 0;

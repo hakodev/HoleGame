@@ -257,7 +257,7 @@ public class Interact : AttributesSync, IObserver
             SetLayerRecursively(heldObject, 7);
 
             //placing anim
-            Spam1();
+            PrepareForDropping();
 
             //specific to placing
             Vector3 bounds = GetRenderersSize(heldObject);
@@ -282,7 +282,7 @@ public class Interact : AttributesSync, IObserver
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             }
 
-            Spam2();
+            FinishDropping();
             //Debug.Break();
         }
         else
@@ -294,7 +294,7 @@ public class Interact : AttributesSync, IObserver
     {
         //specifics to thtowing
 
-        Spam1();
+        PrepareForDropping();
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
         //specifics t thowing
@@ -311,7 +311,7 @@ public class Interact : AttributesSync, IObserver
         Debug.DrawRay(heldObject.transform.position, rbToTrack.velocity, Color.magenta);
         Debug.DrawRay(heldObject.transform.position, rb.angularVelocity, Color.green);
 
-        Spam2();
+        FinishDropping();
     }
 
     private Vector3 GetRenderersSize(GameObject obj)
@@ -366,7 +366,7 @@ public class Interact : AttributesSync, IObserver
 
         return closest;
     }
-    private void Spam1()
+    private void PrepareForDropping()
     {
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
@@ -378,7 +378,7 @@ public class Interact : AttributesSync, IObserver
 
 
     }
-    private void Spam2()
+    private void FinishDropping()
     {
         //disappearingObjs.CheckIfPlayerHasDisappearingObjectsSymptom(heldObject);
 
