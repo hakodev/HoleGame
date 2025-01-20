@@ -26,6 +26,7 @@ public class StickyNote : DynamicInteractableObject
     private Camera tempCamRef;
     [SynchronizableField]
     private int userID;
+    Collision currentCollision;
 
     protected override void Awake()
     {
@@ -122,6 +123,7 @@ public class StickyNote : DynamicInteractableObject
     {
         //physics
         rb.useGravity = false;
+        rb.freezeRotation = true;
         ResetMomentum();
 
 
@@ -150,6 +152,7 @@ public class StickyNote : DynamicInteractableObject
         isThrown = false;
         isGameStart = false;
     }
+
     private void AlignWithSurface(Collision collision)
     {
         ResetMomentum();
@@ -197,9 +200,10 @@ public class StickyNote : DynamicInteractableObject
         }
         rbToTrack.SetPosition(transform.position);
 
+        //transform.SetParent(collision.transform, true);
 
-        //i hate this line
-        transform.SetParent(collision.transform, true);
+        //currentCollision = collision;
+        //BroadcastRemoteMethod(nameof(SyncParent));
     }
     void OnDrawGizmos()
     {
@@ -216,6 +220,13 @@ public class StickyNote : DynamicInteractableObject
         transform.localRotation = Quaternion.Euler(placedLocalRot);
         rbToTrack.SetRotation(transform.rotation);
     }
+
+    [SynchronizableMethod]
+    void SyncParent()
+    {
+        transform.SetParent(currentCollision.transform, true);
+    }
+
     private Vector3 GetRenderersSize(GameObject obj)
     {
         Renderer[] temp = obj.GetComponentsInChildren<Renderer>();

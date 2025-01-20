@@ -42,6 +42,7 @@ public class Interact : AttributesSync, IObserver
 
 
     private Transform currentOutlinedObject;
+    GameObject pickedUp;
 
 
     private void Awake()
@@ -113,11 +114,11 @@ public class Interact : AttributesSync, IObserver
                     AnimateReleaseChargebar();
                     currentThrowStrength = Mathf.Lerp(minMaxThrowStrength.x, minMaxThrowStrength.y, currentChargeUpTime);
                     //currentChargeUpTime = 0;
-                    Throw();
+                    BroadcastRemoteMethod(nameof(Throw));
                 }
                 else
                 {
-                    Place();
+                    BroadcastRemoteMethod(nameof(Place));
                 }
             }
             finishedPickUp = true;
@@ -175,8 +176,9 @@ public class Interact : AttributesSync, IObserver
                 hudDisplay.SetState(new DynamicInteract(hudDisplay));
                 if (Input.GetMouseButtonDown(0))
                 {
-                    TryPickUp(hit.transform.gameObject);
-                    finishedPickUp = false;
+                    pickedUp = hit.transform.gameObject;
+                    BroadcastRemoteMethod(nameof(TryPickUp));
+                    
                 }
             }
         }
@@ -239,8 +241,10 @@ public class Interact : AttributesSync, IObserver
         return heldObject == null;
     }
 
+    [SynchronizableMethod]
     private void Place()
     {
+        if(!avatar.IsMe) return;
         SetLayerRecursively(heldObject, 11);
         LayerMask everythingButHeldObject = ~(1 << 11 | 10);
 
@@ -271,7 +275,7 @@ public class Interact : AttributesSync, IObserver
             if (heldObject.name.Contains("StickyNote"))
             {
                 //heldObject.transform.parent = hit.collider.transform;
-                heldObject.transform.SetParent(hit.collider.transform, true);
+                //heldObject.transform.SetParent(hit.collider.transform, true);
 
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             }
@@ -284,10 +288,11 @@ public class Interact : AttributesSync, IObserver
             SetLayerRecursively(heldObject, 7);
         }
     }
+    [SynchronizableMethod]
     private void Throw()
     {
         //specifics to thtowing
-
+        if (!avatar.IsMe) return;
         PrepareForDropping();
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
@@ -364,7 +369,7 @@ public class Interact : AttributesSync, IObserver
     {
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
-        heldObject.transform.SetParent(GameObject.FindGameObjectWithTag("SceneParentForPlacedObjects").transform, true);
+        heldObject.transform.SetParent(null);
         ResetMomentum();
 
         rbToTrack.ApplyAsTransform = true;
@@ -390,10 +395,12 @@ public class Interact : AttributesSync, IObserver
         rb = null;
     }
 
-    private void TryPickUp(GameObject pickedUp)
+    [SynchronizableMethod]
+    private void TryPickUp()
     {
-        if (heldObject != null) { return; }
-
+        if(!avatar.IsMe) return;
+        if(heldObject != null) { return; }
+        finishedPickUp = false;
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun) 
         {
@@ -514,7 +521,8 @@ public class Interact : AttributesSync, IObserver
             Debug.Log("KAKAKAKA");
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
-            TryPickUp(spawnedGun);
+            pickedUp = spawnedGun;
+            BroadcastRemoteMethod(nameof(TryPickUp), spawnedGun);
         }
     }
 }
