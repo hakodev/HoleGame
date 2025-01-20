@@ -1,7 +1,6 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 using UnityEngine.ProBuilder;
 
 public class CoffeeCup : DynamicInteractableObject
