@@ -495,22 +495,23 @@ public class Interact : AttributesSync, IObserver
             health.DamagePlayer(gun.Damage());
             Debug.Log(gun.Damage());
         }
+        if (interaction == InteractionEnum.RemoveGun)
+        {
+            if (spawnedGun != null && avatar.IsMe)
+            {
+                if(heldObject == spawnedGun) Drop();
+                spawner.Despawn(spawnedGun);
+            }
+        }
+        Debug.Log("KIKIKIKI");
 
         if (interaction == InteractionEnum.GivenTaskManagerRole)
         {
-            //could it be thinkin it's a prefab still
-            // Debug.Log("KIKIKIKIKIKIKIKKI " + gameObject.name + Multiplayer.GetUser().Name);
+            Debug.Log("KAKAKAKA");
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
+            Debug.Break();
             TryPickUp(spawnedGun);
-        }
-        if (interaction == InteractionEnum.RemoveGun)
-        {
-            if (spawnedGun != null && heldObject == spawnedGun && avatar.IsMe)
-            {
-                Drop();
-                spawner.Despawn(spawnedGun);
-            }
         }
     }
 }
