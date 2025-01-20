@@ -16,7 +16,7 @@ public class StickyNote : DynamicInteractableObject
 
     Vector3 finalPosition;
     Vector3 originalPos;
-    public bool isInteractedWith = false;
+    [SynchronizableField] public bool isInteractedWith = false;
     //disable object colliding with it's child
     //enalbe ticking to self player if it is thrown
     //make paper physics fall as if gliding
@@ -105,6 +105,8 @@ public class StickyNote : DynamicInteractableObject
     protected override void Update()
     {
     //   base.Update();
+        
+
         if (isPlaced && transform.parent != null && !transform.parent.gameObject.name.Contains("Hand"))
         {
             StasisInPlace();
@@ -112,9 +114,15 @@ public class StickyNote : DynamicInteractableObject
 
         if (isInteractedWith && Input.GetMouseButton(0))
         {
+            Debug.Log(currentlyOwnedByAvatar);
             mousePainter.Paint(tempCamRef);
+
+            //BroadcastRemoteMethod(nameof(SyncDrawing));
         }
     }
+
+    
+
     private void Stick()
     {
         //physics
