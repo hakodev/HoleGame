@@ -80,7 +80,6 @@ public class PaintManager : AttributesSync{
         RenderTexture support = paintable.getSupport();
         Renderer rend = paintable.getRenderer();
 
-        RenderTexture kur = new RenderTexture(1024, 1024, 0);
        
 
         paintMaterial.SetFloat(prepareUVID, 0);
@@ -93,13 +92,6 @@ public class PaintManager : AttributesSync{
         extendMaterial.SetFloat(uvOffsetID, paintable.extendsIslandOffset);
         extendMaterial.SetTexture(uvIslandsID, uvIslands);
 
-        Debug.Log("prepUV " + paintMaterial.GetFloat(prepareUVID));
-        Debug.Log(paintMaterial.GetVector(positionID));
-        Debug.Log(paintMaterial.GetFloat(hardnessID));
-        Debug.Log(paintMaterial.GetFloat(strengthID));
-        Debug.Log(paintMaterial.GetFloat(radiusID));
-
-        Debug.Log(command.name);
         command.SetRenderTarget(mask);
         command.DrawRenderer(rend, paintMaterial, 0);
         

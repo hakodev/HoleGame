@@ -26,64 +26,12 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     protected virtual void Start()
     {
-        BroadcastRemoteMethod(nameof(DynamicSleep));
+        //BroadcastRemoteMethod(nameof(DynamicSleep));
     }
     protected virtual void Update()
     {
-        SelfSleepIfUnmoving();
-        CheckForMovement();
-    }
-
-
-    private void SelfSleepIfUnmoving()
-    {
-        if (asleep) { return; }
-        if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
-
-        if (currentlyOwnedByAvatar==null)
-        {
-            Debug.Log(transform.root.tag);
-            if (rbDynamic.linearVelocity.magnitude < 0.1f)
-            {
-                timeSinceLastSignificantMovement += Time.deltaTime;
-                if (timeSinceLastSignificantMovement > 1f)
-                {
-                    timeSinceLastSignificantMovement = 0;
-                    BroadcastRemoteMethod(nameof(DynamicSleep));
-                }
-            }
-        }
-    }
-    private void CheckForMovement()
-    {
-        if (!asleep) { return; }
-        if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
-
-
-        if (rbDynamic.linearVelocity.magnitude >= 0.2f || currentlyOwnedByAvatar!=null)
-        {
-            timeSinceLastSignificantMovement = 0;
-            BroadcastRemoteMethod(nameof(DynamicAwake));
-        }
-    }
-    [SynchronizableMethod]
-    public void DynamicSleep()
-    {
-        timeSinceLastSignificantMovement = 0;
-        asleep = true;
-        rbSyncDynamic.SyncEveryNUpdates = 999;
-        rbSyncDynamic.FullSyncEveryNSync = 999;
-        // Debug.Log("sleep " + transform.root.gameObject.name);
-        Debug.Log("asleep " + gameObject.name + asleep);
-    }
-    [SynchronizableMethod]
-    public void DynamicAwake()
-    {
-        asleep = false;
-        //  Debug.Log(rbDynamic + " " + rbSyncDynamic);
-        rbSyncDynamic.SyncEveryNUpdates = 1;
-        rbSyncDynamic.FullSyncEveryNSync = 1;
-        Debug.Log("awake " + gameObject.name + asleep);
+        //SelfSleepIfUnmoving();
+        //CheckForMovement();
     }
     
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
