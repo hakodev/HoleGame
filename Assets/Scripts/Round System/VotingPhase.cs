@@ -51,7 +51,7 @@ public class VotingPhase : AttributesSync {
         player.VotedCount = 0;
         hasVoted = false;
 
-        player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
+       // player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
 
         if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
@@ -163,6 +163,7 @@ public class VotingPhase : AttributesSync {
         pickedPlayerNameText.text = taskManagerNameInHost;
         if (player.IsTaskManager)
         {
+            Debug.Log("DUDUDUUD");
             GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
         }
         StartCoroutine(DisplayTaskManager());
