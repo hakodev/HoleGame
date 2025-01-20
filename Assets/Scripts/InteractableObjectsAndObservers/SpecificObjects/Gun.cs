@@ -19,7 +19,7 @@ public class Gun : DynamicInteractableObject
 
     protected override void Start()
     {
-      //  base.Start();
+        base.Start();
         currentAmmo = maxAmmo;
         otherPlayerLayerMask = LayerMask.GetMask("PlayerLayer");
     }
@@ -40,15 +40,11 @@ public class Gun : DynamicInteractableObject
             Debug.Log(hit.collider.gameObject.name + " " + transform.parent.gameObject.name);
             if (hit.collider.gameObject != transform.root.gameObject && hit.collider.gameObject.CompareTag("Player"))
             {
-                   Debug.Log("BULLSEYE!");
                 hit.collider.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.ShotWithGun, this);
                 transform.root.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
+                currentAmmo--;
             }
         }
-        currentAmmo--;
-    }
-    private void Reload()
-    {
-        currentAmmo = maxAmmo;
+        
     }
 }

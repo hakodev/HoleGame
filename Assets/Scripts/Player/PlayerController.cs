@@ -2,6 +2,7 @@ using UnityEngine;
 using Alteruna;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 public class PlayerController : MonoBehaviour
 {
 
@@ -66,9 +67,6 @@ public class PlayerController : MonoBehaviour
         ProcessMovement();
     }
 
-
-
-
     private void ProcessInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -87,8 +85,11 @@ public class PlayerController : MonoBehaviour
 
         if (IsCrouching)
         {
-            mishSync.SetStance(StanceEnum.Crouching);
-
+            if(mishSync.GetCurrentStance() != StanceEnum.Crouching)
+            {
+                mishSync.SetStance(StanceEnum.Crouching);
+            }
+                
             //  currentSpeed = isRunning ? crouchRunSpeed : crouchSpeed;
             if (isMoving)
             {
@@ -105,18 +106,27 @@ public class PlayerController : MonoBehaviour
                 {
                     currentSpeed = runSpeed;
                     if (verticalInput < 0) currentSpeed = runSpeedBack;
-                    mishSync.SetStance(StanceEnum.Running);
+                    if (mishSync.GetCurrentStance() != StanceEnum.Running)
+                    {
+                        mishSync.SetStance(StanceEnum.Running);
+                    }
                 }
                 else
                 {
                     currentSpeed = walkSpeed;
                     if (verticalInput < 0) currentSpeed = walkSpeedBack;
-                    mishSync.SetStance(StanceEnum.Walking);
+                    if (mishSync.GetCurrentStance() != StanceEnum.Walking)
+                    {
+                        mishSync.SetStance(StanceEnum.Walking);
+                    }
                 }
             }
             else
             {
-                mishSync.SetStance(StanceEnum.Walking);
+                if (mishSync.GetCurrentStance() != StanceEnum.Walking)
+                {
+                    mishSync.SetStance(StanceEnum.Walking);
+                }
             }
 
             currentjumpHeight = jumpHeight;

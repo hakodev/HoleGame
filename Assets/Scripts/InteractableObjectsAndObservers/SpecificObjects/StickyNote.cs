@@ -16,20 +16,25 @@ public class StickyNote : DynamicInteractableObject
 
     Vector3 finalPosition;
     Vector3 originalPos;
-    public bool isInteractedWith = false;
+    [SynchronizableField] public bool isInteractedWith = false;
     //disable object colliding with it's child
     //enalbe ticking to self player if it is thrown
     //make paper physics fall as if gliding
     //if object has a sticky note parent it behaves weirdly when thrown after being picked up
+
+    private MousePainter mousePainter;
+    private Camera tempCamRef;
+
     protected override void Awake()
     {
-      //  base.Awake();
+        base.Awake();
         rb = GetComponent<Rigidbody>();
         rbToTrack = GetComponent<RigidbodySynchronizable>();
+       
     }
     protected override void Start()
     {
-      //  base.Start();
+        base.Start();
         selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
     }
 
@@ -63,6 +68,9 @@ public class StickyNote : DynamicInteractableObject
 
     public override void Use()
     {
+        mousePainter = transform.root.GetComponentInChildren<MousePainter>();
+        tempCamRef = transform.root.GetComponentInChildren<Camera>();
+
         if (!isInteractedWith)
         {
             transform.root.GetComponent<PlayerController>().enabled = false;
@@ -93,12 +101,20 @@ public class StickyNote : DynamicInteractableObject
 
     protected override void Update()
     {
-       // base.Update();
+        base.Update();
         if (isPlaced && transform.parent != null && !transform.parent.gameObject.name.Contains("Hand"))
         {
             StasisInPlace();
         }
+
+        if (isInteractedWith && Input.GetMouseButton(0))
+        {
+            mousePainter.Paint(tempCamRef);
+        }
     }
+
+
+
     private void Stick()
     {
         //physics

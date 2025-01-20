@@ -3,6 +3,13 @@ using UnityEngine;
 public class Marker : DynamicInteractableObject
 {
     public MousePainter painter;
+    Camera cam;
+
+    protected override void Start()
+    {
+        base.Start(); 
+        painter = GetComponent<MousePainter>();
+    } 
 
     public override void SpecialInteraction(InteractionEnum interaction, Component caller)
     {
@@ -16,18 +23,14 @@ public class Marker : DynamicInteractableObject
 
     protected override void Update()
     {
-     //   base.Update();
+        base.Update();
         if (Input.GetMouseButton(1) && isPickedUp) 
         {
-            if (painter == null)
+            if (cam == null)
             {
-                painter = GetComponent<MousePainter>();
+                cam = transform.root.GetComponentInChildren<Camera>();
             }
-            if (!painter.cam)
-            {
-                painter.cam =transform.root.GetComponentInChildren<Camera>();
-            }
-            //painter.Paint();
+            painter.Paint(cam);
         }
     }
 

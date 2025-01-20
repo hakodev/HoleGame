@@ -3,9 +3,9 @@ using UnityEngine;
 
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
-    Alteruna.Avatar currentlyOwnedByAvatar;
+    protected Alteruna.Avatar currentlyOwnedByAvatar;
 
-    public bool isPickedUp;
+    [SynchronizableField] public bool isPickedUp;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
     public abstract void Use();
 
@@ -16,8 +16,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
      Vector2 syncEveryNUpdates = new Vector2(30, 2);
      Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
 
-    float timeSinceLastSignificantMovement = 0;
-
+    [SynchronizableField]float timeSinceLastSignificantMovement = 0;
 
     protected virtual void Awake()
     {
@@ -34,24 +33,37 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         CheckForMovement();
     }
 
+
     private void SelfSleepIfUnmoving()
     {
-        if (transform.root.tag != "SelfPlayerLayer" && transform.root.tag != "Player")
+        if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
+        //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
+        if (currentlyOwnedByAvatar==null)
         {
-            if (rbDynamic.linearVelocity.magnitude < 0.1f)
+            if (rbDynamic.linearVelocity.magnitude < 0.05f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
-                if (timeSinceLastSignificantMovement > 1)
+                if (timeSinceLastSignificantMovement > 5f)
                 {
+                //    Debug.Log("sleep");
+                    timeSinceLastSignificantMovement = 0;
                     BroadcastRemoteMethod(nameof(DynamicSleep));
                 }
             }
         }
+        else
+        {
+            timeSinceLastSignificantMovement = 0;
+        }
     }
     private void CheckForMovement()
     {
-        if (rbDynamic.linearVelocity.magnitude >= 0.2f)
+        if (currentlyOwnedByAvatar == null || !currentlyOwnedByAvatar.IsMe) { return; }
+
+
+        if (rbDynamic.linearVelocity.magnitude >= 0.05f || currentlyOwnedByAvatar!=null)
         {
+        //    Debug.Log("awake");
             timeSinceLastSignificantMovement = 0;
             BroadcastRemoteMethod(nameof(DynamicAwake));
         }
@@ -59,17 +71,16 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void DynamicSleep()
     {
-        rbSyncDynamic.SyncEveryNUpdates = 9999999;
-        rbSyncDynamic.FullSyncEveryNSync = 9999999;
-     //   Debug.Log("sleep " + transform.root.gameObject.name);
+        timeSinceLastSignificantMovement = 0;
+        rbSyncDynamic.SyncEveryNUpdates = 999999;
+        rbSyncDynamic.FullSyncEveryNSync = 999999;
+        // Debug.Log("sleep " + transform.root.gameObject.name);
     }
     [SynchronizableMethod]
     public void DynamicAwake()
     {
-      //  Debug.Log(rbDynamic + " " + rbSyncDynamic);
         rbSyncDynamic.SyncEveryNUpdates = 1;
         rbSyncDynamic.FullSyncEveryNSync = 1;
-      //  Debug.Log("awooga " + transform.root.gameObject.name);
     }
     
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
@@ -79,8 +90,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void SetCurrentlyOwnedByAvatar(int newIndex)
     {
-        currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
-        Debug.Log("SetCUrrentlyOwnedAvatar " + currentlyOwnedByAvatar); //important debug log
+        if(newIndex!=-1)currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
+        if (newIndex == -1) currentlyOwnedByAvatar = null;
     }
 
     public Alteruna.Avatar GetAvatarByOwnerIndex(int ownerIndex)
