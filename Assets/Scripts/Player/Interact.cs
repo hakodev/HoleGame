@@ -312,11 +312,10 @@ public class Interact : AttributesSync, IObserver
         //specifics to thtowing
         if (!avatar.IsMe) return;
         PrepareForDropping();
-
-        PlayerAudioManager.Instance.PlaySound(heldObject, PlayerAudioManager.Instance.GetThrowAudio);
-
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
+        //specifics t thowing
+        // animatorSync.Animator.SetTrigger("Throwing");
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
         Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
         currentThrowStrength = 0;
@@ -386,7 +385,6 @@ public class Interact : AttributesSync, IObserver
     }
     private void PrepareForDropping()
     {
-        
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
         heldObject.transform.SetParent(null);
@@ -432,7 +430,6 @@ public class Interact : AttributesSync, IObserver
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
                 //get all necessary variales
-                PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetPickUp);
                 heldObject = pickedUp;
                 rb = heldObject.GetComponent<Rigidbody>();
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
