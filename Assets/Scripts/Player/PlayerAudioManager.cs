@@ -11,12 +11,12 @@ public class PlayerAudioManager : MonoBehaviour
     [SerializeField] private AudioClipSettings heavyHit;
 
     #region Properties
-    public AudioClipSettings GetHeavyHit() => heavyHit;
-    public AudioClipSettings GetLightHit() => lightHit;
-    public AudioClipSettings GetDeathStatic() => deathStatic;
-    public AudioClipSettings GetThrowAudio() => throwAudio;
-    public AudioClipSettings GetLaserBeep() => laserBeep;
-    public AudioClipSettings GetPickUp() => pickUpAudio;
+    public AudioClipSettings GetHeavyHit { get => heavyHit; }
+    public AudioClipSettings GetLightHit { get => lightHit; }
+    public AudioClipSettings GetDeathStatic { get => deathStatic; }
+    public AudioClipSettings GetThrowAudio { get => throwAudio; }
+    public AudioClipSettings GetLaserBeep { get => laserBeep; }
+    public AudioClipSettings GetPickUp { get => pickUpAudio; }
 
     private static PlayerAudioManager instance;
 

@@ -39,11 +39,11 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
         if(rbDynamic.mass > 1)
         {
-            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit());
+            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit);
         }
         else
         {
-            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit());
+            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit);
         }
     }
 

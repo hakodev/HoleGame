@@ -313,7 +313,7 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) return;
         PrepareForDropping();
 
-        PlayerAudioManager.Instance.PlaySound(heldObject, PlayerAudioManager.Instance.throwAudio);
+        PlayerAudioManager.Instance.PlaySound(heldObject, PlayerAudioManager.Instance.GetThrowAudio);
 
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
@@ -432,7 +432,7 @@ public class Interact : AttributesSync, IObserver
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
                 //get all necessary variales
-                PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.pickUpAudio);
+                PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetPickUp);
                 heldObject = pickedUp;
                 rb = heldObject.GetComponent<Rigidbody>();
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
