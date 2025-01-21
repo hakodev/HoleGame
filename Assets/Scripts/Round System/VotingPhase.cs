@@ -31,7 +31,7 @@ public class VotingPhase : AttributesSync {
         player = GetComponent<PlayerRole>();
     }
     private void Start() {
-        totalALivePlayers = RoleAssignment.GetTotalPlayers();
+
     }
 
 
@@ -40,6 +40,7 @@ public class VotingPhase : AttributesSync {
 
         if (!avatar.IsMe) { return; }
         //if (totalPlayers.Count <= 1) { return; }
+       if(totalALivePlayers==null) totalALivePlayers = RoleAssignment.GetTotalPlayers();
 
 
         votingPlayers = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None).ToList<VotingPhase>();
@@ -63,7 +64,7 @@ public class VotingPhase : AttributesSync {
                     i++;
 
                     GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
-                    newPlayerVoteOption.GetComponentInChildren<TMP_Text>().text = otherPlayer.gameObject.name;
+                    newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
 
                     RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
                     rect.anchoredPosition += rect.anchoredPosition * i;
@@ -199,7 +200,7 @@ public class VotingPhase : AttributesSync {
     private IEnumerator DisplaySymptomNotif() {
         symptomsNotifCanvas.SetActive(true);
        // symptomsNotifCanvas.DOFade(1f, 0.1f);
-        yield return new WaitForSeconds(4f); // How many seconds to display it on screen
+        yield return new WaitForSeconds(10f); // How many seconds to display it on screen
       //  symptomsNotifCanvas.DOFade(0f, 2f);
         symptomsNotifCanvas.SetActive(false);
     }
