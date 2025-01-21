@@ -868,12 +868,12 @@ MonoBehaviour:
   serverHand: {fileID: 4025769460903363640}
   playerCamera: {fileID: 8609542860471924445}
   grabReach: 6
-  placeReach: 3
+  placeReach: 6
   primaryButton: 323
   interactButton: 324
   minMaxThrowStrength: {x: 3, y: 20}
   minMaxThrowChargeUpTime: {x: 0.3, y: 1}
-  smoothingHeldObjectMovement: 0.025
+  smoothingHeldObjectMovement: 0.1
 --- !u!114 &2531697562551564077
 MonoBehaviour:
   m_ObjectHideFlags: 0
