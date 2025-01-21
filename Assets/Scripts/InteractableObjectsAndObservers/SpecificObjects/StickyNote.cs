@@ -24,6 +24,11 @@ public class StickyNote : DynamicInteractableObject
 
     private MousePainter mousePainter;
     private Camera tempCamRef;
+    [SynchronizableField]
+    private int userID;
+    Collision currentCollision;
+
+    public static bool currentlyDrawing=false;
 
     protected override void Awake()
     {
@@ -73,30 +78,31 @@ public class StickyNote : DynamicInteractableObject
 
         if (!isInteractedWith)
         {
+            currentlyDrawing = true;
             transform.root.GetComponent<PlayerController>().enabled = false;
             transform.root.GetComponentInChildren<CameraMovement>().enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            BroadcastRemoteMethod(nameof(DrawPosition), transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f);
-
-
+            BroadcastRemoteMethod(nameof(DrawPosition), transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f, Multiplayer.GetUser().Index);
         }
         else
         {
+            currentlyDrawing = false;
             transform.root.GetComponent<PlayerController>().enabled = true;
             transform.root.GetComponentInChildren<CameraMovement>().enabled = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            BroadcastRemoteMethod(nameof(DrawPosition), originalPos);
+            BroadcastRemoteMethod(nameof(DrawPosition), originalPos, Multiplayer.GetUser().Index);
         }
 
     }
 
     [SynchronizableMethod]
-    public void DrawPosition(Vector3 finalPos)
+    public void DrawPosition(Vector3 finalPos, int userId)
     {
         transform.position = finalPos;
         isInteractedWith = !isInteractedWith;
+        userID = userId;
     }
 
     protected override void Update()
@@ -106,7 +112,7 @@ public class StickyNote : DynamicInteractableObject
         {
             StasisInPlace();
         }
-
+        if(userID != Multiplayer.GetUser().Index) { return; }
         if (isInteractedWith && Input.GetMouseButton(0))
         {
             mousePainter.Paint(tempCamRef);
@@ -119,6 +125,7 @@ public class StickyNote : DynamicInteractableObject
     {
         //physics
         rb.useGravity = false;
+        rb.freezeRotation = true;
         ResetMomentum();
 
 
@@ -147,6 +154,7 @@ public class StickyNote : DynamicInteractableObject
         isThrown = false;
         isGameStart = false;
     }
+
     private void AlignWithSurface(Collision collision)
     {
         ResetMomentum();
@@ -186,17 +194,18 @@ public class StickyNote : DynamicInteractableObject
 
         if (isGameStart)
         {
-            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 12f;
+            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 20f;
         }
         else
         {
-            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 12;
+            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 20;
         }
         rbToTrack.SetPosition(transform.position);
 
+        //transform.SetParent(collision.transform, true);
 
-        //i hate this line
-        transform.SetParent(collision.transform, true);
+        //currentCollision = collision;
+        //BroadcastRemoteMethod(nameof(SyncParent));
     }
     void OnDrawGizmos()
     {
@@ -213,6 +222,13 @@ public class StickyNote : DynamicInteractableObject
         transform.localRotation = Quaternion.Euler(placedLocalRot);
         rbToTrack.SetRotation(transform.rotation);
     }
+
+    [SynchronizableMethod]
+    void SyncParent()
+    {
+        transform.SetParent(currentCollision.transform, true);
+    }
+
     private Vector3 GetRenderersSize(GameObject obj)
     {
         Renderer[] temp = obj.GetComponentsInChildren<Renderer>();

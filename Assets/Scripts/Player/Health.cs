@@ -44,6 +44,7 @@ public class Health : AttributesSync {
         playerController.MovementEnabled = false;
         characterController.enabled = false;
         mishSync.SetStance(StanceEnum.Dead);
+        VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
       //  dead = true;
     }
 

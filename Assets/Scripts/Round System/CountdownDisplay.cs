@@ -26,9 +26,16 @@ public class CountdownDisplay : AttributesSync {
     }
     private void Start()
     {
-        sendFlavorTextToUI = flavorTextMesh.text;
+        //flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
+        //sendFlavorTextToUI = flavorTextMesh.text;
     }
-
+    /*
+    private new void OnEnable()
+    {
+        base.OnEnable();
+        sendFlavorTextToUI = flavorTextMesh.text;
+    }*/
+    
     //these are meant to be called from the same object to itself so just use BoradcastRemoteMethod("nameofthing")
     [SynchronizableMethod]
     private void DeactivateUnusedTimers()//(string deactivatedObject)
@@ -55,6 +62,13 @@ public class CountdownDisplay : AttributesSync {
             //Debug.Log(player.gameObject.name);
             player.EndVotingPhase();
         }
+
+        SymptomNotifText[] allNotifTexts = FindObjectsByType<SymptomNotifText>(FindObjectsSortMode.None);
+        foreach(SymptomNotifText notifText in allNotifTexts)
+        {
+            // This will enable the notification canvas for all players
+            notifText.transform.parent.parent.gameObject.SetActive(true);
+        }
     }
 
     private void Update() {
@@ -71,14 +85,7 @@ public class CountdownDisplay : AttributesSync {
     {
         countdown.text = time.ToString();
 
-        if (time <= secondsRemainingToTurnRed)
-        {
-            countdownColor = Color.red;
-        }
-        else
-        {
-            countdownColor = Color.green;
-        }
+        countdownColor = time <= secondsRemainingToTurnRed ? Color.red : Color.green;
         countdown.color = countdownColor;
     }
 
@@ -100,8 +107,8 @@ public class CountdownDisplay : AttributesSync {
             manager.BroadcastRemoteMethod("ActivateTimer", parameters: gameObject.name);
             BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
             
-            if(gameObject.tag == "DowntimeDisplay") BroadcastRemoteMethod(nameof(InitiateVotingPhaseForAllPlayers));
-            if (gameObject.tag == "VotingDisplay") BroadcastRemoteMethod(nameof(EndVotingPhaseForAllPlayers));
+            if(gameObject.CompareTag("DowntimeDisplay")) BroadcastRemoteMethod(nameof(InitiateVotingPhaseForAllPlayers));
+            if (gameObject.CompareTag("VotingDisplay")) BroadcastRemoteMethod(nameof(EndVotingPhaseForAllPlayers));
         }
     }
 }

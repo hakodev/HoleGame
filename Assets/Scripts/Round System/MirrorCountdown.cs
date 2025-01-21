@@ -8,12 +8,13 @@ public class MirrorCountdown : MonoBehaviour
 
     private void Start()
     {
-       // flavorText = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
+        flavorText = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
     }
 
     private void LateUpdate()
     {
         countdown.text = CountdownDisplay.sendTimeToUI.ToString();
-       // flavorText.text = CountdownDisplay.sendFlavorTextToUI;
+              flavorText.text = CountdownDisplay.sendFlavorTextToUI;
+              countdown.color = CountdownDisplay.countdownColor;
     }
 }

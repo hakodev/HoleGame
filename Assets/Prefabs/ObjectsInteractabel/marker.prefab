@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
-  paintColor: {r: 1, g: 0.10849059, b: 0.10849059, a: 1}
+  paintColor: {r: 0.02234834, g: 0, b: 0.8867924, a: 1}
   radius: 0.02
   strength: 1
   hardness: 1
