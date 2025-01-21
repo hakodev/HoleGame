@@ -34,6 +34,7 @@ public class Health : AttributesSync {
         {
             currentHealth = 0;
             Debug.Log("Reduced HP");
+            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.deathStatic);
             BroadcastRemoteMethod("KillPlayer");
         }
     }

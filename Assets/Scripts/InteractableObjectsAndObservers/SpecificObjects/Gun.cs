@@ -35,6 +35,8 @@ public class Gun : DynamicInteractableObject
     }
     private void Fire()
     {
+        PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLaserBeep());
+
         if (Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, bulletMaxDistance, otherPlayerLayerMask))
         {
             Debug.Log(hit.collider.gameObject.name + " " + transform.parent.gameObject.name);
