@@ -66,6 +66,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a30d547a5f652499ef32794f28d51f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2319211875501605832
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3584768292373128877}
+  m_Layer: 7
+  m_Name: IdealCoffeeCupSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3584768292373128877
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2319211875501605832}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0009989442, y: 0, z: 0.142}
+  m_LocalScale: {x: 0.1348205, y: 0.13482054, z: 0.1348205}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7127518502152620832}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4012108918561487531
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -269,6 +300,9 @@ PrefabInstance:
     - {fileID: -7524844655464396628, guid: afdbf7ca51e10f14f9a6df3f8b32106d, type: 3}
     - {fileID: -4830747963362797956, guid: afdbf7ca51e10f14f9a6df3f8b32106d, type: 3}
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: afdbf7ca51e10f14f9a6df3f8b32106d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3584768292373128877}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: afdbf7ca51e10f14f9a6df3f8b32106d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3469854946524257600}

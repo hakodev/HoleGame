@@ -98,12 +98,12 @@ public class Interact : AttributesSync, IObserver
     {
         UpdateHeldObjectPhysics();
     }
+
     private void ProcessInput()
-    {
-        //release / place
+    {        //release / place
         if (Input.GetMouseButtonUp(0) && heldObject != null)
         {
-            if (finishedPickUp)
+            if (finishedPickUp && !StickyNote.currentlyDrawing)
             {
                 //isChargingUp = false;
                 //                heldObject.GetComponent<Rigidbody>().useGravity = true;
@@ -129,7 +129,7 @@ public class Interact : AttributesSync, IObserver
         //windup
         if (Input.GetMouseButtonDown(0))
         {
-            if (heldObject != null && finishedPickUp)
+            if (heldObject != null && finishedPickUp && !StickyNote.currentlyDrawing)
             {
                 isChargingUp = true;
                 AnimateWindUpChanrgebar();
@@ -264,7 +264,7 @@ public class Interact : AttributesSync, IObserver
 
 
             float divider = 2;
-            if (heldObject.gameObject.name.Contains("StickyNote")) divider = 20;
+            if (heldObject.gameObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) divider = 20;
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
             rbToTrack.SetPosition(heldObject.transform.position);
 
@@ -272,12 +272,16 @@ public class Interact : AttributesSync, IObserver
             rbToTrack.SetRotation(heldObject.transform.rotation);
 
 
-            if (heldObject.name.Contains("StickyNote"))
+            if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster"))
             {
-                //heldObject.transform.parent = hit.collider.transform;
-                //heldObject.transform.SetParent(hit.collider.transform, true);
-
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
+            }
+
+            Debug.Log(hit.collider.gameObject.name);
+            Transform hitRoot = hit.collider.transform.root;
+            if (hitRoot.name.Contains("CoffeeMachine"))
+            {
+                hitRoot.GetComponent<CoffeeMachine>().SpecialInteraction(InteractionEnum.PlaceCupInCoffeeMachine, this);
             }
 
             FinishDropping();
@@ -301,7 +305,7 @@ public class Interact : AttributesSync, IObserver
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
         Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
         currentThrowStrength = 0;
-        if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
+        if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
         if (heldObject.GetComponent<CoffeeCup>())
         {
             heldObject.GetComponent<CoffeeCup>().SpecialInteraction(InteractionEnum.CoffeeStain, this);
@@ -415,7 +419,7 @@ public class Interact : AttributesSync, IObserver
                 DIO.isPickedUp = true;
                 //rbToTrack.ApplyAsTransform = true;
 
-                if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
+                if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
                 //reset physics
                 rb.freezeRotation = true;
@@ -448,7 +452,7 @@ public class Interact : AttributesSync, IObserver
     {
         if (heldObject != null)
         {
-            if (heldObject.name.Contains("StickyNote"))
+            if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster"))
             {
                 if (heldObject.GetComponent<StickyNote>().isInteractedWith)
                 {
@@ -525,6 +529,10 @@ public class Interact : AttributesSync, IObserver
 
             BroadcastRemoteMethod(nameof(TryPickUp));
         }
+    }
+    public GameObject GetHeldObject()
+    {
+        return heldObject;
     }
 }
 
