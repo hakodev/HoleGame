@@ -943,7 +943,7 @@ MonoBehaviour:
   _uidString: 16889806-cf43-4de6-b0ef-366232eecc01
   Reliability: 1
   LocalMethodBehavior: 1
-  deadScreen: {fileID: 0}
+  deadScreen: {fileID: 7587190647672760422}
 --- !u!114 &3393442953825086244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1216,8 +1216,8 @@ RectTransform:
   m_GameObject: {fileID: 2380961244887926389}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.006, y: 0.006, z: 0.006}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: -0.006, y: 0.006, z: 0.006}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2815784353318359038}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1337,7 +1337,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ceb6302da9e15e43a429bc6893be388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 8609542860471924445}
+  Multiplayer: {fileID: 0}
+  _uidString: 874b76cb-d9c4-46ff-bf93-0b259eac6ecf
+  Reliability: 1
+  LocalMethodBehavior: 1
 --- !u!1 &2510125821566200400
 GameObject:
   m_ObjectHideFlags: 0
@@ -4418,6 +4421,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &7587190647672760422 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 8958955900897494040, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+  m_PrefabInstance: {fileID: 1522084040542383230}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3802455235705057515
 PrefabInstance:
   m_ObjectHideFlags: 0
