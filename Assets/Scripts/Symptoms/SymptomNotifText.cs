@@ -4,13 +4,14 @@ using TMPro;
 using UnityEngine;
 
 public class SymptomNotifText : AttributesSync {
-    private TMP_Text notificationText;
+    private TextMeshProUGUI notificationText;
 
     private void Awake() {
-        notificationText = GetComponent<TMP_Text>();
+        notificationText = GetComponent<TextMeshProUGUI>();
     }
 
-    private void OnEnable() {
+    private new void OnEnable() {
+        base.OnEnable();
         ApplyNewSymptom();
         DisplayNotificationText();
     }
@@ -22,7 +23,7 @@ public class SymptomNotifText : AttributesSync {
 
         int allSymptomsCount = SymptomsManager.Instance.GetSymptomsList().Count;
         int randNum = SymptomsManager.Instance.GetRandomNum();
-        SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), randNum);
+        SymptomsManager.Instance.SetSymptom(randNum);
         Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
     }
 

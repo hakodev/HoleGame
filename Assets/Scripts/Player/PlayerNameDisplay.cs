@@ -1,38 +1,51 @@
+using Alteruna;
 using TMPro;
 using UnityEngine;
 
-public class PlayerNameDisplay : MonoBehaviour {
-    private TMP_Text playerNameText;
+public class PlayerNameDisplay : AttributesSync {
+    private TextMeshProUGUI playerNameText;
     private Alteruna.Avatar avatar;
     private PlayerRole thisPlayerRole;
-    [SerializeField] private Camera playerCamera;
+    private Camera getLocalCamera;
 
     private void Awake () {
-        playerNameText = GetComponent<TMP_Text>();
+        playerNameText = GetComponent<TextMeshProUGUI>();
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
         thisPlayerRole = transform.root.GetComponent<PlayerRole>();
+
     }
 
     private void Start() {
+        getLocalCamera = Multiplayer.GetAvatar(Multiplayer.GetUser().Index).gameObject.GetComponentInChildren<Camera>();
+
         playerNameText.text = avatar.gameObject.name; // Set this to be the player name the user chooses
 
-        if(thisPlayerRole.GetRole() == Roles.Infiltrator) {
-            foreach(PlayerRole player in RoleAssignment.GetTotalPlayers()) {
-                if(player.GetRole() == Roles.Infiltrator) {
-                    player.gameObject.GetComponentInChildren<PlayerNameDisplay>().
-                        playerNameText.color = Color.red; // Setting name colors to red, only viewable by infiltrators
-                }
-            }
-        }
+       
+
 
         if(avatar.IsMe) {
             playerNameText.enabled = false; // Disable my text for my view
         }
     }
 
-    private void LateUpdate() {
+    bool once = true;
+    private new void LateUpdate() {
+        base.LateUpdate();
         if(avatar.IsMe) return;
 
-        playerNameText.transform.LookAt(playerCamera.transform);
+        playerNameText.transform.LookAt(getLocalCamera.transform);
+
+        if(RoleAssignment.hasGameStarted && once)
+        {
+            once = false;
+            if (thisPlayerRole.GetRole() == Roles.Infiltrator)
+            {
+                PlayerRole player = Multiplayer.GetAvatar(Multiplayer.GetUser().Index).gameObject.GetComponent<PlayerRole>();
+                if (player.GetRole() == Roles.Infiltrator)
+                {
+                    playerNameText.color = Color.red; 
+                }
+            }
+        }
     }
 }

@@ -30,7 +30,6 @@ public class SymptomsManager : AttributesSync {
         return symptoms;
     }
 
-    [SynchronizableMethod]
     public void SetSymptom(int index) {
         currentSymptom = symptoms[index];
     }
