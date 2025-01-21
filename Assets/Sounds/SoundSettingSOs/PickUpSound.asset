@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1975c133db35d1f4983ab27c4e2f07a4, type: 3}
   m_Name: PickUpSound
   m_EditorClassIdentifier: 
-  clip: {fileID: 0}
-  volume: 0
-  spatialBlend: 0
+  clip: {fileID: 8300000, guid: 16010741fc4123445980855d042154c9, type: 3}
+  volume: 0.314
+  spatialBlend: 1

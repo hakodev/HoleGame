@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1975c133db35d1f4983ab27c4e2f07a4, type: 3}
   m_Name: LaserBeep
   m_EditorClassIdentifier: 
-  clip: {fileID: 0}
-  volume: 0
-  spatialBlend: 0
+  clip: {fileID: 8300000, guid: ff87d15a13637a4459088c4eecdec8aa, type: 3}
+  volume: 0.223
+  spatialBlend: 1
