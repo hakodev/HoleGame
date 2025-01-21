@@ -28,6 +28,8 @@ public class StickyNote : DynamicInteractableObject
     private int userID;
     Collision currentCollision;
 
+    public static bool currentlyDrawing=false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -76,16 +78,16 @@ public class StickyNote : DynamicInteractableObject
 
         if (!isInteractedWith)
         {
+            currentlyDrawing = true;
             transform.root.GetComponent<PlayerController>().enabled = false;
             transform.root.GetComponentInChildren<CameraMovement>().enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             BroadcastRemoteMethod(nameof(DrawPosition), transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f, Multiplayer.GetUser().Index);
-
-
         }
         else
         {
+            currentlyDrawing = false;
             transform.root.GetComponent<PlayerController>().enabled = true;
             transform.root.GetComponentInChildren<CameraMovement>().enabled = true;
             Cursor.visible = false;
@@ -192,11 +194,11 @@ public class StickyNote : DynamicInteractableObject
 
         if (isGameStart)
         {
-            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 12f;
+            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 20f;
         }
         else
         {
-            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 12;
+            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 20;
         }
         rbToTrack.SetPosition(transform.position);
 
