@@ -10,7 +10,7 @@ public class PlayerAudioManager : MonoBehaviour
     [SerializeField] private AudioClipSettings lightHit;
     [SerializeField] private AudioClipSettings heavyHit;
 
-    #region Constructors
+    #region Properties
     public AudioClipSettings GetHeavyHit() => heavyHit;
     public AudioClipSettings GetLightHit() => lightHit;
     public AudioClipSettings GetDeathStatic() => deathStatic;
