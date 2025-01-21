@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using Alteruna;
 using System.Linq;
 using UnityEditor;
@@ -28,3 +30,5 @@ public class RegisterUID : MonoBehaviour
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 }
+
+#endif
