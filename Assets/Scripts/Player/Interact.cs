@@ -7,6 +7,7 @@ public class Interact : AttributesSync, IObserver
 {
     private Alteruna.Avatar avatar;
     GameObject heldObject = null;
+    DynamicInteractableObject dynamicObject;
 
     [Header("not important")]
     [SerializeField] GameObject clientHand;
@@ -100,9 +101,22 @@ public class Interact : AttributesSync, IObserver
     }
     private void ProcessInput()
     {
-        //release / place
-        if (Input.GetMouseButtonUp(0) && heldObject != null)
+        
+        if (Input.GetMouseButtonUp(0) && heldObject != null )
         {
+
+            dynamicObject = heldObject.GetComponent<DynamicInteractableObject>();
+
+            if (dynamicObject is StickyNote)
+            {
+                StickyNote stickyNote = (StickyNote)dynamicObject;
+                if (stickyNote.isInteractedWith)
+                {
+                    return;
+                }
+            }
+
+             
             if (finishedPickUp)
             {
                 //isChargingUp = false;
@@ -169,7 +183,6 @@ public class Interact : AttributesSync, IObserver
                 }
 
             }
-
 
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
             {
@@ -398,13 +411,16 @@ public class Interact : AttributesSync, IObserver
     [SynchronizableMethod]
     private void TryPickUp()
     {
+
         if(!avatar.IsMe) return;
+        DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
+        if (DIO.isPickedUp) return;
         if(heldObject != null) { return; }
-        finishedPickUp = false;
+        
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun) 
         {
-            DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
+            
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
@@ -430,6 +446,7 @@ public class Interact : AttributesSync, IObserver
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
                 Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
                 HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+                finishedPickUp = false;
             }
             else
             {
