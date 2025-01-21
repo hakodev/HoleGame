@@ -1,6 +1,7 @@
 using UnityEngine;
 using Alteruna;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public class Interact : AttributesSync, IObserver
@@ -380,7 +381,7 @@ public class Interact : AttributesSync, IObserver
         rb.freezeRotation = false;
         rb.useGravity = true;
 
-
+        ToggleCollidersOfHeldObject(true);
     }
     private void FinishDropping()
     {
@@ -398,6 +399,7 @@ public class Interact : AttributesSync, IObserver
         rbToTrack = null;
         rb = null;
     }
+
 
     [SynchronizableMethod]
     private void TryPickUp()
@@ -434,11 +436,23 @@ public class Interact : AttributesSync, IObserver
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
                 Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
                 HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+
+                ToggleCollidersOfHeldObject(false);
             }
             else
             {
                 Debug.Log("You can't pick up that");
             }
+        }
+    }
+    private void ToggleCollidersOfHeldObject(bool newState)
+    {
+        List<Collider> cols = heldObject.GetComponentsInChildren<Collider>().ToList<Collider>();
+        Collider thisCol = heldObject.GetComponent<Collider>();
+        if (thisCol != null) cols.Add(thisCol);
+        foreach (Collider col in cols)
+        {
+            col.enabled = newState;
         }
     }
     private void ResetMomentum()
