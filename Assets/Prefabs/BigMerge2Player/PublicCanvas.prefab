@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1087370154277903981}
   - component: {fileID: 2954264425683808535}
   - component: {fileID: 2171783535176504622}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PublicCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578876711223553192}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.006, y: 0.006, z: 0.006}
   m_ConstrainProportionsScale: 0
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 218248865536680491}
   - component: {fileID: 8652535964163324914}
   - component: {fileID: 1593620044667966849}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerHealthPublic
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -14,7 +14,7 @@ public class PlayerNameDisplay : MonoBehaviour {
     }
 
     private void Start() {
-        playerNameText.text = avatar.name; // Set this to be the player name the user chooses
+        playerNameText.text = avatar.gameObject.name; // Set this to be the player name the user chooses
 
         if(thisPlayerRole.GetRole() == Roles.Infiltrator) {
             foreach(PlayerRole player in RoleAssignment.GetTotalPlayers()) {
