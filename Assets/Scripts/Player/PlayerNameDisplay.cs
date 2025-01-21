@@ -18,10 +18,8 @@ public class PlayerNameDisplay : AttributesSync {
     private void Start() {
         getLocalCamera = Multiplayer.GetAvatar(Multiplayer.GetUser().Index).gameObject.GetComponentInChildren<Camera>();
 
-        playerNameText.text = avatar.gameObject.name; // Set this to be the player name the user chooses
-
-       
-
+        playerNameText.text = UIInput.PlayerName;
+        transform.root.gameObject.name = playerNameText.text;
 
         if(avatar.IsMe) {
             playerNameText.enabled = false; // Disable my text for my view
