@@ -8,6 +8,8 @@ public class UIInput : MonoBehaviour
     [SerializeField] private TextMeshProUGUI invalidNameWarningText;
     [SerializeField] private GameObject roomMenu;
 
+    [SerializeField] private AudioSource musicAudioSource;
+
     public static string PlayerName;
 
     public void ClickedPlayButton()
@@ -24,10 +26,12 @@ public class UIInput : MonoBehaviour
     }
     public void ClickedJoinButton()
     {
+        musicAudioSource.Play();
         gameObject.SetActive(false);
     }
     public void ClickedStartButton()
     {
+        musicAudioSource.Play();
         gameObject.SetActive(false);
     }
 }
