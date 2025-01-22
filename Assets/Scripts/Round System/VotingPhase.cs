@@ -25,6 +25,9 @@ public class VotingPhase : AttributesSync {
     int randomlyPickedPlayer;
     List<VotingPhase> votingPlayers;
     [SynchronizableField] int pickedPlayerIndex;
+
+    private bool hasVoted = false;
+    [SynchronizableField, HideInInspector] public string taskManagerNameInHost = "";
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -35,7 +38,6 @@ public class VotingPhase : AttributesSync {
     }
 
 
-    private bool hasVoted = false;
     public void InitiateVotingPhase() {
 
         if (!avatar.IsMe) { return; }
@@ -88,7 +90,7 @@ public class VotingPhase : AttributesSync {
 
     //randomly votred
 
-    [SynchronizableField, HideInInspector] public string taskManagerNameInHost = "";
+
     public void EndVotingPhase()
     {
         if (!avatar.IsMe) { return; }

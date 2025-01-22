@@ -19,10 +19,12 @@ public class PlayerRole : AttributesSync
 
     [SynchronizableField] public int VotedCount=0;
     [SynchronizableField] public bool IsTaskManager = false;
+    [SerializeField] private GameObject ceoFlashScreen;
 
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
+        ceoFlashScreen.SetActive(false);
 
     }
     [SynchronizableMethod]
@@ -46,6 +48,18 @@ public class PlayerRole : AttributesSync
         roleCanvas.DOFade(1f, 1f);
         yield return new WaitForSeconds(roleDisplayTime); // How many seconds to display it on screen
         roleCanvas.DOFade(0f, 1f);
+    }
+
+    private void Update()
+    {
+        if (IsTaskManager)
+        {
+            ceoFlashScreen.SetActive(true);
+        }
+        else
+        {
+            ceoFlashScreen.SetActive(false);
+        }
     }
 
     public Roles GetRole()
