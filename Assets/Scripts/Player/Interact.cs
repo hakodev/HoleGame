@@ -440,7 +440,9 @@ public class Interact : AttributesSync, IObserver
                 Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
                 HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
 
-                ToggleCollidersOfHeldObject(false);
+
+                //ball needs this but sticky note needs this to not happen
+                if(!heldObject.name.Contains("StickyNote")) ToggleCollidersOfHeldObject(false);
             }
             else
             {
