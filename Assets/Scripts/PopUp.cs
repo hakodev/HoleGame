@@ -12,6 +12,9 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     [SerializeField] float popOutTime;
     [SerializeField] float overPopImpact;
 
+    [SerializeField] bool triggersCaptcha = false;
+
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -44,7 +47,26 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
 
     public void PopOut()
     {
-        transform.DOScale(Vector3.one, popOutTime).SetEase(Ease.OutBack).OnComplete(() => transform.DOScale(Vector3.zero, popOutTime).SetEase(Ease.InBack).OnComplete(() => gameObject.SetActive(false))); 
+        if (!triggersCaptcha)
+        {
+            transform.DOScale(Vector3.one, popOutTime).SetEase(Ease.OutBack).OnComplete(() => transform.DOScale(Vector3.zero, popOutTime).SetEase(Ease.InBack).OnComplete(() => gameObject.SetActive(false)));
+        }
+        else
+        {
+            GameObject captchaPopUpPrefab = Resources.Load<GameObject>("PopupCaptcha");
+            GameObject captchaPopUp = Instantiate(captchaPopUpPrefab, canvas.transform, false);
+            captchaPopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(453, -8, 0);
+        }
     }
 
+    GameObject applyPopUp;
+    public void ClickedApplyButton()
+    {
+        if (applyPopUp == null)
+        {
+            GameObject applyPopUpPrefab = Resources.Load<GameObject>("PopupApply");
+            GameObject applyPopUp = Instantiate(applyPopUpPrefab, canvas.transform, false);
+            applyPopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
+        }
+    }
 }
