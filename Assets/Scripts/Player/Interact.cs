@@ -265,6 +265,7 @@ public class Interact : AttributesSync, IObserver
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
         {
             heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
+
             SetLayerRecursively(heldObject, 7);
 
             //placing anim
@@ -307,7 +308,9 @@ public class Interact : AttributesSync, IObserver
         //specifics to thtowing
         if (!avatar.IsMe) return;
         PrepareForDropping();
+
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
+
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
@@ -385,11 +388,12 @@ public class Interact : AttributesSync, IObserver
         heldObject.transform.SetParent(null);
         ResetMomentum();
 
-        rbToTrack.ApplyAsTransform = true;
+       // rbToTrack.ApplyAsTransform = true;
         rb.freezeRotation = false;
         rb.useGravity = true;
 
-
+        DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
+        DIO.BroadcastRemoteMethod("DynamicAwake");
     }
     private void FinishDropping()
     {
@@ -430,6 +434,7 @@ public class Interact : AttributesSync, IObserver
                 rb = heldObject.GetComponent<Rigidbody>();
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
                 DIO.isPickedUp = true;
+                
                 //rbToTrack.ApplyAsTransform = true;
 
                 if (heldObject.name.Contains("StickyNote")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
@@ -445,6 +450,7 @@ public class Interact : AttributesSync, IObserver
                 UpdateHeldObjectPhysics();
 
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
+                DIO.BroadcastRemoteMethod("DynamicAwake");
                 Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
                 HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
                 finishedPickUp = false;
