@@ -165,7 +165,7 @@ public class VotingPhase : AttributesSync {
     {
         if(!avatar.IsMe) { return; }
         pickedPlayerNameText.text = taskManagerNameInHost;
-        Debug.Log(player.IsTaskManager);
+        Debug.Log("da eba maika ti " + player.IsTaskManager);
         if (player.IsTaskManager)
         {
             GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);

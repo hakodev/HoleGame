@@ -11,5 +11,7 @@ public enum InteractionEnum
     GivenTaskManagerRole,
     RemoveGun,
     PlaceCupInCoffeeMachine,
+    MarkerOnPosterOrStickyNote,
+    StoppedMarkerOnPosterOrStickyNote,
     CoffeeStain
 }
