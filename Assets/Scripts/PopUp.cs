@@ -59,14 +59,14 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         }
     }
 
-    GameObject applyPopUp;
+    GameObject namePopUp;
     public void ClickedApplyButton()
     {
-        if (applyPopUp == null)
+        if (namePopUp == null)
         {
-            GameObject applyPopUpPrefab = Resources.Load<GameObject>("PopupApply");
-            GameObject applyPopUp = Instantiate(applyPopUpPrefab, canvas.transform, false);
-            applyPopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
+            GameObject applyPopUpPrefab = Resources.Load<GameObject>("PopupEnterName");
+            namePopUp = Instantiate(applyPopUpPrefab, canvas.transform, false);
+            namePopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
         }
     }
 }

@@ -10,6 +10,7 @@ TagManager:
   - VotingDisplay
   - drawnOn
   - NetworkManager
+  - RoomMenu
   layers:
   - Default
   - TransparentFX

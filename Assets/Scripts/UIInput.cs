@@ -1,3 +1,4 @@
+using Alteruna;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -5,17 +6,19 @@ using UnityEngine;
 public class UIInput : MonoBehaviour
 {
     [SerializeField] private TMP_InputField nameInputField;
-    [SerializeField] private TextMeshProUGUI invalidNameWarningText;
-    [SerializeField] private GameObject roomMenu;
+    private Canvas canvas;
+    GameObject roomMenu;
 
     public static string PlayerName;
 
     public void ClickedPlayButton()
     {
-        if(nameInputField.text == string.Empty) {
-            invalidNameWarningText.DOKill();
-            invalidNameWarningText.alpha = 1f;
-            invalidNameWarningText.DOFade(0f, 3f);
+        roomMenu = GameObject.FindGameObjectWithTag("RoomMenu");
+        canvas = GetComponentInParent<Canvas>();   
+        if (nameInputField.text == string.Empty) {
+            GameObject noNamePopupPrefab = Resources.Load<GameObject>("PopupWrongName");
+            GameObject captchaPopUp = Instantiate(noNamePopupPrefab, canvas.transform, false);
+            captchaPopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-286, 228, 0);
         } else {
             PlayerName = nameInputField.text;
             roomMenu.SetActive(true);

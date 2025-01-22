@@ -546,7 +546,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6273163117075868201, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
       propertyPath: triggersCaptcha
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8495727316091608246, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
       propertyPath: m_Name
