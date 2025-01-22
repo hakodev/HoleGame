@@ -205,9 +205,10 @@ public class StickyNote : DynamicInteractableObject
         }
         rbToTrack.SetPosition(transform.position);
 
-        BroadcastRemoteMethod(nameof(SyncSetParent));
+        //  if(isGameStart) 
+        //BroadcastRemoteMethod(nameof(SyncSetParent));
+        SyncSetParent();
     }
-    [SynchronizableMethod]
     private void SyncSetParent()
     {
         RaycastHit hit;
@@ -272,16 +273,7 @@ public class StickyNote : DynamicInteractableObject
             CustomMethods.SetLayerRecursively("DynamicInteractableObject", tempSticky);
         }
     }
-    /*
-    [SynchronizableMethod]
-    private void OrphanThatPoorChild()
-    {
-        Collider parentCol = parentedTo.GetComponent<Collider>();
-        if(parentCol==null) parentCol = parentedTo.GetComponent<MeshCollider>();
-        Physics.IgnoreCollision(parentCol, parentCol, false);
-        transform.SetParent(null);
-    }
-    */
+
 
     void OnDrawGizmos()
     {

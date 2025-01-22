@@ -55,6 +55,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
         if (currentlyOwnedByAvatar==null)
         {
+            if (!currentlyOwnedByAvatar.IsMe) { return; }
             if (rbDynamic.linearVelocity.magnitude < 0.1f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
@@ -81,7 +82,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         if (isAwake) { return; }
 
 
-            if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar!=null)
+            if (rbDynamic.linearVelocity.magnitude >= 0.4f || currentlyOwnedByAvatar!=null)
         {
         //    Debug.Log("awake");
 
