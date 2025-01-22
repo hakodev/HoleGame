@@ -47,7 +47,7 @@ public class CoffeeCup : DynamicInteractableObject
 
     protected override void OnCollisionEnter(Collision info)
     {
-        base.OnCollisionEnter(info);
+        //base.OnCollisionEnter(info);
         // find collision point and normal. You may want to average over all contacts
         var point = info.contacts[0].point;
         var dir = -info.contacts[0].normal; // you need vector pointing TOWARDS the collision, not away from it
