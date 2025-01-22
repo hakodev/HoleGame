@@ -1,7 +1,8 @@
 using Alteruna;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Linq;
 using UnityEngine;
+
 
 public class StickyNote : DynamicInteractableObject
 {
@@ -26,7 +27,9 @@ public class StickyNote : DynamicInteractableObject
     private Camera tempCamRef;
     [SynchronizableField]
     private int userID;
-    Collision currentCollision;
+
+    List<Collider> allStickyColliders;
+    Transform parentedTo;
 
     public static bool currentlyDrawing=false;
 
@@ -35,7 +38,9 @@ public class StickyNote : DynamicInteractableObject
         base.Awake();
         rb = GetComponent<Rigidbody>();
         rbToTrack = GetComponent<RigidbodySynchronizable>();
-       
+        allStickyColliders = transform.GetComponentsInChildren<Collider>().ToList();
+        allStickyColliders.Add(GetComponent<Collider>());
+
     }
     protected override void Start()
     {
@@ -47,6 +52,7 @@ public class StickyNote : DynamicInteractableObject
     {
         if (interaction == InteractionEnum.PlacedStickyNote)
         {
+            BroadcastRemoteMethod(nameof(SyncSetParent));
             Stick();
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
@@ -58,7 +64,16 @@ public class StickyNote : DynamicInteractableObject
         {
             isPlaced = false;
             originalPos = transform.position;
-
+        }
+        if(interaction == InteractionEnum.MarkerOnPosterOrStickyNote)
+        {
+            Collider boxy = GetComponent<Collider>();
+            boxy.enabled = false;
+        }
+        if (interaction == InteractionEnum.StoppedMarkerOnPosterOrStickyNote)
+        {
+            Collider boxy = GetComponent<Collider>();
+            boxy.enabled = true;
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -123,13 +138,11 @@ public class StickyNote : DynamicInteractableObject
 
     private void Stick()
     {
-        //physics
         rb.useGravity = false;
         rb.freezeRotation = true;
         ResetMomentum();
 
 
-        //essential for sticking
         placedLocalRot = transform.localEulerAngles;
         placedLocalPos = transform.localPosition;
 
@@ -145,11 +158,7 @@ public class StickyNote : DynamicInteractableObject
                 }
             }
         }
-        //make sure sticky notes can stack when spawned without parenting causing issues
 
-
-
-        //states of sticky note management
         isPlaced = true;
         isThrown = false;
         isGameStart = false;
@@ -157,6 +166,7 @@ public class StickyNote : DynamicInteractableObject
 
     private void AlignWithSurface(Collision collision)
     {
+
         ResetMomentum();
 
 
@@ -198,15 +208,49 @@ public class StickyNote : DynamicInteractableObject
         }
         else
         {
-            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 20;
+            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 20f;
         }
         rbToTrack.SetPosition(transform.position);
 
-        //transform.SetParent(collision.transform, true);
-
-        //currentCollision = collision;
+        BroadcastRemoteMethod(nameof(SyncSetParent));
         //BroadcastRemoteMethod(nameof(SyncParent));
     }
+    [SynchronizableMethod]
+    private void SyncSetParent()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 1))
+        {
+            transform.SetParent(hit.transform, true);
+            parentedTo = hit.transform;
+
+            Rigidbody parentRB = hit.collider.transform.GetComponent<Rigidbody>();
+            if(parentRB==null) parentRB = hit.collider.transform.GetComponentInChildren<Rigidbody>();
+            if(parentRB!=null)
+            {
+                parentRB.linearVelocity = Vector3.zero;
+                parentRB.angularVelocity = Vector3.zero;
+
+
+                foreach(Collider col in allStickyColliders)
+                {
+                    Physics.IgnoreCollision(col, hit.collider);
+                }
+            }
+        }
+    }
+
+    /*
+    [SynchronizableMethod]
+    private void OrphanThatPoorChild()
+    {
+        Collider parentCol = parentedTo.GetComponent<Collider>();
+        if(parentCol==null) parentCol = parentedTo.GetComponent<MeshCollider>();
+        Physics.IgnoreCollision(parentCol, parentCol, false);
+        transform.SetParent(null);
+    }
+    */
+
     void OnDrawGizmos()
     {
         Gizmos.color = UnityEngine.Color.red;
@@ -214,19 +258,13 @@ public class StickyNote : DynamicInteractableObject
     }
     private void StasisInPlace()
     {
-        ResetMomentum();
+      //  ResetMomentum();
 
         transform.localPosition = placedLocalPos;
         rbToTrack.SetPosition(transform.position);
 
         transform.localRotation = Quaternion.Euler(placedLocalRot);
         rbToTrack.SetRotation(transform.rotation);
-    }
-
-    [SynchronizableMethod]
-    void SyncParent()
-    {
-        transform.SetParent(currentCollision.transform, true);
     }
 
     private Vector3 GetRenderersSize(GameObject obj)

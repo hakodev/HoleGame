@@ -7,7 +7,7 @@ public class Marker : DynamicInteractableObject
     [SynchronizableField]
     private int userID;
 
-    private void Start()
+    protected override void Start()
     {
         base.Start(); 
         painter = GetComponent<MousePainter>();
@@ -28,11 +28,14 @@ public class Marker : DynamicInteractableObject
         base.Update();
         if (Input.GetMouseButton(1) && isPickedUp) 
         {
-            if(userID != Multiplayer.GetUser().Index) { return; }
+            if (userID != Multiplayer.GetUser().Index) { return; }
             if (cam == null)
             {
                 cam = transform.root.GetComponentInChildren<Camera>();
             }
+            RaycastHit hit;
+           // if()
+
             painter.Paint(cam);
         }
     }

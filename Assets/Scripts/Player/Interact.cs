@@ -2,6 +2,7 @@ using UnityEngine;
 using Alteruna;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Search;
 
 
 public class Interact : AttributesSync, IObserver
@@ -11,7 +12,6 @@ public class Interact : AttributesSync, IObserver
 
     [Header("not important")]
     [SerializeField] GameObject clientHand;
-    [SerializeField] GameObject serverHand;
 
     [SerializeField] Camera playerCamera;
     PlayerController playerController;
@@ -193,6 +193,7 @@ public class Interact : AttributesSync, IObserver
     private void ApplyOutline(GameObject objectToApply)
     {
         List<GameObject> tempChildList = new List<GameObject>();
+
         if (objectToApply == currentOutlinedObject)
         {
             return;
@@ -207,6 +208,15 @@ public class Interact : AttributesSync, IObserver
         currentOutlinedObject = objectToApply.transform;
 
         ChangeChildrenLayers("OutlineLayer", tempChildList);
+
+
+
+        StickyNote stickyNoteFound = objectToApply.GetComponentInChildren<StickyNote>();
+        if(stickyNoteFound == null) { return; }
+
+        Queue<GameObject> tempSticky = new Queue<GameObject>();
+        tempSticky.Enqueue(stickyNoteFound.gameObject);
+        CustomMethods.SetLayerRecursively("DynamicInteractableObject", tempSticky);
     }
 
     private void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)

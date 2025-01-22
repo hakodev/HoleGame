@@ -105,7 +105,6 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   extendsIslandOffset: 1
-  material: {fileID: 0}
 --- !u!64 &7003364448515391647
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -196,7 +195,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 0.3
   m_Drag: 6
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -267,8 +266,6 @@ MonoBehaviour:
   Reliability: 2
   LocalMethodBehavior: 1
   isPickedUp: 0
-  syncEveryNUpdates: {x: 30, y: 2}
-  fullSyncEveryNSyncs: {x: 30, y: 2}
   isPlaced: 0
   isInteractedWith: 0
 --- !u!1 &8281173070946733831
@@ -376,7 +373,6 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   extendsIslandOffset: 1
-  material: {fileID: 0}
 --- !u!65 &8188005514495798448
 BoxCollider:
   m_ObjectHideFlags: 0
