@@ -32,7 +32,8 @@ public class PlayerRole : AttributesSync
 
     private void Start()
     {
-        SetName(UIInput.PlayerNameSync);
+        if (!avatar.IsMe) { return; }
+        BroadcastRemoteMethod(nameof(SetName), UIInput.PlayerNameSync);
     }
     [SynchronizableMethod]
     public void DisplayRole()
@@ -83,6 +84,7 @@ public class PlayerRole : AttributesSync
     public void SetName(string name)
     {
         playerNameSync = name;
+        Debug.Log(" " + playerNameSync);
     }
 
     [SynchronizableMethod]

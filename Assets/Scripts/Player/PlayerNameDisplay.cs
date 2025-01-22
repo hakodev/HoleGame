@@ -18,20 +18,15 @@ public class PlayerNameDisplay : AttributesSync {
 
     private void Start() {
         getLocalCamera = Multiplayer.GetAvatar(Multiplayer.GetUser().Index).gameObject.GetComponentInChildren<Camera>();
+        BroadcastRemoteMethod(nameof(SufferingInTheAbyss));
+    }
+    [SynchronizableMethod]
+    private void SufferingInTheAbyss()
+    {
+        playerNameText.text = transform.root.GetComponentInChildren<PlayerRole>().GetName();
+        transform.root.gameObject.name = playerNameText.text;
 
-       
-        
-
-        if(avatar.IsMe) {
-            playerNameText.enabled = false;
-            // Disable my text for my view
-
-        }
-        else
-        {
-            playerNameText.text = transform.root.GetComponentInChildren<PlayerRole>().GetName();
-            transform.root.gameObject.name = playerNameText.text;
-        }
+        Debug.Log("3 " + playerNameText.text);
     }
 
     bool once = true;
