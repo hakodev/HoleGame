@@ -352,9 +352,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5814446186303693382}
-        m_TargetAssemblyTypeName: UIInput, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 8239672403011769561}
+        m_TargetAssemblyTypeName: PopUp, Assembly-CSharp
+        m_MethodName: ClickedVerifyNameButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1038,33 +1038,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3277018296094056439, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2589791696628032298}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8495727316091608246, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1377488764390394924}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
 --- !u!224 &589334094175592711 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3277018296094056439, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
   m_PrefabInstance: {fileID: 2690886463779290864}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5814446186303693382 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8495727316091608246, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
+--- !u!114 &8239672403011769561 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6273163117075868201, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
   m_PrefabInstance: {fileID: 2690886463779290864}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1377488764390394924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5814446186303693382}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 701c994b00c69c04bac35bfcfa122a92, type: 3}
+  m_Script: {fileID: 11500000, guid: 94cb94a69029fee40b3276b7a4f892da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameInputField: {fileID: 5848705361689556366}
-  invalidNameWarningText: {fileID: 0}
-  roomMenu: {fileID: 0}

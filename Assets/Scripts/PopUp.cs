@@ -14,11 +14,13 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
 
     [SerializeField] bool triggersCaptcha = false;
 
+    UIInput uiInput;
 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
+        uiInput = transform.root.GetComponentInChildren<UIInput>();
     }
     private void Start()
     {
@@ -68,5 +70,9 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
             namePopUp = Instantiate(applyPopUpPrefab, canvas.transform, false);
             namePopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
         }
+    }
+    public void ClickedVerifyNameButton()
+    {
+        uiInput.ClickedPlayButton();
     }
 }
