@@ -1,3 +1,4 @@
+using Alteruna;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class UIInput : MonoBehaviour
     [SerializeField] private TextMeshProUGUI invalidNameWarningText;
     [SerializeField] private GameObject roomMenu;
 
-    public static string PlayerName;
+    public static string PlayerNameSync;
 
     public void ClickedPlayButton()
     {
@@ -16,8 +17,8 @@ public class UIInput : MonoBehaviour
             invalidNameWarningText.DOKill();
             invalidNameWarningText.alpha = 1f;
             invalidNameWarningText.DOFade(0f, 3f);
-        } else {
-            PlayerName = nameInputField.text;
+        } else { 
+            PlayerNameSync = nameInputField.text;
             roomMenu.SetActive(true);
             gameObject.SetActive(false);
         }
