@@ -92,8 +92,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void DynamicAwake()
     {
-        rbSyncDynamic.SyncEveryNUpdates = 1;
-        rbSyncDynamic.FullSyncEveryNSync = 1;
+        rbSyncDynamic.SyncEveryNUpdates = 4;
+        rbSyncDynamic.FullSyncEveryNSync = 4;
     }
     
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
