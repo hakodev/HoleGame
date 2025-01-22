@@ -29,9 +29,12 @@ public class StickyNote : DynamicInteractableObject
     private int userID;
 
     List<Collider> allStickyColliders;
+    List<Collider> parentColliders;
     Transform parentedTo;
 
     public static bool currentlyDrawing=false;
+
+
 
     protected override void Awake()
     {
@@ -46,6 +49,7 @@ public class StickyNote : DynamicInteractableObject
     {
         base.Start();
         selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
+        parentColliders = new List<Collider>();
     }
 
     public override void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
@@ -64,6 +68,7 @@ public class StickyNote : DynamicInteractableObject
         {
             isPlaced = false;
             originalPos = transform.position;
+            BroadcastRemoteMethod(nameof(GnoreCollisions));
         }
         if(interaction == InteractionEnum.MarkerOnPosterOrStickyNote)
         {
@@ -146,18 +151,6 @@ public class StickyNote : DynamicInteractableObject
         placedLocalRot = transform.localEulerAngles;
         placedLocalPos = transform.localPosition;
 
-        if (transform.parent != null)
-        {
-            if (transform.parent.gameObject.name.Contains("StickyNote"))
-            {
-                if (isGameStart)
-                {
-                    placedLocalPos = new Vector3(0, 0, 1);
-                    placedLocalRot = new Vector3(0, 0, 0);
-                    transform.localScale = Vector3.one;
-                }
-            }
-        }
 
         isPlaced = true;
         isThrown = false;
@@ -166,12 +159,8 @@ public class StickyNote : DynamicInteractableObject
 
     private void AlignWithSurface(Collision collision)
     {
-
         ResetMomentum();
 
-
-        //getting point variable from either a regular or a meshcollider because it caused issues
-        //make sure mesh collider is always CONVEX  (otherwise it wouldnt detect a hit)
         Vector3 point = Vector3.zero;
         Collider col = collision.gameObject.GetComponent<Collider>();
         MeshCollider stupidCol = collision.gameObject.GetComponent<MeshCollider>();
@@ -191,7 +180,6 @@ public class StickyNote : DynamicInteractableObject
             }
         }
 
-        //calc correct position
         Vector3 hitNormal = transform.position - point;
         Vector3 alignsBestWith = GetClosestAxis(hitNormal);
         Vector3 bounds = GetRenderersSize(gameObject);
@@ -204,7 +192,7 @@ public class StickyNote : DynamicInteractableObject
 
         if (isGameStart)
         {
-            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 20f;
+            transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 2f;
         }
         else
         {
@@ -213,7 +201,6 @@ public class StickyNote : DynamicInteractableObject
         rbToTrack.SetPosition(transform.position);
 
         BroadcastRemoteMethod(nameof(SyncSetParent));
-        //BroadcastRemoteMethod(nameof(SyncParent));
     }
     [SynchronizableMethod]
     private void SyncSetParent()
@@ -231,15 +218,55 @@ public class StickyNote : DynamicInteractableObject
                 parentRB.linearVelocity = Vector3.zero;
                 parentRB.angularVelocity = Vector3.zero;
 
+                List<Collider> parentInternalColliders = hit.transform.GetComponentsInChildren<Collider>().ToList();
+                //remove sticky colliders
+                parentInternalColliders.Add(hit.collider);
 
-                foreach(Collider col in allStickyColliders)
+                for(int i =0;i< parentInternalColliders.Count; i++)
                 {
-                    Physics.IgnoreCollision(col, hit.collider);
+                    for(int j=0; j< allStickyColliders.Count; j++)
+                    {
+                        if (parentInternalColliders[i] == allStickyColliders[j])
+                        {
+                            parentInternalColliders.Remove(parentInternalColliders[i]);
+                            continue;
+                        }
+                        Physics.IgnoreCollision(parentInternalColliders[i], allStickyColliders[j]);
+                    }
                 }
+                parentColliders = parentInternalColliders;
+                Debug.Log("suffering parent " + parentColliders.Count + " " + gameObject.name);
             }
         }
     }
 
+    [SynchronizableMethod]
+    private void GnoreCollisions()
+    {
+        Debug.Log("suffering gnore " + parentColliders.Count);
+        foreach (Collider parentCol in parentColliders)
+        {
+            foreach (Collider col in allStickyColliders)
+            {
+                Physics.IgnoreCollision(parentCol, col, false);
+            }
+        }
+        parentColliders.Clear();
+        allStickyColliders.Clear();
+    }
+
+    public static void AmendShaderLayeringInInteract(GameObject objectToApply)
+    {
+        StickyNote[] stickyNoteFound = objectToApply.GetComponentsInChildren<StickyNote>();
+        if (stickyNoteFound == null) { return; }
+
+        foreach (StickyNote s in stickyNoteFound)
+        {
+            Queue<GameObject> tempSticky = new Queue<GameObject>();
+            tempSticky.Enqueue(s.gameObject);
+            CustomMethods.SetLayerRecursively("DynamicInteractableObject", tempSticky);
+        }
+    }
     /*
     [SynchronizableMethod]
     private void OrphanThatPoorChild()

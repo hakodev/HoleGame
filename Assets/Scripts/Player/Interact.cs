@@ -201,6 +201,7 @@ public class Interact : AttributesSync, IObserver
         if (currentOutlinedObject != null && objectToApply != currentOutlinedObject)
         {
             ChangeChildrenLayers("Default", tempChildList);
+            StickyNote.AmendShaderLayeringInInteract(currentOutlinedObject.gameObject);
         }
 
         if (objectToApply == null) return;
@@ -208,15 +209,7 @@ public class Interact : AttributesSync, IObserver
         currentOutlinedObject = objectToApply.transform;
 
         ChangeChildrenLayers("OutlineLayer", tempChildList);
-
-
-
-        StickyNote stickyNoteFound = objectToApply.GetComponentInChildren<StickyNote>();
-        if(stickyNoteFound == null) { return; }
-
-        Queue<GameObject> tempSticky = new Queue<GameObject>();
-        tempSticky.Enqueue(stickyNoteFound.gameObject);
-        CustomMethods.SetLayerRecursively("DynamicInteractableObject", tempSticky);
+        StickyNote.AmendShaderLayeringInInteract(objectToApply);
     }
 
     private void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
@@ -432,7 +425,6 @@ public class Interact : AttributesSync, IObserver
                 //rbToTrack.ApplyAsTransform = true;
 
                 if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
-
                 //reset physics
                 rb.freezeRotation = true;
                 rb.useGravity = false;
