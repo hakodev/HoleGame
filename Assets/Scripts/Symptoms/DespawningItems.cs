@@ -11,7 +11,7 @@ public class DespawningItems : MonoBehaviour {
         foreach (Renderer renderer in renderers)
         {
             renderer.material.shader = Shader.Find("Shader Graphs/Glitch");
-            renderer.material.DOFloat(5, "_GlitchStrength", 0.4f);
+            renderer.material.DOFloat(3.3f, "_GlitchStrength", 0.4f);
  
         }
 
