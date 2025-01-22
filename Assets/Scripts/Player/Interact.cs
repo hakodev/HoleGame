@@ -1,6 +1,7 @@
 using UnityEngine;
 using Alteruna;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public class Interact : AttributesSync, IObserver
@@ -11,7 +12,6 @@ public class Interact : AttributesSync, IObserver
 
     [Header("not important")]
     [SerializeField] GameObject clientHand;
-    [SerializeField] GameObject serverHand;
 
     [SerializeField] Camera playerCamera;
     PlayerController playerController;
@@ -213,6 +213,7 @@ public class Interact : AttributesSync, IObserver
         if (currentOutlinedObject != null && objectToApply != currentOutlinedObject)
         {
             ChangeChildrenLayers("Default", tempChildList);
+            StickyNote.AmendShaderLayeringInInteract(currentOutlinedObject.gameObject);
         }
 
         if (objectToApply == null) return;
@@ -220,6 +221,7 @@ public class Interact : AttributesSync, IObserver
         currentOutlinedObject = objectToApply.transform;
 
         ChangeChildrenLayers("OutlineLayer", tempChildList);
+        StickyNote.AmendShaderLayeringInInteract(objectToApply);
     }
 
     private void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
@@ -311,6 +313,8 @@ public class Interact : AttributesSync, IObserver
     {
         //specifics to thtowing
         if (!avatar.IsMe) return;
+        if (heldObject.name.Contains("Poster")) { return; }
+
         PrepareForDropping();
 
         PlayerAudioManager.Instance.PlaySound(heldObject, PlayerAudioManager.Instance.GetThrowAudio);
@@ -396,7 +400,7 @@ public class Interact : AttributesSync, IObserver
         rb.freezeRotation = false;
         rb.useGravity = true;
 
-
+        ToggleCollidersOfHeldObject(true);
     }
     private void FinishDropping()
     {
@@ -455,6 +459,11 @@ public class Interact : AttributesSync, IObserver
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
                 Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
                 HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+
+
+                //ball needs this but sticky note needs this to not happen
+                if (!heldObject.name.Contains("StickyNote")) ToggleCollidersOfHeldObject(false);
+
                 finishedPickUp = false;
             }
             else
@@ -463,7 +472,18 @@ public class Interact : AttributesSync, IObserver
             }
         }
     }
-    private void ResetMomentum()
+    private void ToggleCollidersOfHeldObject(bool newState)
+    {
+        List<Collider> cols = heldObject.GetComponentsInChildren<Collider>().ToList<Collider>();
+        Collider thisCol = heldObject.GetComponent<Collider>();
+        if (thisCol != null) cols.Add(thisCol);
+        foreach (Collider col in cols)
+        {
+            col.enabled = newState;
+        }
+    }
+
+private void ResetMomentum()
     {
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -555,6 +575,10 @@ public class Interact : AttributesSync, IObserver
     public GameObject GetHeldObject()
     {
         return heldObject;
+    }
+    public float GetGrabReach()
+    {
+        return grabReach;
     }
 }
 
