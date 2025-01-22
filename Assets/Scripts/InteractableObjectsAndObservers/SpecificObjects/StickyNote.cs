@@ -31,6 +31,8 @@ public class StickyNote : DynamicInteractableObject
     List<Collider> allStickyColliders;
     List<Collider> parentColliders;
     Transform parentedTo;
+    public bool IsPoster { get; private set; } = false;
+
 
     public static bool currentlyDrawing=false;
 
@@ -50,6 +52,7 @@ public class StickyNote : DynamicInteractableObject
         base.Start();
         selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
         parentColliders = new List<Collider>();
+        if (gameObject.name.Contains("Poster")) IsPoster = true;
     }
 
     public override void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
@@ -93,6 +96,7 @@ public class StickyNote : DynamicInteractableObject
 
     public override void Use()
     {
+        if (IsPoster) { return; }
         mousePainter = transform.root.GetComponentInChildren<MousePainter>();
         tempCamRef = transform.root.GetComponentInChildren<Camera>();
 
@@ -135,6 +139,7 @@ public class StickyNote : DynamicInteractableObject
         if(userID != Multiplayer.GetUser().Index) { return; }
         if (isInteractedWith && Input.GetMouseButton(0))
         {
+            Debug.Log("wa");
             mousePainter.Paint(tempCamRef);
         }
     }

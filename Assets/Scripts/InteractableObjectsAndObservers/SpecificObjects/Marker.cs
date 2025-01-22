@@ -6,6 +6,7 @@ public class Marker : DynamicInteractableObject
     Camera cam;
     [SynchronizableField]
     private int userID;
+    Interact interact;
 
     protected override void Start()
     {
@@ -33,10 +34,38 @@ public class Marker : DynamicInteractableObject
             {
                 cam = transform.root.GetComponentInChildren<Camera>();
             }
-            RaycastHit hit;
-           // if()
-
+            ProcessMarkerOnStickyNote();    
             painter.Paint(cam);
+        }
+    }
+
+    private void ProcessMarkerOnStickyNote()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            interact = currentlyOwnedByAvatar.gameObject.GetComponent<Interact>();
+
+            RaycastHit hit;
+            if (Physics.Raycast(cam.ScreenPointToRay(new Vector2(cam.pixelWidth / 2, cam.pixelHeight / 2)), out hit, interact.GetGrabReach()))
+            {
+                StickyNote s = hit.transform.GetComponent<StickyNote>();
+                if (s != null)
+                {
+                    s.SpecialInteraction(InteractionEnum.MarkerOnPosterOrStickyNote, this);
+                }
+            }
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(cam.ScreenPointToRay(new Vector2(cam.pixelWidth / 2, cam.pixelHeight / 2)), out hit, interact.GetGrabReach()))
+            {
+                StickyNote s = hit.transform.GetComponent<StickyNote>();
+                if (s != null)
+                {
+                    s.SpecialInteraction(InteractionEnum.StoppedMarkerOnPosterOrStickyNote, this);
+                }
+            }
         }
     }
 

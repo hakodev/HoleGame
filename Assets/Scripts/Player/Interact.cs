@@ -301,6 +301,7 @@ public class Interact : AttributesSync, IObserver
     {
         //specifics to thtowing
         if (!avatar.IsMe) return;
+        if (heldObject.name.Contains("Poster")) { return; }
         PrepareForDropping();
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
 
@@ -549,6 +550,10 @@ public class Interact : AttributesSync, IObserver
     public GameObject GetHeldObject()
     {
         return heldObject;
+    }
+    public float GetGrabReach()
+    {
+        return grabReach;
     }
 }
 
