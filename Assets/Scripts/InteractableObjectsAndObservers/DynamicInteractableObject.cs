@@ -52,6 +52,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     private void SelfSleepIfUnmoving()
     {
         if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
+        if(!isAwake) { return; }
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
         if (currentlyOwnedByAvatar==null)
         {
@@ -96,16 +97,17 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         timeSinceLastSignificantMovement = 0;
         rbSyncDynamic.SyncEveryNUpdates = 999999;
         rbSyncDynamic.FullSyncEveryNSync = 999999;
-        // Debug.Log("sleep " + transform.root.gameObject.name);
+        Debug.Log("sleep " + gameObject.name);
     }
     [SynchronizableMethod]
     public void DynamicAwake()
     {
         isAwake = true;
-        rbSyncDynamic.SyncEveryNUpdates = 4;
-        rbSyncDynamic.FullSyncEveryNSync = 4;
+        rbSyncDynamic.SyncEveryNUpdates = 1;
+        rbSyncDynamic.FullSyncEveryNSync = 2;
+        Debug.Log("awake " + gameObject.name);
     }
-    
+
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
     {
         return currentlyOwnedByAvatar;
