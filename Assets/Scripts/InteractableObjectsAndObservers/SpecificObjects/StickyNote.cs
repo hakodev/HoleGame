@@ -7,7 +7,6 @@ using UnityEngine;
 public class StickyNote : DynamicInteractableObject
 {
     Rigidbody rb;
-    RigidbodySynchronizable rbToTrack;
     [SynchronizableField] public bool isPlaced = false;
     [SynchronizableField] bool isThrown = false;
     [SynchronizableField] bool isGameStart = true;
@@ -17,10 +16,6 @@ public class StickyNote : DynamicInteractableObject
 
     Vector3 originalPos;
     [SynchronizableField] public bool isInteractedWith = false;
-    //disable object colliding with it's child
-    //enalbe ticking to self player if it is thrown
-    //make paper physics fall as if gliding
-    //if object has a sticky note parent it behaves weirdly when thrown after being picked up
 
     private MousePainter mousePainter;
     private Camera tempCamRef;
@@ -41,7 +36,6 @@ public class StickyNote : DynamicInteractableObject
     {
         base.Awake();
         rb = GetComponent<Rigidbody>();
-      //  rbToTrack = GetComponent<RigidbodySynchronizable>();
         allStickyColliders = transform.GetComponentsInChildren<Collider>().ToList();
         allStickyColliders.Add(GetComponent<Collider>());
 
@@ -57,9 +51,9 @@ public class StickyNote : DynamicInteractableObject
     {
         if (interaction == InteractionEnum.PlacedStickyNote)
         {
-            //BroadcastRemoteMethod(nameof(SyncSetParent));
-            //BroadcastRemoteMethod(nameof(Stick));
-            Stick();
+            BroadcastRemoteMethod(nameof(SyncSetParent));
+            BroadcastRemoteMethod(nameof(Stick));
+            //Stick();
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
@@ -90,20 +84,9 @@ public class StickyNote : DynamicInteractableObject
 
         if (isThrown || isGameStart)
         {
-            /*
-            if (collision.gameObject == transform.root.Find(collision.gameObject.name)) {
-                Stick();
-                //BroadcastRemoteMethod(nameof(Stick));
-                parentCollider = collision.collider;
-                parentedTo = collision.transform;
-                Debug.Log("colliding with proper collider");
-                return; 
-            } //check if already parented, (so parent them sticky notes to the walls they are attached to)
-            */
-
             AlignWithSurface(collision);
-            Stick();
-           // BroadcastRemoteMethod(nameof(Stick));
+            //Stick();
+            BroadcastRemoteMethod(nameof(Stick));
         }
     }
 
@@ -157,6 +140,7 @@ public class StickyNote : DynamicInteractableObject
         }
     }
 
+    [SynchronizableMethod]
     private void Stick()
     {
         rb.useGravity = false;
@@ -187,11 +171,7 @@ public class StickyNote : DynamicInteractableObject
         Vector3 alignsBestWith = GetClosestAxis(hitNormal);
         Vector3 bounds = GetRenderersSize(gameObject);
         Vector3 temp = new Vector3(Mathf.Abs(bounds.x * alignsBestWith.normalized.x), Mathf.Abs(bounds.y * alignsBestWith.normalized.y), Mathf.Abs(bounds.z * alignsBestWith.normalized.z));
-
-
-        //assign correct position and rotation
         gameObject.transform.forward = -hitNormal;
-    //    rbToTrack.SetRotation(transform.rotation);
 
         if (isGameStart)
         {
@@ -201,10 +181,7 @@ public class StickyNote : DynamicInteractableObject
         {
             transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 20f;
         }
-      //  rbToTrack.SetPosition(transform.position);
-
         BroadcastRemoteMethod(nameof(SyncSetParent));
-
     }
 
 
@@ -224,8 +201,6 @@ public class StickyNote : DynamicInteractableObject
             {
                 parentRB.linearVelocity = Vector3.zero;
                 parentRB.angularVelocity = Vector3.zero;
-
-                //remove sticky colliders
 
 
                 for (int j = 0; j < allStickyColliders.Count; j++)
@@ -264,10 +239,7 @@ public class StickyNote : DynamicInteractableObject
       //  ResetMomentum();
 
         transform.localPosition = placedLocalPos;
-    //    rbToTrack.SetPosition(transform.position);
-
         transform.localRotation = Quaternion.Euler(placedLocalRot);
-     //   rbToTrack.SetRotation(transform.rotation);
     }
 
     private Vector3 GetRenderersSize(GameObject obj)
@@ -328,7 +300,5 @@ public class StickyNote : DynamicInteractableObject
         //helps avoid bs parenting physics glitches
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-       // rbToTrack.velocity = Vector3.zero;
-       // rbToTrack.angularVelocity = Vector3.zero;
     }
 }
