@@ -8,7 +8,7 @@ using Alteruna;
 using System.Linq;
 public class VotingPhase : AttributesSync {
 
-    public static List<PlayerRole> totalAlivePlayers;
+    public static List<PlayerRole> totalALivePlayers;
     private PlayerRole player;
 
     [SerializeField] private GameObject playerVoteButton;
@@ -33,22 +33,17 @@ public class VotingPhase : AttributesSync {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
     }
+    private void Start() {
+
+    }
 
 
+    public bool once = false;
     public void InitiateVotingPhase() {
 
         if (!avatar.IsMe) { return; }
         //if (totalPlayers.Count <= 1) { return; }
-        totalAlivePlayers ??= RoleAssignment.GetTotalPlayers();
-
-        foreach(PlayerRole role in totalAlivePlayers) {
-            //Debug.Log(role.gameObject.name);
-            StanceEnum playerStance = role.gameObject.GetComponent<MishSyncAnimations>().GetCurrentStance();
-            if(playerStance == StanceEnum.Dead) {
-                totalAlivePlayers.Remove(role);
-                Destroy(role.gameObject.GetComponent<VotingPhase>());
-            }
-        }
+       if(totalALivePlayers==null) totalALivePlayers = RoleAssignment.GetTotalPlayers();
 
 
         votingPlayers = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None).ToList<VotingPhase>();
@@ -66,7 +61,7 @@ public class VotingPhase : AttributesSync {
             } else {
 
                 int i = 0;
-                foreach(PlayerRole otherPlayer in totalAlivePlayers)
+                foreach(PlayerRole otherPlayer in totalALivePlayers)
                 {
                     if (otherPlayer == player) { continue; }
                     i++;
@@ -100,6 +95,8 @@ public class VotingPhase : AttributesSync {
     public void EndVotingPhase()
     {
         if (!avatar.IsMe) { return; }
+
+        Debug.Log("breakdowns " + avatar.name);
        // if (totalPlayers.Count <= 1) { return; }
 
         if (!hasVoted)
@@ -124,24 +121,27 @@ public class VotingPhase : AttributesSync {
         if (!Multiplayer.GetUser().IsHost || RoleAssignment.playerID-1!=0) { return; }
         if (!avatar.IsMe) { return; }
 
-            PlayerRole pickedPlayer = totalAlivePlayers[0];
+       // if(once) { return; }
+       // once = true;
+
+            PlayerRole pickedPlayer = totalALivePlayers[0];
         List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
 
 
-        for (int i = 1; i < totalAlivePlayers.Count; i++)
+        for (int i = 1; i < totalALivePlayers.Count; i++)
         {
-            if (totalAlivePlayers[i] == player) { continue; } //same player
+            if (totalALivePlayers[i] == player) { continue; } //same player
 
-            if (totalAlivePlayers[i].VotedCount > pickedPlayer.VotedCount) //more votes
+            if (totalALivePlayers[i].VotedCount > pickedPlayer.VotedCount) //more votes
             {
-                pickedPlayer = totalAlivePlayers[i];
+                pickedPlayer = totalALivePlayers[i];
                 equallyVotedPlayers.Clear();
-                equallyVotedPlayers.Add(totalAlivePlayers[i]);
+                equallyVotedPlayers.Add(totalALivePlayers[i]);
             }
 
-            if (totalAlivePlayers[i].VotedCount == pickedPlayer.VotedCount) //equivotes
+            if (totalALivePlayers[i].VotedCount == pickedPlayer.VotedCount) //equivotes
             {
-                equallyVotedPlayers.Add(totalAlivePlayers[i]);
+                equallyVotedPlayers.Add(totalALivePlayers[i]);
             }
         }
 
@@ -152,9 +152,9 @@ public class VotingPhase : AttributesSync {
         pickedPlayer.Commit();
 
 
-        for (int i = 0; i < totalAlivePlayers.Count; i++)
+        for (int i = 0; i < equallyVotedPlayers.Count; i++)
         {
-            if (totalAlivePlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
+            if (equallyVotedPlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
         }
         Debug.Log("DADADA " + gameObject.name + Multiplayer.GetUser().Name);
 
@@ -162,7 +162,7 @@ public class VotingPhase : AttributesSync {
         {
             voter.taskManagerNameInHost = pickedPlayer.gameObject.name;
             voter.pickedPlayerIndex = pickedPlayerIndex;
-            voter.BroadcastRemoteMethod(nameof(voter.EndVotingPhaseFinale));
+            voter.BroadcastRemoteMethod("EndVotingPhaseFinale");
         }
     }
 
@@ -183,10 +183,10 @@ public class VotingPhase : AttributesSync {
     private void VoteRandomly()
     {
         List<PlayerRole> votableCandidates = new List<PlayerRole>();
-        for (int i = 0; i < totalAlivePlayers.Count; i++)
+        for (int i = 0; i < totalALivePlayers.Count; i++)
         {
-            if (totalAlivePlayers[i] == player) { continue; }
-            votableCandidates.Add(totalAlivePlayers[i]);
+            if (totalALivePlayers[i] == player) { continue; }
+            votableCandidates.Add(totalALivePlayers[i]);
         }
 
 
