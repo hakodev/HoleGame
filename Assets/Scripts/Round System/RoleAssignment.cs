@@ -66,6 +66,8 @@ public class RoleAssignment : AttributesSync
                     FindRolelessPlayers();
                     DetermineMaxNumberOfInfiltrators();
                     AssignRoles();
+                    VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
+                    voting.BroadcastRemoteMethod(nameof(voting.DisplaySymptomNotifSync));
                 }
                 else
                 {
@@ -127,6 +129,7 @@ public class RoleAssignment : AttributesSync
         yield return new WaitForSeconds(2f); // How many seconds to display it on screen
         youNeedFriends.DOFade(0f, 1f);
     }
+
 }
 public enum Roles
 {

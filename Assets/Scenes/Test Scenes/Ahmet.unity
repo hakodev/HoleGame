@@ -345,10 +345,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainMenuCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 179021563873673276, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5650040819078379761, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
       propertyPath: roomMenu
       value: 
@@ -431,22 +427,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7404781570024824595, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8186812533569261498, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
-      propertyPath: m_BackGroundColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8186812533569261498, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8186812533569261498, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8186812533569261498, guid: 557dc4fb9c5843542a6c19149c66748c, type: 3}
-      propertyPath: m_BackGroundColor.r
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

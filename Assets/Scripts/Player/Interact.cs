@@ -1,6 +1,8 @@
-using UnityEngine;
 using Alteruna;
 using System.Collections.Generic;
+using UnityEngine;
+
+
 
 
 public class Interact : AttributesSync, IObserver
@@ -178,7 +180,7 @@ public class Interact : AttributesSync, IObserver
                 {
                     pickedUp = hit.transform.gameObject;
                     BroadcastRemoteMethod(nameof(TryPickUp));
-                    
+
                 }
             }
         }
@@ -244,7 +246,7 @@ public class Interact : AttributesSync, IObserver
     [SynchronizableMethod]
     private void Place()
     {
-        if(!avatar.IsMe) return;
+        if (!avatar.IsMe) return;
         SetLayerRecursively(heldObject, 11);
         LayerMask everythingButHeldObject = ~(1 << 11 | 10);
 
@@ -373,6 +375,10 @@ public class Interact : AttributesSync, IObserver
     {
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
+        DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
+        DIO.BroadcastRemoteMethod("DynamicAwake");
+
+
         heldObject.transform.SetParent(null);
         ResetMomentum();
 
@@ -385,9 +391,11 @@ public class Interact : AttributesSync, IObserver
     private void FinishDropping()
     {
         // Is the despawning item symptom on and is the dropper a machine?
-        if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0] &&
-           gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine) {
+        if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0] &&
+          gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
+        {
             DespawningItems.DespawnItem(heldObject);
+            StartCoroutine(DespawningItems.DestroyItem(heldObject));
         }
 
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
@@ -402,11 +410,11 @@ public class Interact : AttributesSync, IObserver
     [SynchronizableMethod]
     private void TryPickUp()
     {
-        if(!avatar.IsMe) return;
-        if(heldObject != null) { return; }
+        if (!avatar.IsMe) return;
+        if (heldObject != null) { return; }
         finishedPickUp = false;
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun) 
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun)
         {
             DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
@@ -432,6 +440,8 @@ public class Interact : AttributesSync, IObserver
                 UpdateHeldObjectPhysics();
 
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
+                DIO.BroadcastRemoteMethod("DynamicAwake");
+
                 Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
                 HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
             }
@@ -514,7 +524,7 @@ public class Interact : AttributesSync, IObserver
         {
             if (spawnedGun != null && avatar.IsMe)
             {
-                if(heldObject == spawnedGun) Drop();
+                if (heldObject == spawnedGun) Drop();
                 spawner.Despawn(spawnedGun);
             }
         }
@@ -533,6 +543,10 @@ public class Interact : AttributesSync, IObserver
     public GameObject GetHeldObject()
     {
         return heldObject;
+    }
+    public float GetGrabReach()
+    {
+        return grabReach;
     }
 }
 

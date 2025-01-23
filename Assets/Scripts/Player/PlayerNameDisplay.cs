@@ -7,29 +7,31 @@ public class PlayerNameDisplay : AttributesSync {
     private Alteruna.Avatar avatar;
     private PlayerRole thisPlayerRole;
     private Camera getLocalCamera;
+    private UIInput uiinput;
 
     private void Awake () {
         playerNameText = GetComponent<TextMeshProUGUI>();
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
         thisPlayerRole = transform.root.GetComponent<PlayerRole>();
-
+        uiinput = FindAnyObjectByType<UIInput>();
     }
 
     private void Start() {
         getLocalCamera = Multiplayer.GetAvatar(Multiplayer.GetUser().Index).gameObject.GetComponentInChildren<Camera>();
+        BroadcastRemoteMethod(nameof(SufferingInTheAbyss));
+    }
+    [SynchronizableMethod]
+    private void SufferingInTheAbyss()
+    {
+        playerNameText.text = transform.root.GetComponentInChildren<PlayerRole>().GetName();
+        transform.root.gameObject.name = playerNameText.text;
 
-        playerNameText.text = avatar.gameObject.name; // Set this to be the player name the user chooses
-
-       
-
-
-        if(avatar.IsMe) {
-            playerNameText.enabled = false; // Disable my text for my view
-        }
+        Debug.Log("3 " + playerNameText.text);
     }
 
     bool once = true;
-    private new void LateUpdate() {
+    private new void LateUpdate() 
+    {
         base.LateUpdate();
         if(avatar.IsMe) return;
 

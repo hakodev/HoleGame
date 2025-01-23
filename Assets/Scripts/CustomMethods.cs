@@ -65,4 +65,14 @@ private static void SetActiveMeshColliderRecursivelyQueue(Queue<Transform> branc
         branches.Enqueue(start);
         SetActiveMeshColliderRecursivelyQueue(branches, newState);
     }
+    public static void SetLayerRecursively(string layerName, Queue<GameObject> childrenLeft)
+    {
+        GameObject currentCheck = childrenLeft.Dequeue();
+
+        foreach (Transform child in currentCheck.GetComponentsInChildren<Transform>())
+        {
+            childrenLeft.Enqueue(child.gameObject);
+        }
+        currentCheck.gameObject.layer = LayerMask.NameToLayer(layerName);
+    }
 }
