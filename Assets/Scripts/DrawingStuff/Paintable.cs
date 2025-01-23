@@ -1,8 +1,6 @@
 using UnityEngine;
 using Alteruna;
-using System.Xml;
-using System;
-using UnityEditor;
+
 
 public class Paintable : AttributesSync {
 	const int TEXTURE_SIZE = 1024;

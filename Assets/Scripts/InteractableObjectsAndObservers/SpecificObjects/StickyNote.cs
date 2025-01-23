@@ -7,21 +7,15 @@ using UnityEngine;
 public class StickyNote : DynamicInteractableObject
 {
     Rigidbody rb;
-    RigidbodySynchronizable rbToTrack;
     [SynchronizableField] public bool isPlaced = false;
     [SynchronizableField] bool isThrown = false;
     [SynchronizableField] bool isGameStart = true;
-    [SynchronizableField] Vector3 placedLocalPos;
-    [SynchronizableField] Vector3 placedLocalRot;
+    Vector3 placedLocalPos;
+    Vector3 placedLocalRot;
     int selfLayer;
 
-    Vector3 finalPosition;
     Vector3 originalPos;
     [SynchronizableField] public bool isInteractedWith = false;
-    //disable object colliding with it's child
-    //enalbe ticking to self player if it is thrown
-    //make paper physics fall as if gliding
-    //if object has a sticky note parent it behaves weirdly when thrown after being picked up
 
     private MousePainter mousePainter;
     private Camera tempCamRef;
@@ -29,7 +23,7 @@ public class StickyNote : DynamicInteractableObject
     private int userID;
 
     List<Collider> allStickyColliders;
-    List<Collider> parentColliders;
+    Collider parentCollider;
     Transform parentedTo;
     public bool IsPoster { get; private set; } = false;
 
@@ -42,7 +36,6 @@ public class StickyNote : DynamicInteractableObject
     {
         base.Awake();
         rb = GetComponent<Rigidbody>();
-        rbToTrack = GetComponent<RigidbodySynchronizable>();
         allStickyColliders = transform.GetComponentsInChildren<Collider>().ToList();
         allStickyColliders.Add(GetComponent<Collider>());
 
@@ -51,7 +44,6 @@ public class StickyNote : DynamicInteractableObject
     {
         base.Start();
         selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
-        parentColliders = new List<Collider>();
         if (gameObject.name.Contains("Poster")) IsPoster = true;
     }
 
@@ -60,7 +52,8 @@ public class StickyNote : DynamicInteractableObject
         if (interaction == InteractionEnum.PlacedStickyNote)
         {
             BroadcastRemoteMethod(nameof(SyncSetParent));
-            Stick();
+            BroadcastRemoteMethod(nameof(Stick));
+            //Stick();
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
@@ -84,13 +77,16 @@ public class StickyNote : DynamicInteractableObject
             boxy.enabled = true;
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision collision)
     {
+        base.OnCollisionEnter(collision);
         if (collision.gameObject.layer == selfLayer) { return; }
+
         if (isThrown || isGameStart)
         {
             AlignWithSurface(collision);
-            Stick();
+            //Stick();
+            BroadcastRemoteMethod(nameof(Stick));
         }
     }
 
@@ -144,8 +140,7 @@ public class StickyNote : DynamicInteractableObject
         }
     }
 
-
-
+    [SynchronizableMethod]
     private void Stick()
     {
         rb.useGravity = false;
@@ -168,32 +163,15 @@ public class StickyNote : DynamicInteractableObject
 
         Vector3 point = Vector3.zero;
         Collider col = collision.gameObject.GetComponent<Collider>();
-        MeshCollider stupidCol = collision.gameObject.GetComponent<MeshCollider>();
-        if (col != null && col.enabled)
-        {
-            point = col.ClosestPoint(transform.position);
-        }
-        else
-        {
-            if (stupidCol != null && stupidCol.enabled)
-            {
-                point = (stupidCol).ClosestPoint(transform.position);
-            }
-            else
-            {
-                Debug.Log("Some other collider somehow " + stupidCol + stupidCol.enabled);
-            }
-        }
+        if (col != null && col.enabled) point = col.ClosestPoint(transform.position);
+        parentCollider = col;
+
 
         Vector3 hitNormal = transform.position - point;
         Vector3 alignsBestWith = GetClosestAxis(hitNormal);
         Vector3 bounds = GetRenderersSize(gameObject);
         Vector3 temp = new Vector3(Mathf.Abs(bounds.x * alignsBestWith.normalized.x), Mathf.Abs(bounds.y * alignsBestWith.normalized.y), Mathf.Abs(bounds.z * alignsBestWith.normalized.z));
-
-
-        //assign correct position and rotation
         gameObject.transform.forward = -hitNormal;
-        rbToTrack.SetRotation(transform.rotation);
 
         if (isGameStart)
         {
@@ -203,10 +181,10 @@ public class StickyNote : DynamicInteractableObject
         {
             transform.position = point + Vector3.Scale(hitNormal.normalized, temp) / 20f;
         }
-        rbToTrack.SetPosition(transform.position);
-
         BroadcastRemoteMethod(nameof(SyncSetParent));
     }
+
+
     [SynchronizableMethod]
     private void SyncSetParent()
     {
@@ -215,6 +193,7 @@ public class StickyNote : DynamicInteractableObject
         {
             transform.SetParent(hit.transform, true);
             parentedTo = hit.transform;
+            parentCollider = hit.collider;
 
             Rigidbody parentRB = hit.collider.transform.GetComponent<Rigidbody>();
             if(parentRB==null) parentRB = hit.collider.transform.GetComponentInChildren<Rigidbody>();
@@ -223,24 +202,11 @@ public class StickyNote : DynamicInteractableObject
                 parentRB.linearVelocity = Vector3.zero;
                 parentRB.angularVelocity = Vector3.zero;
 
-                List<Collider> parentInternalColliders = hit.transform.GetComponentsInChildren<Collider>().ToList();
-                //remove sticky colliders
-                parentInternalColliders.Add(hit.collider);
 
-                for(int i =0;i< parentInternalColliders.Count; i++)
+                for (int j = 0; j < allStickyColliders.Count; j++)
                 {
-                    for(int j=0; j< allStickyColliders.Count; j++)
-                    {
-                        if (parentInternalColliders[i] == allStickyColliders[j])
-                        {
-                            parentInternalColliders.Remove(parentInternalColliders[i]);
-                            continue;
-                        }
-                        Physics.IgnoreCollision(parentInternalColliders[i], allStickyColliders[j]);
-                    }
+                    Physics.IgnoreCollision(parentCollider, allStickyColliders[j], true);
                 }
-                parentColliders = parentInternalColliders;
-                Debug.Log("suffering parent " + parentColliders.Count + " " + gameObject.name);
             }
         }
     }
@@ -248,16 +214,10 @@ public class StickyNote : DynamicInteractableObject
     [SynchronizableMethod]
     private void GnoreCollisions()
     {
-        Debug.Log("suffering gnore " + parentColliders.Count);
-        foreach (Collider parentCol in parentColliders)
+        foreach (Collider col in allStickyColliders)
         {
-            foreach (Collider col in allStickyColliders)
-            {
-                Physics.IgnoreCollision(parentCol, col, false);
-            }
+            Physics.IgnoreCollision(parentCollider, col, false);
         }
-        parentColliders.Clear();
-        allStickyColliders.Clear();
     }
 
     public static void AmendShaderLayeringInInteract(GameObject objectToApply)
@@ -272,31 +232,14 @@ public class StickyNote : DynamicInteractableObject
             CustomMethods.SetLayerRecursively("DynamicInteractableObject", tempSticky);
         }
     }
-    /*
-    [SynchronizableMethod]
-    private void OrphanThatPoorChild()
-    {
-        Collider parentCol = parentedTo.GetComponent<Collider>();
-        if(parentCol==null) parentCol = parentedTo.GetComponent<MeshCollider>();
-        Physics.IgnoreCollision(parentCol, parentCol, false);
-        transform.SetParent(null);
-    }
-    */
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = UnityEngine.Color.red;
-        Gizmos.DrawWireCube(GetComponent<Collider>().bounds.center, GetComponent<Collider>().bounds.size);
-    }
+    
     private void StasisInPlace()
     {
       //  ResetMomentum();
 
         transform.localPosition = placedLocalPos;
-        rbToTrack.SetPosition(transform.position);
-
         transform.localRotation = Quaternion.Euler(placedLocalRot);
-        rbToTrack.SetRotation(transform.rotation);
     }
 
     private Vector3 GetRenderersSize(GameObject obj)
@@ -357,7 +300,5 @@ public class StickyNote : DynamicInteractableObject
         //helps avoid bs parenting physics glitches
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rbToTrack.velocity = Vector3.zero;
-        rbToTrack.angularVelocity = Vector3.zero;
     }
 }

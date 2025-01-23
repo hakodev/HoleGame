@@ -18,9 +18,7 @@ public class UIInput : MonoBehaviour
             invalidNameWarningText.DOKill();
             invalidNameWarningText.alpha = 1f;
             invalidNameWarningText.DOFade(0f, 3f);
-        }
-        else
-        {
+        } else { 
             PlayerNameSync = nameInputField.text;
             Debug.Log("1 " + PlayerNameSync);
             roomMenu.SetActive(true);

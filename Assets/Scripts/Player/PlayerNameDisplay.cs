@@ -33,7 +33,7 @@ public class PlayerNameDisplay : AttributesSync
     }
 
     bool once = true;
-    private new void LateUpdate()
+    private new void LateUpdate() 
     {
         base.LateUpdate();
         if (avatar.IsMe) return;
