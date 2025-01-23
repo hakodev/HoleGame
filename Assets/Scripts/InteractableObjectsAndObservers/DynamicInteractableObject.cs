@@ -55,7 +55,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
         if (currentlyOwnedByAvatar==null)
         {
-            if (!currentlyOwnedByAvatar.IsMe) { return; }
             if (rbDynamic.linearVelocity.magnitude < 0.1f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
@@ -87,7 +86,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //    Debug.Log("awake");
 
             timeSinceLastSignificantMovement = 0;
-            BroadcastRemoteMethod(nameof(DynamicAwake));
+            //BroadcastRemoteMethod(nameof(DynamicAwake));
         }
     }
     [SynchronizableMethod]
