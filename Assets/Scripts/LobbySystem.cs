@@ -1,4 +1,4 @@
-using System.Collections;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -27,30 +27,20 @@ public class LobbySystem : MonoBehaviour {
     }
 
     private void DisplayNotificationText() {
-        StopCoroutine(TimedDisplay());
-        StopCoroutine(NoSymptomDisplay());
+        symptomNotifText.DOKill();
         symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
-        StartCoroutine(TimedDisplay());
-    }
-
-    private void DisplayNoSymptomText() {
-        StopCoroutine(TimedDisplay());
-        StopCoroutine(NoSymptomDisplay());
-        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
-        StartCoroutine(NoSymptomDisplay());
-    }
-
-    private IEnumerator TimedDisplay() {
+        symptomNotifText.alpha = 1f;
         symptomNotifText.text = "Simulating new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
                                $"{SymptomsManager.Instance.GetSymptom().Description}";
-        yield return new WaitForSeconds(10f);
-        symptomNotifText.transform.parent.parent.gameObject.SetActive(false); // disable canvas
+        symptomNotifText.DOFade(0f, 10f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
     }
 
-    private IEnumerator NoSymptomDisplay() {
-        symptomNotifText.text = "Removed all symptoms!";
-        yield return new WaitForSeconds(5f);
-        symptomNotifText.transform.parent.parent.gameObject.SetActive(false); // disable canvas
+    private void DisplayNoSymptomText() {
+        symptomNotifText.DOKill();
+        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
+        symptomNotifText.alpha = 1f;
+        symptomNotifText.text = "All symptoms removed!";
+        symptomNotifText.DOFade(0f, 5f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
     }
 }
