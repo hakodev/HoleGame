@@ -66,7 +66,8 @@ public class RoleAssignment : AttributesSync
                     FindRolelessPlayers();
                     DetermineMaxNumberOfInfiltrators();
                     AssignRoles();
-                    GetComponent<PlayerRole>().BroadcastRemoteMethod("DisplaySymptomNotifSync");
+                    VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
+                    voting.BroadcastRemoteMethod(nameof(voting.DisplaySymptomNotifSync));
                 }
                 else
                 {
