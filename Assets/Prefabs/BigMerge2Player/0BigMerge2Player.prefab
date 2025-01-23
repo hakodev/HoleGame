@@ -865,7 +865,6 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   clientHand: {fileID: 8848563047412206510}
-  serverHand: {fileID: 4025769460903363640}
   playerCamera: {fileID: 8609542860471924445}
   grabReach: 6
   placeReach: 6
@@ -928,6 +927,7 @@ MonoBehaviour:
   VotedCount: 0
   IsTaskManager: 0
   ceoFlashScreen: {fileID: 4566744043790251347}
+  playerNameSync: 
 --- !u!114 &7886903507939173138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4635,7 +4635,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 223894777740195027, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3727677605208202113, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
       insertIndex: -1
@@ -4645,11 +4646,6 @@ PrefabInstance:
 --- !u!4 &539965675802405738 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3727677605208202113, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
-  m_PrefabInstance: {fileID: 3802455235705057515}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4025769460903363640 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 223894777740195027, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
   m_PrefabInstance: {fileID: 3802455235705057515}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5178066372033882247 stripped
