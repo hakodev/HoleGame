@@ -63,6 +63,10 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
                     BroadcastRemoteMethod(nameof(DynamicSleep));
                 }
             }
+            else
+            {
+                timeSinceLastSignificantMovement = 0;
+            }
         }
         else
         {
@@ -78,7 +82,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         {
         //    Debug.Log("awake");
             timeSinceLastSignificantMovement = 0;
-            BroadcastRemoteMethod(nameof(DynamicAwake));
+        //    BroadcastRemoteMethod(nameof(DynamicAwake));
         }
     }
     [SynchronizableMethod]

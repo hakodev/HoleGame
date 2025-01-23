@@ -60,7 +60,8 @@ public class StickyNote : DynamicInteractableObject
         if (interaction == InteractionEnum.PlacedStickyNote)
         {
             BroadcastRemoteMethod(nameof(SyncSetParent));
-            Stick();
+            BroadcastRemoteMethod(nameof(Stick));
+            //Stick();
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
@@ -84,13 +85,15 @@ public class StickyNote : DynamicInteractableObject
             boxy.enabled = true;
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision collision)
     {
+        base.OnCollisionEnter(collision);
         if (collision.gameObject.layer == selfLayer) { return; }
         if (isThrown || isGameStart)
         {
             AlignWithSurface(collision);
-            Stick();
+            BroadcastRemoteMethod(nameof(Stick));
+            //Stick();
         }
     }
 
@@ -139,13 +142,14 @@ public class StickyNote : DynamicInteractableObject
         if(userID != Multiplayer.GetUser().Index) { return; }
         if (isInteractedWith && Input.GetMouseButton(0))
         {
-            Debug.Log("wa");
+            Debug.Log("drawing on sticky note");
             mousePainter.Paint(tempCamRef);
         }
     }
 
 
 
+    [SynchronizableMethod]
     private void Stick()
     {
         rb.useGravity = false;
@@ -257,7 +261,6 @@ public class StickyNote : DynamicInteractableObject
             }
         }
         parentColliders.Clear();
-        allStickyColliders.Clear();
     }
 
     public static void AmendShaderLayeringInInteract(GameObject objectToApply)
@@ -272,31 +275,13 @@ public class StickyNote : DynamicInteractableObject
             CustomMethods.SetLayerRecursively("DynamicInteractableObject", tempSticky);
         }
     }
-    /*
-    [SynchronizableMethod]
-    private void OrphanThatPoorChild()
-    {
-        Collider parentCol = parentedTo.GetComponent<Collider>();
-        if(parentCol==null) parentCol = parentedTo.GetComponent<MeshCollider>();
-        Physics.IgnoreCollision(parentCol, parentCol, false);
-        transform.SetParent(null);
-    }
-    */
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = UnityEngine.Color.red;
-        Gizmos.DrawWireCube(GetComponent<Collider>().bounds.center, GetComponent<Collider>().bounds.size);
-    }
     private void StasisInPlace()
     {
       //  ResetMomentum();
 
         transform.localPosition = placedLocalPos;
-        rbToTrack.SetPosition(transform.position);
-
         transform.localRotation = Quaternion.Euler(placedLocalRot);
-        rbToTrack.SetRotation(transform.rotation);
     }
 
     private Vector3 GetRenderersSize(GameObject obj)
