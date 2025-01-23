@@ -212,5 +212,10 @@ public class VotingPhase : AttributesSync {
         yield return new WaitForSeconds(6f); // How many seconds to display it on screen
         randomlyVotedPlayer.SetActive(false);
     }
+    [SynchronizableMethod]
+    public void DisplaySymptomNotifSync()
+    {
+        StartCoroutine(DisplaySymptomNotif());
+    }
 
 }

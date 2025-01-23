@@ -62,9 +62,13 @@ public class StickyNote : DynamicInteractableObject
     {
         if (interaction == InteractionEnum.PlacedStickyNote)
         {
-            BroadcastRemoteMethod(nameof(SyncSetParent));
-            //BroadcastRemoteMethod(nameof(Stick));
-            Stick();
+         BroadcastRemoteMethod(nameof(SyncSetParent));
+         BroadcastRemoteMethod(nameof(Stick));
+
+
+            //Stick();
+            //isThrown = false;
+
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
@@ -76,8 +80,10 @@ public class StickyNote : DynamicInteractableObject
             isPlaced = false;
             originalPos = transform.position;
             BroadcastRemoteMethod(nameof(GnoreCollisions));
+
+            //isThrown = false;
         }
-        if(interaction == InteractionEnum.MarkerOnPosterOrStickyNote)
+        if (interaction == InteractionEnum.MarkerOnPosterOrStickyNote)
         {
             Collider boxy = GetComponent<Collider>();
             boxy.enabled = false;
@@ -94,6 +100,7 @@ public class StickyNote : DynamicInteractableObject
         if (collision.gameObject.layer == selfLayer) { return; }
         if (isThrown || isGameStart)
         {
+            Debug.Log("COLL STICKYYY");
             AlignWithSurface(collision);
             BroadcastRemoteMethod(nameof(Stick));
             //Stick();
