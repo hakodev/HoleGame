@@ -59,7 +59,7 @@ public class StickyNote : DynamicInteractableObject
     {
         if (interaction == InteractionEnum.PlacedStickyNote)
         {
-            BroadcastRemoteMethod(nameof(SyncSetParent));
+            //BroadcastRemoteMethod(nameof(SyncSetParent));
             Stick();
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
@@ -207,7 +207,7 @@ public class StickyNote : DynamicInteractableObject
 
         //  if(isGameStart) 
         //BroadcastRemoteMethod(nameof(SyncSetParent));
-        SyncSetParent();
+        //  SyncSetParent();
     }
     private void SyncSetParent()
     {
