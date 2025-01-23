@@ -8,7 +8,7 @@ using Alteruna;
 using System.Linq;
 public class VotingPhase : AttributesSync {
 
-    public static List<PlayerRole> totalALivePlayers;
+    public static List<PlayerRole> totalAlivePlayers;
     private PlayerRole player;
 
     [SerializeField] private GameObject playerVoteButton;
@@ -33,16 +33,22 @@ public class VotingPhase : AttributesSync {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
     }
-    private void Start() {
-
-    }
 
 
     public void InitiateVotingPhase() {
 
         if (!avatar.IsMe) { return; }
         //if (totalPlayers.Count <= 1) { return; }
-       if(totalALivePlayers==null) totalALivePlayers = RoleAssignment.GetTotalPlayers();
+        totalAlivePlayers ??= RoleAssignment.GetTotalPlayers();
+
+        foreach(PlayerRole role in totalAlivePlayers) {
+            //Debug.Log(role.gameObject.name);
+            StanceEnum playerStance = role.gameObject.GetComponent<MishSyncAnimations>().GetCurrentStance();
+            if(playerStance == StanceEnum.Dead) {
+                totalAlivePlayers.Remove(role);
+                Destroy(role.gameObject.GetComponent<VotingPhase>());
+            }
+        }
 
 
         votingPlayers = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None).ToList<VotingPhase>();
@@ -60,7 +66,7 @@ public class VotingPhase : AttributesSync {
             } else {
 
                 int i = 0;
-                foreach(PlayerRole otherPlayer in totalALivePlayers)
+                foreach(PlayerRole otherPlayer in totalAlivePlayers)
                 {
                     if (otherPlayer == player) { continue; }
                     i++;
@@ -118,24 +124,24 @@ public class VotingPhase : AttributesSync {
         if (!Multiplayer.GetUser().IsHost || RoleAssignment.playerID-1!=0) { return; }
         if (!avatar.IsMe) { return; }
 
-            PlayerRole pickedPlayer = totalALivePlayers[0];
+            PlayerRole pickedPlayer = totalAlivePlayers[0];
         List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
 
 
-        for (int i = 1; i < totalALivePlayers.Count; i++)
+        for (int i = 1; i < totalAlivePlayers.Count; i++)
         {
-            if (totalALivePlayers[i] == player) { continue; } //same player
+            if (totalAlivePlayers[i] == player) { continue; } //same player
 
-            if (totalALivePlayers[i].VotedCount > pickedPlayer.VotedCount) //more votes
+            if (totalAlivePlayers[i].VotedCount > pickedPlayer.VotedCount) //more votes
             {
-                pickedPlayer = totalALivePlayers[i];
+                pickedPlayer = totalAlivePlayers[i];
                 equallyVotedPlayers.Clear();
-                equallyVotedPlayers.Add(totalALivePlayers[i]);
+                equallyVotedPlayers.Add(totalAlivePlayers[i]);
             }
 
-            if (totalALivePlayers[i].VotedCount == pickedPlayer.VotedCount) //equivotes
+            if (totalAlivePlayers[i].VotedCount == pickedPlayer.VotedCount) //equivotes
             {
-                equallyVotedPlayers.Add(totalALivePlayers[i]);
+                equallyVotedPlayers.Add(totalAlivePlayers[i]);
             }
         }
 
@@ -146,9 +152,9 @@ public class VotingPhase : AttributesSync {
         pickedPlayer.Commit();
 
 
-        for (int i = 0; i < totalALivePlayers.Count; i++)
+        for (int i = 0; i < totalAlivePlayers.Count; i++)
         {
-            if (totalALivePlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
+            if (totalAlivePlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
         }
         Debug.Log("DADADA " + gameObject.name + Multiplayer.GetUser().Name);
 
@@ -177,10 +183,10 @@ public class VotingPhase : AttributesSync {
     private void VoteRandomly()
     {
         List<PlayerRole> votableCandidates = new List<PlayerRole>();
-        for (int i = 0; i < totalALivePlayers.Count; i++)
+        for (int i = 0; i < totalAlivePlayers.Count; i++)
         {
-            if (totalALivePlayers[i] == player) { continue; }
-            votableCandidates.Add(totalALivePlayers[i]);
+            if (totalAlivePlayers[i] == player) { continue; }
+            votableCandidates.Add(totalAlivePlayers[i]);
         }
 
 

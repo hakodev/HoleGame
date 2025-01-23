@@ -640,6 +640,7 @@ MonoBehaviour:
   - {x: 1, y: 1}
   - {x: 6, y: 2}
   - {x: 9, y: 3}
+  lobbyCanvas: {fileID: 5801904133662904714}
 --- !u!1 &1983625876616037276
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,6 +866,7 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   clientHand: {fileID: 8848563047412206510}
+  serverHand: {fileID: 0}
   playerCamera: {fileID: 8609542860471924445}
   grabReach: 6
   placeReach: 6
