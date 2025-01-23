@@ -11,6 +11,7 @@ TagManager:
   - drawnOn
   - NetworkManager
   - RoomMenu
+  - nameInput
   layers:
   - Default
   - TransparentFX

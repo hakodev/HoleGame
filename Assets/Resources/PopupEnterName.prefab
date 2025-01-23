@@ -376,8 +376,8 @@ GameObject:
   - component: {fileID: 1458794388016601822}
   - component: {fileID: 186624311035565460}
   m_Layer: 5
-  m_Name: Text
-  m_TagString: Untagged
+  m_Name: nameInput
+  m_TagString: nameInput
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

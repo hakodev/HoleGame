@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using Alteruna;
+using TMPro;
 
 
 public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     private RectTransform rectTransform;
     private Canvas canvas;
+    private static GameObject roomMenu;
 
     [SerializeField] float popInTime;
     [SerializeField] float popOutTime;
@@ -21,6 +24,11 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         uiInput = transform.root.GetComponentInChildren<UIInput>();
+        if (roomMenu == null)
+        {
+            roomMenu = GameObject.FindGameObjectWithTag("RoomMenu");
+            roomMenu.SetActive(false);
+        }
     }
     private void Start()
     {
@@ -71,8 +79,22 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
             namePopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
         }
     }
+
+    TextMeshProUGUI nameInputFieldText;
     public void ClickedVerifyNameButton()
     {
-        uiInput.ClickedPlayButton();
+        nameInputFieldText = GameObject.FindGameObjectWithTag("nameInput").GetComponent<TextMeshProUGUI>();
+        if (nameInputFieldText.text == string.Empty)
+        {
+            GameObject noNamePopupPrefab = Resources.Load<GameObject>("PopupWrongName");
+            GameObject captchaPopUp = Instantiate(noNamePopupPrefab, canvas.transform, false);
+            captchaPopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-286, 228, 0);
+        }
+        else
+        {
+            uiInput.SetPlayerNameSync(nameInputFieldText.text);
+            roomMenu.SetActive(true);
+            canvas.gameObject.SetActive(false);
+        }
     }
 }
