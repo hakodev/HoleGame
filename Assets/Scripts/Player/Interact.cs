@@ -65,8 +65,6 @@ public class Interact : AttributesSync, IObserver
         }
         else
         {
-            //animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-
             dynamicLayerMask = LayerMask.GetMask("DynamicInteractableObject");
             stationaryLayerMask = LayerMask.GetMask("StationaryInteractableObject");
             interactableLayerMask = dynamicLayerMask | stationaryLayerMask;

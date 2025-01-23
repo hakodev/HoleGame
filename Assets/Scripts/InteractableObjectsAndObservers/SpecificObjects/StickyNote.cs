@@ -15,13 +15,9 @@ public class StickyNote : DynamicInteractableObject
     [SynchronizableField] Vector3 placedLocalRot;
     int selfLayer;
 
-    Vector3 finalPosition;
     Vector3 originalPos;
     [SynchronizableField] public bool isInteractedWith = false;
-    //disable object colliding with it's child
-    //enalbe ticking to self player if it is thrown
-    //make paper physics fall as if gliding
-    //if object has a sticky note parent it behaves weirdly when thrown after being picked up
+
 
     private MousePainter mousePainter;
     private Camera tempCamRef;
@@ -37,7 +33,14 @@ public class StickyNote : DynamicInteractableObject
     public static bool currentlyDrawing=false;
 
 
+    //throwing syncing
+    //drawing syncing
+    //object in hand syncing
+    //placing not syncing
 
+
+    //first picked object not syncing
+    //when placing or throwing sticky they get twisted in a weird direction
     protected override void Awake()
     {
         base.Awake();
@@ -60,8 +63,8 @@ public class StickyNote : DynamicInteractableObject
         if (interaction == InteractionEnum.PlacedStickyNote)
         {
             BroadcastRemoteMethod(nameof(SyncSetParent));
-            BroadcastRemoteMethod(nameof(Stick));
-            //Stick();
+            //BroadcastRemoteMethod(nameof(Stick));
+            Stick();
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
