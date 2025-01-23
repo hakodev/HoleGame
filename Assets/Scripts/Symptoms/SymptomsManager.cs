@@ -31,7 +31,7 @@ public class SymptomsManager : AttributesSync {
     }
 
     public void SetSymptom(int index) {
-        currentSymptom = symptoms[index];
+        currentSymptom = index == 999 ? null : symptoms[index];
     }
 
     public int GetRandomNum() {

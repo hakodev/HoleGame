@@ -21,7 +21,6 @@ public class SymptomNotifText : AttributesSync {
         //int randNum = Random.Range(0, allSymptomsCount);
         //SymptomsManager.Instance.SetSymptom(allSymptoms[randNum]);
 
-        int allSymptomsCount = SymptomsManager.Instance.GetSymptomsList().Count;
         int randNum = SymptomsManager.Instance.GetRandomNum();
         SymptomsManager.Instance.SetSymptom(randNum);
         Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
