@@ -66,6 +66,7 @@ public class RoleAssignment : AttributesSync
                     FindRolelessPlayers();
                     DetermineMaxNumberOfInfiltrators();
                     AssignRoles();
+                    GetComponent<PlayerRole>().BroadcastRemoteMethod("DisplaySymptomNotifSync");
                 }
                 else
                 {

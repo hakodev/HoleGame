@@ -66,8 +66,6 @@ public class Interact : AttributesSync, IObserver
         }
         else
         {
-            //animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-
             dynamicLayerMask = LayerMask.GetMask("DynamicInteractableObject");
             stationaryLayerMask = LayerMask.GetMask("StationaryInteractableObject");
             interactableLayerMask = dynamicLayerMask | stationaryLayerMask;
@@ -91,7 +89,6 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) { return; }
 
         ProcessInput();
-        HighlightInteractable();
 
         if (isChargingUp) currentChargeUpTime += Time.deltaTime;
     }
@@ -107,13 +104,9 @@ public class Interact : AttributesSync, IObserver
         {
             if (finishedPickUp && !StickyNote.currentlyDrawing)
             {
-                //isChargingUp = false;
-                //                heldObject.GetComponent<Rigidbody>().useGravity = true;
-
                 if (currentChargeUpTime > minMaxThrowChargeUpTime.x)
                 {
                     if (currentChargeUpTime > minMaxThrowChargeUpTime.y) currentChargeUpTime = minMaxThrowChargeUpTime.y;
-                    AnimateReleaseChargebar();
                     currentThrowStrength = Mathf.Lerp(minMaxThrowStrength.x, minMaxThrowStrength.y, currentChargeUpTime);
                     //currentChargeUpTime = 0;
                     BroadcastRemoteMethod(nameof(Throw));
@@ -134,7 +127,6 @@ public class Interact : AttributesSync, IObserver
             if (heldObject != null && finishedPickUp && !StickyNote.currentlyDrawing)
             {
                 isChargingUp = true;
-                AnimateWindUpChanrgebar();
             }
         }
 
@@ -253,17 +245,16 @@ public class Interact : AttributesSync, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
         {
-            heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
+            DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
+            DIO.isPickedUp = false;
             SetLayerRecursively(heldObject, 7);
 
-            //placing anim
             PrepareForDropping();
 
             //specific to placing
             Vector3 bounds = GetRenderersSize(heldObject);
             Vector3 alignsBestWith = GetClosestAxis(hit.normal);
             Vector3 temp = new Vector3(Mathf.Abs(bounds.x * alignsBestWith.normalized.x), Mathf.Abs(bounds.y * alignsBestWith.normalized.y), Mathf.Abs(bounds.z * alignsBestWith.normalized.z));
-
 
             float divider = 2;
             if (heldObject.gameObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) divider = 20;
@@ -273,27 +264,19 @@ public class Interact : AttributesSync, IObserver
             heldObject.transform.forward = -hit.normal;
             rbToTrack.SetRotation(heldObject.transform.rotation);
 
-
-            if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster"))
-            {
-                heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
-            }
-
-            Debug.Log(hit.collider.gameObject.name);
+            if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             Transform hitRoot = hit.collider.transform.root;
-            if (hitRoot.name.Contains("CoffeeMachine"))
-            {
-                hitRoot.GetComponent<CoffeeMachine>().SpecialInteraction(InteractionEnum.PlaceCupInCoffeeMachine, this);
-            }
+            if (hitRoot.name.Contains("CoffeeMachine")) hitRoot.GetComponent<CoffeeMachine>().SpecialInteraction(InteractionEnum.PlaceCupInCoffeeMachine, this);     
 
             FinishDropping();
-            //Debug.Break();
         }
         else
         {
             SetLayerRecursively(heldObject, 7);
         }
     }
+
+
     [SynchronizableMethod]
     private void Throw()
     {
@@ -373,6 +356,9 @@ public class Interact : AttributesSync, IObserver
     }
     private void PrepareForDropping()
     {
+        DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
+        DIO.BroadcastRemoteMethod("DynamicAwake");
+
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
@@ -399,7 +385,6 @@ public class Interact : AttributesSync, IObserver
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
-        rbToTrack.enabled = true;
         heldObject = null;
         rbToTrack = null;
         rb = null;
@@ -408,9 +393,11 @@ public class Interact : AttributesSync, IObserver
     [SynchronizableMethod]
     private void TryPickUp()
     {
-        if (!avatar.IsMe) return;
-        if (heldObject != null) { return; }
-        finishedPickUp = false;
+        if(!avatar.IsMe) return;
+        DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
+        if (DIO.isPickedUp) return;
+        if(heldObject != null) { return; }
+        
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun)
         {
@@ -465,40 +452,15 @@ public class Interact : AttributesSync, IObserver
                 {
                     return;
                 }
-
             }
-            Vector3 targetPosition = clientHand.transform.position;
-            Quaternion targetRotation = playerCamera.transform.rotation;
+            heldObject.transform.position = clientHand.transform.position;
+            heldObject.transform.rotation = playerCamera.transform.rotation;
 
-            heldObject.transform.position = targetPosition;
-            heldObject.transform.rotation = targetRotation;
-
-            rbToTrack.SetPosition(targetPosition);
-            rbToTrack.SetRotation(targetRotation);
+            rbToTrack.SetPosition(heldObject.transform.position);
+            rbToTrack.SetRotation(heldObject.transform.rotation);
         }
     }
 
-
-
-
-
-    //art stuff
-    private void AnimateWindUpChanrgebar()
-    {
-
-    }
-    private void AnimateReleaseChargebar()
-    {
-
-    }
-    private void HighlightInteractable()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, interactableLayerMask))
-        {
-            // Highlight shader or whatever
-        }
-    }
 
     private void Drop()
     {
