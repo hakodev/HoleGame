@@ -393,6 +393,7 @@ public class Interact : AttributesSync, IObserver
         if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0] &&
            gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine) {
             DespawningItems.DespawnItem(heldObject);
+            StartCoroutine(DespawningItems.DestroyItem(heldObject));
         }
 
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
