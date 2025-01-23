@@ -215,6 +215,7 @@ public class VotingPhase : AttributesSync {
     [SynchronizableMethod]
     public void DisplaySymptomNotifSync()
     {
+        Debug.Log("come on symptoms");
         StartCoroutine(DisplaySymptomNotif());
     }
 
