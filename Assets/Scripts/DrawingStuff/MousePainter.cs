@@ -1,47 +1,55 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
+using Alteruna;
+using System;
+using System.Drawing;
+public class MousePainter : MonoBehaviour {
 
-public class MousePainter : MonoBehaviour{
-	public Camera cam;
-	[Space]
-	public bool mouseSingleClick;
-	[Space]
-	public Color paintColor;
-	
-	public float radius = 1;
-	public float strength = 1;
-	public float hardness = 1;
+    public Camera cam;
+    [Space]
+    public UnityEngine.Color paintColor;
 
-	public float range = 6;
-	
-	PaintManager paintManager;
+    public float radius = 1;
+    public float strength = 1;
+    public float hardness = 1;
 
-	public LayerMask notPlayerMask;
-	
-	public void Start()
-	{
-		paintManager = FindAnyObjectByType<PaintManager>();
-	}
+    public float range = 6;
 
-	public void Paint()
-	{
+    PaintManager paintManager;
+
+    public LayerMask notPlayerMask;
+    Paintable p;
+
+    public void Start()
+    {
+        paintManager = FindAnyObjectByType<PaintManager>();
+    }
+
+    public void Paint(Camera cam)
+    {
         Vector3 position = Input.mousePosition;
         Ray ray = cam.ScreenPointToRay(position);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, range, notPlayerMask))
         {
-            Paintable p = hit.collider.GetComponent<Paintable>();
+            p = hit.collider.GetComponent<Paintable>();
             if (p != null)
             {
-                PaintManager.Instance.paint(p, hit.point, radius, hardness, strength, paintColor);
+                CommunicationBridgeUID puid = p.GetComponent<CommunicationBridgeUID>();
+                Guid id = puid.GetUID();
+
+                paintManager.BroadcastRemoteMethod("paint", id, hit.point, radius, hardness, strength, paintColor);
+               
             }
         }
 
+    }
 
+    private void Update()
+    {
 
-
+           
+        
     }
 
 }

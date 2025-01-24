@@ -1,13 +1,12 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class DeskLamp : DynamicInteractableObject
 {
     private Light[] spotLight;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         spotLight = GetComponentsInChildren<Light>();
         foreach (Light light in spotLight)
         {
@@ -29,9 +28,9 @@ public class DeskLamp : DynamicInteractableObject
 
     }
 
-    private void Update()
+    protected override void Update()
     {
-        
+        base.Update();
     }
 
 

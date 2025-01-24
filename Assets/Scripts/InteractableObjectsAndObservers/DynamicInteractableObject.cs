@@ -3,26 +3,123 @@ using UnityEngine;
 
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
-    [SynchronizableField] Alteruna.Avatar currentlyOwnedByAvatar;
+    protected Alteruna.Avatar currentlyOwnedByAvatar;
 
-    public bool isPickedUp;
+    [SynchronizableField] public bool isPickedUp;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
     public abstract void Use();
 
+    RigidbodySynchronizable rbSyncDynamic;
+    Rigidbody rbDynamic;
 
+    [Header("removed serialize fields for speed. Nsync Objects is Here. x - when object is inactive(high number), y - when object is active(low number), also in the script both are 30 2, for ease of access")]
+     Vector2 syncEveryNUpdates = new Vector2(30, 2);
+     Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
+
+    [SynchronizableField]float timeSinceLastSignificantMovement = 0;
+
+    bool isAwake = false;
+
+    protected virtual void Awake()
+    {
+        rbSyncDynamic = GetComponent<RigidbodySynchronizable>();
+        rbDynamic = GetComponent<Rigidbody>();
+    }
+    protected virtual void Start()
+    {
+    //    BroadcastRemoteMethod(nameof(DynamicSleep));
+    }
+    protected virtual void Update()
+    {
+        SelfSleepIfUnmoving();
+        CheckForMovement();
+    }
+
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        if (isPickedUp) return;
+
+        if(rbDynamic.mass > 1)
+        {
+            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit);
+        }
+        else
+        {
+            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit);
+        }
+    }
+
+    private void SelfSleepIfUnmoving()
+    {
+        if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
+        //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
+        if (currentlyOwnedByAvatar==null)
+        {
+            if (rbDynamic.linearVelocity.magnitude < 0.1f)
+            {
+                timeSinceLastSignificantMovement += Time.deltaTime;
+                if (timeSinceLastSignificantMovement > 5f)
+                {
+                //    Debug.Log("sleep");
+                    timeSinceLastSignificantMovement = 0;
+                    BroadcastRemoteMethod(nameof(DynamicSleep));
+                }
+            }
+            else
+            {
+                timeSinceLastSignificantMovement = 0;
+            }
+        }
+        else
+        {
+            timeSinceLastSignificantMovement = 0;
+        }
+    }
+    private void CheckForMovement()
+    {
+        if (currentlyOwnedByAvatar == null || !currentlyOwnedByAvatar.IsMe) { return; }
+        if (isAwake) { return; }
+
+
+            if (rbDynamic.linearVelocity.magnitude >= 0.4f || currentlyOwnedByAvatar!=null)
+        {
+        //    Debug.Log("awake");
+
+            timeSinceLastSignificantMovement = 0;
+            //BroadcastRemoteMethod(nameof(DynamicAwake));
+        }
+    }
+    [SynchronizableMethod]
+    public void DynamicSleep()
+    {
+        isAwake = false;
+        timeSinceLastSignificantMovement = 0;
+        rbSyncDynamic.SyncEveryNUpdates = 999999;
+        rbSyncDynamic.FullSyncEveryNSync = 999999;
+        // Debug.Log("sleep " + transform.root.gameObject.name);
+    }
+    [SynchronizableMethod]
+    public void DynamicAwake()
+    {
+        isAwake = true;
+        rbSyncDynamic.SyncEveryNUpdates = 4;
+        rbSyncDynamic.FullSyncEveryNSync = 4;
+    }
+    
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
     {
         return currentlyOwnedByAvatar;
     }
-    [SynchronizableMethod] public void SetCurrentlyOwnedByAvatar(int newIndex)
+    [SynchronizableMethod]
+    public void SetCurrentlyOwnedByAvatar(int newIndex)
     {
-        currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
-        Debug.Log("SetCUrrentlyOwnedAvatar " + currentlyOwnedByAvatar); //important debug log
+        if(newIndex!=-1)currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
+        if (newIndex == -1) currentlyOwnedByAvatar = null;
     }
 
     public Alteruna.Avatar GetAvatarByOwnerIndex(int ownerIndex)
     {
-        Alteruna.Avatar[] avatars = FindObjectsOfType<Alteruna.Avatar>();
+        Alteruna.Avatar[] avatars = FindObjectsByType<Alteruna.Avatar>(FindObjectsSortMode.None);
         foreach (Alteruna.Avatar avatar in avatars)
         {
             if (avatar.Owner.Index == ownerIndex)
@@ -32,4 +129,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         }
         return null;
     }
+
+
 }

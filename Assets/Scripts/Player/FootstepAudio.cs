@@ -4,6 +4,7 @@ using static Unity.VisualScripting.Member;
 public class FootstepAudio : MonoBehaviour
 {
     private PlayerController playerController;
+    private CharacterController characterController;
     float timer = 0;
     private bool bPos;
 
@@ -15,13 +16,14 @@ public class FootstepAudio : MonoBehaviour
     {
         originalInterval = interval;
         source = GetComponent<AudioSource>();
-        playerController = FindAnyObjectByType<PlayerController>();
+        playerController = GetComponentInParent<PlayerController>();
+        characterController = GetComponentInParent<CharacterController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerController.isMoving)
+        if (playerController.isMoving && characterController.isGrounded)
         {
             interval = originalInterval;
             if (playerController.isRunning)

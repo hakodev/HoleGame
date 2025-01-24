@@ -1,5 +1,6 @@
 using UnityEngine;
 using Alteruna;
+using System.Collections;
 public class Gun : DynamicInteractableObject
 {
     private Camera playerCamera;
@@ -10,17 +11,28 @@ public class Gun : DynamicInteractableObject
     LayerMask otherPlayerLayerMask;
     [SynchronizableField] [SerializeField] int damage;
 
-   // Animator playerAnimator;
-   // AnimationSynchronizable playerAnimatorSync;
+    public Transform recoilRotationTransform;
+    Quaternion startRotation;
+    Transform childTransform;
+    ParticleSystem glitchParticle;
+    
+    // Animator playerAnimator;
+    // AnimationSynchronizable playerAnimatorSync;
     public int Damage() {
         Debug.Log(damage);
         return damage;
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         currentAmmo = maxAmmo;
         otherPlayerLayerMask = LayerMask.GetMask("PlayerLayer");
+        childTransform = transform.GetChild(0);
+
+        startRotation = childTransform.localRotation;
+        glitchParticle = GetComponentInChildren<ParticleSystem>();
+
     }
 
     public override void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
@@ -30,33 +42,54 @@ public class Gun : DynamicInteractableObject
     public override void Use()
     {
         playerCamera = transform.root.Find("Camera").GetComponent<Camera>();
-      //  playerAnimator = transform.root.Find("Animation").GetComponent<Animator>();
-      //  playerAnimatorSync = transform.root.Find("Animation").GetComponent<AnimationSynchronizable>();
         Fire();
     }
     private void Fire()
     {
-     //   playerAnimator.SetTrigger("ShootingGun");
-     //   playerAnimatorSync.SetTrigger("ShootingGun");
+        PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLaserBeep);
+        StartCoroutine(Recoil(childTransform.localRotation));
+        glitchParticle.Play();
 
-        // Debug.Log("Fired weapon");
         if (Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, bulletMaxDistance, otherPlayerLayerMask))
         {
             Debug.Log(hit.collider.gameObject.name + " " + transform.parent.gameObject.name);
             if (hit.collider.gameObject != transform.root.gameObject && hit.collider.gameObject.CompareTag("Player"))
             {
-                // UserId targetUserId = hit.collider.gameObject.GetComponent<UserId>();
-             //   hit.collider.gameObject.GetComponent<Health>().DamagePlayer(Random.Range(3, 7)); // Change later
-                   Debug.Log("BULLSEYE!");
                 hit.collider.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.ShotWithGun, this);
+                transform.root.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
+                currentAmmo--;
             }
         }
-        currentAmmo--;
-        //playerAnim.SetShooting(true);
+        
     }
-    private void Reload()
+    
+    private IEnumerator Recoil(Quaternion startRotation)
     {
-        //  Debug.Log("Reloading...");
-        currentAmmo = maxAmmo;
+        float t = 0;
+
+        while (t < 1)
+        {
+            childTransform.localRotation = Quaternion.Lerp(startRotation, recoilRotationTransform.localRotation, t);
+
+            t += Time.deltaTime * 5;
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        StartCoroutine(RecoilBack());
+    }
+
+    private IEnumerator RecoilBack()
+    {
+        float t = 0;
+
+        while (t < 1)
+        {
+            childTransform.localRotation = Quaternion.Lerp(recoilRotationTransform.localRotation, startRotation, t);
+
+            t += Time.deltaTime * 5;
+
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

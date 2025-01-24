@@ -1,17 +1,14 @@
+using TMPro;
 using UnityEngine;
 
 public class UIInput : MonoBehaviour
 {
-    [SerializeField] GameObject roomMenu;
-    private void Awake()
-    {
+    [SerializeField] private TMP_InputField nameInputField;
 
-    }
-    public void ClickedPlayButton()
-    {
-        roomMenu.SetActive(true);
-        gameObject.SetActive(false);
-    }
+
+    public static string PlayerNameSync;
+
+
     public void ClickedJoinButton()
     {
         gameObject.SetActive(false);
@@ -19,5 +16,10 @@ public class UIInput : MonoBehaviour
     public void ClickedStartButton()
     {
         gameObject.SetActive(false);
+    }
+
+    public void SetPlayerNameSync(string setName)
+    {
+        PlayerNameSync = setName;
     }
 }

@@ -1,16 +1,25 @@
 using UnityEngine;
+using Alteruna;
+using System.Xml;
+using System;
+using UnityEditor;
 
-public class Paintable : MonoBehaviour {
+public class Paintable : AttributesSync {
 	const int TEXTURE_SIZE = 1024;
 
 	public float extendsIslandOffset = 1;
 
-	RenderTexture extendIslandsRenderTexture;
-	RenderTexture uvIslandsRenderTexture;
-	RenderTexture maskRenderTexture;
-	RenderTexture supportTexture;
 	
-	Renderer rend;
+    RenderTexture extendIslandsRenderTexture;
+
+    RenderTexture uvIslandsRenderTexture;
+
+    RenderTexture maskRenderTexture;
+
+    RenderTexture supportTexture;
+
+
+    Renderer rend;
 	
 	PaintManager paintManager;
 
@@ -21,6 +30,7 @@ public class Paintable : MonoBehaviour {
 	public RenderTexture getExtend() => extendIslandsRenderTexture;
 	public RenderTexture getSupport() => supportTexture;
 	public Renderer getRenderer() => rend;
+
 
 	public void Start() {
 		paintManager = FindAnyObjectByType<PaintManager>();
@@ -37,10 +47,12 @@ public class Paintable : MonoBehaviour {
 		supportTexture.filterMode =  FilterMode.Bilinear;
 
 		rend = GetComponent<Renderer>();
-        rend.material.SetTexture(maskTextureID, extendIslandsRenderTexture);
-		
 
-		paintManager.initTextures(this);
+        rend.material.SetTexture(maskTextureID, extendIslandsRenderTexture);
+        //CommunicationBridgeUID puid = GetComponent<CommunicationBridgeUID>();
+        //Guid id = puid.GetUID();
+
+        paintManager.initTextures(this);
 	}
 
 	public void OnDisable(){

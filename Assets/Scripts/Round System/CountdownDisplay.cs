@@ -1,35 +1,113 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
+using Alteruna;
 
-public class CountdownDisplay : MonoBehaviour {
-    private TMP_Text countdown;
-    [SerializeField] private int time;
+
+public class CountdownDisplay : AttributesSync {
+
     [SerializeField] private int secondsRemainingToTurnRed;
-    [SerializeField] private UnityEvent OnTimerEnd;
+    [SerializeField] TextMeshProUGUI countdown;
+    TextMeshProUGUI flavorTextMesh;
+    [SerializeField] private CountDownDisplayManager manager;
+
+    [SynchronizableField] public int time;
+    [SynchronizableField] public static Color countdownColor = Color.green;
+    private float deltaTime=0;
+    public int maxTime;
+
+
+    public static int sendTimeToUI;
+    public static string sendFlavorTextToUI;
+
 
     private void Awake() {
-        countdown = GetComponent<TMP_Text>();
+        maxTime = time;
+        flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
+    }
+    private void Start()
+    {
+        //flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
+        //sendFlavorTextToUI = flavorTextMesh.text;
+    }
+    /*
+    private new void OnEnable()
+    {
+        base.OnEnable();
+        sendFlavorTextToUI = flavorTextMesh.text;
+    }*/
+    
+    //these are meant to be called from the same object to itself so just use BoradcastRemoteMethod("nameofthing")
+    [SynchronizableMethod]
+    private void DeactivateUnusedTimers()//(string deactivatedObject)
+    {
+        gameObject.SetActive(false);
     }
 
-    private void Start() {
+    [SynchronizableMethod]
+    private void InitiateVotingPhaseForAllPlayers()
+    {
+        VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
+        foreach (VotingPhase player in allVotingPhases)
+        {
+           // Debug.Log(player.gameObject.name);
+            player.InitiateVotingPhase();
+        }
+    }
+    [SynchronizableMethod]
+    private void EndVotingPhaseForAllPlayers()
+    {
+        //VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
+        VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
+        //Debug.Log(player.gameObject.name);
+            player.EndVotingPhase();
+        
+
+        SymptomNotifText[] allNotifTexts = FindObjectsByType<SymptomNotifText>(FindObjectsSortMode.None);
+        foreach(SymptomNotifText notifText in allNotifTexts)
+        {
+            // This will enable the notification canvas for all players
+            notifText.transform.parent.parent.gameObject.SetActive(true);
+        }
+    }
+
+    private void Update() {
+        if (CountDownDisplayManager.hasInitiatedTheTimer)
+        {
+            UpdateTickDown();
+            UpdateUI();
+            sendTimeToUI = time;
+        }
+    }
+
+    
+    private void UpdateUI()
+    {
         countdown.text = time.ToString();
-        countdown.color = Color.green;
-        StartCoroutine(TickDown());
+
+        countdownColor = time <= secondsRemainingToTurnRed ? Color.red : Color.green;
+        countdown.color = countdownColor;
     }
 
-    private IEnumerator TickDown() {
-        while(time > 0) {
-            yield return new WaitForSeconds(1);
-            time--;
-            countdown.text = time.ToString();
-
-            if(time <= 20) {
-                countdown.color = Color.red;
+    
+    private void UpdateTickDown()
+    {
+        if (time > 0) 
+        {
+            deltaTime += Time.deltaTime;
+            if (deltaTime >= 1)
+            {
+                deltaTime = 0;
+                if (Multiplayer.GetUser().IsHost) time--;
+                //Debug.Log(gameObject.name);
             }
         }
-
-        OnTimerEnd?.Invoke();
+        else
+        {
+            manager.BroadcastRemoteMethod("ActivateTimer", parameters: gameObject.name);
+            BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
+            
+            if(gameObject.CompareTag("DowntimeDisplay")) BroadcastRemoteMethod(nameof(InitiateVotingPhaseForAllPlayers));
+            if (gameObject.CompareTag("VotingDisplay")) BroadcastRemoteMethod(nameof(EndVotingPhaseForAllPlayers));
+        }
     }
 }

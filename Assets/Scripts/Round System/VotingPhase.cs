@@ -1,84 +1,202 @@
 using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Alteruna;
+using System.Linq;
+public class VotingPhase : AttributesSync {
 
-public class VotingPhase : MonoBehaviour {
-    private PlayerController[] totalPlayers;
+    public static List<PlayerRole> totalALivePlayers;
+    private PlayerRole player;
+
     [SerializeField] private GameObject playerVoteButton;
-    [SerializeField] private float firstPlayerOptionYPos;
-    [SerializeField] private TMP_Text pickedPlayerNameText;
+    [SerializeField] TMP_Text pickedPlayerNameText;
     [SerializeField] private GameObject votingCanvas;
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
-    [SerializeField] private GameObject symptomsNotifCanvas;
+    [SerializeField] private GameObject randomlyVotedPlayer;
+    [SerializeField] GameObject symptomsNotifCanvas;
+    [SerializeField] GameObject votingPhaseObject;
+    Alteruna.Avatar avatar;
 
-    private void OnEnable() {
-        totalPlayers = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+
+    int randomlyPickedPlayer;
+    List<VotingPhase> votingPlayers;
+    [SynchronizableField] int pickedPlayerIndex;
+
+    private bool hasVoted = false;
+    [SynchronizableField, HideInInspector] public string taskManagerNameInHost = "";
+    private void Awake()
+    {
+        avatar = GetComponent<Alteruna.Avatar>();
+        player = GetComponent<PlayerRole>();
+    }
+    private void Start() {
+
     }
 
-    public PlayerController[] GetTotalPlayers() {
-        return totalPlayers;
-    }
 
+    public bool once = false;
     public void InitiateVotingPhase() {
+
+        if (!avatar.IsMe) { return; }
+        //if (totalPlayers.Count <= 1) { return; }
+       if(totalALivePlayers==null) totalALivePlayers = RoleAssignment.GetTotalPlayers();
+
+
+        votingPlayers = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None).ToList<VotingPhase>();
+
         votingCanvas.SetActive(true);
-
-        Cursor.lockState = CursorLockMode.None; // Unlock the mouse for the voting
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        player.VotedCount = 0;
+        hasVoted = false;
 
-        float tempYPos = firstPlayerOptionYPos;
+        player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
 
-        foreach(PlayerController player in totalPlayers) {
-            if(player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
+        if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
             } else {
-                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, this.transform);
-                newPlayerVoteOption.GetComponentInChildren<TMP_Text>().text = player.gameObject.name;
-                newPlayerVoteOption.transform.position = new Vector3(newPlayerVoteOption.transform.position.x,
-                                                                     tempYPos,
-                                                                     newPlayerVoteOption.transform.position.z);
 
-                newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
-                    player.VotedCount++;
-                    votingCanvas.SetActive(false);
-                    votedCanvas.SetActive(true);
-                });
+                int i = 0;
+                foreach(PlayerRole otherPlayer in totalALivePlayers)
+                {
+                    if (otherPlayer == player) { continue; }
+                    i++;
 
-                tempYPos -= 100f;
+                    GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
+                    newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
+
+                    RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
+                    rect.anchoredPosition += rect.anchoredPosition * i;
+
+                    newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
+                            otherPlayer.VotedCount++;
+                            votingCanvas.SetActive(false);
+                            votedCanvas.SetActive(true);
+                            hasVoted = true;
+                    });
+                }
             }
 
-            player.MovementEnabled = false; // Disable movement until end of voting phase
+         //   player.gameObject.GetComponent<PlayerController>().MovementEnabled = false; // Disable movement until end of voting phase
         }
-    }
 
-    public void EndVotingPhase() {
+
+
+    //if highest ppl have equal votes, then sb is picked at random
+    //give gun to CEO through the specialInteractionSystem
+
+    //randomly votred
+
+
+    public void EndVotingPhase()
+    {
+        if (!avatar.IsMe) { return; }
+
+        Debug.Log("breakdowns " + avatar.name);
+       // if (totalPlayers.Count <= 1) { return; }
+
+        if (!hasVoted)
+        {
+            hasVoted = true;
+            VoteRandomly();
+        }
+
+
         votingCanvas.SetActive(false);
         votedCanvas.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+      //  player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
-        PlayerController pickedPlayer = null;
+        if (avatar.IsMe && Multiplayer.GetUser().IsHost) EndVotingPhaseHost();
+    }
 
-        for(int i = 0; i < totalPlayers.Length; i++) {
-            PlayerRole currentPlayer = totalPlayers[i].GetComponent<PlayerRole>();
 
-            totalPlayers[i].MovementEnabled = true; // Enable movement again
+    private void EndVotingPhaseHost()
+    {
+        if (!Multiplayer.GetUser().IsHost || RoleAssignment.playerID-1!=0) { return; }
+        if (!avatar.IsMe) { return; }
 
-            if(currentPlayer.GetRole() == Roles.Infiltrator)
-                StartCoroutine(DisplaySymptomNotif());
+       // if(once) { return; }
+       // once = true;
 
-            if(totalPlayers[i] == totalPlayers[0])
-                continue;
+            PlayerRole pickedPlayer = totalALivePlayers[0];
+        List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
 
-            if(totalPlayers[i].VotedCount > totalPlayers[i - 1].VotedCount)
-                pickedPlayer = totalPlayers[i];
+
+        for (int i = 1; i < totalALivePlayers.Count; i++)
+        {
+            if (totalALivePlayers[i] == player) { continue; } //same player
+
+            if (totalALivePlayers[i].VotedCount > pickedPlayer.VotedCount) //more votes
+            {
+                pickedPlayer = totalALivePlayers[i];
+                equallyVotedPlayers.Clear();
+                equallyVotedPlayers.Add(totalALivePlayers[i]);
+            }
+
+            if (totalALivePlayers[i].VotedCount == pickedPlayer.VotedCount) //equivotes
+            {
+                equallyVotedPlayers.Add(totalALivePlayers[i]);
+            }
         }
 
-        pickedPlayerNameText.text = pickedPlayer.gameObject.name;
+        randomlyPickedPlayer = 0;
+        randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
+        pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
         pickedPlayer.IsTaskManager = true;
+        pickedPlayer.Commit();
+
+
+        for (int i = 0; i < equallyVotedPlayers.Count; i++)
+        {
+            if (equallyVotedPlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
+        }
+        Debug.Log("DADADA " + gameObject.name + Multiplayer.GetUser().Name);
+
+        foreach (VotingPhase voter in votingPlayers)
+        {
+            voter.taskManagerNameInHost = pickedPlayer.gameObject.name;
+            voter.pickedPlayerIndex = pickedPlayerIndex;
+            voter.BroadcastRemoteMethod("EndVotingPhaseFinale");
+        }
+    }
+
+    [SynchronizableMethod]
+    public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
+    {
+        if(!avatar.IsMe) { return; }
+        pickedPlayerNameText.text = taskManagerNameInHost;
+        Debug.Log("da eba maika ti " + player.IsTaskManager);
+        if (player.IsTaskManager)
+        {
+            GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+        }
         StartCoroutine(DisplayTaskManager());
+        StartCoroutine(DisplaySymptomNotif());
+    }
+
+    private void VoteRandomly()
+    {
+        List<PlayerRole> votableCandidates = new List<PlayerRole>();
+        for (int i = 0; i < totalALivePlayers.Count; i++)
+        {
+            if (totalALivePlayers[i] == player) { continue; }
+            votableCandidates.Add(totalALivePlayers[i]);
+        }
+
+
+         randomlyPickedPlayer = Random.Range(0, votableCandidates.Count);
+        PlayerRole randomlyVotedPlayer = votableCandidates[randomlyPickedPlayer];
+        randomlyVotedPlayer.VotedCount++;
+
+        Debug.Log("randomly Chosen " + randomlyVotedPlayer.gameObject.name);
+
+        StartCoroutine(DisplayRandomlyVotedCanvas());
     }
 
     private IEnumerator DisplayTaskManager() {
@@ -89,7 +207,21 @@ public class VotingPhase : MonoBehaviour {
 
     private IEnumerator DisplaySymptomNotif() {
         symptomsNotifCanvas.SetActive(true);
+       // symptomsNotifCanvas.DOFade(1f, 0.1f);
         yield return new WaitForSeconds(10f); // How many seconds to display it on screen
+      //  symptomsNotifCanvas.DOFade(0f, 2f);
         symptomsNotifCanvas.SetActive(false);
     }
+    private IEnumerator DisplayRandomlyVotedCanvas()
+    {
+        randomlyVotedPlayer.SetActive(true);
+        yield return new WaitForSeconds(6f); // How many seconds to display it on screen
+        randomlyVotedPlayer.SetActive(false);
+    }
+    [SynchronizableMethod]
+    public void DisplaySymptomNotifSync()
+    {
+        StartCoroutine(DisplaySymptomNotif());
+    }
+
 }

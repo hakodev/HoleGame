@@ -11,14 +11,29 @@ public class PlayerRole : AttributesSync
     [Header("nerd shit - programming")]
     Alteruna.Avatar avatar;
     [SynchronizableField] Roles role;
+    public static Roles localClientRole;
 
     [SerializeField] CanvasGroup infiltratorCanvas;
     [SerializeField] CanvasGroup machineCanvas;
 
+
+    [SynchronizableField] public int VotedCount=0;
+    [SynchronizableField] public bool IsTaskManager = false;
+    [SerializeField] private GameObject ceoFlashScreen;
+
+    [SynchronizableField] public string playerNameSync;
+
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
+        ceoFlashScreen.SetActive(false);
 
+    }
+
+    private void Start()
+    {
+        if (!avatar.IsMe) { return; }
+        BroadcastRemoteMethod(nameof(SetName), UIInput.PlayerNameSync);
     }
     [SynchronizableMethod]
     public void DisplayRole()
@@ -43,14 +58,40 @@ public class PlayerRole : AttributesSync
         roleCanvas.DOFade(0f, 1f);
     }
 
+    private void Update()
+    {
+        if (IsTaskManager)
+        {
+            ceoFlashScreen.SetActive(true);
+        }
+        else
+        {
+            ceoFlashScreen.SetActive(false);
+        }
+    }
+
     public Roles GetRole()
     {
         return role;
     }
+
+    public string GetName()
+    {
+        return playerNameSync;
+    }
+
+    [SynchronizableMethod]
+    public void SetName(string name)
+    {
+        playerNameSync = name;
+        Debug.Log(" " + playerNameSync);
+    }
+
     [SynchronizableMethod]
     public void SetRole(Roles newRole)
     {
         role = newRole;
+        localClientRole = newRole;
     }
 }
     

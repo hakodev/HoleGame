@@ -22,12 +22,10 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: T_Bathroom_Floor_Tiles_Black
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_Parent: {fileID: 2100000, guid: 625e241bda61c83409e07da82b07275d, type: 2}
+  m_Parent: {fileID: 2100000, guid: 8c85c27b0c1c2b94ea63b3a0edaba859, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _METALLICSPECGLOSSMAP
   - _NORMALMAP
-  - _SPECULAR_SETUP
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
