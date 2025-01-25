@@ -923,8 +923,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <MovementEnabled>k__BackingField: 1
-  walkSpeed: 2.8
-  runSpeed: 4.5
+  walkSpeed: 4
+  runSpeed: 6
   crouchSpeed: 1.24
   crouchRunSpeed: 1.65
   walkSpeedBack: 1.96
