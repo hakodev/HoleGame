@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e39a8b125dc8f041bb08526c6d59fad, type: 3}
-  m_Name: Sym2
+  m_Name: Sym2_RenderDistance
   m_EditorClassIdentifier: 
-  Name: Symptom name here
-  Description: Symptom description here, keep it short
+  Name: Render Distance
+  Description: Reality is disintegrating beyond a certain treshold
