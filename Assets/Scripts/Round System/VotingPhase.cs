@@ -38,6 +38,7 @@ public class VotingPhase : AttributesSync {
     }
 
 
+    public bool once = false;
     public void InitiateVotingPhase() {
 
         if (!avatar.IsMe) { return; }
@@ -94,6 +95,8 @@ public class VotingPhase : AttributesSync {
     public void EndVotingPhase()
     {
         if (!avatar.IsMe) { return; }
+
+        Debug.Log("breakdowns " + avatar.name);
        // if (totalPlayers.Count <= 1) { return; }
 
         if (!hasVoted)
@@ -117,6 +120,9 @@ public class VotingPhase : AttributesSync {
     {
         if (!Multiplayer.GetUser().IsHost || RoleAssignment.playerID-1!=0) { return; }
         if (!avatar.IsMe) { return; }
+
+       // if(once) { return; }
+       // once = true;
 
             PlayerRole pickedPlayer = totalALivePlayers[0];
         List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
@@ -146,9 +152,9 @@ public class VotingPhase : AttributesSync {
         pickedPlayer.Commit();
 
 
-        for (int i = 0; i < totalALivePlayers.Count; i++)
+        for (int i = 0; i < equallyVotedPlayers.Count; i++)
         {
-            if (totalALivePlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
+            if (equallyVotedPlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
         }
         Debug.Log("DADADA " + gameObject.name + Multiplayer.GetUser().Name);
 
@@ -156,7 +162,7 @@ public class VotingPhase : AttributesSync {
         {
             voter.taskManagerNameInHost = pickedPlayer.gameObject.name;
             voter.pickedPlayerIndex = pickedPlayerIndex;
-            voter.BroadcastRemoteMethod(nameof(voter.EndVotingPhaseFinale));
+            voter.BroadcastRemoteMethod("EndVotingPhaseFinale");
         }
     }
 
