@@ -1,7 +1,6 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 using UnityEngine.ProBuilder;
 
 public class CoffeeCup : DynamicInteractableObject
@@ -18,7 +17,7 @@ public class CoffeeCup : DynamicInteractableObject
 
     protected override void Start()
     {
-      //  base.Start();
+        base.Start();
         coffeeFill = transform.GetChild(0).gameObject;
         hitSource = GetComponent<AudioSource>();
     }
@@ -46,9 +45,9 @@ public class CoffeeCup : DynamicInteractableObject
         coffeeFilled = true;
     }
 
-    private void OnCollisionEnter(Collision info)
+    protected override void OnCollisionEnter(Collision info)
     {
-        hitSource.Play();
+        base.OnCollisionEnter(info);
         // find collision point and normal. You may want to average over all contacts
         var point = info.contacts[0].point;
         var dir = -info.contacts[0].normal; // you need vector pointing TOWARDS the collision, not away from it

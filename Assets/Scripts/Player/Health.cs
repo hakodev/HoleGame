@@ -8,7 +8,7 @@ public class Health : AttributesSync {
 
    [SynchronizableField] private float currentHealth = 100f;
     private const float maxHealth = 100f;
-    [SerializeField] CanvasGroup deadScreen;
+    [SerializeField] GameObject deadScreen;
 
     private PlayerController playerController;
     private Alteruna.Avatar avatar;
@@ -21,6 +21,7 @@ public class Health : AttributesSync {
         characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
         mishSync = GetComponent<MishSyncAnimations>();
+        deadScreen.SetActive(false);
     }
 
     private void Start() {
@@ -34,6 +35,7 @@ public class Health : AttributesSync {
         {
             currentHealth = 0;
             Debug.Log("Reduced HP");
+            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetDeathStatic);
             BroadcastRemoteMethod("KillPlayer");
         }
     }
@@ -43,8 +45,9 @@ public class Health : AttributesSync {
         Debug.Log("Player died!");
         playerController.MovementEnabled = false;
         characterController.enabled = false;
+        deadScreen.SetActive(true);
         mishSync.SetStance(StanceEnum.Dead);
-      //  dead = true;
+        //VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
     }
 
     public float GetHealth()
@@ -56,10 +59,4 @@ public class Health : AttributesSync {
         return maxHealth;
     }
 
-    private IEnumerator DisplayTaskManager()
-    {
-        deadScreen.DOFade(1f, 1f);
-        yield return new WaitForSeconds(4f); // How many seconds to display it on screen
-        deadScreen.DOFade(0f, 1f);
-    }
 }
