@@ -528,11 +528,9 @@ public class Interact : AttributesSync, IObserver
                 spawner.Despawn(spawnedGun);
             }
         }
-        Debug.Log("KIKIKIKI");
-
         if (interaction == InteractionEnum.GivenTaskManagerRole)
         {
-            Debug.Log("KAKAKAKA");
+            Debug.Log("BITTE_GUN");
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
             pickedUp = spawnedGun;

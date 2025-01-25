@@ -8,7 +8,7 @@ using Alteruna;
 using System.Linq;
 public class VotingPhase : AttributesSync {
 
-    public static List<PlayerRole> totalALivePlayers;
+    public static List<PlayerRole> totalALivePlayers = new List<PlayerRole>();
     private PlayerRole player;
 
     [SerializeField] private GameObject playerVoteButton;
@@ -23,7 +23,7 @@ public class VotingPhase : AttributesSync {
 
 
     int randomlyPickedPlayer;
-    List<VotingPhase> votingPlayers;
+    List<VotingPhase> votingPlayers = new List<VotingPhase>();
     [SynchronizableField] int pickedPlayerIndex;
 
     private bool hasVoted = false;
@@ -32,6 +32,8 @@ public class VotingPhase : AttributesSync {
     {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
+        totalALivePlayers.Add(player);
+        votingPlayers.Add(GetComponent<VotingPhase>());
     }
     private void Start() {
 
@@ -43,11 +45,6 @@ public class VotingPhase : AttributesSync {
 
         if (!avatar.IsMe) { return; }
         //if (totalPlayers.Count <= 1) { return; }
-       if(totalALivePlayers==null) totalALivePlayers = RoleAssignment.GetTotalPlayers();
-
-
-        votingPlayers = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None).ToList<VotingPhase>();
-
         votingCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -77,6 +74,7 @@ public class VotingPhase : AttributesSync {
                             votingCanvas.SetActive(false);
                             votedCanvas.SetActive(true);
                             hasVoted = true;
+                            Debug.Log("BITTE_Button " + otherPlayer.name);
                     });
                 }
             }
@@ -96,8 +94,9 @@ public class VotingPhase : AttributesSync {
     {
         if (!avatar.IsMe) { return; }
 
-        Debug.Log("breakdowns " + avatar.name);
-       // if (totalPlayers.Count <= 1) { return; }
+        Debug.Log("BITTE_EndVotingPhase " + avatar.name);
+
+        // if (totalPlayers.Count <= 1) { return; }
 
         if (!hasVoted)
         {
@@ -112,14 +111,17 @@ public class VotingPhase : AttributesSync {
         Cursor.visible = false;
       //  player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
-        if (avatar.IsMe && Multiplayer.GetUser().IsHost) EndVotingPhaseHost();
+        EndVotingPhaseHost();
     }
 
 
     private void EndVotingPhaseHost()
     {
-        if (!Multiplayer.GetUser().IsHost || RoleAssignment.playerID-1!=0) { return; }
+        if (!Multiplayer.GetUser().IsHost) { return; }
         if (!avatar.IsMe) { return; }
+        if (RoleAssignment.playerID - 1 != 0) { return; }
+
+        Debug.Log("BITTE_Host " + avatar.name);
 
        // if(once) { return; }
        // once = true;
@@ -150,32 +152,32 @@ public class VotingPhase : AttributesSync {
         pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
         pickedPlayer.IsTaskManager = true;
         pickedPlayer.Commit();
-
-
+        Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
+        taskManagerNameInHost = pickedPlayer.gameObject.name;
         for (int i = 0; i < equallyVotedPlayers.Count; i++)
         {
             if (equallyVotedPlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
         }
-        Debug.Log("DADADA " + gameObject.name + Multiplayer.GetUser().Name);
 
-        foreach (VotingPhase voter in votingPlayers)
-        {
-            voter.taskManagerNameInHost = pickedPlayer.gameObject.name;
-            voter.pickedPlayerIndex = pickedPlayerIndex;
-            voter.BroadcastRemoteMethod("EndVotingPhaseFinale");
-        }
+
+        //List<Alteruna.Avatar> avatars = Multiplayer.GetAvatars();
+            //VotingPhase avatarVoter = a.gameObject.GetComponentInChildren<VotingPhase>();
+           BroadcastRemoteMethod("EndVotingPhaseFinale", taskManagerNameInHost, pickedPlayerIndex);
+        
     }
-
     [SynchronizableMethod]
-    public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
+    public void EndVotingPhaseFinale(string hostName, int playerIndex) //needs to be here bc of sequencing errors
     {
         if(!avatar.IsMe) { return; }
+        Debug.Log("BITTE " + avatar.name);
+
+        taskManagerNameInHost = hostName;
+        pickedPlayerIndex = playerIndex;
         pickedPlayerNameText.text = taskManagerNameInHost;
-        Debug.Log("da eba maika ti " + player.IsTaskManager);
-        if (player.IsTaskManager)
-        {
-            GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
-        }
+
+        Debug.Log("BITTE " + player.IsTaskManager);
+        if (player.IsTaskManager) GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+        
         StartCoroutine(DisplayTaskManager());
         StartCoroutine(DisplaySymptomNotif());
     }

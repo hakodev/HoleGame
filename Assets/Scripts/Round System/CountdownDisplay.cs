@@ -91,6 +91,11 @@ public class CountdownDisplay : AttributesSync {
     
     private void UpdateTickDown()
     {
+        if (!Multiplayer.GetUser().IsHost) { return; }
+        if (!Multiplayer.GetAvatar().IsMe) { return; }
+        if (RoleAssignment.playerID - 1 != 0) { return; }
+
+
         if (time > 0) 
         {
             deltaTime += Time.deltaTime;
