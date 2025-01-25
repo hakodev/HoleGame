@@ -12,7 +12,17 @@ public class LobbySystem : MonoBehaviour {
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
-            SymptomsManager.Instance.SetSymptom(0); // Despawning items
+            SymptomsManager.Instance.SetSymptom(0); // Inverted controls
+            DisplayNotificationText();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) {
+            SymptomsManager.Instance.SetSymptom(1); // Jumpy carpets
+            DisplayNotificationText();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) {
+            SymptomsManager.Instance.SetSymptom(2); // Render distance
             DisplayNotificationText();
         }
 
@@ -33,6 +43,18 @@ public class LobbySystem : MonoBehaviour {
         symptomNotifText.text = "Simulating new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
                                $"{SymptomsManager.Instance.GetSymptom().Description}";
+
+        // If it is the Jumpy Carpets symptom
+        if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1]) {
+            symptomNotifText.text += $"\n\nThe corrupted carpets are:\n";
+            symptomNotifText.text += CarpetManager.Instance.GetCarpetColorRandomNum() switch {
+                0 => "Red!",
+                1 => "Green!",
+                2 => "Blue!",
+                _ => "If you somehow see this, you broke the game",
+            };
+        }
+
         symptomNotifText.DOFade(0f, 10f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
     }
 
