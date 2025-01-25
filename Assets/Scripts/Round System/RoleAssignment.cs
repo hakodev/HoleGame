@@ -3,7 +3,6 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoleAssignment : AttributesSync
@@ -22,6 +21,9 @@ public class RoleAssignment : AttributesSync
     //y - humans
     //all int numbers
 
+    [SerializeField] private GameObject lobbyCanvas;
+
+
     [SynchronizableField] public static int playerNumber=0;
     public static int playerID=-10; //client based id
 
@@ -36,10 +38,6 @@ public class RoleAssignment : AttributesSync
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
         if(playerID==-10) playerID = playerNumber; //sets proper number
-       // foreach (PlayerRole role in totalPlayers)
-       // {
-       //     Debug.Log(role.gameObject.name);
-      //  }
 
         if (playerNumber != 1)
         {
@@ -61,12 +59,13 @@ public class RoleAssignment : AttributesSync
             if (Input.GetKeyUp(KeyCode.G))
             {
                 if (totalPlayers.Count > 1)
-                { 
+                {
                     BroadcastRemoteMethod(nameof(SetHasGameStarted), true);
                     FindRolelessPlayers();
                     DetermineMaxNumberOfInfiltrators();
                     AssignRoles();
                     VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
+                    Destroy(lobbyCanvas);
                     voting.BroadcastRemoteMethod(nameof(voting.DisplaySymptomNotifSync));
                 }
                 else

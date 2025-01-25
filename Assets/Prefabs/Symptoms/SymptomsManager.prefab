@@ -50,3 +50,4 @@ MonoBehaviour:
   LocalMethodBehavior: 1
   symptoms:
   - {fileID: 11400000, guid: ae5174f17a3d121439392e943ad806f8, type: 2}
+  - {fileID: 11400000, guid: e53df1385ccae584c902f0ce0828f7a6, type: 2}
