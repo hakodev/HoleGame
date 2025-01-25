@@ -99,7 +99,7 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _CoffeeNoiseScale: 25.58
-    - _CoffeeNoiseThreshold: 0.37
+    - _CoffeeNoiseThreshold: 0.17
     - _ColorTransitionY: -0.88
     - _Cull: 2
     - _Cutoff: 0.5
