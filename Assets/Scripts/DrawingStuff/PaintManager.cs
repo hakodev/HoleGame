@@ -24,7 +24,7 @@ public class PaintManager : AttributesSync{
     Material paintMaterial;
     Material extendMaterial;
 
-    public GameObject decalPrefab;
+    public GameObject[] stainPrefabs;
 
     public LayerMask mask;
 
@@ -48,6 +48,11 @@ public class PaintManager : AttributesSync{
         paintMaterial = new Material(texturePaint);
         extendMaterial = new Material(extendIslands);
         command = new CommandBuffer();
+    }
+
+    public GameObject GetStain()
+    {
+        return stainPrefabs[UnityEngine.Random.Range(0,stainPrefabs.Length)];
     }
   
     public void initTextures(Paintable paintable){
