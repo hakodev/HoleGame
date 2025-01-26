@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 1.4, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4964641172827090628}
@@ -111,14 +111,34 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5d3d6baf167b60e4190b3e4e107caa24, type: 2}
+    - target: {fileID: -6763858364670572316, guid: 5ddc72b914c90d5449cdb3dbad501840, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2045257923548263128, guid: 5ddc72b914c90d5449cdb3dbad501840, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 281855664364225751, guid: 5ddc72b914c90d5449cdb3dbad501840, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5ddc72b914c90d5449cdb3dbad501840, type: 3}
       propertyPath: m_Name
       value: SM_double_sofa 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5ddc72b914c90d5449cdb3dbad501840, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4321514657177891973, guid: 5ddc72b914c90d5449cdb3dbad501840, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5d3d6baf167b60e4190b3e4e107caa24, type: 2}
+    - target: {fileID: 8009987137999418058, guid: 5ddc72b914c90d5449cdb3dbad501840, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8567717000986892130, guid: 5ddc72b914c90d5449cdb3dbad501840, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 

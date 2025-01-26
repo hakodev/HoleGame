@@ -80,10 +80,11 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         }
     }
 
-    TextMeshProUGUI nameInputFieldText;
+    TMP_InputField nameInputFieldText;
     public void ClickedVerifyNameButton()
     {
-        nameInputFieldText = GameObject.FindGameObjectWithTag("nameInput").GetComponent<TextMeshProUGUI>();
+        nameInputFieldText = GameObject.FindGameObjectWithTag("nameInput").GetComponent<TMP_InputField>();
+
         if (nameInputFieldText.text == string.Empty)
         {
             GameObject noNamePopupPrefab = Resources.Load<GameObject>("PopupWrongName");

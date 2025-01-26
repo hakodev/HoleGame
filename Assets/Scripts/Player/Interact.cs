@@ -391,12 +391,12 @@ public class Interact : AttributesSync, IObserver
     private void FinishDropping()
     {
         // Is the despawning item symptom on and is the dropper a machine?
-        if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0] &&
-          gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
-        {
-            DespawningItems.DespawnItem(heldObject);
-            StartCoroutine(DespawningItems.DestroyItem(heldObject));
-        }
+        //if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0] &&
+        //  gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
+        //{
+        //    DespawningItems.DespawnItem(heldObject);
+        //    StartCoroutine(DespawningItems.DestroyItem(heldObject));
+        //}
 
         DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
