@@ -30,6 +30,7 @@ public class PlayerRole : AttributesSync
 
     }
 
+
     private void Start()
     {
         if (!avatar.IsMe) { return; }

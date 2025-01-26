@@ -118,16 +118,19 @@ public class VotingPhase : AttributesSync {
     private void EndVotingPhaseHost()
     {
         if (!Multiplayer.GetUser().IsHost) { return; }
-        if (!avatar.IsMe) { return; }
-        if (RoleAssignment.playerID - 1 != 0) { return; }
+    //    if (!avatar.IsMe) { return; }
 
         Debug.Log("BITTE_Host " + avatar.name);
 
-       // if(once) { return; }
-       // once = true;
+        // if(once) { return; }
+        // once = true;
 
-            PlayerRole pickedPlayer = totalALivePlayers[0];
+
+
+
+        PlayerRole pickedPlayer = totalALivePlayers[0];
         List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
+
 
 
         for (int i = 1; i < totalALivePlayers.Count; i++)
@@ -147,35 +150,57 @@ public class VotingPhase : AttributesSync {
             }
         }
 
-        randomlyPickedPlayer = 0;
-        randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
-        pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
-        pickedPlayer.IsTaskManager = true;
-        pickedPlayer.Commit();
-        Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
-        taskManagerNameInHost = pickedPlayer.gameObject.name;
-        for (int i = 0; i < equallyVotedPlayers.Count; i++)
+        if (RoleAssignment.playerID - 1 == 0)
         {
-            if (equallyVotedPlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
+            randomlyPickedPlayer = 0;
+            randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
+            pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
+            pickedPlayer.IsTaskManager = true;
+            pickedPlayer.Commit();
+
+            Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
+            taskManagerNameInHost = pickedPlayer.gameObject.name;
+            for (int i = 0; i < equallyVotedPlayers.Count; i++)
+            {
+                if (equallyVotedPlayers[i] == pickedPlayer) pickedPlayerIndex = i;
+            }
         }
 
 
+
+
         //List<Alteruna.Avatar> avatars = Multiplayer.GetAvatars();
-            //VotingPhase avatarVoter = a.gameObject.GetComponentInChildren<VotingPhase>();
-           BroadcastRemoteMethod("EndVotingPhaseFinale", taskManagerNameInHost, pickedPlayerIndex);
-        
+        //VotingPhase avatarVoter = a.gameObject.GetComponentInChildren<VotingPhase>();
+
+        //   foreach (var player in votingPlayers)
+        //   {
+        // BroadcastRemoteMethod("EndVotingPhaseFinaleSync");
+
+        //  }
+        //EndVotingPhaseFinaleSync();
+        BroadcastRemoteMethod("EndVotingPhaseFinaleSync");
+
     }
     [SynchronizableMethod]
-    public void EndVotingPhaseFinale(string hostName, int playerIndex) //needs to be here bc of sequencing errors
+    private void EndVotingPhaseFinaleSync()
+    {
+        VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
+        Debug.Log("BITTE_FinaleSync " + player.name);
+        player.EndVotingPhaseFinale();
+    }
+
+    public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
     {
         if(!avatar.IsMe) { return; }
-        Debug.Log("BITTE " + avatar.name);
+        Debug.Log("BITTE_Finale " + avatar.name + " " + player.IsTaskManager);
 
-        taskManagerNameInHost = hostName;
-        pickedPlayerIndex = playerIndex;
+        VotingPhase hostVoter = Multiplayer.GetAvatars()[0].GetComponent<VotingPhase>();
+        taskManagerNameInHost = hostVoter.taskManagerNameInHost;
+        pickedPlayerIndex = hostVoter.pickedPlayerIndex;
         pickedPlayerNameText.text = taskManagerNameInHost;
 
-        Debug.Log("BITTE " + player.IsTaskManager);
+        Debug.Log("BITTE_Finale2 " + taskManagerNameInHost + " " + pickedPlayerIndex    );
+
         if (player.IsTaskManager) GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
         
         StartCoroutine(DisplayTaskManager());
