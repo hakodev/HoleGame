@@ -1,4 +1,6 @@
 using DG.Tweening;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -19,6 +21,7 @@ public class LobbySystem : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) {
             SymptomsManager.Instance.SetSymptom(1); // Jumpy carpets
             DisplayNotificationText();
+            SetCarpetParams();
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) {
@@ -34,6 +37,69 @@ public class LobbySystem : MonoBehaviour {
 
     private void OnDestroy() {
         SymptomsManager.Instance.SetSymptom(999); // no symptom
+    }
+
+    void SetCarpetParams()
+    {
+        List<CarpetData> allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
+
+        switch (CarpetManager.Instance.GetCarpetColorRandomNum())
+        {
+            case 0:
+                // red carpets
+                foreach (CarpetData carpet in allCarpets)
+                {
+                    if (carpet.GetColor() == CarpetColor.Red)
+                    {
+                        carpet.IsCorrupted = true;
+                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                    }
+                    else
+                    {
+                        carpet.IsCorrupted = false;
+                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                    }
+                }
+                break;
+            case 1:
+                // green carpets
+                foreach (CarpetData carpet in allCarpets)
+                {
+                    if (carpet.GetColor() == CarpetColor.Green)
+                    {
+                        carpet.IsCorrupted = true;
+                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                    }
+                    else
+                    {
+                        carpet.IsCorrupted = false;
+                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                    }
+                }
+                break;
+            case 2:
+                // blue carpets
+                foreach (CarpetData carpet in allCarpets)
+                {
+                    if (carpet.GetColor() == CarpetColor.Blue)
+                    {
+                        carpet.IsCorrupted = true;
+                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                    }
+                    else
+                    {
+                        carpet.IsCorrupted = false;
+                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                    }
+                }
+                break;
+            default:
+                break; // never gonna happen
+        }
+
+        allCarpets.Clear();
+
+
     }
 
     private void DisplayNotificationText() {

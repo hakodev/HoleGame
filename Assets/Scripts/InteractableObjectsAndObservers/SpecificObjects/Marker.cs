@@ -7,6 +7,7 @@ public class Marker : DynamicInteractableObject
     [SynchronizableField]
     private int userID;
     Interact interact;
+    HUDDisplay display;
 
     protected override void Start()
     {
@@ -38,6 +39,18 @@ public class Marker : DynamicInteractableObject
             painter.Paint(cam);
         }
     }
+
+    /*private new void LateUpdate()
+    {
+        if (isPickedUp)
+        {
+            if (display == null || display.gameObject.transform.root != transform.root)
+            {
+                display = transform.root.GetComponentInChildren<HUDDisplay>();
+            }
+            display.SetState(new MarkerDisplay(display));
+        }
+    }*/
 
     private void ProcessMarkerOnStickyNote()
     {
