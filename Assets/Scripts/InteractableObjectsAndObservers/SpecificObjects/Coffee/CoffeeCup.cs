@@ -80,6 +80,6 @@ public class CoffeeCup : DynamicInteractableObject
     [SynchronizableMethod]
     void CreateDecalPrefab(Vector3 pos, Vector3 normal)
     {
-        Instantiate(PaintManager.Instance.decalPrefab, pos, Quaternion.LookRotation(-normal));
+        Instantiate(PaintManager.Instance.GetStain(), pos, Quaternion.LookRotation(-normal));
     }
 }

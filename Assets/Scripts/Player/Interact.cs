@@ -45,6 +45,7 @@ public class Interact : AttributesSync, IObserver
 
     private Transform currentOutlinedObject;
     GameObject pickedUp;
+    DynamicInteractableObject DIO;
 
 
     private void Awake()
@@ -150,7 +151,19 @@ public class Interact : AttributesSync, IObserver
 
         if (heldObject)
         {
-            hudDisplay.SetState(new CarryDisplay(hudDisplay));
+            if(DIO is StickyNote)
+            {
+                hudDisplay.SetState(new StickyNoteDisplay(hudDisplay));
+            }
+            else if(DIO is Marker)
+            {
+                hudDisplay.SetState(new MarkerDisplay(hudDisplay));
+            }
+            else
+            {
+                hudDisplay.SetState(new CarryDisplay(hudDisplay));
+            }
+            
         }
         else
         {
@@ -175,6 +188,7 @@ public class Interact : AttributesSync, IObserver
 
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
             {
+                if (DIO != null && DIO is StickyNote) return;
                 hudDisplay.SetState(new DynamicInteract(hudDisplay));
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -375,7 +389,7 @@ public class Interact : AttributesSync, IObserver
     {
         HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
 
-        DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
+        DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("DynamicAwake");
 
 
@@ -391,20 +405,21 @@ public class Interact : AttributesSync, IObserver
     private void FinishDropping()
     {
         // Is the despawning item symptom on and is the dropper a machine?
-        if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0] &&
-          gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
-        {
-            DespawningItems.DespawnItem(heldObject);
-            StartCoroutine(DespawningItems.DestroyItem(heldObject));
-        }
+        //if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0] &&
+        //  gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
+        //{
+        //    DespawningItems.DespawnItem(heldObject);
+        //    StartCoroutine(DespawningItems.DestroyItem(heldObject));
+        //}
 
-        DynamicInteractableObject DIO = heldObject.GetComponent<DynamicInteractableObject>();
+        DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
 
         rbToTrack.enabled = true;
         heldObject = null;
         rbToTrack = null;
         rb = null;
+        DIO = null;
     }
 
     [SynchronizableMethod]
@@ -416,7 +431,7 @@ public class Interact : AttributesSync, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun)
         {
-            DynamicInteractableObject DIO = pickedUp.GetComponent<DynamicInteractableObject>();
+            DIO = pickedUp.GetComponent<DynamicInteractableObject>();
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {

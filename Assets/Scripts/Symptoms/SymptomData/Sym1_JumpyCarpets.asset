@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Sym1_JumpyCarpets
   m_EditorClassIdentifier: 
   Name: Jumpy Carpets
-  Description: Symptom description here, keep it short
+  Description: A carpet color has been corrupted and will cause uncontrollable jumping.

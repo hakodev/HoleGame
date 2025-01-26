@@ -133,6 +133,12 @@ public class PlayerController : MonoBehaviour
             currentjumpHeight = jumpHeight;
         }
 
+        //if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0]) {
+            //Inverted controls
+            horizontalInput = -horizontalInput;
+            verticalInput = -verticalInput;
+        //}
+
         Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
         moveTransform.localRotation = Quaternion.Euler(new Vector3(0, cameraTransform.localEulerAngles.y, 0));

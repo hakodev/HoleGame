@@ -7,6 +7,9 @@ public class CarpetData : AttributesSync {
     [SerializeField, SynchronizableField]
     private bool isCorrupted;
 
+    [field: SerializeField] public Material NormalMat { get; private set; }
+    [field: SerializeField] public Material CorruptedMat { get; private set; }
+
     public bool IsCorrupted {
         get { return isCorrupted; }
         set { isCorrupted = value; }
@@ -17,10 +20,12 @@ public class CarpetData : AttributesSync {
     }
 
     private void OnCollisionEnter(Collision otherCollider) {
-        if(this.isCorrupted && otherCollider.collider.CompareTag("Player")) {
-            if(otherCollider.collider.GetComponent<PlayerRole>().GetRole() == Roles.Machine) {
+        Debug.Log("Carpet1");
+        if(this.isCorrupted && otherCollider.gameObject.CompareTag("Player")) {
+            //if(otherCollider.collider.GetComponent<PlayerRole>().GetRole() == Roles.Machine) {
+            Debug.Log("Carpet 2");
                 otherCollider.collider.gameObject.GetComponent<PlayerController>().Jump();
-            }
+            //}
         }
     }
 }

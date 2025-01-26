@@ -103,6 +103,7 @@ Material:
     - _noiseScale3: 4.19
     m_Colors:
     - _Carpet_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 0}
     - _PinkGlitch: {r: 1, g: 0, b: 0.5673647, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
