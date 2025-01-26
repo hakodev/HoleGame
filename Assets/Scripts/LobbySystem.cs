@@ -7,6 +7,13 @@ using UnityEngine;
 public class LobbySystem : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI controlsText;
     [SerializeField] private TextMeshProUGUI symptomNotifText;
+    List<CarpetData> allCarpets;
+
+    private int tempRandom = 0;
+    private void Start()
+    {
+        allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
+    }
 
     private void Update() {
         if(Input.GetKeyDown(KeyCode.Tab)) {
@@ -19,9 +26,12 @@ public class LobbySystem : MonoBehaviour {
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) {
-            SymptomsManager.Instance.SetSymptom(1); // Jumpy carpets
-            DisplayNotificationText();
+            SymptomsManager.Instance.SetSymptom(1);// Jumpy carpets
             SetCarpetParams();
+            DisplayNotificationText();
+
+
+
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) {
@@ -41,22 +51,21 @@ public class LobbySystem : MonoBehaviour {
 
     void SetCarpetParams()
     {
-        List<CarpetData> allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
-
         switch (CarpetManager.Instance.GetCarpetColorRandomNum())
         {
+
             case 0:
                 // red carpets
                 foreach (CarpetData carpet in allCarpets)
                 {
                     if (carpet.GetColor() == CarpetColor.Red)
                     {
-                        carpet.IsCorrupted = true;
+                        carpet.IsCorruptedLocal = true;
                         carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
                     }
                     else
                     {
-                        carpet.IsCorrupted = false;
+                        carpet.IsCorruptedLocal = false;
                         carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
                     }
                 }
@@ -67,12 +76,12 @@ public class LobbySystem : MonoBehaviour {
                 {
                     if (carpet.GetColor() == CarpetColor.Green)
                     {
-                        carpet.IsCorrupted = true;
+                        carpet.IsCorruptedLocal = true;
                         carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
                     }
                     else
                     {
-                        carpet.IsCorrupted = false;
+                        carpet.IsCorruptedLocal = false;
                         carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
                     }
                 }
@@ -83,26 +92,27 @@ public class LobbySystem : MonoBehaviour {
                 {
                     if (carpet.GetColor() == CarpetColor.Blue)
                     {
-                        carpet.IsCorrupted = true;
+                        carpet.IsCorruptedLocal = true;
                         carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
                     }
                     else
                     {
-                        carpet.IsCorrupted = false;
+                        carpet.IsCorruptedLocal = false;
                         carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
                     }
                 }
                 break;
             default:
+                        
+
                 break; // never gonna happen
         }
-
-        allCarpets.Clear();
 
 
     }
 
     private void DisplayNotificationText() {
+
         symptomNotifText.DOKill();
         symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
         symptomNotifText.alpha = 1f;
@@ -113,7 +123,7 @@ public class LobbySystem : MonoBehaviour {
         // If it is the Jumpy Carpets symptom
         if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1]) {
             symptomNotifText.text += $"\n\nThe corrupted carpets are:\n";
-            symptomNotifText.text += CarpetManager.Instance.GetCarpetColorRandomNum() switch {
+            symptomNotifText.text += CarpetManager.Instance.carpetColorRandNum switch {
                 0 => "Red!",
                 1 => "Green!",
                 2 => "Blue!",

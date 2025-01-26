@@ -27,7 +27,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     protected virtual void Start()
     {
-    //    BroadcastRemoteMethod(nameof(DynamicSleep));
+        BroadcastRemoteMethod(nameof(DynamicSleep));
     }
     protected virtual void Update()
     {

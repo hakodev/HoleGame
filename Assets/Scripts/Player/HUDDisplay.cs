@@ -10,21 +10,6 @@ public class HUDDisplay : MonoBehaviour
 
     private HUDState state;
 
-    //private static HUDDisplay instance;
-
-    /*    public static HUDDisplay Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindAnyObjectByType<HUDDisplay>();
-            }
-            return instance;
-        }
-    }*/
-
-
     public void SetState(HUDState stateToSet)
     {
         state = stateToSet;
