@@ -59,8 +59,9 @@ public class CountdownDisplay : AttributesSync {
         //VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
         VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
         //Debug.Log(player.gameObject.name);
-            player.EndVotingPhase();
+        player.EndVotingPhase();
         
+
 
         SymptomNotifText[] allNotifTexts = FindObjectsByType<SymptomNotifText>(FindObjectsSortMode.None);
         foreach(SymptomNotifText notifText in allNotifTexts)

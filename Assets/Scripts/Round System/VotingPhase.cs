@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Alteruna;
-using System.Linq;
 public class VotingPhase : AttributesSync {
 
     public static List<PlayerRole> totalALivePlayers = new List<PlayerRole>();
