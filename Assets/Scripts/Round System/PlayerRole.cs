@@ -17,7 +17,7 @@ public class PlayerRole : AttributesSync
     [SerializeField] CanvasGroup machineCanvas;
 
 
-    [SynchronizableField] public int VotedCount=0;
+    [SynchronizableField] public int VotedCount = 0;
     [SynchronizableField] public bool IsTaskManager = false;
     [SerializeField] private GameObject ceoFlashScreen;
 
@@ -29,7 +29,6 @@ public class PlayerRole : AttributesSync
         ceoFlashScreen.SetActive(false);
 
     }
-
 
     private void Start()
     {
@@ -95,4 +94,3 @@ public class PlayerRole : AttributesSync
         localClientRole = newRole;
     }
 }
-    

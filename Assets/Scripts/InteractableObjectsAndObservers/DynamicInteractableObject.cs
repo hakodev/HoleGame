@@ -18,8 +18,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
     [SynchronizableField]float timeSinceLastSignificantMovement = 0;
 
-    bool isAwake = false;
-
     protected virtual void Awake()
     {
         rbSyncDynamic = GetComponent<RigidbodySynchronizable>();
@@ -31,8 +29,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     protected virtual void Update()
     {
-        SelfSleepIfUnmoving();
-        CheckForMovement();
+        //SelfSleepIfUnmoving();
+        //CheckForMovement();
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
@@ -65,10 +63,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
                     BroadcastRemoteMethod(nameof(DynamicSleep));
                 }
             }
-            else
-            {
-                timeSinceLastSignificantMovement = 0;
-            }
         }
         else
         {
@@ -78,21 +72,18 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     private void CheckForMovement()
     {
         if (currentlyOwnedByAvatar == null || !currentlyOwnedByAvatar.IsMe) { return; }
-        if (isAwake) { return; }
 
 
-            if (rbDynamic.linearVelocity.magnitude >= 0.4f || currentlyOwnedByAvatar!=null)
+        if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar!=null)
         {
         //    Debug.Log("awake");
-
             timeSinceLastSignificantMovement = 0;
-            //BroadcastRemoteMethod(nameof(DynamicAwake));
+            BroadcastRemoteMethod(nameof(DynamicAwake));
         }
     }
     [SynchronizableMethod]
     public void DynamicSleep()
     {
-        isAwake = false;
         timeSinceLastSignificantMovement = 0;
         rbSyncDynamic.SyncEveryNUpdates = 999999;
         rbSyncDynamic.FullSyncEveryNSync = 999999;
@@ -101,7 +92,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void DynamicAwake()
     {
-        isAwake = true;
         rbSyncDynamic.SyncEveryNUpdates = 4;
         rbSyncDynamic.FullSyncEveryNSync = 4;
     }
