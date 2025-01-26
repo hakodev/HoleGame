@@ -5,10 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Alteruna;
-using System.Linq;
 public class VotingPhase : AttributesSync {
 
-    public static List<PlayerRole> totalALivePlayers;
+    public static List<PlayerRole> totalALivePlayers = new List<PlayerRole>();
     private PlayerRole player;
 
     [SerializeField] private GameObject playerVoteButton;
@@ -23,7 +22,7 @@ public class VotingPhase : AttributesSync {
 
 
     int randomlyPickedPlayer;
-    List<VotingPhase> votingPlayers;
+    List<VotingPhase> votingPlayers = new List<VotingPhase>();
     [SynchronizableField] int pickedPlayerIndex;
 
     private bool hasVoted = false;
@@ -32,21 +31,19 @@ public class VotingPhase : AttributesSync {
     {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
+        totalALivePlayers.Add(player);
+        votingPlayers.Add(GetComponent<VotingPhase>());
     }
     private void Start() {
 
     }
 
 
+    public bool once = false;
     public void InitiateVotingPhase() {
 
         if (!avatar.IsMe) { return; }
         //if (totalPlayers.Count <= 1) { return; }
-       if(totalALivePlayers==null) totalALivePlayers = RoleAssignment.GetTotalPlayers();
-
-
-        votingPlayers = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None).ToList<VotingPhase>();
-
         votingCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -76,6 +73,7 @@ public class VotingPhase : AttributesSync {
                             votingCanvas.SetActive(false);
                             votedCanvas.SetActive(true);
                             hasVoted = true;
+                            //Debug.Log("BITTE_Button " + otherPlayer.name);
                     });
                 }
             }
@@ -85,16 +83,14 @@ public class VotingPhase : AttributesSync {
 
 
 
-    //if highest ppl have equal votes, then sb is picked at random
-    //give gun to CEO through the specialInteractionSystem
-
-    //randomly votred
-
 
     public void EndVotingPhase()
     {
         if (!avatar.IsMe) { return; }
-       // if (totalPlayers.Count <= 1) { return; }
+
+       // Debug.Log("BITTE_EndVotingPhase " + avatar.name);
+
+        // if (totalPlayers.Count <= 1) { return; }
 
         if (!hasVoted)
         {
@@ -109,17 +105,20 @@ public class VotingPhase : AttributesSync {
         Cursor.visible = false;
       //  player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
-        if (avatar.IsMe && Multiplayer.GetUser().IsHost) EndVotingPhaseHost();
+        EndVotingPhaseHost();
     }
 
 
     private void EndVotingPhaseHost()
     {
-        if (!Multiplayer.GetUser().IsHost || RoleAssignment.playerID-1!=0) { return; }
-        if (!avatar.IsMe) { return; }
+        if (!Multiplayer.GetUser().IsHost) { return; }
 
-            PlayerRole pickedPlayer = totalALivePlayers[0];
+       // Debug.Log("BITTE_Host " + avatar.name);
+
+
+        PlayerRole pickedPlayer = totalALivePlayers[0];
         List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
+
 
 
         for (int i = 1; i < totalALivePlayers.Count; i++)
@@ -139,37 +138,45 @@ public class VotingPhase : AttributesSync {
             }
         }
 
-        randomlyPickedPlayer = 0;
-        randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
-        pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
-        pickedPlayer.IsTaskManager = true;
-        pickedPlayer.Commit();
-
-
-        for (int i = 0; i < totalALivePlayers.Count; i++)
+        if (RoleAssignment.playerID - 1 == 0)
         {
-            if (totalALivePlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
-        }
-        Debug.Log("DADADA " + gameObject.name + Multiplayer.GetUser().Name);
+            randomlyPickedPlayer = 0;
+            randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
+            pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
+            pickedPlayer.IsTaskManager = true;
+            pickedPlayer.Commit();
 
-        foreach (VotingPhase voter in votingPlayers)
-        {
-            voter.taskManagerNameInHost = pickedPlayer.gameObject.name;
-            voter.pickedPlayerIndex = pickedPlayerIndex;
-            voter.BroadcastRemoteMethod(nameof(voter.EndVotingPhaseFinale));
+            //Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
+            taskManagerNameInHost = pickedPlayer.gameObject.name;
+            for (int i = 0; i < equallyVotedPlayers.Count; i++)
+            {
+                if (equallyVotedPlayers[i] == pickedPlayer) pickedPlayerIndex = i;
+            }
         }
+        BroadcastRemoteMethod("EndVotingPhaseFinaleSync");
+    }
+    [SynchronizableMethod]
+    private void EndVotingPhaseFinaleSync()
+    {
+        VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
+        //Debug.Log("BITTE_FinaleSync " + player.name);
+        player.EndVotingPhaseFinale();
     }
 
-    [SynchronizableMethod]
     public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
     {
         if(!avatar.IsMe) { return; }
+        //Debug.Log("BITTE_Finale " + avatar.name + " " + player.IsTaskManager);
+
+        VotingPhase hostVoter = Multiplayer.GetAvatars()[0].GetComponent<VotingPhase>();
+        taskManagerNameInHost = hostVoter.taskManagerNameInHost;
+        pickedPlayerIndex = hostVoter.pickedPlayerIndex;
         pickedPlayerNameText.text = taskManagerNameInHost;
-        Debug.Log("da eba maika ti " + player.IsTaskManager);
-        if (player.IsTaskManager)
-        {
-            GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
-        }
+
+        //Debug.Log("BITTE_Finale2 " + taskManagerNameInHost + " " + pickedPlayerIndex    );
+
+        if (player.IsTaskManager) GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+        
         StartCoroutine(DisplayTaskManager());
         StartCoroutine(DisplaySymptomNotif());
     }
@@ -188,7 +195,7 @@ public class VotingPhase : AttributesSync {
         PlayerRole randomlyVotedPlayer = votableCandidates[randomlyPickedPlayer];
         randomlyVotedPlayer.VotedCount++;
 
-        Debug.Log("randomly Chosen " + randomlyVotedPlayer.gameObject.name);
+        //Debug.Log("randomly Chosen " + randomlyVotedPlayer.gameObject.name);
 
         StartCoroutine(DisplayRandomlyVotedCanvas());
     }

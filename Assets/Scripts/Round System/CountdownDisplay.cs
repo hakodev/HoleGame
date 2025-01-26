@@ -56,12 +56,12 @@ public class CountdownDisplay : AttributesSync {
     [SynchronizableMethod]
     private void EndVotingPhaseForAllPlayers()
     {
-        VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
-        foreach (VotingPhase player in allVotingPhases)
-        {
-            //Debug.Log(player.gameObject.name);
-            player.EndVotingPhase();
-        }
+        //VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
+        VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
+        //Debug.Log(player.gameObject.name);
+        player.EndVotingPhase();
+        
+
 
         SymptomNotifText[] allNotifTexts = FindObjectsByType<SymptomNotifText>(FindObjectsSortMode.None);
         foreach(SymptomNotifText notifText in allNotifTexts)
@@ -92,6 +92,11 @@ public class CountdownDisplay : AttributesSync {
     
     private void UpdateTickDown()
     {
+        if (!Multiplayer.GetUser().IsHost) { return; }
+        if (!Multiplayer.GetAvatar().IsMe) { return; }
+        if (RoleAssignment.playerID - 1 != 0) { return; }
+
+
         if (time > 0) 
         {
             deltaTime += Time.deltaTime;
