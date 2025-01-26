@@ -17,7 +17,6 @@ public class EndGameResolution : AttributesSync
     Canvas endGameCanvas;
     TextMeshProUGUI descriptor;
     [SerializeField] PopUp popUp;
-    [SerializeField] PopUp wildWestPopUp;
     [SerializeField] CanvasGroup machinesWon;
     [SerializeField] CanvasGroup infiltratorsWon;
 
@@ -25,17 +24,26 @@ public class EndGameResolution : AttributesSync
     [SerializeField] string allInfiltratorsDead = "No Infiltrators Left";
     [SerializeField] string allMachinesDead = "No Machines Left";
 
+
+    [SerializeField] TextMeshProUGUI wildWestTaskBar;
+    [SerializeField] TextMeshProUGUI wildWestTitle;
+    [SerializeField] TextMeshProUGUI wildWestExplanatoryText;
+    [SerializeField] string wildWestProtocolText = "Wild West Protocol";
+    [SerializeField] string wildWestTitleText = "Fire The Other Worker";
+
+
     [SynchronizableField] public bool inWildWest = false;
 
 
     private void Awake()
     {
         display = FindAnyObjectByType<CountDownDisplayManager>();
-        endGameCanvas = transform.parent.GetComponent<Canvas>();
+        endGameCanvas = GetComponent<Canvas>();
         popUp = transform.GetComponentInChildren<PopUp>();
     }
     private void Start()
     {
+        wildWestExplanatoryText.gameObject.SetActive(false);
         popUp.gameObject.SetActive(false);
     }
 
@@ -63,18 +71,19 @@ public class EndGameResolution : AttributesSync
 
     private void WildWest()
     {
-        GameObject wildWestPopUpPrefab = Resources.Load<GameObject>("WildWestPopUp");
-        GameObject wildWestPopUp = Instantiate(wildWestPopUpPrefab, endGameCanvas.transform, false);
-        wildWestPopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
+        wildWestExplanatoryText.gameObject.SetActive(true);
+
+        wildWestTaskBar.text = wildWestProtocolText;
+        wildWestTitle.text = wildWestTitleText;
 
         inWildWest = true;
     }
     public void HandOutGuns()
     {
-        foreach (PlayerRole player in VotingPhase.totalALivePlayers)
-        {
-            player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
-        }
+       // foreach (PlayerRole player in VotingPhase.totalALivePlayers)
+       // {
+            transform.root.GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+      //  }
     }
 
     private bool once = true;

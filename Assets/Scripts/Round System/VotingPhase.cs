@@ -14,12 +14,14 @@ public class VotingPhase : AttributesSync {
     [SerializeField] private GameObject playerVoteButton;
     [SerializeField] TMP_Text pickedPlayerNameText;
     [SerializeField] private GameObject votingCanvas;
+    PopUp votingPopUp;
+
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
     [SerializeField] private GameObject randomlyVotedPlayer;
     [SerializeField] GameObject symptomsNotifCanvas;
     [SerializeField] GameObject votingPhaseObject;
-    [SerializeField] EndGameResolution endGameResolution;
+    EndGameResolution endGameResolution;
     Alteruna.Avatar avatar;
 
 
@@ -43,6 +45,8 @@ public class VotingPhase : AttributesSync {
         totalALivePlayers.Add(player);
         votingPlayers.Add(GetComponent<VotingPhase>());
         spawner = FindAnyObjectByType<Alteruna.Spawner>();
+        endGameResolution = GetComponentInChildren<EndGameResolution>();
+        votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
     }
     private void Start() {
 
@@ -53,9 +57,11 @@ public class VotingPhase : AttributesSync {
     public void InitiateVotingPhase() {
 
         if (!avatar.IsMe) { return; }
-        endGameResolution.CheckForEndGame();
         //if (totalPlayers.Count <= 1) { return; }
         votingCanvas.SetActive(true);
+        endGameResolution.CheckForEndGame();
+        votingPopUp.PopIn();
+        
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         player.VotedCount = 0;
@@ -66,32 +72,39 @@ public class VotingPhase : AttributesSync {
 
         if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
-            } else {
-
-                int i = 0;
-                foreach(PlayerRole otherPlayer in totalALivePlayers)
-                {
-                    if (otherPlayer == player) { continue; }
-                    i++;
-
-                    GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
-                    newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
-
-                    RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
-                    rect.anchoredPosition += rect.anchoredPosition * i;
-
-                    newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
-                            otherPlayer.VotedCount++;
-                            votingCanvas.SetActive(false);
-                            votedCanvas.SetActive(true);
-                            hasVoted = true;
-                            //Debug.Log("BITTE_Button " + otherPlayer.name);
-                    });
-                }
-            }
-
-         //   player.gameObject.GetComponent<PlayerController>().MovementEnabled = false; // Disable movement until end of voting phase
         }
+        else 
+        {
+            int i = 0;
+            foreach (PlayerRole otherPlayer in totalALivePlayers)
+            {
+                if (otherPlayer == player) { continue; }
+                i++;
+
+                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
+                newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
+
+                RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
+                rect.anchoredPosition += new Vector2(0, -80 * i);
+
+                if (i % 2 == 0)
+                {
+                    rect.anchorMin = new Vector2(0f, 0.5f);
+                    rect.anchorMax = new Vector2(0f, 0.5f);
+                    rect.anchoredPosition = new Vector2(-250, rect.anchoredPosition.y);
+                }
+
+
+                newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
+                    otherPlayer.VotedCount++;
+                    votingCanvas.SetActive(false);
+                    votedCanvas.SetActive(true);
+                    hasVoted = true;
+                    //Debug.Log("BITTE_Button " + otherPlayer.name);
+                });
+            }
+        }
+    }
 
 
 

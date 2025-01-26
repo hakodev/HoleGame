@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class RoleAssignment : AttributesSync
 {
-    private List<PlayerRole> rolelessPlayers = new();
-    private List<PlayerRole> totalPlayers = new();
+    private List<PlayerRole> rolelessPlayers = new List<PlayerRole>();
+    private List<PlayerRole> totalPlayers = new List<PlayerRole>();
     public static bool hasGameStarted = false;
 
     private int maxNumOfInfiltrators = 1;
@@ -39,11 +39,12 @@ public class RoleAssignment : AttributesSync
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
         youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
         playerNumber++;
+        totalPlayers.Add(transform.root.GetComponent<PlayerRole>());    
     }
     private void Start()
     {
-        totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
-        if(playerID==-10) playerID = playerNumber; //sets proper number
+        if (playerID == -10) playerID = playerNumber; //sets proper number
+        Debug.Log("player's count " + totalPlayers.Count);
 
         if (playerNumber != 1)
         {
