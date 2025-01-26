@@ -29,14 +29,8 @@ public class CountdownDisplay : AttributesSync {
         //flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
         //sendFlavorTextToUI = flavorTextMesh.text;
     }
-    /*
-    private new void OnEnable()
-    {
-        base.OnEnable();
-        sendFlavorTextToUI = flavorTextMesh.text;
-    }*/
     
-    //these are meant to be called from the same object to itself so just use BoradcastRemoteMethod("nameofthing")
+
     [SynchronizableMethod]
     private void DeactivateUnusedTimers()//(string deactivatedObject)
     {
@@ -103,7 +97,11 @@ public class CountdownDisplay : AttributesSync {
             if (deltaTime >= 1)
             {
                 deltaTime = 0;
-                if (Multiplayer.GetUser().IsHost) time--;
+                if (Multiplayer.GetUser().IsHost)
+                {
+                    time--;
+                    manager.TimeToEndTheGame--;
+                }
                 //Debug.Log(gameObject.name);
             }
         }

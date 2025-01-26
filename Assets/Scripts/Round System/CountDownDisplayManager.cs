@@ -11,9 +11,12 @@ public class CountDownDisplayManager : AttributesSync {
 
     public static bool hasInitiatedTheTimer = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SynchronizableField] public int TimeToEndTheGame = 60 * 6 + 20 * 5;
+
+
     private void Start()
     {
+        hasInitiatedTheTimer = false;
         StartCoroutine(CheckIfGameStarted());
     }
     private IEnumerator CheckIfGameStarted()

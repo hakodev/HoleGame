@@ -49,7 +49,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
 
 
 
-    private void PopIn()
+    public void PopIn()
     {
         transform.localScale = Vector3.zero;
         transform.DOScale(overPopImpact, popInTime).SetEase(Ease.OutBack).OnComplete(() => transform.DOScale(Vector3.one, popInTime).SetEase(Ease.OutBack));
