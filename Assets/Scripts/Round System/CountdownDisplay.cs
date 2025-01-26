@@ -19,6 +19,15 @@ public class CountdownDisplay : AttributesSync {
     public static int sendTimeToUI;
     public static string sendFlavorTextToUI;
 
+    EndGameResolution endGameResolution;
+
+    public static void ResetStatic()
+    {
+        countdownColor = Color.green;
+        sendTimeToUI = 0;
+        sendFlavorTextToUI = "";
+    }
+
 
     private void Awake() {
         maxTime = time;
@@ -99,8 +108,14 @@ public class CountdownDisplay : AttributesSync {
                 deltaTime = 0;
                 if (Multiplayer.GetUser().IsHost)
                 {
-                    time--;
-                    manager.TimeToEndTheGame--;
+                    if(VotingPhase.totalALivePlayers.Count>1)
+                    {
+                        if(endGameResolution==null) endGameResolution = Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>();
+                        if (!endGameResolution.inWildWest) {
+                            time--;
+                            manager.TimeToEndTheGame--;
+                        }
+                    }
                 }
                 //Debug.Log(gameObject.name);
             }

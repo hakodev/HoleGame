@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class RoleAssignment : AttributesSync
 {
-    private static List<PlayerRole> rolelessPlayers = new();
-    private static List<PlayerRole> totalPlayers = new();
+    private List<PlayerRole> rolelessPlayers = new();
+    private List<PlayerRole> totalPlayers = new();
     public static bool hasGameStarted = false;
 
     private int maxNumOfInfiltrators = 1;
@@ -28,6 +28,12 @@ public class RoleAssignment : AttributesSync
     public static int playerID=-10; //client based id
 
 
+    public static void ResetStatic()
+    {
+        hasGameStarted = false;
+        playerID = -10;
+        playerNumber = 0;
+    }
     private void Awake()
     {
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
@@ -75,11 +81,11 @@ public class RoleAssignment : AttributesSync
             }
         }
     }
-
+    /*
     public static List<PlayerRole> GetTotalPlayers() {
         return totalPlayers;
     }
-
+    */
     private void FindRolelessPlayers()
     {
         rolelessPlayers.AddRange(totalPlayers);

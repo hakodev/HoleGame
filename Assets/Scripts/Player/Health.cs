@@ -1,7 +1,5 @@
 using UnityEngine;
 using Alteruna;
-using DG.Tweening;
-using System.Collections;
 
 
 public class Health : AttributesSync {
@@ -15,12 +13,15 @@ public class Health : AttributesSync {
     private CharacterController characterController;
     //bool dead = false;
     private MishSyncAnimations mishSync;
+    private EndGameResolution endGameResolution;
 
     private void Awake() {
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
         mishSync = GetComponent<MishSyncAnimations>();
+        endGameResolution = GetComponentInChildren<EndGameResolution>();
+
         deadScreen.SetActive(false);
     }
 
@@ -47,7 +48,8 @@ public class Health : AttributesSync {
         characterController.enabled = false;
         deadScreen.SetActive(true);
         mishSync.SetStance(StanceEnum.Dead);
-        //VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
+        VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
+        endGameResolution.CheckForEndGame();
     }
 
     public float GetHealth()

@@ -1058,6 +1058,7 @@ MonoBehaviour:
   randomlyVotedPlayer: {fileID: 3503924621019640072}
   symptomsNotifCanvas: {fileID: 1549220016357808742}
   votingPhaseObject: {fileID: 2829875021864781074}
+  endGameResolution: {fileID: 0}
   taskManagerNameInHost: 
   once: 0
 --- !u!1 &2156433978969218877
@@ -1078,7 +1079,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1371666972132873964
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1583,7 +1584,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5828278111493462245
 Transform:
   m_ObjectHideFlags: 0
@@ -3469,7 +3470,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8374584942244674588
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3565,11 +3566,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb8d9232259ad434b950620abf612e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 6f5fdadd-3b15-4c83-8335-ac2f948bd7a3
+  Reliability: 1
+  LocalMethodBehavior: 1
+  popUp: {fileID: 3540229564612076413, guid: a70811c39935d5d4e8462131f9257f82, type: 3}
+  wildWestPopUp: {fileID: 0}
   machinesWon: {fileID: 4252084090233132476}
   infiltratorsWon: {fileID: 8711390698833436457}
   timerEndedText: Timer Ended
   allInfiltratorsDead: No Infiltrators Left
   allMachinesDead: No Machines Left
+  inWildWest: 0
 --- !u!1 &6200773965861047665
 GameObject:
   m_ObjectHideFlags: 0
@@ -5245,11 +5253,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4528067742869382769, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4718649396574360929, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4843545598206597202, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_Name
@@ -5257,11 +5265,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843545598206597202, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5919305820755421972, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8375964590795975718, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_IsActive
@@ -5418,7 +5426,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2315957022601181430, guid: a70811c39935d5d4e8462131f9257f82, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4620191103796019698, guid: a70811c39935d5d4e8462131f9257f82, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a70811c39935d5d4e8462131f9257f82, type: 3}

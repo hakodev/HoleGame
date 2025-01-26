@@ -92,7 +92,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1034877215047644354}
   m_Enabled: 1
-  m_Alpha: 0.98
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -1090,7 +1090,7 @@ PrefabInstance:
     - target: {fileID: 8054372566849307495, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2315957022601181430}
+      objectReference: {fileID: 0}
     - target: {fileID: 8054372566849307495, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ReloadScene
@@ -1192,39 +1192,8 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9090824426693126484, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
       insertIndex: 3
       addedObject: {fileID: 5548594973998195303}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2789334121659345429, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2315957022601181430}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
---- !u!1 &1425756987858310626 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2789334121659345429, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
-  m_PrefabInstance: {fileID: 3854231323177844727}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2315957022601181430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1425756987858310626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb8d9232259ad434b950620abf612e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: 60c17c2e-a11e-4bea-9d59-4189e255937e
-  Reliability: 1
-  LocalMethodBehavior: 1
-  popUp: {fileID: 0}
-  machinesWon: {fileID: 3288481720902643713}
-  infiltratorsWon: {fileID: 7945604215222581908}
-  timerEndedText: Timer Ended
-  allInfiltratorsDead: No Infiltrators Left
-  allMachinesDead: No Machines Left
-  inWildWest: 0
 --- !u!224 &5428493764866741923 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9090824426693126484, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}

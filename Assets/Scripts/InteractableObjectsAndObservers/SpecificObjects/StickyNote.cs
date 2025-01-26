@@ -40,6 +40,7 @@ public class StickyNote : DynamicInteractableObject
 
     protected override void Awake()
     {
+        currentlyDrawing = false;
         base.Awake();
         rb = GetComponent<Rigidbody>();
         rbToTrack = GetComponent<RigidbodySynchronizable>();
