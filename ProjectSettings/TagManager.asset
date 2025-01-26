@@ -12,6 +12,7 @@ TagManager:
   - NetworkManager
   - RoomMenu
   - nameInput
+  - Carpet
   layers:
   - Default
   - TransparentFX

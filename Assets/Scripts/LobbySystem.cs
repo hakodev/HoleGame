@@ -61,12 +61,12 @@ public class LobbySystem : MonoBehaviour {
                     if (carpet.GetColor() == CarpetColor.Red)
                     {
                         carpet.IsCorruptedLocal = true;
-                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                        carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                     }
                     else
                     {
                         carpet.IsCorruptedLocal = false;
-                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                        carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                     }
                 }
                 break;
@@ -77,12 +77,12 @@ public class LobbySystem : MonoBehaviour {
                     if (carpet.GetColor() == CarpetColor.Green)
                     {
                         carpet.IsCorruptedLocal = true;
-                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                        carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                     }
                     else
                     {
                         carpet.IsCorruptedLocal = false;
-                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                        carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                     }
                 }
                 break;
@@ -93,12 +93,12 @@ public class LobbySystem : MonoBehaviour {
                     if (carpet.GetColor() == CarpetColor.Blue)
                     {
                         carpet.IsCorruptedLocal = true;
-                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                        carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                     }
                     else
                     {
                         carpet.IsCorruptedLocal = false;
-                        carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                        carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                     }
                 }
                 break;

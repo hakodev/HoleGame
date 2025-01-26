@@ -27,12 +27,14 @@ public class CarpetDetection : MonoBehaviour
     
     void CheckForCarpetCollision()
     {
-        currentColliders = Physics.OverlapBox(transform.position, extents, Quaternion.identity, carpetMask);
+        currentColliders = Physics.OverlapBox(transform.position, extents, Quaternion.identity);
 
         if (currentColliders.Length == 0) return;
 
         foreach (Collider collider in currentColliders)
         {
+            if (collider.gameObject.tag != "Carpet") return;
+
             if (collider.gameObject.GetComponent<CarpetData>())
             {
                 CarpetData carpetData = collider.gameObject.GetComponent<CarpetData>();

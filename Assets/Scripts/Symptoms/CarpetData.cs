@@ -12,7 +12,7 @@ public class CarpetData : AttributesSync {
 
     private void Start()
     {
-        gameObject.layer = LayerMask.NameToLayer("Carpet");
+        gameObject.tag = "Carpet";
     }
 
     [field: SerializeField] public Material NormalMat { get; private set; }
