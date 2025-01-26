@@ -36,8 +36,6 @@ public class StickyNote : DynamicInteractableObject
 
     public static bool currentlyDrawing=false;
 
-
-
     protected override void Awake()
     {
         base.Awake();
@@ -144,7 +142,17 @@ public class StickyNote : DynamicInteractableObject
         }
     }
 
-
+    /*private new void LateUpdate()
+    {
+        if (isPickedUp)
+        {
+            if (display == null || display.gameObject.transform.root != transform.root)
+            {
+                display = transform.root.GetComponentInChildren<HUDDisplay>();
+            }
+            display.SetState(new StickyNoteDisplay(display));
+        }
+    }*/
 
     private void Stick()
     {

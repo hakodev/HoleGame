@@ -14,6 +14,8 @@ public class SymptomNotifText : AttributesSync {
 
     private new void OnEnable() {
         base.OnEnable();
+
+        if (FindAnyObjectByType<LobbySystem>()) return;
         ApplyNewSymptom();
         DisplayNotificationText();
     }
@@ -22,7 +24,6 @@ public class SymptomNotifText : AttributesSync {
         //List<SymptomsSO> allSymptoms = SymptomsManager.Instance.GetSymptomsList();
         //int randNum = Random.Range(0, allSymptomsCount);
         //SymptomsManager.Instance.SetSymptom(allSymptoms[randNum]);
-
         int randNum = SymptomsManager.Instance.GetRandomNum();
         SymptomsManager.Instance.SetSymptom(randNum);
         Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
