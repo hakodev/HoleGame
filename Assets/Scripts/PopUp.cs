@@ -15,7 +15,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     [SerializeField] float popInTime;
     [SerializeField] float popOutTime;
     [SerializeField] float overPopImpact;
-
+    [SerializeField] GameObject namePopUpPrefab;
     UIInput uiInput;
 
     [SerializeField] bool triggersCaptcha = false;
@@ -28,15 +28,16 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     {
         rectTransform = GetComponent<RectTransform>();
 
+    }
+    private void Start()
+    {
+
         if (roomMenu == null)
         {
             roomMenu = GameObject.FindGameObjectWithTag("RoomMenu");
             roomCamera = roomMenu.GetComponentInChildren<Camera>().gameObject;
             roomCamera.SetActive(false);
         }
-    }
-    private void Start()
-    {
         canvas = GetComponentInParent<Canvas>();
         uiInput = transform.root.GetComponentInChildren<UIInput>();
         PopIn();
@@ -79,18 +80,16 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     GameObject namePopUp;
     public void ClickedApplyButton()
     {
-        if (namePopUp == null)
-        {
-            GameObject applyPopUpPrefab = Resources.Load<GameObject>("PopupEnterName");
-            namePopUp = Instantiate(applyPopUpPrefab, canvas.transform, false);
-            namePopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
-        }
+
+            namePopUpPrefab.SetActive(true);
+            namePopUpPrefab.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
+        
     }
 
     TMP_InputField nameInputFieldText;
     public void ClickedVerifyNameButton()
     {
-        nameInputFieldText = GameObject.FindGameObjectWithTag("nameInput").GetComponent<TMP_InputField>();
+        nameInputFieldText = transform.parent.GetComponentInChildren<TMP_InputField>();
 
         if (nameInputFieldText.text == string.Empty)
         {
