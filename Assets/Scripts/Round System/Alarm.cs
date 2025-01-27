@@ -45,8 +45,11 @@ public class Alarm : MonoBehaviour
     {
         alarmSource = gameObject.AddComponent<AudioSource>();
         alarmSource.clip = alarmClip;
-        alarmSource.spatialBlend = 0.7f;
-        alarmSource.volume = 0.3f;
+        alarmSource.spatialBlend = 0.85f;
+        alarmSource.volume = 0.1f;
+
+        AudioReverbFilter filter = alarmSource.AddComponent<AudioReverbFilter>();
+        filter.reverbPreset = AudioReverbPreset.Room;
 
         isBeeping = true;
     }
