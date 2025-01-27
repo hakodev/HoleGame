@@ -5,7 +5,15 @@ public class CarpetData : AttributesSync {
     [SerializeField] private CarpetColor carpetColor;
 
     [SerializeField, SynchronizableField]
-    private bool isCorrupted;
+    private bool isCorrupted
+        ;
+    private bool isCorruptedLocal;
+
+
+    private void Start()
+    {
+        gameObject.tag = "Carpet";
+    }
 
     [field: SerializeField] public Material NormalMat { get; private set; }
     [field: SerializeField] public Material CorruptedMat { get; private set; }
@@ -15,17 +23,14 @@ public class CarpetData : AttributesSync {
         set { isCorrupted = value; }
     }
 
+    public bool IsCorruptedLocal
+    {
+        get { return isCorruptedLocal; }
+        set { isCorruptedLocal = value; }
+    }
+
     public CarpetColor GetColor() {
         return carpetColor;
     }
 
-    private void OnCollisionEnter(Collision otherCollider) {
-        Debug.Log("Carpet1");
-        if(this.isCorrupted && otherCollider.gameObject.CompareTag("Player")) {
-            //if(otherCollider.collider.GetComponent<PlayerRole>().GetRole() == Roles.Machine) {
-            Debug.Log("Carpet 2");
-                otherCollider.collider.gameObject.GetComponent<PlayerController>().Jump();
-            //}
-        }
-    }
 }

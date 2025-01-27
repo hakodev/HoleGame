@@ -826,8 +826,11 @@ MonoBehaviour:
   throwAudio: {fileID: 11400000, guid: d76fe7fc84433494198cf3307d4d3bec, type: 2}
   laserBeep: {fileID: 11400000, guid: 9031382a0479a3149816eecdacd4b376, type: 2}
   deathStatic: {fileID: 11400000, guid: f9a0a92f721f2664c995970804521063, type: 2}
-  lightHit: {fileID: 11400000, guid: 550d682692253f64380224db1c4a2153, type: 2}
+  lightHit: {fileID: 11400000, guid: d60fe40247defcd4e88c63ee0e901c11, type: 2}
   heavyHit: {fileID: 11400000, guid: 9c7bd82521802a34298a35e6e825ca67, type: 2}
+  stickyHit: {fileID: 11400000, guid: e0388285402da1d469ec0066ed432a61, type: 2}
+  mugHit: {fileID: 11400000, guid: 550d682692253f64380224db1c4a2153, type: 2}
+  bouncyHit: {fileID: 11400000, guid: 2e527f4d23e8c404faea24dc2c58a194, type: 2}
 --- !u!1 &2683684385250576928
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1975c133db35d1f4983ab27c4e2f07a4, type: 3}
   m_Name: LightHit
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: fc85c01b5c9632a40abe3e2334888eda, type: 3}
-  volume: 0.369
+  clip: {fileID: 8300000, guid: 254b66025b61cc847a74fb77648dff50, type: 3}
+  volume: 0.568
   spatialBlend: 1

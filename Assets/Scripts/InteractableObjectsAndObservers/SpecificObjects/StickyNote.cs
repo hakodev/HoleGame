@@ -59,6 +59,7 @@ public class StickyNote : DynamicInteractableObject
         {
             //BroadcastRemoteMethod(nameof(SyncSetParent));
             Stick();
+            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
@@ -89,6 +90,7 @@ public class StickyNote : DynamicInteractableObject
         {
             AlignWithSurface(collision);
             Stick();
+            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
         }
     }
 
