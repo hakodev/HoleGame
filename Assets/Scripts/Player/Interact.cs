@@ -526,7 +526,7 @@ public class Interact : AttributesSync, IObserver
             if (spawnedGun != null && avatar.IsMe)
             {
                 if (heldObject == spawnedGun) Drop();
-                spawner.Despawn(spawnedGun);
+              //  spawner.Despawn(spawnedGun);
             }
         }
         if (interaction == InteractionEnum.GivenTaskManagerRole)

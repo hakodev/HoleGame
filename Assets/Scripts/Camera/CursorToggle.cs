@@ -7,19 +7,19 @@ using UnityEngine.UI;
 public class CursorToggle : MonoBehaviour
 {
     private PlayerRole player;
-    private Camera camera;
     List<Canvas> canvases;
 
     private layerOfUI Escape { get; set; } = layerOfUI.inGame;
 
+    bool once = true;
+
     private void Awake()
     {
-        camera = GetComponentInChildren<Camera>();
+
+    }
+    private void Start()
+    {
         canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
-        for (int i = 0; i < canvases.Count; i++)
-        {
-            if(canvases[i].gameObject.layer!=10) canvases.Remove(canvases[i]);
-        }
     }
 
     private void Update()
@@ -60,6 +60,15 @@ public class CursorToggle : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (once)
+            {
+                once = false;
+                for (int i = 0; i < canvases.Count; i++)
+                {
+                    if (canvases[i].gameObject.layer != 10) canvases.Remove(canvases[i]);
+                }
+            }
+
             if (!HitUI())
             {
                 Cursor.visible = false;
