@@ -12,6 +12,7 @@ TagManager:
   - NetworkManager
   - RoomMenu
   - nameInput
+  - Carpet
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - SelfPlayerLayer
   - HeldObject
   - OutlineLayer
-  - 
+  - Carpet
   - 
   - 
   - 

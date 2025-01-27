@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform cameraTransform;
     [SerializeField] Transform moveTransform;
 
+    PlayerRole role;
+
     public bool IsCrouching { get; private set; }
 
     private void Awake()
@@ -46,6 +48,7 @@ public class PlayerController : MonoBehaviour
         avatar = GetComponent<Alteruna.Avatar>();
         characterController = GetComponent<CharacterController>();
         mishSync = GetComponent<MishSyncAnimations>();
+        role = GetComponent<PlayerRole>();
     }
     private void Start()
     {
@@ -133,7 +136,7 @@ public class PlayerController : MonoBehaviour
             currentjumpHeight = jumpHeight;
         }
 
-        if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0]) {
+        if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[0] && role.GetRole() == Roles.Machine) {
             //Inverted controls
             horizontalInput = -horizontalInput;
             verticalInput = -verticalInput;

@@ -5,23 +5,10 @@ public class HUDDisplay : MonoBehaviour
     public GameObject dynamicInteractDisplay;
     public GameObject stationaryInteractDisplay;
     public GameObject carryDisplay;
+    public GameObject stickyNoteDisplay;
+    public GameObject markerDisplay;
 
     private HUDState state;
-
-    //private static HUDDisplay instance;
-
-    /*    public static HUDDisplay Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindAnyObjectByType<HUDDisplay>();
-            }
-            return instance;
-        }
-    }*/
-
 
     public void SetState(HUDState stateToSet)
     {
@@ -38,6 +25,8 @@ public class HUDDisplay : MonoBehaviour
         dynamicInteractDisplay.SetActive(false);
         stationaryInteractDisplay.SetActive(false);
         carryDisplay.SetActive(false);
+        stickyNoteDisplay.SetActive(false);
+        markerDisplay.SetActive(false);
     }
 
 }
@@ -69,6 +58,26 @@ public class CarryDisplay : HUDState
     {
         display.DisableAllPrompts();
         display.carryDisplay.SetActive(true);
+    }
+}
+
+public class StickyNoteDisplay : HUDState
+{
+    public StickyNoteDisplay(HUDDisplay display) : base(display) { }
+    public override void Display()
+    {
+        display.DisableAllPrompts();
+        display.stickyNoteDisplay.SetActive(true);
+    }
+}
+
+public class MarkerDisplay : HUDState
+{
+    public MarkerDisplay(HUDDisplay display) : base(display) { }
+    public override void Display()
+    {
+        display.DisableAllPrompts();
+        display.markerDisplay.SetActive(true);
     }
 }
 

@@ -75,6 +75,8 @@ public class CoffeeCup : DynamicInteractableObject
 
             BroadcastRemoteMethod(nameof(CreateDecalPrefab), pos, normal);
         }
+
+        PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetMug);
     }
 
     [SynchronizableMethod]

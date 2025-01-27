@@ -36,8 +36,6 @@ public class StickyNote : DynamicInteractableObject
 
     public static bool currentlyDrawing=false;
 
-
-
     protected override void Awake()
     {
         currentlyDrawing = false;
@@ -62,6 +60,7 @@ public class StickyNote : DynamicInteractableObject
         {
             //BroadcastRemoteMethod(nameof(SyncSetParent));
             Stick();
+            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
@@ -92,6 +91,7 @@ public class StickyNote : DynamicInteractableObject
         {
             AlignWithSurface(collision);
             Stick();
+            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
         }
     }
 
@@ -145,7 +145,17 @@ public class StickyNote : DynamicInteractableObject
         }
     }
 
-
+    /*private new void LateUpdate()
+    {
+        if (isPickedUp)
+        {
+            if (display == null || display.gameObject.transform.root != transform.root)
+            {
+                display = transform.root.GetComponentInChildren<HUDDisplay>();
+            }
+            display.SetState(new StickyNoteDisplay(display));
+        }
+    }*/
 
     private void Stick()
     {
