@@ -4,7 +4,7 @@ using UnityEngine;
 public class CarpetManager : AttributesSync {
     public static CarpetManager Instance { get; private set; }
 
-    [SynchronizableField] private int carpetColorRandNum;
+    [SynchronizableField] public int carpetColorRandNum;
     private const int numOfTotalCarpetColors = 3;
 
     private void Awake() {
