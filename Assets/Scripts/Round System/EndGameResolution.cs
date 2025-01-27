@@ -25,6 +25,7 @@ public class EndGameResolution : AttributesSync
     [SerializeField] string allMachinesDead = "No Machines Left";
 
 
+    [SerializeField] PopUp votingPopUp;
     [SerializeField] TextMeshProUGUI wildWestTaskBar;
     [SerializeField] TextMeshProUGUI wildWestTitle;
     [SerializeField] TextMeshProUGUI wildWestExplanatoryText;
@@ -67,6 +68,8 @@ public class EndGameResolution : AttributesSync
             if(player.GetRole() == Roles.Infiltrator) infiltratorsCount++;
             if(player.GetRole() == Roles.Machine) machinesCount++;
         }
+
+        Debug.Log("infils " + infiltratorsCount + "machines " + machinesCount);
     }
 
     private void WildWest()
@@ -77,6 +80,8 @@ public class EndGameResolution : AttributesSync
         wildWestTitle.text = wildWestTitleText;
 
         inWildWest = true;
+
+        votingPopUp.ToggleTriggerCaptcha(false);
     }
     public void HandOutGuns()
     {
@@ -104,8 +109,8 @@ public class EndGameResolution : AttributesSync
         popUp.PopIn();
 
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(machinesWon.DOFade(0f, 0.2f));
-        sequence.Append(machinesWon.DOFade(1f, 1f));
+        sequence.Append(group.DOFade(0f, 0.2f));
+        sequence.Append(group.DOFade(1f, 1f));
 
         descriptor = group.transform.Find("Descriptor").GetComponent<TextMeshProUGUI>();
         descriptor.text = description;

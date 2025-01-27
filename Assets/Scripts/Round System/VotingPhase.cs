@@ -75,39 +75,42 @@ public class VotingPhase : AttributesSync {
         }
         else 
         {
-            int i = 0;
-            foreach (PlayerRole otherPlayer in totalALivePlayers)
-            {
-                if (otherPlayer == player) { continue; }
-                i++;
-
-                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
-                newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
-
-                RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
-                rect.anchoredPosition += new Vector2(0, -80 * i);
-
-                if (i % 2 == 0)
-                {
-                    rect.anchorMin = new Vector2(0f, 0.5f);
-                    rect.anchorMax = new Vector2(0f, 0.5f);
-                    rect.anchoredPosition = new Vector2(-250, rect.anchoredPosition.y);
-                }
-
-
-                newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
-                    otherPlayer.VotedCount++;
-                    votingCanvas.SetActive(false);
-                    votedCanvas.SetActive(true);
-                    hasVoted = true;
-                    //Debug.Log("BITTE_Button " + otherPlayer.name);
-                });
-            }
+            if(!endGameResolution.inWildWest) SpawnVotingButtons();
         }
     }
 
 
+    private void SpawnVotingButtons()
+    {
+        int i = 0;
+        foreach (PlayerRole otherPlayer in totalALivePlayers)
+        {
+            if (otherPlayer == player) { continue; }
+            i++;
 
+            GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingPopUp.transform);
+            newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
+
+            RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -80 * i + 120);
+
+            if (i % 2 == 0)
+            {
+              //  rect.anchorMin = new Vector2(0f, -0.5f);
+             //   rect.anchorMax = new Vector2(0f, -0.5f);
+                rect.anchoredPosition = new Vector2(734, rect.anchoredPosition.y+80);
+            }
+
+
+            newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
+                otherPlayer.VotedCount++;
+                votingCanvas.SetActive(false);
+                votedCanvas.SetActive(true);
+                hasVoted = true;
+                Debug.Log("BITTE_Button " + otherPlayer.name);
+            });
+        }
+    }
 
     public void EndVotingPhase()
     {
@@ -262,9 +265,12 @@ public class VotingPhase : AttributesSync {
     public void DespawnAllGuns()
     {
         Gun[] allGuns = FindObjectsByType<Gun>(FindObjectsSortMode.None);
-        foreach (Gun gun in allGuns)
+        Debug.Log("Despawning guns " + allGuns.Length);
+
+        for (int i=0; i<allGuns.Length; i++)
         {
-            spawner.Despawn(gun.gameObject);
+            Debug.Log("despawned gun " + allGuns[i].gameObject);
+            spawner.Despawn(allGuns[i].gameObject);
         }
     }
 }

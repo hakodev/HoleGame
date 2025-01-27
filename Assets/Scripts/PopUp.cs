@@ -10,14 +10,19 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     private RectTransform rectTransform;
     private Canvas canvas;
     private static GameObject roomMenu;
+    private static GameObject roomCamera;
 
     [SerializeField] float popInTime;
     [SerializeField] float popOutTime;
     [SerializeField] float overPopImpact;
 
-    [SerializeField] bool triggersCaptcha = false;
-
     UIInput uiInput;
+
+    [SerializeField] bool triggersCaptcha = false;
+    public void ToggleTriggerCaptcha(bool newState)
+    {
+        triggersCaptcha = newState;
+    }
 
     private void Awake()
     {
@@ -27,7 +32,8 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         if (roomMenu == null)
         {
             roomMenu = GameObject.FindGameObjectWithTag("RoomMenu");
-            roomMenu.SetActive(false);
+            roomCamera = roomMenu.GetComponentInChildren<Camera>().gameObject;
+            roomCamera.SetActive(false);
         }
     }
     private void Start()
@@ -94,7 +100,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         else
         {
             uiInput.SetPlayerNameSync(nameInputFieldText.text);
-            roomMenu.SetActive(true);
+            roomCamera.SetActive(true);
             canvas.gameObject.SetActive(false);
         }
     }
