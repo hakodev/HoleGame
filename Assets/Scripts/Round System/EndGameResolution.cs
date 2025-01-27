@@ -37,13 +37,13 @@ public class EndGameResolution : AttributesSync
 
 
     private void Awake()
-    {
-        display = FindAnyObjectByType<CountDownDisplayManager>();
-        endGameCanvas = GetComponent<Canvas>();
+    {        endGameCanvas = GetComponent<Canvas>();
         popUp = transform.GetComponentInChildren<PopUp>();
     }
     private void Start()
     {
+
+        display = FindAnyObjectByType<CountDownDisplayManager>();
         wildWestExplanatoryText.gameObject.SetActive(false);
         popUp.gameObject.SetActive(false);
     }

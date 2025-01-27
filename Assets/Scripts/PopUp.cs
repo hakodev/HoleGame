@@ -27,8 +27,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        canvas = GetComponentInParent<Canvas>();
-        uiInput = transform.root.GetComponentInChildren<UIInput>();
+
         if (roomMenu == null)
         {
             roomMenu = GameObject.FindGameObjectWithTag("RoomMenu");
@@ -38,6 +37,8 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     }
     private void Start()
     {
+        canvas = GetComponentInParent<Canvas>();
+        uiInput = transform.root.GetComponentInChildren<UIInput>();
         PopIn();
     }
     public void OnBeginDrag(PointerEventData eventData)
