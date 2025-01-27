@@ -80,8 +80,9 @@ public class Interact : AttributesSync, IObserver
     }
     void SetLayerRecursively(GameObject obj, int layer)
     {
-        if (obj.layer != LayerMask.NameToLayer("UI")) obj.layer = layer;
-        Debug.Log("UI layer " + obj.layer + " " + LayerMask.NameToLayer("UI"));
+        //if (obj.layer != LayerMask.NameToLayer("UI"))
+            obj.layer = layer;
+       // Debug.Log("UI layer " + obj.layer + " " + LayerMask.NameToLayer("UI"));
 
         foreach (Transform child in obj.transform)
         {
