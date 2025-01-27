@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Alteruna;
+using System.Linq;
 public class VotingPhase : AttributesSync {
 
     public static List<PlayerRole> totalALivePlayers = new List<PlayerRole>();
@@ -18,6 +19,7 @@ public class VotingPhase : AttributesSync {
     [SerializeField] private GameObject randomlyVotedPlayer;
     [SerializeField] GameObject symptomsNotifCanvas;
     [SerializeField] GameObject votingPhaseObject;
+    [SerializeField] EndGameResolution endGameResolution;
     Alteruna.Avatar avatar;
 
 
@@ -27,12 +29,20 @@ public class VotingPhase : AttributesSync {
 
     private bool hasVoted = false;
     [SynchronizableField, HideInInspector] public string taskManagerNameInHost = "";
+
+    Spawner spawner;
+
+    public static void StaticReset()
+    {
+        totalALivePlayers.Clear();
+    }
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
         totalALivePlayers.Add(player);
         votingPlayers.Add(GetComponent<VotingPhase>());
+        spawner = FindAnyObjectByType<Alteruna.Spawner>();
     }
     private void Start() {
 
@@ -43,6 +53,7 @@ public class VotingPhase : AttributesSync {
     public void InitiateVotingPhase() {
 
         if (!avatar.IsMe) { return; }
+        endGameResolution.CheckForEndGame();
         //if (totalPlayers.Count <= 1) { return; }
         votingCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
@@ -51,6 +62,7 @@ public class VotingPhase : AttributesSync {
         hasVoted = false;
 
         player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
+        DespawnAllGuns();
 
         if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
@@ -166,19 +178,27 @@ public class VotingPhase : AttributesSync {
     public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
     {
         if(!avatar.IsMe) { return; }
-        //Debug.Log("BITTE_Finale " + avatar.name + " " + player.IsTaskManager);
 
-        VotingPhase hostVoter = Multiplayer.GetAvatars()[0].GetComponent<VotingPhase>();
-        taskManagerNameInHost = hostVoter.taskManagerNameInHost;
-        pickedPlayerIndex = hostVoter.pickedPlayerIndex;
-        pickedPlayerNameText.text = taskManagerNameInHost;
+        if (endGameResolution.inWildWest)
+        {
+            endGameResolution.HandOutGuns();
+        }
+        else
+        {
+            //Debug.Log("BITTE_Finale " + avatar.name + " " + player.IsTaskManager);
 
-        //Debug.Log("BITTE_Finale2 " + taskManagerNameInHost + " " + pickedPlayerIndex    );
+            VotingPhase hostVoter = Multiplayer.GetAvatars()[0].GetComponent<VotingPhase>();
+            taskManagerNameInHost = hostVoter.taskManagerNameInHost;
+            pickedPlayerIndex = hostVoter.pickedPlayerIndex;
+            pickedPlayerNameText.text = taskManagerNameInHost;
 
-        if (player.IsTaskManager) GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
-        
-        StartCoroutine(DisplayTaskManager());
-        StartCoroutine(DisplaySymptomNotif());
+            //Debug.Log("BITTE_Finale2 " + taskManagerNameInHost + " " + pickedPlayerIndex    );
+
+            if (player.IsTaskManager) GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+
+            StartCoroutine(DisplayTaskManager());
+            StartCoroutine(DisplaySymptomNotif());
+        }
     }
 
     private void VoteRandomly()
@@ -226,4 +246,12 @@ public class VotingPhase : AttributesSync {
         StartCoroutine(DisplaySymptomNotif());
     }
 
+    public void DespawnAllGuns()
+    {
+        Gun[] allGuns = FindObjectsByType<Gun>(FindObjectsSortMode.None);
+        foreach (Gun gun in allGuns)
+        {
+            spawner.Despawn(gun.gameObject);
+        }
+    }
 }

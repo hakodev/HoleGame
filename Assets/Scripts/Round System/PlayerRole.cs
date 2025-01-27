@@ -23,6 +23,11 @@ public class PlayerRole : AttributesSync
 
     [SynchronizableField] public string playerNameSync;
 
+
+    public static void ResetStatic()
+    {
+        localClientRole = Roles.Machine;
+    }
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();

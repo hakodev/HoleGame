@@ -17,6 +17,7 @@ public class EndGameResolution : AttributesSync
     Canvas endGameCanvas;
     TextMeshProUGUI descriptor;
     [SerializeField] PopUp popUp;
+    [SerializeField] PopUp wildWestPopUp;
     [SerializeField] CanvasGroup machinesWon;
     [SerializeField] CanvasGroup infiltratorsWon;
 
@@ -26,11 +27,16 @@ public class EndGameResolution : AttributesSync
 
     [SynchronizableField] public bool inWildWest = false;
 
-    private void Start()
+
+    private void Awake()
     {
         display = FindAnyObjectByType<CountDownDisplayManager>();
         endGameCanvas = transform.parent.GetComponent<Canvas>();
         popUp = transform.GetComponentInChildren<PopUp>();
+    }
+    private void Start()
+    {
+        popUp.gameObject.SetActive(false);
     }
 
     public void CheckForEndGame()
@@ -54,6 +60,7 @@ public class EndGameResolution : AttributesSync
             if(player.GetRole() == Roles.Machine) machinesCount++;
         }
     }
+
     private void WildWest()
     {
         GameObject wildWestPopUpPrefab = Resources.Load<GameObject>("WildWestPopUp");
@@ -61,10 +68,25 @@ public class EndGameResolution : AttributesSync
         wildWestPopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
 
         inWildWest = true;
+    }
+    public void HandOutGuns()
+    {
+        foreach (PlayerRole player in VotingPhase.totalALivePlayers)
+        {
+            player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+        }
+    }
 
-        //give guns to both alive players
-
-        //continue to check
+    private bool once = true;
+    private void Update()
+    {
+        if (inWildWest && once) {
+            if(VotingPhase.totalALivePlayers.Count<=1)
+            {
+                once = false;
+                CheckForEndGame();
+            }
+        }
     }
 
     private void GroupWon(CanvasGroup group, string description)
@@ -82,6 +104,14 @@ public class EndGameResolution : AttributesSync
 
     public void ReloadScene()
     {
+        RoleAssignment.ResetStatic();
+        CountdownDisplay.ResetStatic();
+        PlayerRole.ResetStatic();
+
+        VotingPhase.StaticReset();
+
+        //destroy the dontdestroyonloads now if you have any
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
