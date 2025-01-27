@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class RenderDistanceSymptom : MonoBehaviour
 {
-    public bool isEnabled = true;
     float renderDistanceTimer = 2;
 
     private Transform[] spheres;
 
     Alteruna.Avatar avatar;
 
+    private bool isInactive;
+
     private void Start()
     {
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
         spheres = new Transform[3];
-        SymptomsManager.Instance.SetRenderDistanceSymptom(this);
 
         for (int i = 0; i < transform.childCount; i++) 
         {
@@ -35,6 +35,7 @@ public class RenderDistanceSymptom : MonoBehaviour
             sphere.gameObject.layer = 0;
             sphere.gameObject.SetActive(true);
         }
+        isInactive = false;
     }
 
     public void SetRenderDistanceBack()
@@ -43,16 +44,12 @@ public class RenderDistanceSymptom : MonoBehaviour
         {
             sphere.gameObject.SetActive(false);
         }
-    }
-
-    public void SetEnabled()
-    {
-        isEnabled = !isEnabled;
+        isInactive = true;
     }
 
     private void Update()
     {
-        if (isEnabled)
+        if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[2])
         {
             renderDistanceTimer += Time.deltaTime;
 
@@ -61,6 +58,10 @@ public class RenderDistanceSymptom : MonoBehaviour
                 SetRenderDistance();
                 renderDistanceTimer = 0;
             }
+        }
+        else
+        {
+            SetRenderDistanceBack();
         }
     }
 }

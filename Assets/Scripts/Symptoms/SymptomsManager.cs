@@ -14,7 +14,6 @@ public class SymptomsManager : AttributesSync {
     [SynchronizableField] private int randNum;
     Alteruna.Avatar avatar;
     float renderDistanceTimer = 2;
-    RenderDistanceSymptom renderDistanceSymptom = null;
 
     private void Awake() {
         if(Instance != null && Instance != this) {
@@ -35,13 +34,8 @@ public class SymptomsManager : AttributesSync {
 
     public void SetSymptom(int index) {
 
-        if(GetSymptom() == GetSymptomsList()[2] && avatar.gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
-            renderDistanceSymptom.SetRenderDistanceBack();
-
         currentSymptom = index == 999 ? null : symptoms[index];
 
-        if (GetSymptom() == GetSymptomsList()[2] && avatar.gameObject.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
-            renderDistanceSymptom.SetRenderDistance();
     }
 
     public int GetRandomNum() {
@@ -49,11 +43,5 @@ public class SymptomsManager : AttributesSync {
         return randNum;
     }
 
-    public void SetRenderDistanceSymptom(RenderDistanceSymptom symptom)
-    {
-        avatar = Multiplayer.GetAvatar();
-        if (!avatar.IsMe) return;
-        renderDistanceSymptom = symptom;
-    }
 
 }

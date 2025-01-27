@@ -7,13 +7,18 @@ using UnityEngine;
 
 public class SymptomNotifText : AttributesSync {
     private TextMeshProUGUI notificationText;
+    LobbySystem lobbySystem;
 
     private void Awake() {
         notificationText = GetComponent<TextMeshProUGUI>();
+        lobbySystem = transform.root.GetComponentInChildren<LobbySystem>();
     }
 
     private new void OnEnable() {
         base.OnEnable();
+
+        if (lobbySystem != null) return;
+
         ApplyNewSymptom();
         DisplayNotificationText();
     }
@@ -22,7 +27,7 @@ public class SymptomNotifText : AttributesSync {
         //List<SymptomsSO> allSymptoms = SymptomsManager.Instance.GetSymptomsList();
         //int randNum = Random.Range(0, allSymptomsCount);
         //SymptomsManager.Instance.SetSymptom(allSymptoms[randNum]);
-
+        Debug.Log("killme");
         int randNum = SymptomsManager.Instance.GetRandomNum();
         SymptomsManager.Instance.SetSymptom(randNum);
         Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
@@ -88,7 +93,7 @@ public class SymptomNotifText : AttributesSync {
         // If it is the Jumpy Carpets symptom
         if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1]) {
             notificationText.text += $"\n\nThe corrupted carpets for this round are:\n";
-            notificationText.text += CarpetManager.Instance.GetCarpetColorRandomNum() switch {
+            notificationText.text += CarpetManager.Instance.carpetColorRandNum switch {
                 0 => "Red!",
                 1 => "Green!",
                 2 => "Blue!",

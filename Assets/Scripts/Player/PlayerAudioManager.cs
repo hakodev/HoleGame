@@ -9,6 +9,9 @@ public class PlayerAudioManager : MonoBehaviour
 
     [SerializeField] private AudioClipSettings lightHit;
     [SerializeField] private AudioClipSettings heavyHit;
+    [SerializeField] private AudioClipSettings stickyHit;
+    [SerializeField] private AudioClipSettings mugHit;
+    [SerializeField] private AudioClipSettings bouncyHit;
 
     #region Properties
     public AudioClipSettings GetHeavyHit { get => heavyHit; }
@@ -17,6 +20,9 @@ public class PlayerAudioManager : MonoBehaviour
     public AudioClipSettings GetThrowAudio { get => throwAudio; }
     public AudioClipSettings GetLaserBeep { get => laserBeep; }
     public AudioClipSettings GetPickUp { get => pickUpAudio; }
+    public AudioClipSettings GetSticky { get => stickyHit; }
+    public AudioClipSettings GetMug { get => mugHit; }
+    public AudioClipSettings GetBouncyBall { get => bouncyHit; }
 
     private static PlayerAudioManager instance;
 
