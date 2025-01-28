@@ -22,6 +22,7 @@ public class LobbySystem : MonoBehaviour {
 
         if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
             SymptomsManager.Instance.SetSymptom(0); // Inverted controls
+            ResetCarpetParams();
             DisplayNotificationText();
         }
 
@@ -36,11 +37,13 @@ public class LobbySystem : MonoBehaviour {
 
         if(Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) {
             SymptomsManager.Instance.SetSymptom(2); // Render distance
+            ResetCarpetParams();
             DisplayNotificationText();
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) {
             SymptomsManager.Instance.SetSymptom(999); // no symptom
+            ResetCarpetParams();
             DisplayNoSymptomText();
         }
     }
@@ -109,6 +112,15 @@ public class LobbySystem : MonoBehaviour {
         }
 
 
+    }
+
+    void ResetCarpetParams()
+    {
+        foreach (CarpetData carpet in allCarpets)
+        {
+            carpet.IsCorruptedLocal = false;
+            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
+        }
     }
 
     private void DisplayNotificationText() {
