@@ -80,7 +80,8 @@ public class Interact : AttributesSync, IObserver
     }
     void SetLayerRecursively(GameObject obj, int layer)
     {
-        obj.layer = layer;
+        if (obj.layer != LayerMask.NameToLayer("UI")) obj.layer = layer;
+        Debug.Log("UI layer " + obj.layer + " " + LayerMask.NameToLayer("UI"));
 
         foreach (Transform child in obj.transform)
         {
@@ -315,6 +316,7 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) return;
         PrepareForDropping();
         heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
+        PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetThrowAudio);
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
@@ -431,6 +433,7 @@ public class Interact : AttributesSync, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun)
         {
+            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetPickUp);
             DIO = pickedUp.GetComponent<DynamicInteractableObject>();
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
@@ -540,7 +543,7 @@ public class Interact : AttributesSync, IObserver
             if (spawnedGun != null && avatar.IsMe)
             {
                 if (heldObject == spawnedGun) Drop();
-                spawner.Despawn(spawnedGun);
+              //  spawner.Despawn(spawnedGun);
             }
         }
         if (interaction == InteractionEnum.GivenTaskManagerRole)

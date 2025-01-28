@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Test Scenes/TheBigMerge2.unity
-    guid: 8ca5f5b3f4d7add43a640e906f190b94
+    path: Assets/Scenes/Test Scenes/CurrentMainMisho.unity
+    guid: 658fdf177f0aa3146ad5a9097533ad56
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

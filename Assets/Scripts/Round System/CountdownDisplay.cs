@@ -20,6 +20,7 @@ public class CountdownDisplay : AttributesSync {
     public static string sendFlavorTextToUI;
 
     EndGameResolution endGameResolution;
+    // countdowns left
 
     public static void ResetStatic()
     {
@@ -111,10 +112,10 @@ public class CountdownDisplay : AttributesSync {
                     if(VotingPhase.totalALivePlayers.Count>1)
                     {
                         if(endGameResolution==null) endGameResolution = Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>();
-                        if (!endGameResolution.inWildWest) {
+                        //if (!endGameResolution.inWildWest) {
                             time--;
                             manager.TimeToEndTheGame--;
-                        }
+                        //}
                     }
                 }
                 //Debug.Log(gameObject.name);

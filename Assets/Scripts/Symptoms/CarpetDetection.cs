@@ -9,6 +9,8 @@ public class CarpetDetection : MonoBehaviour
     PlayerRole playerRole;
     Alteruna.Avatar avatar;
 
+    private AudioSource[] audioSources;
+
     LobbySystem lobby;
     void Start()
     {
@@ -16,6 +18,7 @@ public class CarpetDetection : MonoBehaviour
         playerRole = transform.root.GetComponent<PlayerRole>();
         lobby = transform.root.GetComponentInChildren<LobbySystem>();
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        audioSources = GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
@@ -45,6 +48,11 @@ public class CarpetDetection : MonoBehaviour
                         if (playerRole.GetRole() != Roles.Machine) return;
 
                         playerController.Jump();
+
+                        foreach (AudioSource source in audioSources)
+                        {
+                            source.Play();
+                        }
                     }
                 }
                 else
@@ -54,6 +62,11 @@ public class CarpetDetection : MonoBehaviour
                         if (!avatar.IsMe) return;
 
                         playerController.Jump();
+
+                        foreach (AudioSource source in audioSources)
+                        {
+                            source.Play();
+                        }
                     }
 
 

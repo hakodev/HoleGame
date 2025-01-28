@@ -17,7 +17,6 @@ public class EndGameResolution : AttributesSync
     Canvas endGameCanvas;
     TextMeshProUGUI descriptor;
     [SerializeField] PopUp popUp;
-    [SerializeField] PopUp wildWestPopUp;
     [SerializeField] CanvasGroup machinesWon;
     [SerializeField] CanvasGroup infiltratorsWon;
 
@@ -25,17 +24,27 @@ public class EndGameResolution : AttributesSync
     [SerializeField] string allInfiltratorsDead = "No Infiltrators Left";
     [SerializeField] string allMachinesDead = "No Machines Left";
 
+
+    [SerializeField] PopUp votingPopUp;
+    [SerializeField] TextMeshProUGUI wildWestTaskBar;
+    [SerializeField] TextMeshProUGUI wildWestTitle;
+    [SerializeField] TextMeshProUGUI wildWestExplanatoryText;
+    [SerializeField] string wildWestProtocolText = "Wild West Protocol";
+    [SerializeField] string wildWestTitleText = "Fire The Other Worker";
+
+
     [SynchronizableField] public bool inWildWest = false;
 
 
     private void Awake()
-    {
-        display = FindAnyObjectByType<CountDownDisplayManager>();
-        endGameCanvas = transform.parent.GetComponent<Canvas>();
+    {        endGameCanvas = GetComponent<Canvas>();
         popUp = transform.GetComponentInChildren<PopUp>();
     }
     private void Start()
     {
+
+        display = FindAnyObjectByType<CountDownDisplayManager>();
+        wildWestExplanatoryText.gameObject.SetActive(false);
         popUp.gameObject.SetActive(false);
     }
 
@@ -59,22 +68,27 @@ public class EndGameResolution : AttributesSync
             if(player.GetRole() == Roles.Infiltrator) infiltratorsCount++;
             if(player.GetRole() == Roles.Machine) machinesCount++;
         }
+
+        Debug.Log("infils " + infiltratorsCount + "machines " + machinesCount);
     }
 
     private void WildWest()
     {
-        GameObject wildWestPopUpPrefab = Resources.Load<GameObject>("WildWestPopUp");
-        GameObject wildWestPopUp = Instantiate(wildWestPopUpPrefab, endGameCanvas.transform, false);
-        wildWestPopUp.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
+        wildWestExplanatoryText.gameObject.SetActive(true);
+
+        wildWestTaskBar.text = wildWestProtocolText;
+        wildWestTitle.text = wildWestTitleText;
 
         inWildWest = true;
+
+        votingPopUp.ToggleTriggerCaptcha(false);
     }
     public void HandOutGuns()
     {
-        foreach (PlayerRole player in VotingPhase.totalALivePlayers)
-        {
-            player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
-        }
+       // foreach (PlayerRole player in VotingPhase.totalALivePlayers)
+       // {
+            transform.root.GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+      //  }
     }
 
     private bool once = true;
@@ -95,8 +109,8 @@ public class EndGameResolution : AttributesSync
         popUp.PopIn();
 
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(machinesWon.DOFade(0f, 0.2f));
-        sequence.Append(machinesWon.DOFade(1f, 1f));
+        sequence.Append(group.DOFade(0f, 0.2f));
+        sequence.Append(group.DOFade(1f, 1f));
 
         descriptor = group.transform.Find("Descriptor").GetComponent<TextMeshProUGUI>();
         descriptor.text = description;

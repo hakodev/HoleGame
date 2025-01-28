@@ -59,7 +59,7 @@ public class RenderDistanceSymptom : MonoBehaviour
                 renderDistanceTimer = 0;
             }
         }
-        else if(!isInactive)
+        else
         {
             SetRenderDistanceBack();
         }

@@ -2,13 +2,14 @@ using Alteruna;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
 public class RoleAssignment : AttributesSync
 {
-    private List<PlayerRole> rolelessPlayers = new();
-    private List<PlayerRole> totalPlayers = new();
+    private List<PlayerRole> rolelessPlayers = new List<PlayerRole>();
+    private static List<PlayerRole> totalPlayers = new List<PlayerRole>();
     public static bool hasGameStarted = false;
 
     private int maxNumOfInfiltrators = 1;
@@ -33,6 +34,7 @@ public class RoleAssignment : AttributesSync
         hasGameStarted = false;
         playerID = -10;
         playerNumber = 0;
+        totalPlayers.Clear();
     }
     private void Awake()
     {
@@ -43,7 +45,11 @@ public class RoleAssignment : AttributesSync
     private void Start()
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
-        if(playerID==-10) playerID = playerNumber; //sets proper number
+
+       // totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None).ToList();
+
+        if (playerID == -10) playerID = playerNumber; //sets proper number
+        Debug.Log("player's count " + totalPlayers.Count);
 
         if (playerNumber != 1)
         {
