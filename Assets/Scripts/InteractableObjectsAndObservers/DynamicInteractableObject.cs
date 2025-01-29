@@ -48,12 +48,14 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         {
             if (currentlyOwnedByAvatar != null)
             {
-                ownedCharacterController = GetComponent<CharacterController>();
+                ownedCharacterController =currentlyOwnedByAvatar.gameObject.GetComponent<CharacterController>();
+                if (ownedCharacterController == null) { return; }
                 Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, true);
             }
         }
         else
         {
+            if (ownedCharacterController == null) { return; }
             Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, false);
             ownedCharacterController = null;
         }      
@@ -129,9 +131,15 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void SetCurrentlyOwnedByAvatar(int newIndex)
     {
-        if(newIndex!=-1)currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
-        if (newIndex == -1) currentlyOwnedByAvatar = null;
-    //    Debug.Log("owned by " + currentlyOwnedByAvatar.gameObject.name);
+        if (newIndex != -1)
+        {
+            currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
+        }
+        else
+        {
+            currentlyOwnedByAvatar = null;
+        }
+        //    Debug.Log("owned by " + currentlyOwnedByAvatar.gameObject.name);
     }
 
     public Alteruna.Avatar GetAvatarByOwnerIndex(int ownerIndex)

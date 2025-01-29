@@ -249,7 +249,7 @@ public class Interact : AttributesSync, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
         {
-            heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
+            DIO.isPickedUp = false;
             SetLayerRecursively(heldObject, 7);
 
             //placing anim
@@ -275,7 +275,7 @@ public class Interact : AttributesSync, IObserver
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             }
 
-            Debug.Log(hit.collider.gameObject.name);
+            //Debug.Log(hit.collider.gameObject.name);
             Transform hitRoot = hit.collider.transform.root;
             if (hitRoot.name.Contains("CoffeeMachine"))
             {
@@ -295,13 +295,13 @@ public class Interact : AttributesSync, IObserver
         //specifics to thtowing
         if (!avatar.IsMe) return;
         PrepareForDropping();
-        heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
+        DIO.isPickedUp = false;
         PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetThrowAudio);
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
-        Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
+        //Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
         currentThrowStrength = 0;
         if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
         if (heldObject.GetComponent<CoffeeCup>()!=null)
@@ -365,11 +365,9 @@ public class Interact : AttributesSync, IObserver
     }
     private void PrepareForDropping()
     {
-        HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
-
         DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("DynamicAwake");
-
+        DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
 
         heldObject.transform.SetParent(null);
         ResetMomentum();
@@ -377,6 +375,7 @@ public class Interact : AttributesSync, IObserver
         //rb.freezeRotation = false;
         //rb.useGravity = true;
         DIO.BroadcastRemoteMethod(nameof(DIO.ToggleRigidbody), true);
+        Debug.Log("froze pls ");
 
     }
     private void FinishDropping()
@@ -410,7 +409,7 @@ public class Interact : AttributesSync, IObserver
         {
             PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetPickUp);
             DIO = pickedUp.GetComponent<DynamicInteractableObject>();
-            Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
+            //Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
                 //get all necessary variales
@@ -434,9 +433,9 @@ public class Interact : AttributesSync, IObserver
 
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
                 DIO.BroadcastRemoteMethod("DynamicAwake");
+                DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
 
-                Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
-                HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+                //Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             }
             else
             {
