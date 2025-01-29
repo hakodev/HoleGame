@@ -119,15 +119,18 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
             RenderTexture.active = renderTexture;
             texture2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
             texture2D.Apply();
+            texture2D.name = nameInputFieldText.text;
 
 
             RenderTexture.active = currentRT;
-            File.WriteAllBytes(Application.dataPath + "/Resources/" + nameInputFieldText.text + ".png", texture2D.EncodeToPNG());
+            TexturesManager.currentTexture = texture2D;
+
+            //File.WriteAllBytes(Application.dataPath + "/Resources/" + nameInputFieldText.text + ".png", texture2D.EncodeToPNG());
             //AssetDatabase.Refresh();
             //RenderTexture.active = previous;
             //RenderTexture.ReleaseTemporary(screenRenderTexture);
 
-            Destroy(screenObject);
+            screenObject.SetActive(false);
             uiInput.SetPlayerNameSync(nameInputFieldText.text);
             roomCamera.SetActive(true);
             canvas.gameObject.SetActive(false);
