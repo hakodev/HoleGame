@@ -125,15 +125,11 @@ public class LobbySystem : MonoBehaviour {
     }
 
     private void DisplayNotificationText() {
-        Image notifPanelImage = symptomNotifText.transform.parent.GetComponent<Image>();
+        CanvasGroup notifGroup = symptomNotifText.transform.parent.GetComponent<CanvasGroup>();
 
-        symptomNotifText.DOKill();
-        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
-
-        Color alphaReset = new(notifPanelImage.color.r, notifPanelImage.color.g, notifPanelImage.color.b, 0.9215686f);
-        notifPanelImage.color = alphaReset;
-
-        symptomNotifText.alpha = 1f;
+        notifGroup.DOKill();
+        notifGroup.transform.parent.gameObject.SetActive(true);
+        notifGroup.alpha = 1f;
         symptomNotifText.text = "Simulating new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
                                $"{SymptomsManager.Instance.GetSymptom().Description}";
@@ -149,20 +145,16 @@ public class LobbySystem : MonoBehaviour {
             };
         }
 
-        notifPanelImage.DOFade(0f, 10f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
+        notifGroup.DOFade(0f, 10f).OnComplete(() => notifGroup.transform.parent.gameObject.SetActive(false));
     }
 
     private void DisplayNoSymptomText() {
-        Image notifPanelImage = symptomNotifText.transform.parent.GetComponent<Image>();
+        CanvasGroup notifGroup = symptomNotifText.transform.parent.GetComponent<CanvasGroup>();
 
-        symptomNotifText.DOKill();
-        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
-
-        Color alphaReset = new(notifPanelImage.color.r, notifPanelImage.color.g, notifPanelImage.color.b, 0.9215686f);
-        notifPanelImage.color = alphaReset;
-
-        symptomNotifText.alpha = 1f;
+        notifGroup.DOKill();
+        notifGroup.transform.parent.gameObject.SetActive(true);
+        notifGroup.alpha = 1f;
         symptomNotifText.text = "All symptoms removed!";
-        notifPanelImage.DOFade(0f, 6f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
+        notifGroup.DOFade(0f, 6f).OnComplete(() => notifGroup.transform.parent.gameObject.SetActive(false));
     }
 }
