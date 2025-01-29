@@ -81,8 +81,8 @@ public class Interact : AttributesSync, IObserver
     void SetLayerRecursively(GameObject obj, int layer)
     {
         //if (obj.layer != LayerMask.NameToLayer("UI"))
-            obj.layer = layer;
-       // Debug.Log("UI layer " + obj.layer + " " + LayerMask.NameToLayer("UI"));
+        obj.layer = layer;
+        // Debug.Log("UI layer " + obj.layer + " " + LayerMask.NameToLayer("UI"));
 
         foreach (Transform child in obj.transform)
         {
@@ -119,11 +119,13 @@ public class Interact : AttributesSync, IObserver
                     AnimateReleaseChargebar();
                     currentThrowStrength = Mathf.Lerp(minMaxThrowStrength.x, minMaxThrowStrength.y, currentChargeUpTime);
                     //currentChargeUpTime = 0;
-                    BroadcastRemoteMethod(nameof(Throw));
+                    //BroadcastRemoteMethod(nameof(Throw));
+                    Throw();
                 }
                 else
                 {
-                    BroadcastRemoteMethod(nameof(Place));
+                    //BroadcastRemoteMethod(nameof(Place));
+                    Place();
                 }
             }
             finishedPickUp = true;
@@ -153,11 +155,11 @@ public class Interact : AttributesSync, IObserver
 
         if (heldObject)
         {
-            if(DIO is StickyNote)
+            if (DIO is StickyNote)
             {
                 hudDisplay.SetState(new StickyNoteDisplay(hudDisplay));
             }
-            else if(DIO is Marker)
+            else if (DIO is Marker)
             {
                 hudDisplay.SetState(new MarkerDisplay(hudDisplay));
             }
@@ -165,7 +167,7 @@ public class Interact : AttributesSync, IObserver
             {
                 hudDisplay.SetState(new CarryDisplay(hudDisplay));
             }
-            
+
         }
         else
         {
@@ -195,7 +197,8 @@ public class Interact : AttributesSync, IObserver
                 if (Input.GetMouseButtonDown(0))
                 {
                     pickedUp = hit.transform.gameObject;
-                    BroadcastRemoteMethod(nameof(TryPickUp));
+                    //BroadcastRemoteMethod(nameof(TryPickUp));
+                    TryPickUp();
 
                 }
             }
@@ -259,7 +262,6 @@ public class Interact : AttributesSync, IObserver
         return heldObject == null;
     }
 
-    [SynchronizableMethod]
     private void Place()
     {
         if (!avatar.IsMe) return;
@@ -310,7 +312,6 @@ public class Interact : AttributesSync, IObserver
             SetLayerRecursively(heldObject, 7);
         }
     }
-    [SynchronizableMethod]
     private void Throw()
     {
         //specifics to thtowing
@@ -394,16 +395,13 @@ public class Interact : AttributesSync, IObserver
 
         DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("DynamicAwake");
-
+        DIO.BroadcastRemoteMethod(nameof(DIO.ToggleRigidbodyGravity), true);
+        DIO.BroadcastRemoteMethod(nameof(DIO.ToggleCollider), true);
 
         heldObject.transform.SetParent(null);
         ResetMomentum();
 
         rbToTrack.ApplyAsTransform = true;
-        rb.freezeRotation = false;
-        rb.useGravity = true;
-
-
     }
     private void FinishDropping()
     {
@@ -425,10 +423,8 @@ public class Interact : AttributesSync, IObserver
         DIO = null;
     }
 
-    [SynchronizableMethod]
     private void TryPickUp()
     {
-        if (!avatar.IsMe) return;
         if (heldObject != null) { return; }
         finishedPickUp = false;
         RaycastHit hit;
@@ -449,8 +445,8 @@ public class Interact : AttributesSync, IObserver
                 if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
                 //reset physics
-                rb.freezeRotation = true;
-                rb.useGravity = false;
+                DIO.BroadcastRemoteMethod(nameof(DIO.ToggleRigidbodyGravity), false);
+                DIO.BroadcastRemoteMethod(nameof(DIO.ToggleCollider), false);
                 ResetMomentum();
 
                 heldObject.transform.SetParent(clientHand.transform, true);
@@ -544,7 +540,7 @@ public class Interact : AttributesSync, IObserver
             if (spawnedGun != null && avatar.IsMe)
             {
                 if (heldObject == spawnedGun) Drop();
-              //  spawner.Despawn(spawnedGun);
+                //  spawner.Despawn(spawnedGun);
             }
         }
         if (interaction == InteractionEnum.GivenTaskManagerRole)
@@ -554,7 +550,8 @@ public class Interact : AttributesSync, IObserver
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
             pickedUp = spawnedGun;
 
-            BroadcastRemoteMethod(nameof(TryPickUp));
+            TryPickUp();
+            //BroadcastRemoteMethod(nameof(TryPickUp));
         }
     }
     public GameObject GetHeldObject()
