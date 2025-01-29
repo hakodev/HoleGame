@@ -34,6 +34,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //SelfSleepIfUnmoving();
         //CheckForMovement();
     }
+
+
     [SynchronizableMethod]
     public void ToggleRigidbodyGravity(bool newstate)
     {
@@ -43,7 +45,9 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void ToggleCollider(bool newState)
     {
-        colliderDynamic.enabled = newState;
+       // colliderDynamic.enabled = newState;
+        //Debug.Log("great_TOGGLECOLLIDER " + colliderDynamic.enabled);
+      //  Physics.IgnoreCollision(colliderDynamic,);
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
@@ -103,8 +107,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     public void DynamicAwake()
     {
         timeSinceLastSignificantMovement = 0;
-        rbSyncDynamic.SyncEveryNUpdates = 4;
-        rbSyncDynamic.FullSyncEveryNSync = 4;
+        rbSyncDynamic.SyncEveryNUpdates = 1;
+        rbSyncDynamic.FullSyncEveryNSync = 1;
     }
 
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
