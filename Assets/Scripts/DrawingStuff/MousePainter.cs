@@ -19,6 +19,8 @@ public class MousePainter : MonoBehaviour {
     public LayerMask notPlayerMask;
     Paintable p;
 
+    public bool isFreeForm = false;
+
     public void Start()
     {
         paintManager = FindAnyObjectByType<PaintManager>();
@@ -48,8 +50,16 @@ public class MousePainter : MonoBehaviour {
     private void Update()
     {
 
-           
+        if (isFreeForm && Input.GetMouseButton(0))
+        {
+            Paint(cam);
+        }
         
+    }
+
+    public void ChangeColor(UnityEngine.Color color)
+    {
+        paintColor = color;
     }
 
 }

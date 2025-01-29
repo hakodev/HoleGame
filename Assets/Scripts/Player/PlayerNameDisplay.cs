@@ -15,12 +15,13 @@ public class PlayerNameDisplay : AttributesSync
         playerNameText = GetComponent<TextMeshProUGUI>();
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
         thisPlayerRole = transform.root.GetComponent<PlayerRole>();
-        uiinput = FindAnyObjectByType<UIInput>();
+
     }
 
     private void Start()
     {
         getLocalCamera = Multiplayer.GetAvatar(Multiplayer.GetUser().Index).gameObject.GetComponentInChildren<Camera>();
+        uiinput = FindAnyObjectByType<UIInput>();
         BroadcastRemoteMethod(nameof(SufferingInTheAbyss));
     }
     [SynchronizableMethod]

@@ -32,10 +32,10 @@ public class SymptomNotifText : AttributesSync {
         SymptomsManager.Instance.SetSymptom(randNum);
         Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
 
+        List<CarpetData> allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
+
         // If it is the Jumpy Carpets symptom
         if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1]) {
-            List<CarpetData> allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
-
             switch(CarpetManager.Instance.GetCarpetColorRandomNum()) {
                 case 0:
                     // red carpets
@@ -76,9 +76,14 @@ public class SymptomNotifText : AttributesSync {
                 default:
                     break; // never gonna happen
             }
-
-            allCarpets.Clear();
+        } else {
+            foreach(CarpetData carpet in allCarpets) {
+                carpet.IsCorrupted = false;
+                carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+            }
         }
+
+        allCarpets.Clear();
     }
 
     private void DisplayNotificationText() {
