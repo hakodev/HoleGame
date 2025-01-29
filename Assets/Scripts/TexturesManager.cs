@@ -6,7 +6,6 @@ public class TexturesManager : AttributesSync
 {
     public static List<Texture2D> allTextures = new List<Texture2D>();
     public static Texture2D currentTexture = null;
-    private Texture2D currentTex;
 
     private void Update()
     {
@@ -19,7 +18,7 @@ public class TexturesManager : AttributesSync
     [SynchronizableMethod]
     void SyncTex()
     {
-        currentTex = currentTexture;
+        Texture2D currentTex = currentTexture;
         if (allTextures.Contains(currentTex))
         {
             return;
