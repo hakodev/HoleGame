@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class AssignPlayerProgileTexture : MonoBehaviour
 {
-    public Texture texture;
+    public Texture2D texture;
     private Renderer screenrenderer;
     void Start()
     {
-        texture = Resources.Load<Texture>(UIInput.PlayerNameSync);
+        texture = Resources.Load<Texture2D>(UIInput.PlayerNameSync);
         screenrenderer = GetComponent<Renderer>();
         screenrenderer.material.SetTexture("_MaskTexture", texture);
     }

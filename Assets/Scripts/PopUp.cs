@@ -4,6 +4,7 @@ using DG.Tweening;
 using Alteruna;
 using TMPro;
 using System.IO;
+using UnityEditor;
 
 
 public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
@@ -122,6 +123,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
 
             RenderTexture.active = currentRT;
             File.WriteAllBytes(Application.dataPath + "/Resources/" + nameInputFieldText.text + ".png", texture2D.EncodeToPNG());
+            //AssetDatabase.Refresh();
             //RenderTexture.active = previous;
             //RenderTexture.ReleaseTemporary(screenRenderTexture);
 
