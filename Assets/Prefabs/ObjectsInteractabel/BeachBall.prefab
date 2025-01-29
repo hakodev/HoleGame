@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 278eaa0674f36a743b1cdc77794f96f7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -95,10 +95,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8157824931596068039}
-  - component: {fileID: 6004286467873999403}
   - component: {fileID: 5553638774623509846}
   - component: {fileID: 2410826123424781347}
   - component: {fileID: 906666260247080605}
+  - component: {fileID: 4959398649646236014}
   m_Layer: 7
   m_Name: BeachBall
   m_TagString: Untagged
@@ -122,23 +122,6 @@ Transform:
   - {fileID: 56131956886378863}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6004286467873999403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5330162033003593856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64fb435e20e4d394a8e60948a8999407, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: 04e246d0-463d-40d8-ab25-5c1622baa6e2
-  Reliability: 2
-  LocalMethodBehavior: 1
-  isPickedUp: 0
 --- !u!54 &5553638774623509846
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -224,3 +207,22 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4959398649646236014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5330162033003593856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0bfdf69a49b0934eb3c76ec9cc979a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 01ff37b8-568e-4759-aa60-907be2bfb9fa
+  Reliability: 1
+  LocalMethodBehavior: 1
+  isPickedUp: 0
+  extraBounce: 4
+  kickStrength: 1

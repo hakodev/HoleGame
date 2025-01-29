@@ -1,8 +1,5 @@
 using UnityEngine;
-using Alteruna;
-using NUnit.Framework;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 public class PlayerController : MonoBehaviour
 {
 
@@ -30,6 +27,8 @@ public class PlayerController : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
     private float currentjumpHeight;
+    [SerializeField] float timeSavingJumpInput;
+    float maxTimeSavingJumpInput;
 
     private Alteruna.Avatar avatar;
     private GameObject animationTie;
@@ -38,6 +37,7 @@ public class PlayerController : MonoBehaviour
     [Header("Nerd SHIT - Programming")]
     [SerializeField] Transform cameraTransform;
     [SerializeField] Transform moveTransform;
+
 
     PlayerRole role;
 
@@ -53,7 +53,12 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         if (!avatar.IsMe) { return; }
+        maxTimeSavingJumpInput = timeSavingJumpInput;
+    }
 
+    public void AddVerticalVelocity(float bonus)
+    {
+       verticalVelocity.y += Mathf.Sqrt(bonus * -2f * gravity); //finish later
     }
     private void Update()
     {
@@ -161,11 +166,17 @@ public class PlayerController : MonoBehaviour
             mishSync.SetJumping(false);
         }
 
-        // Handle jumping
-        if (Input.GetKeyDown(KeyCode.Space) && mishSync.GetCurrentStance()!=StanceEnum.Dead)
+        // Handle jumping + coyotte time
+        if (Input.GetKey(KeyCode.Space) && mishSync.GetCurrentStance()!=StanceEnum.Dead)
         {
+            timeSavingJumpInput = maxTimeSavingJumpInput;
+        }
+        if(timeSavingJumpInput>0)
+        {
+            timeSavingJumpInput-= Time.deltaTime;
             Jump();
         }
+
         finalMovement += verticalVelocity * Time.deltaTime;
 
         characterController.Move(finalMovement);

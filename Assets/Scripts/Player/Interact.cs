@@ -12,7 +12,6 @@ public class Interact : AttributesSync, IObserver
 
     [Header("not important")]
     [SerializeField] GameObject clientHand;
-    [SerializeField] GameObject serverHand;
 
     [SerializeField] Camera playerCamera;
     PlayerController playerController;
@@ -40,6 +39,8 @@ public class Interact : AttributesSync, IObserver
     Rigidbody rb;
     private Alteruna.Spawner spawner;
 
+    CharacterController characterController;
+
     //AnimationSynchronizable animatorSync;
 
 
@@ -50,14 +51,16 @@ public class Interact : AttributesSync, IObserver
 
     private void Awake()
     {
-        hudDisplay = GetComponentInChildren<HUDDisplay>();
         avatar = GetComponent<Alteruna.Avatar>();
         spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
         playerController = GetComponent<PlayerController>();
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Start()
     {
+        hudDisplay = GetComponentInChildren<HUDDisplay>();
+
         if (!avatar.IsMe)
         {
             int playerLayer = LayerMask.NameToLayer("PlayerLayer");
@@ -67,8 +70,6 @@ public class Interact : AttributesSync, IObserver
         }
         else
         {
-            //animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-
             dynamicLayerMask = LayerMask.GetMask("DynamicInteractableObject");
             stationaryLayerMask = LayerMask.GetMask("StationaryInteractableObject");
             interactableLayerMask = dynamicLayerMask | stationaryLayerMask;
@@ -80,10 +81,7 @@ public class Interact : AttributesSync, IObserver
     }
     void SetLayerRecursively(GameObject obj, int layer)
     {
-        //if (obj.layer != LayerMask.NameToLayer("UI"))
         obj.layer = layer;
-        // Debug.Log("UI layer " + obj.layer + " " + LayerMask.NameToLayer("UI"));
-
         foreach (Transform child in obj.transform)
         {
             SetLayerRecursively(child.gameObject, layer);
@@ -94,7 +92,6 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) { return; }
 
         ProcessInput();
-        HighlightInteractable();
 
         if (isChargingUp) currentChargeUpTime += Time.deltaTime;
     }
@@ -110,22 +107,15 @@ public class Interact : AttributesSync, IObserver
         {
             if (finishedPickUp && !StickyNote.currentlyDrawing)
             {
-                //isChargingUp = false;
-                //                heldObject.GetComponent<Rigidbody>().useGravity = true;
-
                 if (currentChargeUpTime > minMaxThrowChargeUpTime.x)
                 {
                     if (currentChargeUpTime > minMaxThrowChargeUpTime.y) currentChargeUpTime = minMaxThrowChargeUpTime.y;
-                    AnimateReleaseChargebar();
                     currentThrowStrength = Mathf.Lerp(minMaxThrowStrength.x, minMaxThrowStrength.y, currentChargeUpTime);
-                    //currentChargeUpTime = 0;
-                    //BroadcastRemoteMethod(nameof(Throw));
-                    Throw();
+                    BroadcastRemoteMethod(nameof(Throw));
                 }
                 else
                 {
-                    //BroadcastRemoteMethod(nameof(Place));
-                    Place();
+                    BroadcastRemoteMethod(nameof(Place));
                 }
             }
             finishedPickUp = true;
@@ -139,7 +129,6 @@ public class Interact : AttributesSync, IObserver
             if (heldObject != null && finishedPickUp && !StickyNote.currentlyDrawing)
             {
                 isChargingUp = true;
-                AnimateWindUpChanrgebar();
             }
         }
 
@@ -186,9 +175,7 @@ public class Interact : AttributesSync, IObserver
                 {
                     hit.transform.gameObject.GetComponent<StationaryInteractableObject>().Use();
                 }
-
             }
-
 
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DynamicInteractableObject"))
             {
@@ -197,9 +184,7 @@ public class Interact : AttributesSync, IObserver
                 if (Input.GetMouseButtonDown(0))
                 {
                     pickedUp = hit.transform.gameObject;
-                    //BroadcastRemoteMethod(nameof(TryPickUp));
-                    TryPickUp();
-
+                    BroadcastRemoteMethod(nameof(TryPickUp));
                 }
             }
         }
@@ -213,20 +198,19 @@ public class Interact : AttributesSync, IObserver
     private void ApplyOutline(GameObject objectToApply)
     {
         List<GameObject> tempChildList = new List<GameObject>();
-        if (objectToApply == currentOutlinedObject)
-        {
-            return;
-        }
+        if (objectToApply == currentOutlinedObject) { return; }
         if (currentOutlinedObject != null && objectToApply != currentOutlinedObject)
         {
             ChangeChildrenLayers("Default", tempChildList);
+            StickyNote.AmendShaderLayeringInInteract(currentOutlinedObject.gameObject);
         }
 
-        if (objectToApply == null) return;
+        if (objectToApply == null) { return; }
 
         currentOutlinedObject = objectToApply.transform;
 
         ChangeChildrenLayers("OutlineLayer", tempChildList);
+        StickyNote.AmendShaderLayeringInInteract(objectToApply);
     }
 
     private void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
@@ -242,14 +226,11 @@ public class Interact : AttributesSync, IObserver
 
     private void GetChildRecursive(GameObject obj, List<GameObject> tempChildList)
     {
-        if (null == obj)
-            return;
+        if (null == obj) {return;}
 
         foreach (Transform child in obj.transform)
         {
-            if (null == child)
-                continue;
-            //child.gameobject contains the current child you can do whatever you want like add it to an array
+            if (null == child) { continue; }           
             tempChildList.Add(child.gameObject);
             GetChildRecursive(child.gameObject, tempChildList);
         }
@@ -262,6 +243,7 @@ public class Interact : AttributesSync, IObserver
         return heldObject == null;
     }
 
+    [SynchronizableMethod]
     private void Place()
     {
         if (!avatar.IsMe) return;
@@ -271,7 +253,7 @@ public class Interact : AttributesSync, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
         {
-            heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
+            DIO.isPickedUp = false;
             SetLayerRecursively(heldObject, 7);
 
             //placing anim
@@ -297,7 +279,7 @@ public class Interact : AttributesSync, IObserver
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             }
 
-            Debug.Log(hit.collider.gameObject.name);
+            //Debug.Log(hit.collider.gameObject.name);
             Transform hitRoot = hit.collider.transform.root;
             if (hitRoot.name.Contains("CoffeeMachine"))
             {
@@ -305,35 +287,31 @@ public class Interact : AttributesSync, IObserver
             }
 
             FinishDropping();
-            //Debug.Break();
         }
         else
         {
             SetLayerRecursively(heldObject, 7);
         }
     }
+    [SynchronizableMethod]
     private void Throw()
     {
         //specifics to thtowing
         if (!avatar.IsMe) return;
         PrepareForDropping();
-        heldObject.GetComponent<DynamicInteractableObject>().isPickedUp = false;
+        DIO.isPickedUp = false;
         PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetThrowAudio);
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
         rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
-        Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
+        //Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
         currentThrowStrength = 0;
         if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
-        if (heldObject.GetComponent<CoffeeCup>())
+        if (heldObject.GetComponent<CoffeeCup>()!=null)
         {
             heldObject.GetComponent<CoffeeCup>().SpecialInteraction(InteractionEnum.CoffeeStain, this);
         }
-
-        Debug.DrawRay(heldObject.transform.position, rbToTrack.velocity, Color.magenta);
-        Debug.DrawRay(heldObject.transform.position, rb.angularVelocity, Color.green);
-
         FinishDropping();
     }
 
@@ -391,17 +369,20 @@ public class Interact : AttributesSync, IObserver
     }
     private void PrepareForDropping()
     {
-        HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), false);
-
         DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("DynamicAwake");
-        DIO.BroadcastRemoteMethod(nameof(DIO.ToggleRigidbodyGravity), true);
-        DIO.BroadcastRemoteMethod(nameof(DIO.ToggleCollider), true);
+        DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
+        Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, false);
+
 
         heldObject.transform.SetParent(null);
         ResetMomentum();
 
-        rbToTrack.ApplyAsTransform = true;
+        //rb.freezeRotation = false;
+        //rb.useGravity = true;
+        DIO.BroadcastRemoteMethod(nameof(DIO.ToggleRigidbody), true);
+        Debug.Log("froze pls ");
+
     }
     private void FinishDropping()
     {
@@ -423,8 +404,10 @@ public class Interact : AttributesSync, IObserver
         DIO = null;
     }
 
+    [SynchronizableMethod]
     private void TryPickUp()
     {
+        if (!avatar.IsMe) return;
         if (heldObject != null) { return; }
         finishedPickUp = false;
         RaycastHit hit;
@@ -432,7 +415,7 @@ public class Interact : AttributesSync, IObserver
         {
             PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetPickUp);
             DIO = pickedUp.GetComponent<DynamicInteractableObject>();
-            Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
+            //Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
                 //get all necessary variales
@@ -440,13 +423,13 @@ public class Interact : AttributesSync, IObserver
                 rb = heldObject.GetComponent<Rigidbody>();
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
                 DIO.isPickedUp = true;
-                //rbToTrack.ApplyAsTransform = true;
 
                 if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
                 //reset physics
-                DIO.BroadcastRemoteMethod(nameof(DIO.ToggleRigidbodyGravity), false);
-                DIO.BroadcastRemoteMethod(nameof(DIO.ToggleCollider), false);
+                //rb.freezeRotation = true;
+                //rb.useGravity = false;
+                DIO.BroadcastRemoteMethod(nameof(DIO.ToggleRigidbody), false);
                 ResetMomentum();
 
                 heldObject.transform.SetParent(clientHand.transform, true);
@@ -456,9 +439,11 @@ public class Interact : AttributesSync, IObserver
 
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
                 DIO.BroadcastRemoteMethod("DynamicAwake");
+                DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
+                Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, true);
 
-                Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
-                HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+
+                //Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             }
             else
             {
@@ -496,28 +481,6 @@ public class Interact : AttributesSync, IObserver
         }
     }
 
-
-
-
-
-    //art stuff
-    private void AnimateWindUpChanrgebar()
-    {
-
-    }
-    private void AnimateReleaseChargebar()
-    {
-
-    }
-    private void HighlightInteractable()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, interactableLayerMask))
-        {
-            // Highlight shader or whatever
-        }
-    }
-
     private void Drop()
     {
         PrepareForDropping();
@@ -550,8 +513,7 @@ public class Interact : AttributesSync, IObserver
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
             pickedUp = spawnedGun;
 
-            TryPickUp();
-            //BroadcastRemoteMethod(nameof(TryPickUp));
+            BroadcastRemoteMethod(nameof(TryPickUp));
         }
     }
     public GameObject GetHeldObject()

@@ -13,5 +13,6 @@ public enum InteractionEnum
     PlaceCupInCoffeeMachine,
     MarkerOnPosterOrStickyNote,
     StoppedMarkerOnPosterOrStickyNote,
-    CoffeeStain
+    CoffeeStain,
+    smackedPlayerWithObject
 }
