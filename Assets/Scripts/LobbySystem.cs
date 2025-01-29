@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbySystem : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI controlsText;
@@ -124,9 +125,14 @@ public class LobbySystem : MonoBehaviour {
     }
 
     private void DisplayNotificationText() {
+        Image notifPanelImage = symptomNotifText.transform.parent.GetComponent<Image>();
 
         symptomNotifText.DOKill();
         symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
+
+        Color alphaReset = new(notifPanelImage.color.r, notifPanelImage.color.g, notifPanelImage.color.b, 0.9215686f);
+        notifPanelImage.color = alphaReset;
+
         symptomNotifText.alpha = 1f;
         symptomNotifText.text = "Simulating new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
@@ -143,14 +149,20 @@ public class LobbySystem : MonoBehaviour {
             };
         }
 
-        symptomNotifText.DOFade(0f, 10f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
+        notifPanelImage.DOFade(0f, 10f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
     }
 
     private void DisplayNoSymptomText() {
+        Image notifPanelImage = symptomNotifText.transform.parent.GetComponent<Image>();
+
         symptomNotifText.DOKill();
         symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
+
+        Color alphaReset = new(notifPanelImage.color.r, notifPanelImage.color.g, notifPanelImage.color.b, 0.9215686f);
+        notifPanelImage.color = alphaReset;
+
         symptomNotifText.alpha = 1f;
         symptomNotifText.text = "All symptoms removed!";
-        symptomNotifText.DOFade(0f, 5f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
+        notifPanelImage.DOFade(0f, 6f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
     }
 }
