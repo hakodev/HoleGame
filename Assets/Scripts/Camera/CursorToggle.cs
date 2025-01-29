@@ -19,6 +19,7 @@ public class CursorToggle : MonoBehaviour
     }
     private void Start()
     {
+        canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
     }
 
     private void Update()
@@ -51,7 +52,6 @@ public class CursorToggle : MonoBehaviour
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
             }
-            Debug.Log("wha " + performedAnAction + Escape.ToString());
 
             performedAnAction = false;
         }
@@ -62,12 +62,10 @@ public class CursorToggle : MonoBehaviour
         {
             if (once)
             {
-                canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
-
                 once = false;
                 for (int i = 0; i < canvases.Count; i++)
                 {
-                    if (canvases[i].gameObject.layer != 10 && canvases[i].gameObject.layer != 5) canvases.Remove(canvases[i]);
+                    if (canvases[i].gameObject.layer != 10) canvases.Remove(canvases[i]);
                 }
             }
 
@@ -95,7 +93,6 @@ public class CursorToggle : MonoBehaviour
             foreach (RaycastResult result in raycastResults)
             {
                 hitCount++;
-            //    Debug.Log(canvases[i]);
             }
         }
         return hitCount > 0;
