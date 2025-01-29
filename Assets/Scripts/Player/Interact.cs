@@ -446,7 +446,14 @@ public class Interact : AttributesSync, IObserver
                 DIO.isPickedUp = true;
                 //rbToTrack.ApplyAsTransform = true;
 
-                if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
+                if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster"))
+                {
+                    heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
+                }
+                else
+                {
+                    ToggleCollidersOfHeldObject(false);
+                }
 
                 //reset physics
                 rb.freezeRotation = true;
@@ -464,7 +471,7 @@ public class Interact : AttributesSync, IObserver
                 Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
 
                 //DIO.BroadcastRemoteMethod(nameof(DIO.ToggleCollider), false);
-                ToggleCollidersOfHeldObject(false);
+                
             }
             else
             {
@@ -475,7 +482,7 @@ public class Interact : AttributesSync, IObserver
 
     private void ToggleCollidersOfHeldObject(bool newState)
     {
-        List<Collider> cols = heldObject.GetComponentsInChildren<Collider>().ToList<Collider>();
+        List<Collider> cols = heldObject.GetComponentsInChildren<Collider>().ToList();
         Collider thisCol = heldObject.GetComponent<Collider>();
         if (thisCol != null) cols.Add(thisCol);
         foreach (Collider col in cols)

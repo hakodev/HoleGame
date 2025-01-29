@@ -58,7 +58,7 @@ public class StickyNote : DynamicInteractableObject
     {
         if (interaction == InteractionEnum.PlacedStickyNote)
         {
-            //BroadcastRemoteMethod(nameof(SyncSetParent));
+            BroadcastRemoteMethod(nameof(SyncSetParent));
             Stick();
             PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
         }
@@ -71,7 +71,7 @@ public class StickyNote : DynamicInteractableObject
         {
             isPlaced = false;
             originalPos = transform.position;
-            BroadcastRemoteMethod(nameof(GnoreCollisions));
+         //   BroadcastRemoteMethod(nameof(GnoreCollisions));
         }
         if(interaction == InteractionEnum.MarkerOnPosterOrStickyNote)
         {
@@ -84,8 +84,9 @@ public class StickyNote : DynamicInteractableObject
             boxy.enabled = true;
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision collision)
     {
+        base.OnCollisionEnter(collision);
         if (collision.gameObject.layer == selfLayer) { return; }
         if (isThrown || isGameStart)
         {
@@ -140,7 +141,6 @@ public class StickyNote : DynamicInteractableObject
         if(userID != Multiplayer.GetUser().Index) { return; }
         if (isInteractedWith && Input.GetMouseButton(0))
         {
-            Debug.Log("wa");
             mousePainter.Paint(tempCamRef);
         }
     }
@@ -219,7 +219,10 @@ public class StickyNote : DynamicInteractableObject
         //  if(isGameStart) 
         //BroadcastRemoteMethod(nameof(SyncSetParent));
         //  SyncSetParent();
+
+        BroadcastRemoteMethod(nameof(SyncSetParent));
     }
+    [SynchronizableMethod]
     private void SyncSetParent()
     {
         RaycastHit hit;
@@ -239,6 +242,7 @@ public class StickyNote : DynamicInteractableObject
                 //remove sticky colliders
                 parentInternalColliders.Add(hit.collider);
 
+                
                 for(int i =0;i< parentInternalColliders.Count; i++)
                 {
                     for(int j=0; j< allStickyColliders.Count; j++)
@@ -251,8 +255,9 @@ public class StickyNote : DynamicInteractableObject
                         Physics.IgnoreCollision(parentInternalColliders[i], allStickyColliders[j]);
                     }
                 }
+                
                 parentColliders = parentInternalColliders;
-                Debug.Log("suffering parent " + parentColliders.Count + " " + gameObject.name);
+                //Debug.Log("suffering parent " + parentColliders.Count + " " + gameObject.name);
             }
         }
     }
@@ -269,7 +274,7 @@ public class StickyNote : DynamicInteractableObject
             }
         }
         parentColliders.Clear();
-        allStickyColliders.Clear();
+       // allStickyColliders.Clear();
     }
 
     public static void AmendShaderLayeringInInteract(GameObject objectToApply)
@@ -296,10 +301,10 @@ public class StickyNote : DynamicInteractableObject
       //  ResetMomentum();
 
         transform.localPosition = placedLocalPos;
-        rbToTrack.SetPosition(transform.position);
+     //   rbToTrack.SetPosition(transform.position);
 
         transform.localRotation = Quaternion.Euler(placedLocalRot);
-        rbToTrack.SetRotation(transform.rotation);
+     //   rbToTrack.SetRotation(transform.rotation);
     }
 
     private Vector3 GetRenderersSize(GameObject obj)
