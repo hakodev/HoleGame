@@ -89,8 +89,8 @@ public class PlayerRole : AttributesSync
     public void SetName(string name)
     {
         playerNameSync = name;
-        AssignPlayerProgileTexture profileTexture = transform.GetComponentInChildren<AssignPlayerProgileTexture>();
-        profileTexture.BroadcastRemoteMethod(nameof(profileTexture.SetDrawing), playerNameSync);
+        //AssignPlayerProgileTexture profileTexture = transform.GetComponentInChildren<AssignPlayerProgileTexture>();
+        //profileTexture.BroadcastRemoteMethod(nameof(profileTexture.SetDrawing), playerNameSync);
         Debug.Log(" " + playerNameSync);
     }
 
