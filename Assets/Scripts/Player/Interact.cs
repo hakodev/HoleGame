@@ -51,7 +51,6 @@ public class Interact : AttributesSync, IObserver
 
     private void Awake()
     {
-        hudDisplay = GetComponentInChildren<HUDDisplay>();
         avatar = GetComponent<Alteruna.Avatar>();
         spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
         playerController = GetComponent<PlayerController>();
@@ -60,6 +59,8 @@ public class Interact : AttributesSync, IObserver
 
     private void Start()
     {
+        hudDisplay = GetComponentInChildren<HUDDisplay>();
+
         if (!avatar.IsMe)
         {
             int playerLayer = LayerMask.NameToLayer("PlayerLayer");
