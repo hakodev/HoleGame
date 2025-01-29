@@ -14,7 +14,5 @@ public enum InteractionEnum
     MarkerOnPosterOrStickyNote,
     StoppedMarkerOnPosterOrStickyNote,
     CoffeeStain,
-    kickBall,
-    trampolineBall,
     smackedPlayerWithObject
 }

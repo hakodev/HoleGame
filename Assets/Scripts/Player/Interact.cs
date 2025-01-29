@@ -39,6 +39,8 @@ public class Interact : AttributesSync, IObserver
     Rigidbody rb;
     private Alteruna.Spawner spawner;
 
+    CharacterController characterController;
+
     //AnimationSynchronizable animatorSync;
 
 
@@ -53,6 +55,7 @@ public class Interact : AttributesSync, IObserver
         avatar = GetComponent<Alteruna.Avatar>();
         spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
         playerController = GetComponent<PlayerController>();
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Start()
@@ -368,6 +371,8 @@ public class Interact : AttributesSync, IObserver
         DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("DynamicAwake");
         DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
+        Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, false);
+
 
         heldObject.transform.SetParent(null);
         ResetMomentum();
@@ -434,6 +439,8 @@ public class Interact : AttributesSync, IObserver
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
                 DIO.BroadcastRemoteMethod("DynamicAwake");
                 DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
+                Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, true);
+
 
                 //Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             }
