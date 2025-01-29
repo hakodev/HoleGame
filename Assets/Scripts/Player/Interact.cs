@@ -1,5 +1,6 @@
 using Alteruna;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -12,7 +13,6 @@ public class Interact : AttributesSync, IObserver
 
     [Header("not important")]
     [SerializeField] GameObject clientHand;
-    [SerializeField] GameObject serverHand;
 
     [SerializeField] Camera playerCamera;
     PlayerController playerController;
@@ -67,8 +67,6 @@ public class Interact : AttributesSync, IObserver
         }
         else
         {
-            //animatorSync.Animator = transform.Find("Animation").GetComponent<Animator>();
-
             dynamicLayerMask = LayerMask.GetMask("DynamicInteractableObject");
             stationaryLayerMask = LayerMask.GetMask("StationaryInteractableObject");
             interactableLayerMask = dynamicLayerMask | stationaryLayerMask;
@@ -80,10 +78,7 @@ public class Interact : AttributesSync, IObserver
     }
     void SetLayerRecursively(GameObject obj, int layer)
     {
-        //if (obj.layer != LayerMask.NameToLayer("UI"))
         obj.layer = layer;
-        // Debug.Log("UI layer " + obj.layer + " " + LayerMask.NameToLayer("UI"));
-
         foreach (Transform child in obj.transform)
         {
             SetLayerRecursively(child.gameObject, layer);
@@ -217,6 +212,8 @@ public class Interact : AttributesSync, IObserver
         if (currentOutlinedObject != null && objectToApply != currentOutlinedObject)
         {
             ChangeChildrenLayers("Default", tempChildList);
+            StickyNote.AmendShaderLayeringInInteract(currentOutlinedObject.gameObject);
+
         }
 
         if (objectToApply == null) return;
@@ -224,6 +221,7 @@ public class Interact : AttributesSync, IObserver
         currentOutlinedObject = objectToApply.transform;
 
         ChangeChildrenLayers("OutlineLayer", tempChildList);
+        StickyNote.AmendShaderLayeringInInteract(objectToApply);
     }
 
     private void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
@@ -403,7 +401,9 @@ public class Interact : AttributesSync, IObserver
         rb.freezeRotation = false;
         rb.useGravity = true;
 
+        ToggleCollidersOfHeldObject(true);
 
+        //DIO.BroadcastRemoteMethod(nameof(DIO.ToggleCollider), true);
     }
     private void FinishDropping()
     {
@@ -462,7 +462,9 @@ public class Interact : AttributesSync, IObserver
                 DIO.BroadcastRemoteMethod("DynamicAwake");
 
                 Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
-                HandObjects.ToggleActive(heldObject.name.Replace("(Clone)", ""), true);
+
+                //DIO.BroadcastRemoteMethod(nameof(DIO.ToggleCollider), false);
+                ToggleCollidersOfHeldObject(false);
             }
             else
             {
@@ -470,7 +472,19 @@ public class Interact : AttributesSync, IObserver
             }
         }
     }
-    private void ResetMomentum()
+
+    private void ToggleCollidersOfHeldObject(bool newState)
+    {
+        List<Collider> cols = heldObject.GetComponentsInChildren<Collider>().ToList<Collider>();
+        Collider thisCol = heldObject.GetComponent<Collider>();
+        if (thisCol != null) cols.Add(thisCol);
+        foreach (Collider col in cols)
+        {
+            col.enabled = newState;
+        }
+    }
+
+private void ResetMomentum()
     {
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
