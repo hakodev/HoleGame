@@ -1,7 +1,6 @@
 
 using UnityEngine;
 using TMPro;
-using System.Collections;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using Alteruna;
@@ -16,7 +15,7 @@ public class EndGameResolution : AttributesSync
     CountDownDisplayManager display;
     Canvas endGameCanvas;
     TextMeshProUGUI descriptor;
-    [SerializeField] PopUp popUp;
+    [SerializeField] PopUp endGamePopUp;
     [SerializeField] CanvasGroup machinesWon;
     [SerializeField] CanvasGroup infiltratorsWon;
 
@@ -38,14 +37,13 @@ public class EndGameResolution : AttributesSync
 
     private void Awake()
     {
-        display = FindAnyObjectByType<CountDownDisplayManager>();
         endGameCanvas = GetComponent<Canvas>();
-        popUp = transform.GetComponentInChildren<PopUp>();
     }
     private void Start()
     {
+        display = FindAnyObjectByType<CountDownDisplayManager>();
+
         wildWestExplanatoryText.gameObject.SetActive(false);
-        popUp.gameObject.SetActive(false);
     }
 
     public void CheckForEndGame()
@@ -81,7 +79,7 @@ public class EndGameResolution : AttributesSync
 
         inWildWest = true;
 
-        votingPopUp.ToggleTriggerCaptcha(false);
+        votingPopUp.ToggleTriggerCaptcha(true);
     }
     public void HandOutGuns()
     {
@@ -105,8 +103,8 @@ public class EndGameResolution : AttributesSync
 
     private void GroupWon(CanvasGroup group, string description)
     {
-        popUp.gameObject.SetActive(true);
-        popUp.PopIn();
+        endGamePopUp.gameObject.SetActive(true);
+        endGamePopUp.PopIn();
 
         Sequence sequence = DOTween.Sequence();
         sequence.Append(group.DOFade(0f, 0.2f));

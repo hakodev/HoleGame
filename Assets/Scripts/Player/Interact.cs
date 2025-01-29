@@ -1,6 +1,7 @@
 using Alteruna;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 
@@ -195,8 +196,11 @@ public class Interact : AttributesSync, IObserver
                 if (Input.GetMouseButtonDown(0))
                 {
                     pickedUp = hit.transform.gameObject;
-                    BroadcastRemoteMethod(nameof(TryPickUp));
 
+                    Guid id = pickedUp.GetComponent<DynamicInteractableObject>().UID;
+                    Debug.Log("picked ID " + id);
+                    if (heldObject != null) { return; }
+                    BroadcastRemoteMethod(nameof(TryPickUp), id);
                 }
             }
         }
@@ -403,7 +407,7 @@ public class Interact : AttributesSync, IObserver
         rb.freezeRotation = false;
         rb.useGravity = true;
 
-
+        heldObject.GetComponent<Collider>().enabled = true;
     }
     private void FinishDropping()
     {
@@ -426,25 +430,30 @@ public class Interact : AttributesSync, IObserver
     }
 
     [SynchronizableMethod]
-    private void TryPickUp()
+    private void TryPickUp(Guid pickedDynamicObjectID)
     {
-        if (!avatar.IsMe) return;
-        if (heldObject != null) { return; }
+       // if (!avatar.IsMe) return;
+      //  if (heldObject != null) { return; }
         finishedPickUp = false;
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun)
         {
             PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetPickUp);
+
+            Debug.Log(pickedDynamicObjectID);
+            pickedUp = Multiplayer.GetGameObjectById(pickedDynamicObjectID);
             DIO = pickedUp.GetComponent<DynamicInteractableObject>();
-            Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
+            Debug.Log("picked ID " + pickedUp.name);
+
+            //Debug.Log("owned by " + pickedUp.name + " " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
-                //get all necessary variales
+                Debug.Log("picked ID2 " + pickedUp.name);
+
                 heldObject = pickedUp;
-                rb = heldObject.GetComponent<Rigidbody>();
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
+                rb = heldObject.GetComponent<Rigidbody>();
                 DIO.isPickedUp = true;
-                //rbToTrack.ApplyAsTransform = true;
 
                 if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
@@ -452,6 +461,7 @@ public class Interact : AttributesSync, IObserver
                 rb.freezeRotation = true;
                 rb.useGravity = false;
                 ResetMomentum();
+                heldObject.GetComponent<Collider>().enabled = false;
 
                 heldObject.transform.SetParent(clientHand.transform, true);
 
@@ -554,7 +564,9 @@ public class Interact : AttributesSync, IObserver
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
             pickedUp = spawnedGun;
 
-            BroadcastRemoteMethod(nameof(TryPickUp));
+            //CommunicationBridgeUID cuid = p.GetComponent<CommunicationBridgeUID>();
+            Guid id = pickedUp.GetComponent<DynamicInteractableObject>().UID;
+            BroadcastRemoteMethod(nameof(TryPickUp), id);
         }
     }
     public GameObject GetHeldObject()

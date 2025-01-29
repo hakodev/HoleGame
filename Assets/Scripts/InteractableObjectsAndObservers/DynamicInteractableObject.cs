@@ -4,6 +4,7 @@ using UnityEngine;
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
     protected Alteruna.Avatar currentlyOwnedByAvatar;
+    protected CharacterController ownedCharacterController;
 
     [SynchronizableField] public bool isPickedUp;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
@@ -11,6 +12,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
     RigidbodySynchronizable rbSyncDynamic;
     Rigidbody rbDynamic;
+    Collider colliderDynamic;
 
     [Header("removed serialize fields for speed. Nsync Objects is Here. x - when object is inactive(high number), y - when object is active(low number), also in the script both are 30 2, for ease of access")]
      Vector2 syncEveryNUpdates = new Vector2(30, 2);
@@ -22,6 +24,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     {
         rbSyncDynamic = GetComponent<RigidbodySynchronizable>();
         rbDynamic = GetComponent<Rigidbody>();
+        colliderDynamic = GetComponent<Collider>();
     }
     protected virtual void Start()
     {
@@ -31,6 +34,29 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     {
         //SelfSleepIfUnmoving();
         //CheckForMovement();
+    }
+    [SynchronizableMethod]
+    public void ToggleRigidbody(bool newstate)
+    {
+        rbDynamic.useGravity = newstate;
+        rbDynamic.freezeRotation = !newstate;
+    }
+    [SynchronizableMethod]
+    public void ToggleIgnoreCollisionsWithOwner(bool newState)
+    {
+        if(newState)
+        {
+            if (currentlyOwnedByAvatar != null)
+            {
+                ownedCharacterController = GetComponent<CharacterController>();
+                Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, true);
+            }
+        }
+        else
+        {
+            Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, false);
+            ownedCharacterController = null;
+        }      
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
@@ -105,6 +131,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     {
         if(newIndex!=-1)currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
         if (newIndex == -1) currentlyOwnedByAvatar = null;
+        Debug.Log("owned by " + currentlyOwnedByAvatar.gameObject.name);
     }
 
     public Alteruna.Avatar GetAvatarByOwnerIndex(int ownerIndex)
