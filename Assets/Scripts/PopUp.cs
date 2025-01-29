@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using Alteruna;
 using TMPro;
+using System.IO;
+using UnityEditor;
 
 
 public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
@@ -15,8 +17,14 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     [SerializeField] float popInTime;
     [SerializeField] float popOutTime;
     [SerializeField] float overPopImpact;
+    [SerializeField] GameObject screenPopUpPrefab;
     [SerializeField] GameObject namePopUpPrefab;
+    [SerializeField] GameObject colorPickerPrefab;
     UIInput uiInput;
+
+    public GameObject screenObject;
+    public Renderer screenRenderer;
+    public RenderTexture screenRenderTexture;
 
     [SerializeField] bool triggersCaptcha = false;
     public void ToggleTriggerCaptcha(bool newState)
@@ -29,7 +37,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         rectTransform = GetComponent<RectTransform>();
 
     }
-    private void Start()
+    protected void Start()
     {
 
         if (roomMenu == null)
@@ -57,7 +65,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
 
 
 
-    public void PopIn()
+    public virtual void PopIn()
     {
         transform.localScale = Vector3.zero;
         transform.DOScale(overPopImpact, popInTime).SetEase(Ease.OutBack).OnComplete(() => transform.DOScale(Vector3.one, popInTime).SetEase(Ease.OutBack));
@@ -80,15 +88,16 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     GameObject namePopUp;
     public void ClickedApplyButton()
     {
-
-            namePopUpPrefab.SetActive(true);
-            namePopUpPrefab.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
+        screenPopUpPrefab.SetActive(true);
+        colorPickerPrefab.SetActive(true);
         
+
     }
 
     TMP_InputField nameInputFieldText;
     public void ClickedVerifyNameButton()
     {
+
         nameInputFieldText = transform.parent.GetComponentInChildren<TMP_InputField>();
 
         if (nameInputFieldText.text == string.Empty)
@@ -99,9 +108,43 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         }
         else
         {
+            Texture screenTexture = screenRenderer.material.GetTexture("_MaskTexture");
+            Texture2D texture2D = new Texture2D(screenTexture.width, screenTexture.height, TextureFormat.RGBA32, false);
+
+            RenderTexture currentRT = RenderTexture.active;
+
+            RenderTexture renderTexture = new RenderTexture(screenTexture.width, screenTexture.height, 32);
+            Graphics.Blit(screenTexture, renderTexture);
+
+            RenderTexture.active = renderTexture;
+            texture2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+            texture2D.Apply();
+            texture2D.name = nameInputFieldText.text;
+
+
+            RenderTexture.active = currentRT;
+            TexturesManager.currentTexture = texture2D;
+
+            //File.WriteAllBytes(Application.dataPath + "/Resources/" + nameInputFieldText.text + ".png", texture2D.EncodeToPNG());
+            //AssetDatabase.Refresh();
+            //RenderTexture.active = previous;
+            //RenderTexture.ReleaseTemporary(screenRenderTexture);
+
+            screenObject.SetActive(false);
             uiInput.SetPlayerNameSync(nameInputFieldText.text);
             roomCamera.SetActive(true);
             canvas.gameObject.SetActive(false);
+            //uiInput.SetPlayerNameSync(nameInputFieldText.text);
+
+            //canvas.gameObject.SetActive(false);
+          
         }
+
+    }
+
+    public virtual void ClickedScreenContinueButton()
+    {
+        namePopUpPrefab.SetActive(true);
+        namePopUpPrefab.GetComponent<RectTransform>().anchoredPosition = new Vector3(-316, 188, 0);
     }
 }
