@@ -44,18 +44,20 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void ToggleIgnoreCollisionsWithOwner(bool newState)
     {
-        if(newState)
+        StickyNote isSticky = GetComponent<StickyNote>();
+
+        if (newState)
         {
             if (currentlyOwnedByAvatar != null)
             {
                 ownedCharacterController =currentlyOwnedByAvatar.gameObject.GetComponent<CharacterController>();
-                if (ownedCharacterController == null) { return; }
+                if (ownedCharacterController == null || isSticky!=null) { return; }
                 Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, true);
             }
         }
         else
         {
-            if (ownedCharacterController == null) { return; }
+            if (ownedCharacterController == null || isSticky!=null) { return; }
             Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, false);
             ownedCharacterController = null;
         }      
