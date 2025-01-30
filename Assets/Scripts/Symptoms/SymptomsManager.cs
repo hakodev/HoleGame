@@ -36,25 +36,24 @@ public class SymptomsManager : AttributesSync {
         return symptoms;
     }
 
-    public void SymptomNotifTextWasSpawned(SymptomNotifText caller)
-    {
-        avatar = caller.transform.root.GetComponent<Alteruna.Avatar>();
-        Debug.Log("health " + avatar.name);
-        thisAvatarSymptomNotifText = caller;
-    }
+
 
     [SynchronizableMethod]
     public void SetSymptom(int index) {
 
         currentSymptom = symptoms[index];
+        if (avatar == null)
+        {
+            avatar = Multiplayer.GetAvatar();
+            thisAvatarSymptomNotifText = avatar.transform.GetComponentInChildren<SymptomNotifText>(true);
+        }
+
+
         Debug.Log("healthcare2 " + Multiplayer.GetUser().Name + " " + Multiplayer.GetAvatar().name);
 
         Debug.Log("healthcare avatartext " + thisAvatarSymptomNotifText + avatar.name);
-        Debug.Log("healthcare sequencing " + Multiplayer.GetUser().Name + " " + Multiplayer.GetAvatar().name);
         thisAvatarSymptomNotifText.ApplyEffectsOfSymptom();
         thisAvatarSymptomNotifText.ChangeNotifText();
-        Debug.Log("healthcare sequencing " + Multiplayer.GetUser().Name + " " + Multiplayer.GetAvatar().name);
-
     }
 
     public void PickRandNumberHostAndSetSymptomForAll() {
