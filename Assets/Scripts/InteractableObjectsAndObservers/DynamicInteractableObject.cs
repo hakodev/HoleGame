@@ -63,19 +63,19 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         }      
     }
 
-    protected virtual void OnCollisionEnter(Collision collision)
-    {
-        if (isPickedUp) return;
+        protected virtual void OnCollisionEnter(Collision collision)
+        {
+            if (isPickedUp) return;
 
-        if(rbDynamic.mass > 1)
-        {
-            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit);
+            if(rbDynamic.mass > 1)
+            {
+               // PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit);
+            }
+            else
+            {
+             //   PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit);
+            }
         }
-        else
-        {
-            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit);
-        }
-    }
 
     private void SelfSleepIfUnmoving()
     {

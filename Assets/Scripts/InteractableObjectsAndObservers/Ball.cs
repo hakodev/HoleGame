@@ -29,7 +29,7 @@ public class Ball : DynamicInteractableObject
     protected override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
-        PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetBouncyBall);
+        //PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetBouncyBall);
         TrampolinePlayer(collision);
     }
     private void TrampolinePlayer(Collision collision)

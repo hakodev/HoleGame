@@ -108,7 +108,7 @@ public class VotingPhase : AttributesSync {
                 votingCanvas.SetActive(false);
                 votedCanvas.SetActive(true);
                 hasVoted = true;
-                Debug.Log("BITTE_Button " + otherPlayer.name);
+                //Debug.Log("BITTE_Button " + otherPlayer.name);
             });
         }
     }
@@ -177,9 +177,9 @@ public class VotingPhase : AttributesSync {
 
 
 
-            Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
+            //Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
             taskManagerNameInHost = pickedPlayer.gameObject.name;
-            Debug.Log("pompous1 " + taskManagerNameInHost);
+            //Debug.Log("pompous1 " + taskManagerNameInHost);
 
             for (int i = 0; i < equallyVotedPlayers.Count; i++)
             {
@@ -193,7 +193,7 @@ public class VotingPhase : AttributesSync {
     {
         VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
         //Debug.Log("BITTE_FinaleSync " + player.name);
-        Debug.Log("pompous2 " + taskManagerNameInHost);
+        //Debug.Log("pompous2 " + taskManagerNameInHost);
         player.EndVotingPhaseFinale();
     }
 
@@ -218,7 +218,7 @@ public class VotingPhase : AttributesSync {
 
             if (player.IsTaskManager)
             {
-                Debug.Log(player.IsTaskManager + player.gameObject.name);
+                //Debug.Log(player.IsTaskManager + player.gameObject.name);
                 GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
             }
 
@@ -268,18 +268,18 @@ public class VotingPhase : AttributesSync {
     [SynchronizableMethod]
     public void DisplaySymptomNotifSync()
     {
-        Debug.Log("come on symptoms");
+        //Debug.Log("come on symptoms");
         StartCoroutine(DisplaySymptomNotif());
     }
 
     public void DespawnAllGuns()
     {
         Gun[] allGuns = FindObjectsByType<Gun>(FindObjectsSortMode.None);
-        Debug.Log("Despawning guns " + allGuns.Length);
+        //Debug.Log("Despawning guns " + allGuns.Length);
 
         for (int i=0; i<allGuns.Length; i++)
         {
-            Debug.Log("despawned gun " + allGuns[i].gameObject);
+            //Debug.Log("despawned gun " + allGuns[i].gameObject);
             spawner.Despawn(allGuns[i].gameObject);
         }
     }

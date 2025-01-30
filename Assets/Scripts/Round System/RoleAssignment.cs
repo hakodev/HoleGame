@@ -2,7 +2,6 @@ using Alteruna;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -39,15 +38,15 @@ public class RoleAssignment : AttributesSync
     }
     private void Awake()
     {
-        avatar = transform.root.GetComponent<Alteruna.Avatar>();
-        youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
+
         playerNumber++;
     }
     private void Start()
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
-
-       // totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None).ToList();
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
+        // totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None).ToList();
 
         if (playerID == -10) playerID = playerNumber; //sets proper number
         Debug.Log("player's count " + totalPlayers.Count);
@@ -78,7 +77,7 @@ public class RoleAssignment : AttributesSync
                     DetermineMaxNumberOfInfiltrators();
                     AssignRoles();
                     VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
-                    SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
+                    //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
                     Destroy(lobbyCanvas);
                     voting.BroadcastRemoteMethod(nameof(voting.DisplaySymptomNotifSync));
                 }

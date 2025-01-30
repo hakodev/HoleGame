@@ -65,14 +65,14 @@ public class CountdownDisplay : AttributesSync {
         //Debug.Log(player.gameObject.name);
         player.EndVotingPhase();
 
-
+        /*
         SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
         SymptomNotifText[] allNotifTexts = FindObjectsByType<SymptomNotifText>(FindObjectsSortMode.None);
         foreach(SymptomNotifText notifText in allNotifTexts)
         {
             // This will enable the notification canvas for all players
             notifText.transform.parent.parent.gameObject.SetActive(true);
-        }
+        }*/
     }
 
     private void Update() {

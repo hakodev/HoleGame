@@ -1,4 +1,5 @@
 using Alteruna;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,20 +12,13 @@ public class SymptomsManager : AttributesSync {
             "Sym2")]
     [SerializeField] private List<SymptomsSO> symptoms;
     private SymptomsSO currentSymptom = null;
-    [SynchronizableField] int randNum;
+    [SynchronizableField] int randNum; //should only be modified by host
 
     Alteruna.Avatar avatar;
+    SymptomNotifText thisAvatarSymptomNotifText;
     float renderDistanceTimer = 2;
 
-    [SynchronizableMethod]
-    public void SetterRandNum(int AAA)
-    {
-        randNum = AAA;
-    }
-    public int GetterRandNum()
-    {
-        return randNum;
-    }
+
 
     private void Awake() {
         if(Instance != null && Instance != this) {
@@ -43,16 +37,33 @@ public class SymptomsManager : AttributesSync {
         return symptoms;
     }
 
+
+
     [SynchronizableMethod]
     public void SetSymptom(int index) {
 
         currentSymptom = symptoms[index];
+        if (avatar == null)
+        {
+            avatar = Multiplayer.GetAvatar();
+            thisAvatarSymptomNotifText = avatar.transform.GetComponentInChildren<SymptomNotifText>(true);
+        }
+        StartCoroutine(Delay());
+    }
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(0.1f);
+        thisAvatarSymptomNotifText.ApplyEffectsOfSymptom();
+        thisAvatarSymptomNotifText.ChangeNotifText();
     }
 
-    public int GetRandomNum() {
+    public void PickRandNumberHostAndSetSymptomForAll() {
+        if (!Multiplayer.GetUser().IsHost) { return; }
+
         randNum = Random.Range(0, symptoms.Count);
-        return randNum;
+        BroadcastRemoteMethod(nameof(SetSymptom), randNum);
     }
 
+    public int GetRandNumber() { return randNum; }
 
 }
