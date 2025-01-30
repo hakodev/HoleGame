@@ -1,4 +1,5 @@
 using Alteruna;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,11 +48,11 @@ public class SymptomsManager : AttributesSync {
             avatar = Multiplayer.GetAvatar();
             thisAvatarSymptomNotifText = avatar.transform.GetComponentInChildren<SymptomNotifText>(true);
         }
-
-
-        Debug.Log("healthcare2 " + Multiplayer.GetUser().Name + " " + Multiplayer.GetAvatar().name);
-
-        Debug.Log("healthcare avatartext " + thisAvatarSymptomNotifText + avatar.name);
+        StartCoroutine(Delay());
+    }
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(0.1f);
         thisAvatarSymptomNotifText.ApplyEffectsOfSymptom();
         thisAvatarSymptomNotifText.ChangeNotifText();
     }
@@ -59,7 +60,6 @@ public class SymptomsManager : AttributesSync {
     public void PickRandNumberHostAndSetSymptomForAll() {
         if (!Multiplayer.GetUser().IsHost) { return; }
 
-        Debug.Log("healthcare " + Multiplayer.GetUser().Name + " " + Multiplayer.GetAvatar().name);
         randNum = Random.Range(0, symptoms.Count);
         BroadcastRemoteMethod(nameof(SetSymptom), randNum);
     }

@@ -14,8 +14,6 @@ public class SymptomNotifText : AttributesSync
     {
         //fsr awakes just dont work
         notificationText = GetComponent<TextMeshProUGUI>();
-        Debug.Log("hehe " + notificationText);
-      //  lobbySystem = transform.root.GetComponentInChildren<LobbySystem>();
 
     }
     
@@ -24,7 +22,6 @@ public class SymptomNotifText : AttributesSync
     {
         base.OnEnable();
         // if (lobbySystem != null) {return;}
-
         SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
     }
 
@@ -32,19 +29,10 @@ public class SymptomNotifText : AttributesSync
     public void ApplyEffectsOfSymptom()
     {
         if (avatar == null) avatar = Multiplayer.GetAvatar();
-        Debug.Log("healthcare maybe get past this return" + avatar.name);
         if(!avatar.IsMe) { return; }
-        //List<SymptomsSO> allSymptoms = SymptomsManager.Instance.GetSymptomsList();
-        //int randNum = Random.Range(0, allSymptomsCount);
-        //SymptomsManager.Instance.SetSymptom(allSymptoms[randNum]);
-        //Debug.Log("rocks " + randNum);
-
-        Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
 
         if(allCarpets==null) allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
 
-        // If it is the Jumpy Carpets symptom
-        Debug.Log("healthcare " + SymptomsManager.Instance.GetSymptom() + " " + SymptomsManager.Instance.GetSymptomsList()[1]);
         if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && transform.root.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
         {
             switch (CarpetManager.Instance.GetCarpetColorRandomNum())
@@ -116,16 +104,11 @@ public class SymptomNotifText : AttributesSync
     public void ChangeNotifText()
     {
         if (avatar == null) avatar = Multiplayer.GetAvatar();
-        Debug.Log("healthcare maybe get past this return" + avatar.name);
         if (!avatar.IsMe) { return; }
 
         if(notificationText==null) notificationText = GetComponent<TextMeshProUGUI>();
-        Debug.Log("hehe " + notificationText);
 
-       
-        Debug.Log(notificationText + " " + SymptomsManager.Instance.GetSymptom().Name + " " + SymptomsManager.Instance.GetSymptom().Description);
-        //giving strange nullref
-        
+
         notificationText.text = "The machines have caught a new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
                                $"{SymptomsManager.Instance.GetSymptom().Description}";
@@ -142,12 +125,13 @@ public class SymptomNotifText : AttributesSync
                 _ => "If you somehow see this, you broke the game",
             };
         }
-        
+
+        notificationText.ForceMeshUpdate();
+        Debug.Log("hehe " + notificationText.text);
 
 
 
-
-       // yield return new WaitForSeconds(30f);
-       // this.transform.parent.parent.gameObject.SetActive(false); // disable canvas
+        // yield return new WaitForSeconds(30f);
+        // this.transform.parent.parent.gameObject.SetActive(false); // disable canvas
     }
 }
