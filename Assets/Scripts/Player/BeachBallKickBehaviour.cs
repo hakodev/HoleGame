@@ -5,6 +5,11 @@ public class BeachBallKickBehaviour : MonoBehaviour {
     [SerializeField] private float kickForce = 12f;
 
     private Collider[] currentColliders;
+    private CharacterController characterController;
+
+    private void Start() {
+        characterController = transform.root.gameObject.GetComponent<CharacterController>();
+    }
 
     private void Update() {
         CheckForBallCollision();
@@ -20,7 +25,7 @@ public class BeachBallKickBehaviour : MonoBehaviour {
 
             Rigidbody ballRigidbody = collider.gameObject.GetComponent<Rigidbody>();
 
-            if(ballRigidbody) {
+            if(ballRigidbody && characterController.isGrounded) {
                 Vector3 direction = (ballRigidbody.transform.position - this.transform.position).normalized;
                 ballRigidbody.AddForce(direction * kickForce, ForceMode.Impulse);
             }
