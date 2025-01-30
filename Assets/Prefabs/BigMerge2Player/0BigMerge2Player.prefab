@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 3717276532838660401}
   - component: {fileID: 1970362934871855503}
   m_Layer: 9
-  m_Name: BeachBallKickBehaviour
+  m_Name: BeachBallBehaviour
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -341,8 +341,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406bff8bce152114ea1ee28aff8cb6f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  extents: {x: 0.3, y: 0.2, z: 0.3}
-  kickForce: 12
+  extents: {x: 0.3, y: 0.25, z: 0.3}
+  kickForce: 11
   carpetDetection: {fileID: 2394153267043893264}
 --- !u!1 &1719338351492321157
 GameObject:

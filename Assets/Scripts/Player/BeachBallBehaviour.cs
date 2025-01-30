@@ -1,15 +1,17 @@
 using UnityEngine;
 
-public class BeachBallKickBehaviour : MonoBehaviour {
+public class BeachBallBehaviour : MonoBehaviour {
     [SerializeField] private Vector3 extents;
-    [SerializeField] private float kickForce = 12f;
+    [SerializeField] private float kickForce = 11f;
     [SerializeField] private CarpetDetection carpetDetection;
 
     private Collider[] currentColliders;
     private CharacterController characterController;
+    private PlayerController playerController;
 
     private void Start() {
         characterController = transform.root.gameObject.GetComponent<CharacterController>();
+        playerController = transform.root.gameObject.GetComponent<PlayerController>();
     }
 
     private void Update() {
@@ -28,6 +30,8 @@ public class BeachBallKickBehaviour : MonoBehaviour {
                 if(characterController.isGrounded && carpetDetection.IsStandingOnCarpet) {
                     Vector3 direction = (ballRigidbody.transform.position - this.transform.position).normalized;
                     ballRigidbody.AddForce(direction * kickForce, ForceMode.Impulse);
+                } else {
+                    playerController.Jump();
                 }
             }
         }
