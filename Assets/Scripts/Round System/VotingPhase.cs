@@ -26,7 +26,7 @@ public class VotingPhase : AttributesSync {
 
 
     int randomlyPickedPlayer;
-    List<VotingPhase> votingPlayers = new List<VotingPhase>();
+    static List<VotingPhase> votingPlayers = new List<VotingPhase>();
     [SynchronizableField] int pickedPlayerIndex;
 
     private bool hasVoted = false;
@@ -43,13 +43,13 @@ public class VotingPhase : AttributesSync {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
         totalALivePlayers.Add(player);
-        votingPlayers.Add(GetComponent<VotingPhase>());
+        votingPlayers.Add(this);
+
+    }
+    private void Start() {
         spawner = FindAnyObjectByType<Alteruna.Spawner>();
         endGameResolution = GetComponentInChildren<EndGameResolution>();
         votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
-    }
-    private void Start() {
-
     }
 
 

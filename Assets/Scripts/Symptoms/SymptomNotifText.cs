@@ -8,28 +8,47 @@ using UnityEngine;
 public class SymptomNotifText : AttributesSync {
     private TextMeshProUGUI notificationText;
     LobbySystem lobbySystem;
-
+    static List<SymptomNotifText> symptomTexts = new List<SymptomNotifText>();
     private void Awake() {
         notificationText = GetComponent<TextMeshProUGUI>();
         lobbySystem = transform.root.GetComponentInChildren<LobbySystem>();
     }
 
+    private void Start()
+    {
+        symptomTexts.Add(this);
+    }
     private new void OnEnable() {
         base.OnEnable();
 
-        if (lobbySystem != null) return;
+        // if (lobbySystem != null) {return;}
+        // BroadcastRemoteMethod(nameof(PickRandomSYmptom));
+        PickRandomSymptom();
 
-        ApplyNewSymptom();
+
+    }
+    private void PickRandomSymptom()
+    {
+        if (!Multiplayer.GetUser().IsHost) { return; }
+        //randNum = SymptomsManager.Instance.GetRandomNum();
+        SymptomsManager.Instance.SetterRandNum(SymptomsManager.Instance.GetRandomNum());
+        Debug.Log("rocks " + Multiplayer.GetAvatar().IsMe);
+
+
+        BroadcastRemoteMethod(nameof(ApplyNewSymptom));
+       
         DisplayNotificationText();
     }
+    
 
-    private void ApplyNewSymptom() {
+
+    [SynchronizableMethod]
+    public void ApplyNewSymptom() {
         //List<SymptomsSO> allSymptoms = SymptomsManager.Instance.GetSymptomsList();
         //int randNum = Random.Range(0, allSymptomsCount);
         //SymptomsManager.Instance.SetSymptom(allSymptoms[randNum]);
-        Debug.Log("killme");
-        int randNum = SymptomsManager.Instance.GetRandomNum();
-        SymptomsManager.Instance.SetSymptom(randNum);
+        //Debug.Log("rocks " + randNum);
+        SymptomsManager.Instance.SetSymptom(SymptomsManager.Instance.GetterRandNum());
         Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
 
         List<CarpetData> allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
@@ -86,7 +105,7 @@ public class SymptomNotifText : AttributesSync {
         allCarpets.Clear();
     }
 
-    private void DisplayNotificationText() {
+    public void DisplayNotificationText() {
         StartCoroutine(TimedDisplay());
     }
 

@@ -11,9 +11,21 @@ public class SymptomsManager : AttributesSync {
             "Sym2")]
     [SerializeField] private List<SymptomsSO> symptoms;
     private SymptomsSO currentSymptom = null;
-    [SynchronizableField] private int randNum;
+    [SynchronizableField] int randNum;
+
+
     Alteruna.Avatar avatar;
     float renderDistanceTimer = 2;
+
+
+    public void SetterRandNum(int AAA)
+    {
+        randNum = AAA;
+    }
+    public int GetterRandNum()
+    {
+        return randNum;
+    }
 
     private void Awake() {
         if(Instance != null && Instance != this) {
@@ -32,6 +44,7 @@ public class SymptomsManager : AttributesSync {
         return symptoms;
     }
 
+    [SynchronizableMethod]
     public void SetSymptom(int index) {
 
         currentSymptom = index == 999 ? null : symptoms[index];

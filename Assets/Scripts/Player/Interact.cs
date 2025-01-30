@@ -424,7 +424,6 @@ public class Interact : AttributesSync, IObserver
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
                 DIO.isPickedUp = true;
 
-                if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
                 //reset physics
                 //rb.freezeRotation = true;
@@ -442,6 +441,7 @@ public class Interact : AttributesSync, IObserver
                 DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
                 Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, true);
 
+                if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PickedUpStickyNote, this);
 
                 //Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             }
@@ -503,7 +503,7 @@ public class Interact : AttributesSync, IObserver
             if (spawnedGun != null && avatar.IsMe)
             {
                 if (heldObject == spawnedGun) Drop();
-                //  spawner.Despawn(spawnedGun);
+                  spawner.Despawn(spawnedGun);
             }
         }
         if (interaction == InteractionEnum.GivenTaskManagerRole)
