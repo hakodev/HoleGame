@@ -27,6 +27,7 @@ public class RoleAssignment : AttributesSync
 
     [SynchronizableField] public static int playerNumber=0;
     public static int playerID=-10; //client based id
+    [SynchronizableField] bool assignedRole = false;
 
 
     public static void ResetStatic()
@@ -77,6 +78,7 @@ public class RoleAssignment : AttributesSync
                     DetermineMaxNumberOfInfiltrators();
                     AssignRoles();
                     VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
+                    SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
                     Destroy(lobbyCanvas);
                     voting.BroadcastRemoteMethod(nameof(voting.DisplaySymptomNotifSync));
                 }

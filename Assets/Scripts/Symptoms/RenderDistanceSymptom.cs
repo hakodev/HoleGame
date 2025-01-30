@@ -52,13 +52,8 @@ public class RenderDistanceSymptom : MonoBehaviour
     {
         if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[2] && playerRole.GetRole()==Roles.Machine)
         {
-            renderDistanceTimer += Time.deltaTime;
 
-            if (renderDistanceTimer > 2)
-            {
-                SetRenderDistance();
-                renderDistanceTimer = 0;
-            }
+            SetRenderDistance();
         }
         else
         {

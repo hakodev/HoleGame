@@ -13,11 +13,10 @@ public class SymptomsManager : AttributesSync {
     private SymptomsSO currentSymptom = null;
     [SynchronizableField] int randNum;
 
-
     Alteruna.Avatar avatar;
     float renderDistanceTimer = 2;
 
-
+    [SynchronizableMethod]
     public void SetterRandNum(int AAA)
     {
         randNum = AAA;
@@ -47,8 +46,7 @@ public class SymptomsManager : AttributesSync {
     [SynchronizableMethod]
     public void SetSymptom(int index) {
 
-        currentSymptom = index == 999 ? null : symptoms[index];
-
+        currentSymptom = symptoms[index];
     }
 
     public int GetRandomNum() {

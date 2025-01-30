@@ -20,41 +20,39 @@ public class SymptomNotifText : AttributesSync {
     }
     private new void OnEnable() {
         base.OnEnable();
-
         // if (lobbySystem != null) {return;}
-        // BroadcastRemoteMethod(nameof(PickRandomSYmptom));
-        PickRandomSymptom();
+        //BroadcastRemoteMethod(nameof(PickRandomSymptom));
+        //PickRandomSymptom();
 
-
+        ApplyNewSymptom();
+        DisplayNotificationText();
+        //DisplayNotificationText();
     }
+
     private void PickRandomSymptom()
     {
-        if (!Multiplayer.GetUser().IsHost) { return; }
+        
         //randNum = SymptomsManager.Instance.GetRandomNum();
-        SymptomsManager.Instance.SetterRandNum(SymptomsManager.Instance.GetRandomNum());
-        Debug.Log("rocks " + Multiplayer.GetAvatar().IsMe);
 
 
-        BroadcastRemoteMethod(nameof(ApplyNewSymptom));
+        //if (!Multiplayer.GetAvatar().IsMe) return;
        
-        DisplayNotificationText();
     }
     
 
 
-    [SynchronizableMethod]
     public void ApplyNewSymptom() {
         //List<SymptomsSO> allSymptoms = SymptomsManager.Instance.GetSymptomsList();
         //int randNum = Random.Range(0, allSymptomsCount);
         //SymptomsManager.Instance.SetSymptom(allSymptoms[randNum]);
         //Debug.Log("rocks " + randNum);
-        SymptomsManager.Instance.SetSymptom(SymptomsManager.Instance.GetterRandNum());
+        
         Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
 
         List<CarpetData> allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
 
         // If it is the Jumpy Carpets symptom
-        if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1]) {
+        if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && GetComponent<PlayerRole>().GetRole() == Roles.Machine) {
             switch(CarpetManager.Instance.GetCarpetColorRandomNum()) {
                 case 0:
                     // red carpets
