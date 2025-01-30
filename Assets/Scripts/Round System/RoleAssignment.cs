@@ -64,26 +64,30 @@ public class RoleAssignment : AttributesSync
         hasGameStarted = newState; 
     }
 
+   
     private void Update()
     {
-        if(avatar.IsOwner)
+        if(!hasGameStarted)
         {
-            if (Input.GetKeyUp(KeyCode.G))
+            if (Multiplayer.GetUser().IsHost)
             {
-                if (totalPlayers.Count > 1)
+                if (Input.GetKeyUp(KeyCode.G))
                 {
-                    BroadcastRemoteMethod(nameof(SetHasGameStarted), true);
-                    FindRolelessPlayers();
-                    DetermineMaxNumberOfInfiltrators();
-                    AssignRoles();
-                    VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
-                    //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
-                    Destroy(lobbyCanvas);
-                    voting.BroadcastRemoteMethod(nameof(voting.DisplaySymptomNotifSync));
-                }
-                else
-                {
-                    StartCoroutine(DisplayFriends());
+                    if (totalPlayers.Count > 1)
+                    {
+                        BroadcastRemoteMethod(nameof(SetHasGameStarted), true);
+                        FindRolelessPlayers();
+                        DetermineMaxNumberOfInfiltrators();
+                        AssignRoles();
+                        VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
+                        //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
+                        //Destroy(lobbyCanvas);
+                        voting.AllVotersSymptomNotifStartOfGame();
+                    }
+                    else
+                    {
+                        StartCoroutine(DisplayFriends());
+                    }
                 }
             }
         }

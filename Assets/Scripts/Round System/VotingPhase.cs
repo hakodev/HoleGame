@@ -261,15 +261,27 @@ public class VotingPhase : AttributesSync {
     }
     private IEnumerator DisplayRandomlyVotedCanvas()
     {
+        Debug.Log("hoho2 " + Multiplayer.GetAvatar().name + " " + Multiplayer.GetUser().Name);
+
         randomlyVotedPlayer.SetActive(true);
         yield return new WaitForSeconds(6f); // How many seconds to display it on screen
         randomlyVotedPlayer.SetActive(false);
     }
     [SynchronizableMethod]
-    public void DisplaySymptomNotifSync()
+    private void DisplaySymptomNotifSync()
     {
         //Debug.Log("come on symptoms");
+        if (!avatar.IsMe) { return; }
         StartCoroutine(DisplaySymptomNotif());
+    }
+    public void AllVotersSymptomNotifStartOfGame()
+    {
+        Debug.Log("hoho " + Multiplayer.GetAvatar().name + " " + Multiplayer.GetUser().Name);
+        for (int i = 0; i < votingPlayers.Count; i++)
+        {
+            votingPlayers[i].BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
+        }
+        //BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
     }
 
     public void DespawnAllGuns()
