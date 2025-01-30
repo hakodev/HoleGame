@@ -172,10 +172,12 @@ public class VotingPhase : AttributesSync {
             randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
             pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
             pickedPlayer.IsTaskManager = true;
-            pickedPlayer.Commit();
+            //pickedPlayer.Commit();
 
             //Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
             taskManagerNameInHost = pickedPlayer.gameObject.name;
+            Debug.Log("pompous1 " + taskManagerNameInHost);
+
             for (int i = 0; i < equallyVotedPlayers.Count; i++)
             {
                 if (equallyVotedPlayers[i] == pickedPlayer) pickedPlayerIndex = i;
@@ -188,6 +190,7 @@ public class VotingPhase : AttributesSync {
     {
         VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
         //Debug.Log("BITTE_FinaleSync " + player.name);
+        Debug.Log("pompous2 " + taskManagerNameInHost);
         player.EndVotingPhaseFinale();
     }
 
@@ -205,6 +208,8 @@ public class VotingPhase : AttributesSync {
 
             VotingPhase hostVoter = Multiplayer.GetAvatars()[0].GetComponent<VotingPhase>();
             taskManagerNameInHost = hostVoter.taskManagerNameInHost;
+            Debug.Log("pompous3 " + taskManagerNameInHost);
+
             pickedPlayerIndex = hostVoter.pickedPlayerIndex;
             pickedPlayerNameText.text = taskManagerNameInHost;
 
