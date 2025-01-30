@@ -39,15 +39,15 @@ public class RoleAssignment : AttributesSync
     }
     private void Awake()
     {
-        avatar = transform.root.GetComponent<Alteruna.Avatar>();
-        youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
+
         playerNumber++;
     }
     private void Start()
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
-
-       // totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None).ToList();
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
+        // totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None).ToList();
 
         if (playerID == -10) playerID = playerNumber; //sets proper number
         Debug.Log("player's count " + totalPlayers.Count);

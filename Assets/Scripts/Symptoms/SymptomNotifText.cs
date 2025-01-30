@@ -5,11 +5,13 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class SymptomNotifText : AttributesSync {
+public class SymptomNotifText : AttributesSync
+{
     private TextMeshProUGUI notificationText;
     LobbySystem lobbySystem;
     static List<SymptomNotifText> symptomTexts = new List<SymptomNotifText>();
-    private void Awake() {
+    private void Awake()
+    {
         notificationText = GetComponent<TextMeshProUGUI>();
         lobbySystem = transform.root.GetComponentInChildren<LobbySystem>();
     }
@@ -18,7 +20,8 @@ public class SymptomNotifText : AttributesSync {
     {
         symptomTexts.Add(this);
     }
-    private new void OnEnable() {
+    private new void OnEnable()
+    {
         base.OnEnable();
         // if (lobbySystem != null) {return;}
         //BroadcastRemoteMethod(nameof(PickRandomSymptom));
@@ -31,36 +34,43 @@ public class SymptomNotifText : AttributesSync {
 
     private void PickRandomSymptom()
     {
-        
+
         //randNum = SymptomsManager.Instance.GetRandomNum();
 
 
         //if (!Multiplayer.GetAvatar().IsMe) return;
-       
+
     }
-    
 
 
-    public void ApplyNewSymptom() {
+
+    public void ApplyNewSymptom()
+    {
         //List<SymptomsSO> allSymptoms = SymptomsManager.Instance.GetSymptomsList();
         //int randNum = Random.Range(0, allSymptomsCount);
         //SymptomsManager.Instance.SetSymptom(allSymptoms[randNum]);
         //Debug.Log("rocks " + randNum);
-        
+
         Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
 
         List<CarpetData> allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
 
         // If it is the Jumpy Carpets symptom
-        if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && GetComponent<PlayerRole>().GetRole() == Roles.Machine) {
-            switch(CarpetManager.Instance.GetCarpetColorRandomNum()) {
+        if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && GetComponent<PlayerRole>().GetRole() == Roles.Machine)
+        {
+            switch (CarpetManager.Instance.GetCarpetColorRandomNum())
+            {
                 case 0:
                     // red carpets
-                    foreach(CarpetData carpet in allCarpets) {
-                        if(carpet.GetColor() == CarpetColor.Red) {
+                    foreach (CarpetData carpet in allCarpets)
+                    {
+                        if (carpet.GetColor() == CarpetColor.Red)
+                        {
                             carpet.IsCorrupted = true;
                             carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
-                        } else {
+                        }
+                        else
+                        {
                             carpet.IsCorrupted = false;
                             carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
                         }
@@ -68,11 +78,15 @@ public class SymptomNotifText : AttributesSync {
                     break;
                 case 1:
                     // green carpets
-                    foreach(CarpetData carpet in allCarpets) {
-                        if(carpet.GetColor() == CarpetColor.Green) {
+                    foreach (CarpetData carpet in allCarpets)
+                    {
+                        if (carpet.GetColor() == CarpetColor.Green)
+                        {
                             carpet.IsCorrupted = true;
                             carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
-                        } else {
+                        }
+                        else
+                        {
                             carpet.IsCorrupted = false;
                             carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
                         }
@@ -80,11 +94,15 @@ public class SymptomNotifText : AttributesSync {
                     break;
                 case 2:
                     // blue carpets
-                    foreach(CarpetData carpet in allCarpets) {
-                        if(carpet.GetColor() == CarpetColor.Blue) {
+                    foreach (CarpetData carpet in allCarpets)
+                    {
+                        if (carpet.GetColor() == CarpetColor.Blue)
+                        {
                             carpet.IsCorrupted = true;
                             carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
-                        } else {
+                        }
+                        else
+                        {
                             carpet.IsCorrupted = false;
                             carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
                         }
@@ -93,8 +111,11 @@ public class SymptomNotifText : AttributesSync {
                 default:
                     break; // never gonna happen
             }
-        } else {
-            foreach(CarpetData carpet in allCarpets) {
+        }
+        else
+        {
+            foreach (CarpetData carpet in allCarpets)
+            {
                 carpet.IsCorrupted = false;
                 carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
             }
@@ -103,19 +124,23 @@ public class SymptomNotifText : AttributesSync {
         allCarpets.Clear();
     }
 
-    public void DisplayNotificationText() {
+    public void DisplayNotificationText()
+    {
         StartCoroutine(TimedDisplay());
     }
 
-    private IEnumerator TimedDisplay() {
+    private IEnumerator TimedDisplay()
+    {
         notificationText.text = "The machines have caught a new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
                                $"{SymptomsManager.Instance.GetSymptom().Description}";
 
         // If it is the Jumpy Carpets symptom
-        if(SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1]) {
+        if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1])
+        {
             notificationText.text += $"\n\nThe corrupted carpets for this round are:\n";
-            notificationText.text += CarpetManager.Instance.carpetColorRandNum switch {
+            notificationText.text += CarpetManager.Instance.carpetColorRandNum switch
+            {
                 0 => "Red!",
                 1 => "Green!",
                 2 => "Blue!",

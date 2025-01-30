@@ -93,7 +93,7 @@ public class StickyNote : DynamicInteractableObject
         {
             AlignWithSurface(collision);
             Stick();
-            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
+           // PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
         }
     }
 
