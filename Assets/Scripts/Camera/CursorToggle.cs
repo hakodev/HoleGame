@@ -71,8 +71,11 @@ public class CursorToggle : MonoBehaviour
 
             if (!HitUI())
             {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                if(!StickyNote.currentlyDrawing)
+                {
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                }
             }
         }
     }
@@ -93,6 +96,7 @@ public class CursorToggle : MonoBehaviour
             foreach (RaycastResult result in raycastResults)
             {
                 hitCount++;
+                Debug.Log("hitCanvas " + canvases[i]);
             }
         }
         return hitCount > 0;

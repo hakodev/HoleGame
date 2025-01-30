@@ -12,7 +12,7 @@ public class VotingPhase : AttributesSync {
     private PlayerRole player;
 
     [SerializeField] private GameObject playerVoteButton;
-    [SerializeField] TMP_Text pickedPlayerNameText;
+    [SerializeField] TextMeshProUGUI pickedPlayerNameText;
     [SerializeField] private GameObject votingCanvas;
     PopUp votingPopUp;
 
@@ -26,7 +26,7 @@ public class VotingPhase : AttributesSync {
 
 
     int randomlyPickedPlayer;
-    List<VotingPhase> votingPlayers = new List<VotingPhase>();
+    static List<VotingPhase> votingPlayers = new List<VotingPhase>();
     [SynchronizableField] int pickedPlayerIndex;
 
     private bool hasVoted = false;
@@ -42,16 +42,17 @@ public class VotingPhase : AttributesSync {
     {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
-        totalALivePlayers.Add(player);
-        votingPlayers.Add(GetComponent<VotingPhase>());
-        spawner = FindAnyObjectByType<Alteruna.Spawner>();
-        endGameResolution = GetComponentInChildren<EndGameResolution>();
-        votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
     }
     private void Start() {
 
-    }
+        spawner = FindAnyObjectByType<Alteruna.Spawner>();
+        endGameResolution = GetComponentInChildren<EndGameResolution>();
+        votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
 
+        totalALivePlayers.Add(player);
+        votingPlayers.Add(this);
+
+    }
 
     public bool once = false;
     public void InitiateVotingPhase() {
@@ -174,8 +175,12 @@ public class VotingPhase : AttributesSync {
             pickedPlayer.IsTaskManager = true;
             pickedPlayer.Commit();
 
-            //Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
+
+
+            Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
             taskManagerNameInHost = pickedPlayer.gameObject.name;
+            Debug.Log("pompous1 " + taskManagerNameInHost);
+
             for (int i = 0; i < equallyVotedPlayers.Count; i++)
             {
                 if (equallyVotedPlayers[i] == pickedPlayer) pickedPlayerIndex = i;
@@ -188,6 +193,7 @@ public class VotingPhase : AttributesSync {
     {
         VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
         //Debug.Log("BITTE_FinaleSync " + player.name);
+        Debug.Log("pompous2 " + taskManagerNameInHost);
         player.EndVotingPhaseFinale();
     }
 
@@ -202,15 +208,19 @@ public class VotingPhase : AttributesSync {
         else
         {
             //Debug.Log("BITTE_Finale " + avatar.name + " " + player.IsTaskManager);
-
             VotingPhase hostVoter = Multiplayer.GetAvatars()[0].GetComponent<VotingPhase>();
             taskManagerNameInHost = hostVoter.taskManagerNameInHost;
+
             pickedPlayerIndex = hostVoter.pickedPlayerIndex;
             pickedPlayerNameText.text = taskManagerNameInHost;
 
             //Debug.Log("BITTE_Finale2 " + taskManagerNameInHost + " " + pickedPlayerIndex    );
 
-            if (player.IsTaskManager) GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+            if (player.IsTaskManager)
+            {
+                Debug.Log(player.IsTaskManager + player.gameObject.name);
+                GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+            }
 
             StartCoroutine(DisplayTaskManager());
             StartCoroutine(DisplaySymptomNotif());
