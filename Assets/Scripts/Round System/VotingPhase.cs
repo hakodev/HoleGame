@@ -45,16 +45,14 @@ public class VotingPhase : AttributesSync {
     }
     private void Start() {
 
+        spawner = FindAnyObjectByType<Alteruna.Spawner>();
+        endGameResolution = GetComponentInChildren<EndGameResolution>();
+        votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
+
         totalALivePlayers.Add(player);
         votingPlayers.Add(this);
 
     }
-    private void Start() {
-        spawner = FindAnyObjectByType<Alteruna.Spawner>();
-        endGameResolution = GetComponentInChildren<EndGameResolution>();
-        votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
-    }
-
 
     public bool once = false;
     public void InitiateVotingPhase() {
