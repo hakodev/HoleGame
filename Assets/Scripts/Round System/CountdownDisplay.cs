@@ -64,9 +64,9 @@ public class CountdownDisplay : AttributesSync {
         VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
         //Debug.Log(player.gameObject.name);
         player.EndVotingPhase();
-        
 
 
+        SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
         SymptomNotifText[] allNotifTexts = FindObjectsByType<SymptomNotifText>(FindObjectsSortMode.None);
         foreach(SymptomNotifText notifText in allNotifTexts)
         {

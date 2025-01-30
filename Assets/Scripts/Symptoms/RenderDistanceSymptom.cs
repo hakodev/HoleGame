@@ -1,5 +1,3 @@
-using Alteruna;
-using System.Threading;
 using UnityEngine;
 
 public class RenderDistanceSymptom : MonoBehaviour
@@ -12,9 +10,12 @@ public class RenderDistanceSymptom : MonoBehaviour
 
     private bool isInactive;
 
+    private PlayerRole playerRole;
+
     private void Start()
     {
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        playerRole = transform.root.GetComponent<PlayerRole>();
         spheres = new Transform[3];
 
         for (int i = 0; i < transform.childCount; i++) 
@@ -49,15 +50,10 @@ public class RenderDistanceSymptom : MonoBehaviour
 
     private void Update()
     {
-        if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[2])
+        if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[2] && playerRole.GetRole()==Roles.Machine)
         {
-            renderDistanceTimer += Time.deltaTime;
 
-            if (renderDistanceTimer > 2)
-            {
-                SetRenderDistance();
-                renderDistanceTimer = 0;
-            }
+            SetRenderDistance();
         }
         else
         {

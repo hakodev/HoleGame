@@ -17,14 +17,15 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     [SerializeField] float popInTime;
     [SerializeField] float popOutTime;
     [SerializeField] float overPopImpact;
-    [SerializeField] GameObject screenPopUpPrefab;
-    [SerializeField] GameObject namePopUpPrefab;
-    [SerializeField] GameObject colorPickerPrefab;
-    UIInput uiInput;
+   
+        [SerializeField] GameObject screenPopUpPrefab;
+        [SerializeField] GameObject namePopUpPrefab;
+        [SerializeField] GameObject colorPickerPrefab;
+        UIInput uiInput;
 
-    public GameObject screenObject;
-    public Renderer screenRenderer;
-    public RenderTexture screenRenderTexture;
+        public GameObject screenObject;
+        public Renderer screenRenderer;
+        public RenderTexture screenRenderTexture;
 
     [SerializeField] bool triggersCaptcha = false;
     public void ToggleTriggerCaptcha(bool newState)
@@ -98,6 +99,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
     public void ClickedVerifyNameButton()
     {
 
+
         nameInputFieldText = transform.parent.GetComponentInChildren<TMP_InputField>();
 
         if (nameInputFieldText.text == string.Empty)
@@ -108,6 +110,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         }
         else
         {
+            /*
             Texture screenTexture = screenRenderer.material.GetTexture("_MaskTexture");
             Texture2D texture2D = new Texture2D(screenTexture.width, screenTexture.height, TextureFormat.RGBA32, false);
 
@@ -130,6 +133,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
             //RenderTexture.active = previous;
             //RenderTexture.ReleaseTemporary(screenRenderTexture);
 
+            */
             screenObject.SetActive(false);
             uiInput.SetPlayerNameSync(nameInputFieldText.text);
             roomCamera.SetActive(true);
