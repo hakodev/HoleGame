@@ -49,7 +49,7 @@ public class LobbySystem : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        SymptomsManager.Instance.SetSymptom(999); // no symptom
+    //    SymptomsManager.Instance.SetSymptom(999); // no symptom
     }
 
     void SetCarpetParams()

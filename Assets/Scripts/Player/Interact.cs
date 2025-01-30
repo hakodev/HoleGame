@@ -503,7 +503,8 @@ public class Interact : AttributesSync, IObserver
             if (spawnedGun != null && avatar.IsMe)
             {
                 if (heldObject == spawnedGun) Drop();
-                //  spawner.Despawn(spawnedGun);
+                Debug.Log("despawned this " + spawnedGun);
+                  spawner.Despawn(spawnedGun);
             }
         }
         if (interaction == InteractionEnum.GivenTaskManagerRole)
@@ -512,6 +513,8 @@ public class Interact : AttributesSync, IObserver
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
             pickedUp = spawnedGun;
+
+
 
             BroadcastRemoteMethod(nameof(TryPickUp));
         }

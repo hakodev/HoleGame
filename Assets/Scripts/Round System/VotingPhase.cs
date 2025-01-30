@@ -12,7 +12,7 @@ public class VotingPhase : AttributesSync {
     private PlayerRole player;
 
     [SerializeField] private GameObject playerVoteButton;
-    [SerializeField] TMP_Text pickedPlayerNameText;
+    [SerializeField] TextMeshProUGUI pickedPlayerNameText;
     [SerializeField] private GameObject votingCanvas;
     PopUp votingPopUp;
 
@@ -42,14 +42,14 @@ public class VotingPhase : AttributesSync {
     {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
+    }
+    private void Start() {
+
         totalALivePlayers.Add(player);
         votingPlayers.Add(GetComponent<VotingPhase>());
         spawner = FindAnyObjectByType<Alteruna.Spawner>();
         endGameResolution = GetComponentInChildren<EndGameResolution>();
         votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
-    }
-    private void Start() {
-
     }
 
 
@@ -172,9 +172,11 @@ public class VotingPhase : AttributesSync {
             randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
             pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
             pickedPlayer.IsTaskManager = true;
-            //pickedPlayer.Commit();
+            pickedPlayer.Commit();
 
-            //Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
+
+
+            Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
             taskManagerNameInHost = pickedPlayer.gameObject.name;
             Debug.Log("pompous1 " + taskManagerNameInHost);
 
@@ -205,17 +207,19 @@ public class VotingPhase : AttributesSync {
         else
         {
             //Debug.Log("BITTE_Finale " + avatar.name + " " + player.IsTaskManager);
-
             VotingPhase hostVoter = Multiplayer.GetAvatars()[0].GetComponent<VotingPhase>();
             taskManagerNameInHost = hostVoter.taskManagerNameInHost;
-            Debug.Log("pompous3 " + taskManagerNameInHost);
 
             pickedPlayerIndex = hostVoter.pickedPlayerIndex;
             pickedPlayerNameText.text = taskManagerNameInHost;
 
             //Debug.Log("BITTE_Finale2 " + taskManagerNameInHost + " " + pickedPlayerIndex    );
 
-            if (player.IsTaskManager) GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+            if (player.IsTaskManager)
+            {
+                Debug.Log(player.IsTaskManager + player.gameObject.name);
+                GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+            }
 
             StartCoroutine(DisplayTaskManager());
             StartCoroutine(DisplaySymptomNotif());
