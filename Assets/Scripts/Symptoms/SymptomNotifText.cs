@@ -1,5 +1,4 @@
 using Alteruna;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -10,42 +9,41 @@ public class SymptomNotifText : AttributesSync
     private TextMeshProUGUI notificationText;
     LobbySystem lobbySystem;
     static List<SymptomNotifText> symptomTexts = new List<SymptomNotifText>();
+    Alteruna.Avatar avatar;
+
     private void Awake()
     {
         notificationText = GetComponent<TextMeshProUGUI>();
         lobbySystem = transform.root.GetComponentInChildren<LobbySystem>();
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        SymptomsManager.Instance.SymptomNotifTextWasSpawned(this);
+        Debug.Log("health " + avatar.name);
     }
+    
+    public static List<SymptomNotifText> GetSymptomNotifTexts() { return symptomTexts; }
 
     private void Start()
     {
         symptomTexts.Add(this);
     }
+
+    bool hasBeenCalled = false;
+    
     private new void OnEnable()
     {
         base.OnEnable();
         // if (lobbySystem != null) {return;}
-        //BroadcastRemoteMethod(nameof(PickRandomSymptom));
-        //PickRandomSymptom();
+        if (!avatar.IsMe) { return; }
 
-        ApplyNewSymptom();
-        DisplayNotificationText();
-        //DisplayNotificationText();
+        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
     }
 
-    private void PickRandomSymptom()
+    List<CarpetData> allCarpets;
+    public void ApplyEffectsOfSymptom()
     {
+        Debug.Log("healthcare maybe get past this return" + avatar.name);
 
-        //randNum = SymptomsManager.Instance.GetRandomNum();
-
-
-        //if (!Multiplayer.GetAvatar().IsMe) return;
-
-    }
-
-
-
-    public void ApplyNewSymptom()
-    {
+        if (avatar.IsMe!) { return; }
         //List<SymptomsSO> allSymptoms = SymptomsManager.Instance.GetSymptomsList();
         //int randNum = Random.Range(0, allSymptomsCount);
         //SymptomsManager.Instance.SetSymptom(allSymptoms[randNum]);
@@ -53,9 +51,10 @@ public class SymptomNotifText : AttributesSync
 
         Debug.Log($"New symptom applied: {SymptomsManager.Instance.GetSymptom().Name}");
 
-        List<CarpetData> allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
+        if(allCarpets==null) allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
 
         // If it is the Jumpy Carpets symptom
+        Debug.Log("healthcare " + SymptomsManager.Instance.GetSymptom() + " " + SymptomsManager.Instance.GetSymptomsList()[1]);
         if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && GetComponent<PlayerRole>().GetRole() == Roles.Machine)
         {
             switch (CarpetManager.Instance.GetCarpetColorRandomNum())
@@ -124,12 +123,7 @@ public class SymptomNotifText : AttributesSync
         allCarpets.Clear();
     }
 
-    public void DisplayNotificationText()
-    {
-        StartCoroutine(TimedDisplay());
-    }
-
-    private IEnumerator TimedDisplay()
+    public void ChangeNotifText()
     {
         notificationText.text = "The machines have caught a new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
@@ -148,7 +142,7 @@ public class SymptomNotifText : AttributesSync
             };
         }
 
-        yield return new WaitForSeconds(10f);
-        this.transform.parent.parent.gameObject.SetActive(false); // disable canvas
+       // yield return new WaitForSeconds(30f);
+       // this.transform.parent.parent.gameObject.SetActive(false); // disable canvas
     }
 }

@@ -2,7 +2,6 @@ using Alteruna;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -78,7 +77,7 @@ public class RoleAssignment : AttributesSync
                     DetermineMaxNumberOfInfiltrators();
                     AssignRoles();
                     VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
-                    SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
+                    //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
                     Destroy(lobbyCanvas);
                     voting.BroadcastRemoteMethod(nameof(voting.DisplaySymptomNotifSync));
                 }

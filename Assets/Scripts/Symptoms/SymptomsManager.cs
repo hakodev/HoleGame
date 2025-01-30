@@ -11,20 +11,13 @@ public class SymptomsManager : AttributesSync {
             "Sym2")]
     [SerializeField] private List<SymptomsSO> symptoms;
     private SymptomsSO currentSymptom = null;
-    [SynchronizableField] int randNum;
+    [SynchronizableField] int randNum; //should only be modified by host
 
     Alteruna.Avatar avatar;
+    SymptomNotifText thisAvatarSymptomNotifText;
     float renderDistanceTimer = 2;
 
-    [SynchronizableMethod]
-    public void SetterRandNum(int AAA)
-    {
-        randNum = AAA;
-    }
-    public int GetterRandNum()
-    {
-        return randNum;
-    }
+
 
     private void Awake() {
         if(Instance != null && Instance != this) {
@@ -43,16 +36,35 @@ public class SymptomsManager : AttributesSync {
         return symptoms;
     }
 
+    public void SymptomNotifTextWasSpawned(SymptomNotifText caller)
+    {
+        avatar = caller.transform.root.GetComponent<Alteruna.Avatar>();
+        Debug.Log("health " + avatar.name);
+        thisAvatarSymptomNotifText = caller;
+    }
+
     [SynchronizableMethod]
     public void SetSymptom(int index) {
 
         currentSymptom = symptoms[index];
+        Debug.Log("healthcare2 " + Multiplayer.GetUser().Name + " " + Multiplayer.GetAvatar().name);
+
+        Debug.Log("healthcare avatartext " + thisAvatarSymptomNotifText + avatar.name);
+        Debug.Log("healthcare sequencing " + Multiplayer.GetUser().Name + " " + Multiplayer.GetAvatar().name);
+        thisAvatarSymptomNotifText.ApplyEffectsOfSymptom();
+        thisAvatarSymptomNotifText.ChangeNotifText();
+        Debug.Log("healthcare sequencing " + Multiplayer.GetUser().Name + " " + Multiplayer.GetAvatar().name);
+
     }
 
-    public int GetRandomNum() {
+    public void PickRandNumberHostAndSetSymptomForAll() {
+        if (!Multiplayer.GetUser().IsHost) { return; }
+
+        Debug.Log("healthcare " + Multiplayer.GetUser().Name + " " + Multiplayer.GetAvatar().name);
         randNum = Random.Range(0, symptoms.Count);
-        return randNum;
+        BroadcastRemoteMethod(nameof(SetSymptom), randNum);
     }
 
+    public int GetRandNumber() { return randNum; }
 
 }
