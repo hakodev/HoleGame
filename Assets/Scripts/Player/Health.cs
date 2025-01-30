@@ -1,5 +1,6 @@
 using UnityEngine;
 using Alteruna;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -17,7 +18,7 @@ public class Health : AttributesSync {
     private EndGameResolution endGameResolution;
     private TransformSynchronizable transformSynchronizable;
 
-    [SerializeField] private List<Object> objectsToDestroyUponDeath;
+    //[SerializeField] private List<Object> objectsToDestroyUponDeath;
 
     private void Awake() {
         playerController = GetComponent<PlayerController>();
@@ -49,19 +50,21 @@ public class Health : AttributesSync {
     [SynchronizableMethod]
     private void KillPlayer() {
         Debug.Log("Player died!");
-        playerController.MovementEnabled = false;
-        characterController.enabled = false;
-        deadScreen.SetActive(true);
+        //playerController.MovementEnabled = false;
+        //characterController.enabled = false;
+        //deadScreen.SetActive(true);
+        StartCoroutine(DeadScreenDisplay());
         mishSync.SetStance(StanceEnum.Dead);
         VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
         transformSynchronizable.RefreshRate = 0f;
 
-        foreach(Object objectt in objectsToDestroyUponDeath) {
-            Destroy(objectt);
-            objectsToDestroyUponDeath.Remove(objectt);
-        }
-
         endGameResolution.CheckForEndGame();
+    }
+
+    private IEnumerator DeadScreenDisplay() {
+        deadScreen.SetActive(true);
+        yield return new WaitForSeconds(4f);
+        deadScreen.SetActive(false);
     }
 
     public float GetHealth()

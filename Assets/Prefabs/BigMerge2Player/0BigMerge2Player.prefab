@@ -742,15 +742,8 @@ MonoBehaviour:
   LocalMethodBehavior: 1
   deadScreen: {fileID: 3155170394574653967}
   objectsToDestroyUponDeath:
-  - {fileID: 3393442953825086244}
   - {fileID: 6200773965861047665}
-  - {fileID: 4226180939155489860}
-  - {fileID: 8654192742448875819}
-  - {fileID: 6199238965892857220}
-  - {fileID: 3933098515540793186}
   - {fileID: 3247772703483496256}
-  - {fileID: 3843869579870924853}
-  - {fileID: 8666659295885315574}
 --- !u!114 &3393442953825086244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5571,11 +5564,6 @@ PrefabInstance:
 --- !u!4 &539965675802405738 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3727677605208202113, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
-  m_PrefabInstance: {fileID: 3802455235705057515}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4226180939155489860 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1036779884072268975, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
   m_PrefabInstance: {fileID: 3802455235705057515}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5178066372033882247 stripped
