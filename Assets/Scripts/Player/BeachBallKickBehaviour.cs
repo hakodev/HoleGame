@@ -1,8 +1,10 @@
+using System.Linq;
 using UnityEngine;
 
 public class BeachBallKickBehaviour : MonoBehaviour {
     [SerializeField] private Vector3 extents;
     [SerializeField] private float kickForce = 12f;
+    [SerializeField] private CarpetDetection carpetDetection;
 
     private Collider[] currentColliders;
     private CharacterController characterController;
@@ -21,13 +23,13 @@ public class BeachBallKickBehaviour : MonoBehaviour {
         if(currentColliders.Length == 0) return;
 
         foreach(Collider collider in currentColliders) {
-            if(!collider.gameObject.CompareTag("Ball")) continue;
+            if(collider.gameObject.GetComponent<Rigidbody>() && collider.gameObject.CompareTag("Ball")) {
+                Rigidbody ballRigidbody = collider.gameObject.GetComponent<Rigidbody>();
 
-            Rigidbody ballRigidbody = collider.gameObject.GetComponent<Rigidbody>();
-
-            if(ballRigidbody && characterController.isGrounded) {
-                Vector3 direction = (ballRigidbody.transform.position - this.transform.position).normalized;
-                ballRigidbody.AddForce(direction * kickForce, ForceMode.Impulse);
+                if(characterController.isGrounded && carpetDetection.IsStandingOnCarpet) {
+                    Vector3 direction = (ballRigidbody.transform.position - this.transform.position).normalized;
+                    ballRigidbody.AddForce(direction * kickForce, ForceMode.Impulse);
+                }
             }
         }
     }

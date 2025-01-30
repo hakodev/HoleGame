@@ -343,6 +343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   extents: {x: 0.3, y: 0.2, z: 0.3}
   kickForce: 12
+  carpetDetection: {fileID: 2394153267043893264}
 --- !u!1 &1719338351492321157
 GameObject:
   m_ObjectHideFlags: 0
