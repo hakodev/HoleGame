@@ -147,7 +147,7 @@ public class VotingPhase : AttributesSync {
 
         PlayerRole pickedPlayer = totalALivePlayers[0];
         List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
-
+        equallyVotedPlayers.Add(pickedPlayer);
 
 
         for (int i = 1; i < totalALivePlayers.Count; i++)

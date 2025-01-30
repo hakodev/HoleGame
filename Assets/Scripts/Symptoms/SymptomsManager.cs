@@ -48,11 +48,6 @@ public class SymptomsManager : AttributesSync {
             avatar = Multiplayer.GetAvatar();
             thisAvatarSymptomNotifText = avatar.transform.GetComponentInChildren<SymptomNotifText>(true);
         }
-        StartCoroutine(Delay());
-    }
-    IEnumerator Delay()
-    {
-        yield return new WaitForSeconds(0.1f);
         thisAvatarSymptomNotifText.ApplyEffectsOfSymptom();
         thisAvatarSymptomNotifText.ChangeNotifText();
     }
