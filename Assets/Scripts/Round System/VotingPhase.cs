@@ -42,14 +42,12 @@ public class VotingPhase : AttributesSync {
     {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
-    }
-    private void Start() {
-
         totalALivePlayers.Add(player);
         votingPlayers.Add(this);
 
     }
-    private void Start() {
+    private void Start()
+    {
         spawner = FindAnyObjectByType<Alteruna.Spawner>();
         endGameResolution = GetComponentInChildren<EndGameResolution>();
         votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
