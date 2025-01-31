@@ -265,10 +265,9 @@ public class Interact : AttributesSync, IObserver
             Vector3 temp = new Vector3(Mathf.Abs(bounds.x * alignsBestWith.normalized.x), Mathf.Abs(bounds.y * alignsBestWith.normalized.y), Mathf.Abs(bounds.z * alignsBestWith.normalized.z));
 
 
-            float divider = 2;
+            float divider = 3f;
             if (heldObject.gameObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) divider = 20;
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
-            Debug.Break();
 
             //rbToTrack.SetPosition(heldObject.transform.position);
 
@@ -286,8 +285,6 @@ public class Interact : AttributesSync, IObserver
                 heldObject.transform.up = hit.normal;
                 //rbToTrack.SetRotation(heldObject.transform.rotation);
             }
-            Debug.Break();
-
             //Debug.Log(hit.collider.gameObject.name);
             Transform hitRoot = hit.collider.transform.root;
             if (hitRoot.name.Contains("CoffeeMachine"))
@@ -382,7 +379,7 @@ public class Interact : AttributesSync, IObserver
         DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("DynamicAwake");
         DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
-        Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, false);
+        //Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, false);
 
 
         heldObject.transform.SetParent(null);
@@ -450,8 +447,8 @@ public class Interact : AttributesSync, IObserver
 
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
                 DIO.BroadcastRemoteMethod("DynamicAwake");
-                DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
-                Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, true);
+                DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), true);
+                //Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, true);
 
 
                 //Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
