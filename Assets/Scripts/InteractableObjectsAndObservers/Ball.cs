@@ -5,8 +5,8 @@ public class Ball : DynamicInteractableObject
 
     PlayerController player;
     Rigidbody rb;
-    [SerializeField] float extraBounce;
-    [SerializeField] float kickStrength;
+    //[SerializeField] float extraBounce;
+   // [SerializeField] float kickStrength;
 
     protected override void Awake()
     {
@@ -30,8 +30,9 @@ public class Ball : DynamicInteractableObject
     {
         base.OnCollisionEnter(collision);
         //PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetBouncyBall);
-        TrampolinePlayer(collision);
+        //TrampolinePlayer(collision);
     }
+    /*
     private void TrampolinePlayer(Collision collision)
     {
         player = collision.collider.gameObject.GetComponent<PlayerController>();
@@ -43,4 +44,5 @@ public class Ball : DynamicInteractableObject
             rb.AddForce(kickStrength * dir);
         }
     }
+    */
 }

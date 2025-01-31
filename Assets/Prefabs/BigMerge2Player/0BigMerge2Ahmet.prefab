@@ -342,8 +342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extents: {x: 0.3, y: 0.25, z: 0.3}
-  kickForce: 11
-  carpetDetection: {fileID: 2394153267043893264}
+  kickForce: 3
 --- !u!1 &1719338351492321157
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,9 +672,9 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.27
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_Radius: 0.15
+  m_SlopeLimit: 60
+  m_StepOffset: 0.2
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
@@ -2127,7 +2126,7 @@ Transform:
   m_GameObject: {fileID: 3910898227450714191}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.523, z: -0.174}
+  m_LocalPosition: {x: 0, y: 0.523, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

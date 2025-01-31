@@ -13,6 +13,7 @@ public class RoleAssignment : AttributesSync
 
     private int maxNumOfInfiltrators = 1;
     Alteruna.Avatar avatar;
+    public static Alteruna.Avatar userAvatar;
     CanvasGroup youNeedFriends;
 
 
@@ -35,6 +36,7 @@ public class RoleAssignment : AttributesSync
         playerID = -10;
         playerNumber = 0;
         totalPlayers.Clear();
+        userAvatar = null;
     }
     private void Awake()
     {
@@ -45,6 +47,7 @@ public class RoleAssignment : AttributesSync
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
         avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        if(avatar.IsMe) userAvatar = avatar;
         youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
         // totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None).ToList();
 

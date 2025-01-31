@@ -9,6 +9,9 @@ public class CarpetDetection : MonoBehaviour
     PlayerRole playerRole;
     Alteruna.Avatar avatar;
 
+    Collider thisCarpetCollider;
+    CarpetData carpetData;
+
     private AudioSource[] audioSources;
 
     public bool IsStandingOnCarpet { get; private set; } = false;
@@ -43,9 +46,19 @@ public class CarpetDetection : MonoBehaviour
             }
             IsStandingOnCarpet = true;
 
-            if (collider.gameObject.GetComponent<CarpetData>())
+            //so this only happens once guys
+            if(collider != thisCarpetCollider)
             {
-                CarpetData carpetData = collider.gameObject.GetComponent<CarpetData>();
+                if(collider.gameObject.GetComponent<CarpetData>())
+                {
+                    thisCarpetCollider = collider;
+                    carpetData = collider.gameObject.GetComponent<CarpetData>();
+                }
+            }
+
+
+            if (collider == thisCarpetCollider)
+            {
                 if (lobby == null)
                 {
                     if (carpetData.IsCorrupted)

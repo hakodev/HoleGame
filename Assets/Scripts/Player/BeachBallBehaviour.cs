@@ -1,54 +1,59 @@
 using UnityEngine;
 
-public class BeachBallBehaviour : DynamicInteractableObject {
+public class BeachBallBehaviour : MonoBehaviour {
     [SerializeField] private Vector3 extents;
-    [SerializeField] private float kickForce = 2f;
-    [SerializeField] private CarpetDetection carpetDetection;
+    [SerializeField] private float kickForce = 11f;
+    //[SerializeField] private CarpetDetection carpetDetection;
 
-    private Collider[] currentColliders;
     private CharacterController characterController;
     private PlayerController playerController;
 
-    protected override void Start() {
-        base.Start();
+    private void Start() {
         characterController = transform.root.gameObject.GetComponent<CharacterController>();
         playerController = transform.root.gameObject.GetComponent<PlayerController>();
     }
 
-    protected override void Update() {
-        base.Update();
-        CheckForBallCollision();
+    private void Update() {
     }
 
-
-    public override void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
+    Rigidbody ballRigidbody;
+    GameObject previouslyCollidedWithThisBall;
+    int ignoreSelfPlayerLayer = ~(1 << 10);
+    void OnControllerColliderHit(ControllerColliderHit conHit)
     {
+        if (conHit.gameObject.CompareTag("Ball")) //yes this is only for yoga balls
+        {
+            if (previouslyCollidedWithThisBall != conHit.gameObject)
+            {
+                Debug.Log("oop new ball");
+                previouslyCollidedWithThisBall = conHit.gameObject;
+                ballRigidbody = previouslyCollidedWithThisBall.GetComponent<Rigidbody>();
+            }
 
-    }
-    public override void Use() 
-    {
-    
-    }
-
-
-    private void CheckForBallCollision() {
-        currentColliders = Physics.OverlapBox(transform.position, extents, Quaternion.identity);
-
-        if(currentColliders.Length == 0) return;
-
-        foreach(Collider collider in currentColliders) {
-            if(collider.gameObject.GetComponent<Rigidbody>() && collider.gameObject.CompareTag("Ball")) {
-                Rigidbody ballRigidbody = collider.gameObject.GetComponent<Rigidbody>();
-
-                if(characterController.isGrounded && carpetDetection.IsStandingOnCarpet) {
-                    Vector3 direction = (ballRigidbody.transform.position - this.transform.position).normalized;
-                    ballRigidbody.AddForce(direction * kickForce, ForceMode.Impulse);
-                } else {
-                    playerController.Jump();
+            if (characterController.isGrounded)
+            {
+                RaycastHit hit;
+                Debug.DrawRay(transform.position, Vector3.down* (characterController.height), Color.magenta);
+                if (Physics.Raycast(transform.position, Vector3.down, out hit, characterController.height, ignoreSelfPlayerLayer)) //last number ignores selfplayer layer
+                {
+                    Debug.Log("oop raycast");
+                    if (hit.collider.transform.gameObject == previouslyCollidedWithThisBall)
+                    {
+                        Debug.Log("oop obj");
+                        playerController.Jump();
+                    }
+                    else
+                    {
+                        Debug.Log("oop jump");
+                        Vector3 direction = (ballRigidbody.transform.position - this.transform.position).normalized;
+                        ballRigidbody.AddForce(direction * kickForce, ForceMode.Impulse);
+                    }
                 }
             }
         }
+
     }
+
 
     private void OnDrawGizmos() {
         Gizmos.DrawWireCube(transform.position, extents * 2);

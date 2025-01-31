@@ -297,53 +297,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &1690142335129562044
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3717276532838660401}
-  - component: {fileID: 1970362934871855503}
-  m_Layer: 9
-  m_Name: BeachBallBehaviour
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3717276532838660401
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1690142335129562044}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.85, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6964225019351602572}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1970362934871855503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1690142335129562044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 406bff8bce152114ea1ee28aff8cb6f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  extents: {x: 0.3, y: 0.25, z: 0.3}
-  kickForce: 11
-  carpetDetection: {fileID: 2394153267043893264}
 --- !u!1 &1719338351492321157
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,6 +519,7 @@ GameObject:
   - component: {fileID: 7886903507939173138}
   - component: {fileID: 3393442953825086244}
   - component: {fileID: 5667255255816071511}
+  - component: {fileID: 5794261390685907181}
   m_Layer: 9
   m_Name: 0BigMerge2Player
   m_TagString: Player
@@ -595,7 +549,6 @@ Transform:
   - {fileID: 1599807874574610994}
   - {fileID: 6873708329993151148}
   - {fileID: 3865020088931088881}
-  - {fileID: 3717276532838660401}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &22722286681070130
@@ -827,6 +780,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 075ce888568c3b046904e6cdd34d6f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5794261390685907181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029518652290077993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406bff8bce152114ea1ee28aff8cb6f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  extents: {x: 0.3, y: 0.25, z: 0.3}
+  kickForce: 3
 --- !u!1 &2380961244887926389
 GameObject:
   m_ObjectHideFlags: 0

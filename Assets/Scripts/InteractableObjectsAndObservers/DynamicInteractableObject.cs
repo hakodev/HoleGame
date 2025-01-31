@@ -5,7 +5,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 {
     protected Alteruna.Avatar currentlyOwnedByAvatar;
     protected CharacterController ownedCharacterController;
-
+    Alteruna.Avatar userAvatar;
 
     [SynchronizableField] public bool isPickedUp;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
@@ -16,6 +16,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     Collider colliderDynamic;
 
     protected float minVelocityToProduceSound = 0.1f;
+
+    bool awake = false;
 
     [Header("removed serialize fields for speed. Nsync Objects is Here. x - when object is inactive(high number), y - when object is active(low number), also in the script both are 30 2, for ease of access")]
      Vector2 syncEveryNUpdates = new Vector2(30, 2);
@@ -35,8 +37,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     protected virtual void Update()
     {
-        //SelfSleepIfUnmoving();
-        //CheckForMovement();
+        SelfSleepIfUnmoving();
+        CheckForMovement();
     }
     [SynchronizableMethod]
     public void ToggleRigidbody(bool newstate)
@@ -66,25 +68,37 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         }      
     }
 
-        protected virtual void OnCollisionEnter(Collision collision)
-        {
-           
-        }
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
 
+    }
+    bool initiatedPlayer = false;
+    private void CheckForPlayer()
+    {
+        if (!initiatedPlayer) {
+            if (RoleAssignment.userAvatar != null)
+            {
+                userAvatar = RoleAssignment.userAvatar;
+                initiatedPlayer = true;
+            }
+        }
+    }
     private void SelfSleepIfUnmoving()
     {
-        if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
+        CheckForPlayer();
+        if (userAvatar==null || !userAvatar.IsMe) { return; }
+
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
         if (currentlyOwnedByAvatar==null)
         {
             if (rbDynamic.linearVelocity.magnitude < 0.1f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
-                if (timeSinceLastSignificantMovement > 5f)
+                if (timeSinceLastSignificantMovement > 3f)
                 {
                 //    Debug.Log("sleep");
                     timeSinceLastSignificantMovement = 0;
-                    BroadcastRemoteMethod(nameof(DynamicSleep));
+                    if(awake) BroadcastRemoteMethod(nameof(DynamicSleep));
                 }
             }
         }
@@ -95,31 +109,33 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     private void CheckForMovement()
     {
-        if (currentlyOwnedByAvatar == null || !currentlyOwnedByAvatar.IsMe) { return; }
+        if (userAvatar == null || !userAvatar.IsMe) { return; }
 
 
         if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar!=null)
         {
-        //    Debug.Log("awake");
-            BroadcastRemoteMethod(nameof(DynamicAwake));
+            timeSinceLastSignificantMovement = 0;
+            if(!awake) BroadcastRemoteMethod(nameof(DynamicAwake));
         }
     }
     [SynchronizableMethod]
     public void DynamicSleep()
     {
+        awake = false;
         timeSinceLastSignificantMovement = 0;
         rbSyncDynamic.SyncEveryNUpdates = 999999;
         rbSyncDynamic.FullSyncEveryNSync = 999999;
-        // Debug.Log("sleep " + transform.root.gameObject.name);
+        //Debug.Log("sleep " + transform.root.gameObject.name);
     }
     [SynchronizableMethod]
     public void DynamicAwake()
     {
-        timeSinceLastSignificantMovement = 0;
-        rbSyncDynamic.SyncEveryNUpdates = 2;
-        rbSyncDynamic.FullSyncEveryNSync = 4;
+        awake = true;
+        rbSyncDynamic.SyncEveryNUpdates = 1;
+        rbSyncDynamic.FullSyncEveryNSync = 1;
+        Debug.Log("awake " + transform.parent.gameObject.name + " " + transform.gameObject.name);
     }
-    
+
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
     {
         return currentlyOwnedByAvatar;

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7774169178556231581}
   - component: {fileID: 1566520578020904309}
   - component: {fileID: 4317739697838236705}
-  - component: {fileID: 3737974195054021886}
+  - component: {fileID: 2043647654276936961}
   m_Layer: 7
   m_Name: BeachBall
   m_TagString: Ball
@@ -62,7 +62,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1566520578020904309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +121,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3737974195054021886
+--- !u!114 &2043647654276936961
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,17 +130,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1104679487570050131}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 406bff8bce152114ea1ee28aff8cb6f9, type: 3}
+  m_Script: {fileID: 11500000, guid: b0bfdf69a49b0934eb3c76ec9cc979a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 
+  _uidString: c763fdf5-8595-4bcf-82bc-ef34506a9762
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
-  extents: {x: 0, y: 0, z: 0}
-  kickForce: 2
-  carpetDetection: {fileID: 0}
 --- !u!1 &8633962207934840053
 GameObject:
   m_ObjectHideFlags: 0
