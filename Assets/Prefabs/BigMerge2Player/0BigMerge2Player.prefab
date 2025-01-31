@@ -5363,6 +5363,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3797304528183762672, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
+      propertyPath: lobbySystem
+      value: 
+      objectReference: {fileID: 7996181639769488474}
     - target: {fileID: 5202718215585442860, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
       propertyPath: m_Pivot.x
       value: 0

@@ -1,4 +1,5 @@
 using Alteruna;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,7 +43,7 @@ public class SymptomsManager : AttributesSync {
     [SynchronizableMethod]
     public void SetSymptom(int index) {
 
-        currentSymptom = symptoms[index];
+        JustSetSymptom(index);
         if (avatar == null)
         {
             avatar = Multiplayer.GetAvatar();
@@ -52,10 +53,22 @@ public class SymptomsManager : AttributesSync {
         thisAvatarSymptomNotifText.ChangeNotifText();
     }
 
+    public void JustSetSymptom(int index)
+    {
+        if(index>symptoms.Count-1)
+        {
+            currentSymptom = null;
+        }
+        else
+        {
+            currentSymptom = symptoms[index];
+        }
+    }
+
     public void PickRandNumberHostAndSetSymptomForAll() {
         if (!Multiplayer.GetUser().IsHost) { return; }
 
-        randNum = Random.Range(0, symptoms.Count);
+        randNum = UnityEngine.Random.Range(0, symptoms.Count);
         BroadcastRemoteMethod(nameof(SetSymptom), randNum);
     }
 

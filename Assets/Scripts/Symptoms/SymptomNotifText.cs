@@ -7,7 +7,7 @@ using UnityEngine;
 public class SymptomNotifText : AttributesSync
 {
     TextMeshProUGUI notificationText;
-   // LobbySystem lobbySystem;
+    [SerializeField] LobbySystem lobbySystem;
     Alteruna.Avatar avatar;
 
     private void Awake()
@@ -21,7 +21,7 @@ public class SymptomNotifText : AttributesSync
     private new void OnEnable()
     {
         base.OnEnable();
-        // if (lobbySystem != null) {return;}
+       // if (lobbySystem != null) {return;}
         SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
     }
 

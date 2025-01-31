@@ -6,6 +6,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     protected Alteruna.Avatar currentlyOwnedByAvatar;
     protected CharacterController ownedCharacterController;
 
+
     [SynchronizableField] public bool isPickedUp;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
     public abstract void Use();
@@ -13,6 +14,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     RigidbodySynchronizable rbSyncDynamic;
     Rigidbody rbDynamic;
     Collider colliderDynamic;
+
+    float minVelocityToProduceSound = 0.05f;
 
     [Header("removed serialize fields for speed. Nsync Objects is Here. x - when object is inactive(high number), y - when object is active(low number), also in the script both are 30 2, for ease of access")]
      Vector2 syncEveryNUpdates = new Vector2(30, 2);
@@ -65,15 +68,18 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
-            if (isPickedUp) return;
-
-            if(rbDynamic.mass > 1)
+            if (isPickedUp) { return; }
+            if (rbDynamic.linearVelocity.magnitude > minVelocityToProduceSound)
             {
-               // PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit);
-            }
-            else
-            {
-             //   PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit);
+                if (rbDynamic.mass > 1)
+                {
+                    PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit);
+                }
+                else
+                {
+                    PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit);
+                }
+            Debug.Log("bratle " + gameObject.name + " " + rbDynamic.linearVelocity.magnitude);
             }
         }
 
