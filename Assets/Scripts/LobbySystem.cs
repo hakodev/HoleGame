@@ -10,23 +10,36 @@ public class LobbySystem : MonoBehaviour {
     List<CarpetData> allCarpets;
 
     private int tempRandom = 0;
+
+    Alteruna.Avatar avatar;
+    private void Awake()
+    {
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
+    }
     private void Start()
     {
         allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
     }
 
     private void Update() {
+
+        if(!avatar.IsMe) { return; }
         if(Input.GetKeyDown(KeyCode.Tab)) {
             controlsText.enabled = !controlsText.enabled;
         }
 
+
+        // we are calling the symptom twice with these, once in setsymptom and once in the chain of calls bc we are displaying the notif canvas
+
+        
         if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
-            SymptomsManager.Instance.SetSymptom(0); // Inverted controls
+            SymptomsManager.Instance.JustSetSymptom(0); // Inverted controls
+            ResetCarpetParams();
             DisplayNotificationText();
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) {
-            SymptomsManager.Instance.SetSymptom(1);// Jumpy carpets
+            SymptomsManager.Instance.JustSetSymptom(1);// Jumpy carpets
             SetCarpetParams();
             DisplayNotificationText();
 
@@ -35,18 +48,21 @@ public class LobbySystem : MonoBehaviour {
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) {
-            SymptomsManager.Instance.SetSymptom(2); // Render distance
+            SymptomsManager.Instance.JustSetSymptom(2); // Render distance
+            ResetCarpetParams();
             DisplayNotificationText();
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) {
-            SymptomsManager.Instance.SetSymptom(999); // no symptom
+            SymptomsManager.Instance.JustSetSymptom(999); // no symptom
+            ResetCarpetParams();
             DisplayNoSymptomText();
         }
+        
     }
 
     private void OnDestroy() {
-        SymptomsManager.Instance.SetSymptom(999); // no symptom
+        SymptomsManager.Instance.JustSetSymptom(999); // no symptom
     }
 
     void SetCarpetParams()
@@ -109,6 +125,15 @@ public class LobbySystem : MonoBehaviour {
         }
 
 
+    }
+
+    void ResetCarpetParams()
+    {
+        foreach (CarpetData carpet in allCarpets)
+        {
+            carpet.IsCorruptedLocal = false;
+            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
+        }
     }
 
     private void DisplayNotificationText() {

@@ -19,6 +19,16 @@ public class CountdownDisplay : AttributesSync {
     public static int sendTimeToUI;
     public static string sendFlavorTextToUI;
 
+    EndGameResolution endGameResolution;
+    // countdowns left
+
+    public static void ResetStatic()
+    {
+        countdownColor = Color.green;
+        sendTimeToUI = 0;
+        sendFlavorTextToUI = "";
+    }
+
 
     private void Awake() {
         maxTime = time;
@@ -29,14 +39,8 @@ public class CountdownDisplay : AttributesSync {
         //flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
         //sendFlavorTextToUI = flavorTextMesh.text;
     }
-    /*
-    private new void OnEnable()
-    {
-        base.OnEnable();
-        sendFlavorTextToUI = flavorTextMesh.text;
-    }*/
     
-    //these are meant to be called from the same object to itself so just use BoradcastRemoteMethod("nameofthing")
+
     [SynchronizableMethod]
     private void DeactivateUnusedTimers()//(string deactivatedObject)
     {
@@ -59,15 +63,16 @@ public class CountdownDisplay : AttributesSync {
         //VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
         VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
         //Debug.Log(player.gameObject.name);
-            player.EndVotingPhase();
-        
+        player.EndVotingPhase();
 
+        /*
+        SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
         SymptomNotifText[] allNotifTexts = FindObjectsByType<SymptomNotifText>(FindObjectsSortMode.None);
         foreach(SymptomNotifText notifText in allNotifTexts)
         {
             // This will enable the notification canvas for all players
             notifText.transform.parent.parent.gameObject.SetActive(true);
-        }
+        }*/
     }
 
     private void Update() {
@@ -91,13 +96,28 @@ public class CountdownDisplay : AttributesSync {
     
     private void UpdateTickDown()
     {
+        if (!Multiplayer.GetUser().IsHost) { return; }
+        if (!Multiplayer.GetAvatar().IsMe) { return; }
+        if (RoleAssignment.playerID - 1 != 0) { return; }
+
+
         if (time > 0) 
         {
             deltaTime += Time.deltaTime;
             if (deltaTime >= 1)
             {
                 deltaTime = 0;
-                if (Multiplayer.GetUser().IsHost) time--;
+                if (Multiplayer.GetUser().IsHost)
+                {
+                    if(VotingPhase.totalALivePlayers.Count>1)
+                    {
+                        if(endGameResolution==null) endGameResolution = Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>();
+                        //if (!endGameResolution.inWildWest) {
+                            time--;
+                            manager.TimeToEndTheGame--;
+                        //}
+                    }
+                }
                 //Debug.Log(gameObject.name);
             }
         }

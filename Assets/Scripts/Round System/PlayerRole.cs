@@ -17,12 +17,17 @@ public class PlayerRole : AttributesSync
     [SerializeField] CanvasGroup machineCanvas;
 
 
-    [SynchronizableField] public int VotedCount=0;
+    [SynchronizableField] public int VotedCount = 0;
     [SynchronizableField] public bool IsTaskManager = false;
     [SerializeField] private GameObject ceoFlashScreen;
 
     [SynchronizableField] public string playerNameSync;
 
+
+    public static void ResetStatic()
+    {
+        localClientRole = Roles.Machine;
+    }
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -84,6 +89,8 @@ public class PlayerRole : AttributesSync
     public void SetName(string name)
     {
         playerNameSync = name;
+        AssignPlayerProgileTexture profileTexture = transform.GetComponentInChildren<AssignPlayerProgileTexture>();
+        //profileTexture.BroadcastRemoteMethod(nameof(profileTexture.SetDrawing), playerNameSync);
         Debug.Log(" " + playerNameSync);
     }
 
@@ -94,4 +101,3 @@ public class PlayerRole : AttributesSync
         localClientRole = newRole;
     }
 }
-    

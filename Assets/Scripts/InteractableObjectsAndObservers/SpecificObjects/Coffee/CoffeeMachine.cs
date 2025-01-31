@@ -34,7 +34,7 @@ public class CoffeeMachine : StationaryInteractableObject
             rbSync.SetPosition(heldCup.position);
             rbSync.SetRotation(heldCup.rotation);
 
-            Debug.Log("coffeeing");
+            Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA + coffeeing");
         }
     }
     public override void Use()

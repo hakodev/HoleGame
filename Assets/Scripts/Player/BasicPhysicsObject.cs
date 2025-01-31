@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class BasicPhysicsObject : DynamicInteractableObject
 {
-    private bool isBouncingBall;
+    Rigidbody rb;
 
-    private void Start()
+    protected override void Awake()
+    {
+        base.Awake();
+        rb = GetComponent<Rigidbody>();
+    }
+
+    protected override void Start()
     {
         base.Start();
-        if(gameObject.name.Contains("BeachBall"))
-        {
-            isBouncingBall = true;
-        }
     }
     public override void SpecialInteraction(InteractionEnum interaction, Component caller)
     {
@@ -20,15 +22,24 @@ public class BasicPhysicsObject : DynamicInteractableObject
     {
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision collision)
     {
-        if (isBouncingBall)
+        base.OnCollisionEnter(collision);
+
+        if (isPickedUp) { return; }
+        if(!RoleAssignment.hasGameStarted) { return; }
+
+        if (rb.linearVelocity.magnitude > minVelocityToProduceSound)
         {
-            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetBouncyBall);
-        }
-        else
-        {
-            base.OnCollisionEnter(collision);
+            if (rb.mass > 1)
+            {
+                PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit);
+            }
+            else
+            {
+                PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit);
+            }
+            //Debug.Log("bratle " + gameObject.name + " " + rb.linearVelocity.magnitude);
         }
     }
 

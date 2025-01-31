@@ -1,13 +1,13 @@
+using Alteruna;
+using DG.Tweening;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UIInput : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField nameInputField;
-
-
     public static string PlayerNameSync;
-
 
     public void ClickedJoinButton()
     {
@@ -23,3 +23,4 @@ public class UIInput : MonoBehaviour
         PlayerNameSync = setName;
     }
 }
+

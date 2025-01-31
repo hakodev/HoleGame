@@ -8,26 +8,36 @@ using Alteruna;
 using System.Linq;
 public class VotingPhase : AttributesSync {
 
-    public static List<PlayerRole> totalALivePlayers;
+    public static List<PlayerRole> totalALivePlayers = new List<PlayerRole>();
     private PlayerRole player;
 
     [SerializeField] private GameObject playerVoteButton;
-    [SerializeField] TMP_Text pickedPlayerNameText;
+    [SerializeField] TextMeshProUGUI pickedPlayerNameText;
     [SerializeField] private GameObject votingCanvas;
+    PopUp votingPopUp;
+
     [SerializeField] private GameObject votedCanvas;
     [SerializeField] private CanvasGroup taskManagerPickedDisplayCanvas;
     [SerializeField] private GameObject randomlyVotedPlayer;
     [SerializeField] GameObject symptomsNotifCanvas;
     [SerializeField] GameObject votingPhaseObject;
+    EndGameResolution endGameResolution;
     Alteruna.Avatar avatar;
 
 
     int randomlyPickedPlayer;
-    List<VotingPhase> votingPlayers;
+    static List<VotingPhase> votingPlayers = new List<VotingPhase>();
     [SynchronizableField] int pickedPlayerIndex;
 
     private bool hasVoted = false;
     [SynchronizableField, HideInInspector] public string taskManagerNameInHost = "";
+
+    Spawner spawner;
+
+    public static void StaticReset()
+    {
+        totalALivePlayers.Clear();
+    }
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -35,69 +45,81 @@ public class VotingPhase : AttributesSync {
     }
     private void Start() {
 
-    }
+        spawner = FindAnyObjectByType<Alteruna.Spawner>();
+        endGameResolution = GetComponentInChildren<EndGameResolution>();
+        votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
 
+        totalALivePlayers.Add(player);
+        votingPlayers.Add(this);
+
+    }
 
     public bool once = false;
     public void InitiateVotingPhase() {
 
         if (!avatar.IsMe) { return; }
         //if (totalPlayers.Count <= 1) { return; }
-       if(totalALivePlayers==null) totalALivePlayers = RoleAssignment.GetTotalPlayers();
-
-
-        votingPlayers = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None).ToList<VotingPhase>();
-
         votingCanvas.SetActive(true);
+        endGameResolution.CheckForEndGame();
+        votingPopUp.PopIn();
+        
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         player.VotedCount = 0;
         hasVoted = false;
 
         player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
+        DespawnAllGuns();
 
         if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
-            } else {
+        }
+        else 
+        {
+            if(!endGameResolution.inWildWest) SpawnVotingButtons();
+        }
+    }
 
-                int i = 0;
-                foreach(PlayerRole otherPlayer in totalALivePlayers)
-                {
-                    if (otherPlayer == player) { continue; }
-                    i++;
 
-                    GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingCanvas.transform);
-                    newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
+    private void SpawnVotingButtons()
+    {
+        int i = 0;
+        foreach (PlayerRole otherPlayer in totalALivePlayers)
+        {
+            if (otherPlayer == player) { continue; }
+            i++;
 
-                    RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
-                    rect.anchoredPosition += rect.anchoredPosition * i;
+            GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingPopUp.transform);
+            newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
 
-                    newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
-                            otherPlayer.VotedCount++;
-                            votingCanvas.SetActive(false);
-                            votedCanvas.SetActive(true);
-                            hasVoted = true;
-                    });
-                }
+            RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -80 * i + 120);
+
+            if (i % 2 == 0)
+            {
+              //  rect.anchorMin = new Vector2(0f, -0.5f);
+             //   rect.anchorMax = new Vector2(0f, -0.5f);
+                rect.anchoredPosition = new Vector2(734, rect.anchoredPosition.y+80);
             }
 
-         //   player.gameObject.GetComponent<PlayerController>().MovementEnabled = false; // Disable movement until end of voting phase
+
+            newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
+                otherPlayer.VotedCount++;
+                votingCanvas.SetActive(false);
+                votedCanvas.SetActive(true);
+                hasVoted = true;
+                //Debug.Log("BITTE_Button " + otherPlayer.name);
+            });
         }
-
-
-
-    //if highest ppl have equal votes, then sb is picked at random
-    //give gun to CEO through the specialInteractionSystem
-
-    //randomly votred
-
+    }
 
     public void EndVotingPhase()
     {
         if (!avatar.IsMe) { return; }
 
-        Debug.Log("breakdowns " + avatar.name);
-       // if (totalPlayers.Count <= 1) { return; }
+       // Debug.Log("BITTE_EndVotingPhase " + avatar.name);
+
+        // if (totalPlayers.Count <= 1) { return; }
 
         if (!hasVoted)
         {
@@ -112,20 +134,20 @@ public class VotingPhase : AttributesSync {
         Cursor.visible = false;
       //  player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
-        if (avatar.IsMe && Multiplayer.GetUser().IsHost) EndVotingPhaseHost();
+        EndVotingPhaseHost();
     }
 
 
     private void EndVotingPhaseHost()
     {
-        if (!Multiplayer.GetUser().IsHost || RoleAssignment.playerID-1!=0) { return; }
-        if (!avatar.IsMe) { return; }
+        if (!Multiplayer.GetUser().IsHost) { return; }
 
-       // if(once) { return; }
-       // once = true;
+       // Debug.Log("BITTE_Host " + avatar.name);
 
-            PlayerRole pickedPlayer = totalALivePlayers[0];
+
+        PlayerRole pickedPlayer = totalALivePlayers[0];
         List<PlayerRole> equallyVotedPlayers = new List<PlayerRole>();
+        equallyVotedPlayers.Add(pickedPlayer);
 
 
         for (int i = 1; i < totalALivePlayers.Count; i++)
@@ -145,39 +167,64 @@ public class VotingPhase : AttributesSync {
             }
         }
 
-        randomlyPickedPlayer = 0;
-        randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
-        pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
-        pickedPlayer.IsTaskManager = true;
-        pickedPlayer.Commit();
-
-
-        for (int i = 0; i < equallyVotedPlayers.Count; i++)
+        if (RoleAssignment.playerID - 1 == 0)
         {
-            if (equallyVotedPlayers[i] == pickedPlayer)  pickedPlayerIndex = i;
-        }
-        Debug.Log("DADADA " + gameObject.name + Multiplayer.GetUser().Name);
+            randomlyPickedPlayer = 0;
+            randomlyPickedPlayer = Random.Range(0, equallyVotedPlayers.Count);
+            pickedPlayer = equallyVotedPlayers[randomlyPickedPlayer];
+            pickedPlayer.IsTaskManager = true;
+            pickedPlayer.Commit();
 
-        foreach (VotingPhase voter in votingPlayers)
-        {
-            voter.taskManagerNameInHost = pickedPlayer.gameObject.name;
-            voter.pickedPlayerIndex = pickedPlayerIndex;
-            voter.BroadcastRemoteMethod("EndVotingPhaseFinale");
+
+
+            //Debug.Log("BITTE_PlayerName " + pickedPlayer.name + " " + pickedPlayer.IsTaskManager);
+            taskManagerNameInHost = pickedPlayer.gameObject.name;
+            //Debug.Log("pompous1 " + taskManagerNameInHost);
+
+            for (int i = 0; i < equallyVotedPlayers.Count; i++)
+            {
+                if (equallyVotedPlayers[i] == pickedPlayer) pickedPlayerIndex = i;
+            }
         }
+        BroadcastRemoteMethod("EndVotingPhaseFinaleSync");
+    }
+    [SynchronizableMethod]
+    private void EndVotingPhaseFinaleSync()
+    {
+        VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
+        //Debug.Log("BITTE_FinaleSync " + player.name);
+        //Debug.Log("pompous2 " + taskManagerNameInHost);
+        player.EndVotingPhaseFinale();
     }
 
-    [SynchronizableMethod]
     public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
     {
         if(!avatar.IsMe) { return; }
-        pickedPlayerNameText.text = taskManagerNameInHost;
-        Debug.Log("da eba maika ti " + player.IsTaskManager);
-        if (player.IsTaskManager)
+
+        if (endGameResolution.inWildWest)
         {
-            GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+            endGameResolution.HandOutGuns();
         }
-        StartCoroutine(DisplayTaskManager());
-        StartCoroutine(DisplaySymptomNotif());
+        else
+        {
+            //Debug.Log("BITTE_Finale " + avatar.name + " " + player.IsTaskManager);
+            VotingPhase hostVoter = Multiplayer.GetAvatars()[0].GetComponent<VotingPhase>();
+            taskManagerNameInHost = hostVoter.taskManagerNameInHost;
+
+            pickedPlayerIndex = hostVoter.pickedPlayerIndex;
+            pickedPlayerNameText.text = taskManagerNameInHost;
+
+            //Debug.Log("BITTE_Finale2 " + taskManagerNameInHost + " " + pickedPlayerIndex    );
+
+            if (player.IsTaskManager)
+            {
+                //Debug.Log(player.IsTaskManager + player.gameObject.name);
+                GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+            }
+
+            StartCoroutine(DisplayTaskManager());
+            StartCoroutine(DisplaySymptomNotif());
+        }
     }
 
     private void VoteRandomly()
@@ -194,7 +241,7 @@ public class VotingPhase : AttributesSync {
         PlayerRole randomlyVotedPlayer = votableCandidates[randomlyPickedPlayer];
         randomlyVotedPlayer.VotedCount++;
 
-        Debug.Log("randomly Chosen " + randomlyVotedPlayer.gameObject.name);
+        //Debug.Log("randomly Chosen " + randomlyVotedPlayer.gameObject.name);
 
         StartCoroutine(DisplayRandomlyVotedCanvas());
     }
@@ -214,14 +261,38 @@ public class VotingPhase : AttributesSync {
     }
     private IEnumerator DisplayRandomlyVotedCanvas()
     {
+        Debug.Log("hoho2 " + Multiplayer.GetAvatar().name + " " + Multiplayer.GetUser().Name);
+
         randomlyVotedPlayer.SetActive(true);
         yield return new WaitForSeconds(6f); // How many seconds to display it on screen
         randomlyVotedPlayer.SetActive(false);
     }
     [SynchronizableMethod]
-    public void DisplaySymptomNotifSync()
+    private void DisplaySymptomNotifSync()
     {
+        //Debug.Log("come on symptoms");
+        if (!avatar.IsMe) { return; }
         StartCoroutine(DisplaySymptomNotif());
     }
+    public void AllVotersSymptomNotifStartOfGame()
+    {
+        Debug.Log("hoho " + Multiplayer.GetAvatar().name + " " + Multiplayer.GetUser().Name);
+        for (int i = 0; i < votingPlayers.Count; i++)
+        {
+            votingPlayers[i].BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
+        }
+        //BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
+    }
 
+    public void DespawnAllGuns()
+    {
+        Gun[] allGuns = FindObjectsByType<Gun>(FindObjectsSortMode.None);
+        //Debug.Log("Despawning guns " + allGuns.Length);
+
+        for (int i=0; i<allGuns.Length; i++)
+        {
+            //Debug.Log("despawned gun " + allGuns[i].gameObject);
+            spawner.Despawn(allGuns[i].gameObject);
+        }
+    }
 }

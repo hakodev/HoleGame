@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 314573575010589834, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
+      propertyPath: triggersCaptcha
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2789334121659345429, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
       propertyPath: m_Name
       value: PopupWrongName

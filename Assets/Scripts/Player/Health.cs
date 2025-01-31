@@ -1,7 +1,7 @@
 using UnityEngine;
 using Alteruna;
-using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class Health : AttributesSync {
@@ -15,12 +15,19 @@ public class Health : AttributesSync {
     private CharacterController characterController;
     //bool dead = false;
     private MishSyncAnimations mishSync;
+    private EndGameResolution endGameResolution;
+    private TransformSynchronizable transformSynchronizable;
+
+    //[SerializeField] private List<Object> objectsToDestroyUponDeath;
 
     private void Awake() {
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
         mishSync = GetComponent<MishSyncAnimations>();
+        endGameResolution = GetComponentInChildren<EndGameResolution>();
+        transformSynchronizable = GetComponent<TransformSynchronizable>();
+
         deadScreen.SetActive(false);
     }
 
@@ -36,18 +43,28 @@ public class Health : AttributesSync {
             currentHealth = 0;
             Debug.Log("Reduced HP");
             PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetDeathStatic);
-            BroadcastRemoteMethod("KillPlayer");
+            BroadcastRemoteMethod(nameof(KillPlayer));
         }
     }
 
     [SynchronizableMethod]
     private void KillPlayer() {
         Debug.Log("Player died!");
-        playerController.MovementEnabled = false;
-        characterController.enabled = false;
-        deadScreen.SetActive(true);
+        //playerController.MovementEnabled = false;
+        //characterController.enabled = false;
+        //deadScreen.SetActive(true);
+        StartCoroutine(DeadScreenDisplay());
         mishSync.SetStance(StanceEnum.Dead);
-        //VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
+        VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
+        transformSynchronizable.RefreshRate = 0f;
+
+        endGameResolution.CheckForEndGame();
+    }
+
+    private IEnumerator DeadScreenDisplay() {
+        deadScreen.SetActive(true);
+        yield return new WaitForSeconds(4f);
+        deadScreen.SetActive(false);
     }
 
     public float GetHealth()

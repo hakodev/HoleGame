@@ -7,12 +7,13 @@ using UnityEngine;
 
 public class RoleAssignment : AttributesSync
 {
-    private static List<PlayerRole> rolelessPlayers = new();
-    private static List<PlayerRole> totalPlayers = new();
+    private List<PlayerRole> rolelessPlayers = new List<PlayerRole>();
+    private static List<PlayerRole> totalPlayers = new List<PlayerRole>();
     public static bool hasGameStarted = false;
 
     private int maxNumOfInfiltrators = 1;
     Alteruna.Avatar avatar;
+    public static Alteruna.Avatar userAvatar;
     CanvasGroup youNeedFriends;
 
 
@@ -26,18 +27,32 @@ public class RoleAssignment : AttributesSync
 
     [SynchronizableField] public static int playerNumber=0;
     public static int playerID=-10; //client based id
+    [SynchronizableField] bool assignedRole = false;
 
 
+    public static void ResetStatic()
+    {
+        hasGameStarted = false;
+        playerID = -10;
+        playerNumber = 0;
+        totalPlayers.Clear();
+        userAvatar = null;
+    }
     private void Awake()
     {
-        avatar = transform.root.GetComponent<Alteruna.Avatar>();
-        youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
+
         playerNumber++;
     }
     private void Start()
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
-        if(playerID==-10) playerID = playerNumber; //sets proper number
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        if(avatar.IsMe) userAvatar = avatar;
+        youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
+        // totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None).ToList();
+
+        if (playerID == -10) playerID = playerNumber; //sets proper number
+        Debug.Log("player's count " + totalPlayers.Count);
 
         if (playerNumber != 1)
         {
@@ -52,32 +67,48 @@ public class RoleAssignment : AttributesSync
         hasGameStarted = newState; 
     }
 
+   
     private void Update()
     {
-        if(avatar.IsOwner)
+        if(!hasGameStarted)
         {
-            if (Input.GetKeyUp(KeyCode.G))
+            if (Multiplayer.GetUser().IsHost)
             {
-                if (totalPlayers.Count > 1)
+                if (Input.GetKeyUp(KeyCode.G))
                 {
-                    BroadcastRemoteMethod(nameof(SetHasGameStarted), true);
-                    FindRolelessPlayers();
-                    DetermineMaxNumberOfInfiltrators();
-                    AssignRoles();
-                    VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
-                    Destroy(lobbyCanvas);
-                    voting.BroadcastRemoteMethod(nameof(voting.DisplaySymptomNotifSync));
-                }
-                else
-                {
-                    StartCoroutine(DisplayFriends());
+                    if (totalPlayers.Count > 1)
+                    {
+                        BroadcastRemoteMethod(nameof(SetHasGameStarted), true);
+                        FindRolelessPlayers();
+                        DetermineMaxNumberOfInfiltrators();
+                        AssignRoles();
+                        //BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
+                        //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
+                        VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
+                        voting.AllVotersSymptomNotifStartOfGame();
+                    }
+                    else
+                    {
+                        StartCoroutine(DisplayFriends());
+                    }
                 }
             }
         }
     }
-
+    /*
     public static List<PlayerRole> GetTotalPlayers() {
         return totalPlayers;
+    }
+    */
+
+
+
+    [SynchronizableMethod]
+    private void DestroyLobbyForAll()
+    {
+        //yeah so im not doing this
+        Debug.Log("damn " + Multiplayer.GetUser());
+        Destroy(lobbyCanvas);
     }
 
     private void FindRolelessPlayers()
