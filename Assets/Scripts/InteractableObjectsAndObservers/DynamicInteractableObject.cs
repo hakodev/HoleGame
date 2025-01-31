@@ -125,7 +125,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         timeSinceLastSignificantMovement = 0;
         rbSyncDynamic.SyncEveryNUpdates = 999999;
         rbSyncDynamic.FullSyncEveryNSync = 999999;
-        //Debug.Log("sleep " + transform.root.gameObject.name);
+        Debug.Log("sleep " + gameObject.name);
     }
     [SynchronizableMethod]
     public void DynamicAwake()
@@ -133,7 +133,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         awake = true;
         rbSyncDynamic.SyncEveryNUpdates = 1;
         rbSyncDynamic.FullSyncEveryNSync = 1;
-        Debug.Log("awake " + transform.parent.gameObject.name + " " + transform.gameObject.name);
+        Debug.Log("awake " + gameObject.name); //keep this here so we know what causes problems with latency in the future
     }
 
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()

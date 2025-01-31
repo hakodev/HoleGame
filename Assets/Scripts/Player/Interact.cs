@@ -270,13 +270,20 @@ public class Interact : AttributesSync, IObserver
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
             rbToTrack.SetPosition(heldObject.transform.position);
 
-            heldObject.transform.forward = -hit.normal;
-            rbToTrack.SetRotation(heldObject.transform.rotation);
+
 
 
             if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster"))
             {
+                heldObject.transform.forward = -hit.normal;
+                rbToTrack.SetRotation(heldObject.transform.rotation);
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
+            }
+            else
+            {
+                //angle for normally placed objects
+                heldObject.transform.up = hit.normal;
+                rbToTrack.SetRotation(heldObject.transform.rotation);
             }
 
             //Debug.Log(hit.collider.gameObject.name);
