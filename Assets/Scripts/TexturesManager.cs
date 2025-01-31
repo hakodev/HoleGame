@@ -1,29 +1,43 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Alteruna;
+using System;
+using Unity.Collections;
+using System.Runtime.CompilerServices;
 
-public class TexturesManager : AttributesSync
+public class TexturesManager : MonoBehaviour
 {
-    public static List<Texture2D> allTextures = new List<Texture2D>();
-    public static Texture2D currentTexture = null;
+    public NativeArray<Color32> texturearray;
 
-    private void Update()
+    public Texture2D currentTexture;
+    private static TexturesManager instance;
+    public int width;
+    public int height;
+
+    public static TexturesManager Instance
     {
-        if (currentTexture != null)
+        get
         {
-            BroadcastRemoteMethod(nameof(SyncTex));
+            if (instance == null)
+            {
+                instance = FindAnyObjectByType<TexturesManager>();
+            }
+            return instance;
         }
     }
 
-    [SynchronizableMethod]
-    void SyncTex()
+
+    public void SetTextureParams(NativeArray<Color32> array, int width, int height)
     {
-        Texture2D currentTex = currentTexture;
-        if (allTextures.Contains(currentTex))
+
+        currentTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        texturearray = currentTexture.GetPixelData<Color32>(0);
+        for (int i = 0; i < array.Length; i++)
         {
-            return;
+            texturearray[i] = array[i];
         }
-        allTextures.Add(currentTex);
-        
+
     }
+
+
 }

@@ -5,6 +5,7 @@ using Alteruna;
 using TMPro;
 using System.IO;
 using UnityEditor;
+using System;
 
 
 public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
@@ -110,8 +111,8 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         }
         else
         {
-            /*
             Texture screenTexture = screenRenderer.material.GetTexture("_MaskTexture");
+
             Texture2D texture2D = new Texture2D(screenTexture.width, screenTexture.height, TextureFormat.RGBA32, false);
 
             RenderTexture currentRT = RenderTexture.active;
@@ -122,25 +123,20 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
             RenderTexture.active = renderTexture;
             texture2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
             texture2D.Apply();
-            texture2D.name = nameInputFieldText.text;
-
-
             RenderTexture.active = currentRT;
-            TexturesManager.currentTexture = texture2D;
 
-            //File.WriteAllBytes(Application.dataPath + "/Resources/" + nameInputFieldText.text + ".png", texture2D.EncodeToPNG());
-            //AssetDatabase.Refresh();
+            TexturesManager.Instance.width = screenTexture.width;
+            TexturesManager.Instance.height = screenTexture.height;
+            TexturesManager.Instance.SetTextureParams( texture2D.GetPixelData<Color32>(0), screenTexture.width, screenTexture.height);
+            
+
             //RenderTexture.active = previous;
             //RenderTexture.ReleaseTemporary(screenRenderTexture);
 
-            */
             screenObject.SetActive(false);
             uiInput.SetPlayerNameSync(nameInputFieldText.text);
             roomCamera.SetActive(true);
             canvas.gameObject.SetActive(false);
-            //uiInput.SetPlayerNameSync(nameInputFieldText.text);
-
-            //canvas.gameObject.SetActive(false);
           
         }
 
