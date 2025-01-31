@@ -626,7 +626,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.8
-  m_Radius: 0.15
+  m_Radius: 0.02
   m_SlopeLimit: 60
   m_StepOffset: 0.2
   m_SkinWidth: 0.08
@@ -657,6 +657,7 @@ MonoBehaviour:
   isMoving: 0
   isRunning: 0
   timeSavingJumpInput: 0.2
+  <HumanCollider>k__BackingField: {fileID: 8037317931813873023}
   cameraTransform: {fileID: 4449355787945441573}
   moveTransform: {fileID: 187019746038438773}
 --- !u!114 &3247772703483496256
@@ -5527,6 +5528,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1099614759616581539, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 2372121968991586763, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
       propertyPath: _uidString
       value: d4d0eb52-5067-4187-8edc-1fca0dd724b9
@@ -5646,6 +5651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0eb8282aa7e0040b02b5efced32524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateColliderEveryNUpdate: 7
 --- !u!4 &5178066372033882247 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8293703128637741164, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}

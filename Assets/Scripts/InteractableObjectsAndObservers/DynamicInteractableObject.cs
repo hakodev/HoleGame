@@ -6,7 +6,7 @@ using System.Linq;
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
     protected Alteruna.Avatar currentlyOwnedByAvatar;
-    protected CharacterController ownedCharacterController;
+    protected Collider CurrentHumanCollider { get; set; }
     Alteruna.Avatar userAvatar;
 
     [SynchronizableField] public bool isPickedUp;
@@ -57,16 +57,16 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         {
             if (currentlyOwnedByAvatar != null)
             {
-                ownedCharacterController =currentlyOwnedByAvatar.gameObject.GetComponent<CharacterController>();
-                if (ownedCharacterController == null || isSticky!=null) { return; }
+                CurrentHumanCollider = currentlyOwnedByAvatar.GetComponent<PlayerController>().HumanCollider;
+                if (CurrentHumanCollider == null || isSticky!=null) { return; }
                 IgnoreCols(true);
             }
         }
         else
         {
-            if (ownedCharacterController == null || isSticky!=null) { return; }
+            if (CurrentHumanCollider == null || isSticky!=null) { return; }
             IgnoreCols(false);
-            ownedCharacterController = null;
+            CurrentHumanCollider = null;
         }
 
         Debug.Log("krank isIgnoring " + newState);
@@ -76,7 +76,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     {
         foreach (Collider col in collidersDynamic)
         {
-            Physics.IgnoreCollision(col, ownedCharacterController, newState);
+            Physics.IgnoreCollision(col, CurrentHumanCollider, newState);
         }
     }
 
