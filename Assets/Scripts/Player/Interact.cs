@@ -286,10 +286,10 @@ public class Interact : AttributesSync, IObserver
                 //rbToTrack.SetRotation(heldObject.transform.rotation);
             }
             //Debug.Log(hit.collider.gameObject.name);
-            Transform hitRoot = hit.collider.transform.root;
-            if (hitRoot.name.Contains("CoffeeMachine"))
+            CoffeeMachine KAFFEEMASCHINE = hit.collider.transform.root.GetComponentInChildren<CoffeeMachine>();
+            if (KAFFEEMASCHINE != null)
             {
-                hitRoot.GetComponent<CoffeeMachine>().SpecialInteraction(InteractionEnum.PlaceCupInCoffeeMachine, this);
+                KAFFEEMASCHINE.SpecialInteraction(InteractionEnum.PlaceCupInCoffeeMachine, this);
             }
 
             FinishDropping();
