@@ -2747,6 +2747,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8790054143348244518}
     m_Modifications:
+    - target: {fileID: 186624311035565460, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
+      propertyPath: m_fontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 186624311035565460, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 186624311035565460, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 589334094175592711, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2827,6 +2839,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3445620163020386825, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
+      propertyPath: m_fontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3445620163020386825, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3445620163020386825, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 5814446186303693382, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
       propertyPath: m_Name
       value: PopupEnterName
@@ -2834,6 +2858,10 @@ PrefabInstance:
     - target: {fileID: 5814446186303693382, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848705361689556366, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
+      propertyPath: m_GlobalPointSize
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8239672403011769561, guid: b05045ea2051abc4bb33854a7496cbe6, type: 3}
       propertyPath: screenTexture
