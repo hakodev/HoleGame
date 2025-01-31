@@ -20,6 +20,10 @@ PrefabInstance:
       propertyPath: m_text
       value: No Name Entered
       objectReference: {fileID: 0}
+    - target: {fileID: 6987822781657111207, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 8502693751258357075, guid: d30d33e82206f834a8d92b8b3f0dec1f, type: 3}
       propertyPath: m_text
       value: 'We require your
