@@ -68,6 +68,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
             IgnoreCols(false);
             ownedCharacterController = null;
         }
+
+        Debug.Log("krank isIgnoring " + newState);
     }
 
     private void IgnoreCols(bool newState)

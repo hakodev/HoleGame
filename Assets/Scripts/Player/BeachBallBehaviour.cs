@@ -1,7 +1,6 @@
 using UnityEngine;
 
 public class BeachBallBehaviour : MonoBehaviour {
-    [SerializeField] private Vector3 extents;
     [SerializeField] private float kickForce = 11f;
 
     private CharacterController characterController;
@@ -62,9 +61,5 @@ public class BeachBallBehaviour : MonoBehaviour {
                 }
             }
         }
-    }
-
-    private void OnDrawGizmos() {
-        Gizmos.DrawWireCube(transform.position, extents * 2);
     }
 }

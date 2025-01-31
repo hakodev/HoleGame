@@ -88,13 +88,18 @@ public class StickyNote : DynamicInteractableObject
     protected override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
-        if (collision.gameObject.layer == selfLayer) { return; }
-        if (isThrown || isGameStart)
+
+        if(!isPlaced)
         {
-            AlignWithSurface(collision);
-            Stick();
-            if (RoleAssignment.hasGameStarted) PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
-        }
+            //if (collision.gameObject.layer == selfLayer) { return; }
+            Debug.Log("krankenwagen" + collision.gameObject.name);// + " " + collision.transform.parent.name + " " + collision.transform.root.name);
+            if (isThrown || isGameStart)
+            {
+                AlignWithSurface(collision);
+                Stick();
+                if (RoleAssignment.hasGameStarted) PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
+            }
+        }  
     }
 
     public override void Use()
@@ -143,7 +148,7 @@ public class StickyNote : DynamicInteractableObject
         if(userID != Multiplayer.GetUser().Index) { return; }
         if (isInteractedWith && Input.GetMouseButton(0))
         {
-            Debug.Log("wa");
+            //Debug.Log("wa");
             mousePainter.Paint(tempCamRef);
         }
     }
@@ -184,11 +189,17 @@ public class StickyNote : DynamicInteractableObject
 
         Vector3 point = Vector3.zero;
         Collider col = collision.gameObject.GetComponent<Collider>();
+
+        if(collision.gameObject.layer == 9 || collision.gameObject.layer ==10)
+        {
+            col = collision.gameObject.GetComponent<CharacterController>();
+        }
         if (col != null && col.enabled)
         {
             point = col.ClosestPoint(transform.position);
         }
-
+        Debug.Log("kranken " + point + collision.gameObject.name);
+        //its this, cant find point on player's controller collider
 
         Vector3 hitNormal = transform.position - point;
         Vector3 alignsBestWith = GetClosestAxis(hitNormal);
@@ -212,6 +223,7 @@ public class StickyNote : DynamicInteractableObject
     }
     private void CheckRaycastForRigidbody()
     {
+        //Debug.DrawRay(transform.position, transform.forward * 500, Color.yellow);
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, 500))
         {
@@ -227,6 +239,7 @@ public class StickyNote : DynamicInteractableObject
                 if (transSync != null)
                 {
                     Guid aaa = transSync.GetUID();
+                    Debug.Log("krankenwagen passed transform");
                     BroadcastRemoteMethod(nameof(SyncSetParent), aaa);
                 }
                 else
@@ -236,6 +249,7 @@ public class StickyNote : DynamicInteractableObject
 
                 }
             }
+            //Debug.Break();
         }
 
     }
