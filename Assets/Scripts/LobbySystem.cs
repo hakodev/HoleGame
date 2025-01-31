@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbySystem : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI controlsText;
@@ -137,10 +138,11 @@ public class LobbySystem : MonoBehaviour {
     }
 
     private void DisplayNotificationText() {
+        CanvasGroup notifGroup = symptomNotifText.transform.parent.GetComponent<CanvasGroup>();
 
-        symptomNotifText.DOKill();
-        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
-        symptomNotifText.alpha = 1f;
+        notifGroup.DOKill();
+        notifGroup.transform.parent.gameObject.SetActive(true);
+        notifGroup.alpha = 1f;
         symptomNotifText.text = "Simulating new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
                                $"{SymptomsManager.Instance.GetSymptom().Description}";
@@ -156,14 +158,16 @@ public class LobbySystem : MonoBehaviour {
             };
         }
 
-        symptomNotifText.DOFade(0f, 10f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
+        notifGroup.DOFade(0f, 10f).OnComplete(() => notifGroup.transform.parent.gameObject.SetActive(false));
     }
 
     private void DisplayNoSymptomText() {
-        symptomNotifText.DOKill();
-        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
-        symptomNotifText.alpha = 1f;
+        CanvasGroup notifGroup = symptomNotifText.transform.parent.GetComponent<CanvasGroup>();
+
+        notifGroup.DOKill();
+        notifGroup.transform.parent.gameObject.SetActive(true);
+        notifGroup.alpha = 1f;
         symptomNotifText.text = "All symptoms removed!";
-        symptomNotifText.DOFade(0f, 5f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
+        notifGroup.DOFade(0f, 6f).OnComplete(() => notifGroup.transform.parent.gameObject.SetActive(false));
     }
 }

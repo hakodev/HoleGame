@@ -297,6 +297,53 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1690142335129562044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3717276532838660401}
+  - component: {fileID: 1970362934871855503}
+  m_Layer: 9
+  m_Name: BeachBallBehaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3717276532838660401
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690142335129562044}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.85, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6964225019351602572}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1970362934871855503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690142335129562044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406bff8bce152114ea1ee28aff8cb6f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  extents: {x: 0.3, y: 0.25, z: 0.3}
+  kickForce: 11
+  carpetDetection: {fileID: 2394153267043893264}
 --- !u!1 &1719338351492321157
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,6 +595,7 @@ Transform:
   - {fileID: 1599807874574610994}
   - {fileID: 6873708329993151148}
   - {fileID: 3865020088931088881}
+  - {fileID: 3717276532838660401}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &22722286681070130
@@ -5450,7 +5498,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5863680000721412134, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8305222489421702235}
   m_SourcePrefab: {fileID: 100100000, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
 --- !u!1 &1165480473783963065 stripped
 GameObject:
@@ -5468,6 +5519,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6990669613581925008 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5863680000721412134, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
+  m_PrefabInstance: {fileID: 3484696620319447734}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &8305222489421702235
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6990669613581925008}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!224 &8678407602285688474 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5202718215585442860, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
@@ -5484,6 +5552,10 @@ PrefabInstance:
     - target: {fileID: 1036779884072268975, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
       propertyPath: m_Name
       value: Animation
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036779884072268975, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2372121968991586763, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
       propertyPath: _uidString
