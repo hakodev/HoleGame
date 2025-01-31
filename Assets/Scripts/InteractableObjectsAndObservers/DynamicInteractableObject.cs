@@ -33,7 +33,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     protected virtual void Start()
     {
-        BroadcastRemoteMethod(nameof(DynamicSleep));
+       //BroadcastRemoteMethod(nameof(DynamicSleep));
         collidersDynamic = GetComponents<Collider>().ToList();
         Debug.Log("government " + gameObject.name + " " + collidersDynamic.Count);
     }
