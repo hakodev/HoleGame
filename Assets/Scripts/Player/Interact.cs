@@ -248,7 +248,7 @@ public class Interact : AttributesSync, IObserver
     {
         if (!avatar.IsMe) return;
         SetLayerRecursively(heldObject, 11);
-        LayerMask everythingButHeldObject = ~(1 << 11 | 10);
+        LayerMask everythingButHeldObject = ~((1 << 11) | (1 << 10));
 
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, placeReach, everythingButHeldObject, QueryTriggerInteraction.Ignore))
@@ -268,23 +268,25 @@ public class Interact : AttributesSync, IObserver
             float divider = 2;
             if (heldObject.gameObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) divider = 20;
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
-            rbToTrack.SetPosition(heldObject.transform.position);
+            Debug.Break();
 
+            //rbToTrack.SetPosition(heldObject.transform.position);
 
 
 
             if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster"))
             {
                 heldObject.transform.forward = -hit.normal;
-                rbToTrack.SetRotation(heldObject.transform.rotation);
+                //rbToTrack.SetRotation(heldObject.transform.rotation);
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             }
             else
             {
                 //angle for normally placed objects
                 heldObject.transform.up = hit.normal;
-                rbToTrack.SetRotation(heldObject.transform.rotation);
+                //rbToTrack.SetRotation(heldObject.transform.rotation);
             }
+            Debug.Break();
 
             //Debug.Log(hit.collider.gameObject.name);
             Transform hitRoot = hit.collider.transform.root;
@@ -376,6 +378,7 @@ public class Interact : AttributesSync, IObserver
     }
     private void PrepareForDropping()
     {
+        currentlyDropping = true;
         DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("DynamicAwake");
         DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), false);
@@ -409,6 +412,7 @@ public class Interact : AttributesSync, IObserver
         rbToTrack = null;
         rb = null;
         DIO = null;
+        currentlyDropping = false;
     }
 
     [SynchronizableMethod]
@@ -465,13 +469,15 @@ public class Interact : AttributesSync, IObserver
         rbToTrack.velocity = Vector3.zero;
         rbToTrack.angularVelocity = Vector3.zero;
     }
+    bool currentlyDropping = false;
     private void UpdateHeldObjectPhysics()
     {
+        if(currentlyDropping) { return; }
         if (heldObject != null)
         {
             if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster"))
             {
-                if (heldObject.GetComponent<StickyNote>().isInteractedWith)
+                if (heldObject.GetComponent<StickyNote>().isInteractedWith) //another getcomp in update
                 {
                     return;
                 }
