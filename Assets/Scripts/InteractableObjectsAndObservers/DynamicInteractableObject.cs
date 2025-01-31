@@ -58,6 +58,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
                 ownedCharacterController =currentlyOwnedByAvatar.gameObject.GetComponent<CharacterController>();
                 if (ownedCharacterController == null || isSticky!=null) { return; }
                 Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, true);
+                Debug.Log("should be ignoring my guy");
             }
         }
         else

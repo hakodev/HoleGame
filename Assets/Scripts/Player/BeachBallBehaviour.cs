@@ -3,7 +3,6 @@ using UnityEngine;
 public class BeachBallBehaviour : MonoBehaviour {
     [SerializeField] private Vector3 extents;
     [SerializeField] private float kickForce = 11f;
-    //[SerializeField] private CarpetDetection carpetDetection;
 
     private CharacterController characterController;
     private PlayerController playerController;
@@ -14,18 +13,27 @@ public class BeachBallBehaviour : MonoBehaviour {
     }
 
     private void Update() {
+        if((characterController.collisionFlags & CollisionFlags.CollidedBelow) != 0)
+        {
+
+        }
     }
 
     Rigidbody ballRigidbody;
     GameObject previouslyCollidedWithThisBall;
     int ignoreSelfPlayerLayer = ~(1 << 10);
-    void OnControllerColliderHit(ControllerColliderHit conHit)
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        DoBalls(hit);
+    }
+
+    private void DoBalls(ControllerColliderHit conHit)
     {
         if (conHit.gameObject.CompareTag("Ball")) //yes this is only for yoga balls
         {
             if (previouslyCollidedWithThisBall != conHit.gameObject)
             {
-                Debug.Log("oop new ball");
                 previouslyCollidedWithThisBall = conHit.gameObject;
                 ballRigidbody = previouslyCollidedWithThisBall.GetComponent<Rigidbody>();
             }
@@ -33,27 +41,28 @@ public class BeachBallBehaviour : MonoBehaviour {
             if (characterController.isGrounded)
             {
                 RaycastHit hit;
-                Debug.DrawRay(transform.position, Vector3.down* (characterController.height), Color.magenta);
-                if (Physics.Raycast(transform.position, Vector3.down, out hit, characterController.height, ignoreSelfPlayerLayer)) //last number ignores selfplayer layer
-                {
-                    Debug.Log("oop raycast");
-                    if (hit.collider.transform.gameObject == previouslyCollidedWithThisBall)
+                if (Physics.Raycast(transform.position, Vector3.down, out hit, characterController.height, ignoreSelfPlayerLayer)) //last number ignores selfplayer layer              
+                {  
+                    if (hit.collider == conHit.collider)
                     {
-                        Debug.Log("oop obj");
                         playerController.Jump();
+
+
+                        RaycastHit ballHitGround;
+                        if (!Physics.Raycast(previouslyCollidedWithThisBall.transform.position, Vector3.down, out ballHitGround, 0.55f))
+                        {
+                            ballRigidbody.linearVelocity = -ballRigidbody.linearVelocity / 2f;
+                        }
                     }
                     else
                     {
-                        Debug.Log("oop jump");
                         Vector3 direction = (ballRigidbody.transform.position - this.transform.position).normalized;
                         ballRigidbody.AddForce(direction * kickForce, ForceMode.Impulse);
                     }
                 }
             }
         }
-
     }
-
 
     private void OnDrawGizmos() {
         Gizmos.DrawWireCube(transform.position, extents * 2);
