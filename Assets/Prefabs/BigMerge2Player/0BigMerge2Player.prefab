@@ -5636,7 +5636,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1411767531029448869, guid: ffea88ef3d2e65543b961960cd7e4afb, type: 3}
 --- !u!114 &4647582123086195248
@@ -5651,7 +5651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0eb8282aa7e0040b02b5efced32524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateColliderEveryNUpdate: 7
+  updateColliderEveryNUpdate: 30
 --- !u!4 &5178066372033882247 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8293703128637741164, guid: a8222ce6427cf624ebcf1d91dda25130, type: 3}
