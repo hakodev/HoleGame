@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1731013900170456044}
-  - component: {fileID: 2878490556800283680}
   - component: {fileID: 7774169178556231581}
   - component: {fileID: 1566520578020904309}
   - component: {fileID: 4317739697838236705}
+  - component: {fileID: 3737974195054021886}
   m_Layer: 7
   m_Name: BeachBall
   m_TagString: Ball
@@ -36,23 +36,6 @@ Transform:
   - {fileID: 5701308979669735602}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2878490556800283680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1104679487570050131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64fb435e20e4d394a8e60948a8999407, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: e1a5b469-4657-477d-9e8f-3981a9ad412b
-  Reliability: 2
-  LocalMethodBehavior: 1
-  isPickedUp: 0
 --- !u!54 &7774169178556231581
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -138,6 +121,26 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3737974195054021886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104679487570050131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406bff8bce152114ea1ee28aff8cb6f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 
+  Reliability: 1
+  LocalMethodBehavior: 1
+  isPickedUp: 0
+  extents: {x: 0, y: 0, z: 0}
+  kickForce: 2
+  carpetDetection: {fileID: 0}
 --- !u!1 &8633962207934840053
 GameObject:
   m_ObjectHideFlags: 0

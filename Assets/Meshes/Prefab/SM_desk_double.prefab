@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3755743648150943732}
-  - component: {fileID: 4780707269705950405}
+  - component: {fileID: 2145673669717980996}
   m_Layer: 0
   m_Name: SM_desk_double
   m_TagString: Untagged
@@ -33,8 +33,8 @@ Transform:
   - {fileID: 7555517660894914492}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &4780707269705950405
-MeshCollider:
+--- !u!65 &2145673669717980996
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -51,10 +51,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 1.9786379, y: 0.07045305, z: 0.58431214}
+  m_Center: {x: -0.0033841836, y: 0.7511799, z: -0.003471767}
 --- !u!1001 &8020961743149301847
 PrefabInstance:
   m_ObjectHideFlags: 0

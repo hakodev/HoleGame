@@ -9,8 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9005267347043097872}
-  - component: {fileID: 1617653871664178458}
-  m_Layer: 0
+  - component: {fileID: 8966293648164856629}
+  - component: {fileID: 893411926412125722}
+  - component: {fileID: 6506157073516492589}
+  - component: {fileID: 4483580511323351278}
+  m_Layer: 7
   m_Name: SM_stapler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33,8 +36,8 @@ Transform:
   - {fileID: 8253950767097682877}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &1617653871664178458
-MeshCollider:
+--- !u!65 &8966293648164856629
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -51,10 +54,90 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 0.031538673, y: 0.061449297, z: 0.16816466}
+  m_Center: {x: 0.00028627738, y: 0.030610394, z: -0.001244165}
+--- !u!114 &893411926412125722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4566870943618508555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64fb435e20e4d394a8e60948a8999407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: f8d15ac6-ad4f-4673-91e3-6997aeec9efd
+  Reliability: 1
+  LocalMethodBehavior: 1
+  isPickedUp: 0
+--- !u!54 &6506157073516492589
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4566870943618508555}
+  serializedVersion: 4
+  m_Mass: 0.3
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &4483580511323351278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4566870943618508555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1576325847, guid: 0ae8d181602a00248a82f64a684a1c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 4b4b2b7b-cde3-42c1-86a4-9b683968cf78
+  BucketBehaviors:
+  - Name: Min
+    NetLOD: 0
+    Frequency: -1
+  - Name: Low
+    NetLOD: 1
+    Frequency: 0
+  - Name: Mid
+    NetLOD: 2
+    Frequency: 0
+  - Name: High
+    NetLOD: 3
+    Frequency: 0
+  - Name: Max
+    NetLOD: 4
+    Frequency: 120
+  Reliability: 1
+  SyncEveryNUpdates: 10
+  FullSyncEveryNSync: 4
+  SendData: 1
+  ApplyAsTransform: 0
+  AllowCollisionToAssumeOwner: 1
+  Rigidbody: {fileID: 6506157073516492589}
 --- !u!1001 &8431113438936628310
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -103,6 +186,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8551654070373378105, guid: a8ed2d2615f44304c9d4c7e9b2c44082, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: -5754732837579649886, guid: a8ed2d2615f44304c9d4c7e9b2c44082, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -114,6 +201,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a8ed2d2615f44304c9d4c7e9b2c44082, type: 3}
       propertyPath: m_Name
       value: SM_stapler
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a8ed2d2615f44304c9d4c7e9b2c44082, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1835210009659533079, guid: a8ed2d2615f44304c9d4c7e9b2c44082, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

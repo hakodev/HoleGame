@@ -1,22 +1,35 @@
 using UnityEngine;
 
-public class BeachBallBehaviour : MonoBehaviour {
+public class BeachBallBehaviour : DynamicInteractableObject {
     [SerializeField] private Vector3 extents;
-    [SerializeField] private float kickForce = 11f;
+    [SerializeField] private float kickForce = 2f;
     [SerializeField] private CarpetDetection carpetDetection;
 
     private Collider[] currentColliders;
     private CharacterController characterController;
     private PlayerController playerController;
 
-    private void Start() {
+    protected override void Start() {
+        base.Start();
         characterController = transform.root.gameObject.GetComponent<CharacterController>();
         playerController = transform.root.gameObject.GetComponent<PlayerController>();
     }
 
-    private void Update() {
+    protected override void Update() {
+        base.Update();
         CheckForBallCollision();
     }
+
+
+    public override void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller)
+    {
+
+    }
+    public override void Use() 
+    {
+    
+    }
+
 
     private void CheckForBallCollision() {
         currentColliders = Physics.OverlapBox(transform.position, extents, Quaternion.identity);
