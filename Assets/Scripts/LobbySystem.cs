@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class LobbySystem : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI controlsText;
@@ -36,13 +35,13 @@ public class LobbySystem : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
             SymptomsManager.Instance.JustSetSymptom(0); // Inverted controls
             ResetCarpetParams();
-            //DisplayNotificationText();
+            DisplayNotificationText();
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) {
             SymptomsManager.Instance.JustSetSymptom(1);// Jumpy carpets
             SetCarpetParams();
-            //DisplayNotificationText();
+            DisplayNotificationText();
 
 
 
@@ -51,13 +50,13 @@ public class LobbySystem : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) {
             SymptomsManager.Instance.JustSetSymptom(2); // Render distance
             ResetCarpetParams();
-            //DisplayNotificationText();
+            DisplayNotificationText();
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) {
             SymptomsManager.Instance.JustSetSymptom(999); // no symptom
             ResetCarpetParams();
-            //DisplayNoSymptomText();
+            DisplayNoSymptomText();
         }
         
     }
@@ -138,11 +137,10 @@ public class LobbySystem : MonoBehaviour {
     }
 
     private void DisplayNotificationText() {
-        CanvasGroup notifGroup = symptomNotifText.transform.parent.GetComponent<CanvasGroup>();
 
-        notifGroup.DOKill();
-        notifGroup.transform.parent.gameObject.SetActive(true);
-        notifGroup.alpha = 1f;
+        symptomNotifText.DOKill();
+        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
+        symptomNotifText.alpha = 1f;
         symptomNotifText.text = "Simulating new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
                                $"{SymptomsManager.Instance.GetSymptom().Description}";
@@ -158,16 +156,14 @@ public class LobbySystem : MonoBehaviour {
             };
         }
 
-        notifGroup.DOFade(0f, 10f).OnComplete(() => notifGroup.transform.parent.gameObject.SetActive(false));
+        symptomNotifText.DOFade(0f, 10f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
     }
 
     private void DisplayNoSymptomText() {
-        CanvasGroup notifGroup = symptomNotifText.transform.parent.GetComponent<CanvasGroup>();
-
-        notifGroup.DOKill();
-        notifGroup.transform.parent.gameObject.SetActive(true);
-        notifGroup.alpha = 1f;
+        symptomNotifText.DOKill();
+        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
+        symptomNotifText.alpha = 1f;
         symptomNotifText.text = "All symptoms removed!";
-        notifGroup.DOFade(0f, 6f).OnComplete(() => notifGroup.transform.parent.gameObject.SetActive(false));
+        symptomNotifText.DOFade(0f, 5f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
     }
 }
