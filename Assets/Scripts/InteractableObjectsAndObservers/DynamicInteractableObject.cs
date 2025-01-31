@@ -1,5 +1,7 @@
 using Alteruna;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
@@ -13,8 +15,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
     RigidbodySynchronizable rbSyncDynamic;
     Rigidbody rbDynamic;
-    Collider colliderDynamic;
-
+    List<Collider> collidersDynamic;
     protected float minVelocityToProduceSound = 0.1f;
 
     bool awake = false;
@@ -29,11 +30,12 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     {
         rbSyncDynamic = GetComponent<RigidbodySynchronizable>();
         rbDynamic = GetComponent<Rigidbody>();
-        colliderDynamic = GetComponent<Collider>();
     }
     protected virtual void Start()
     {
         BroadcastRemoteMethod(nameof(DynamicSleep));
+        collidersDynamic = GetComponents<Collider>().ToList();
+        Debug.Log("government " + gameObject.name + " " + collidersDynamic.Count);
     }
     protected virtual void Update()
     {
@@ -57,14 +59,22 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
             {
                 ownedCharacterController =currentlyOwnedByAvatar.gameObject.GetComponent<CharacterController>();
                 if (ownedCharacterController == null || isSticky!=null) { return; }
-                Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, true);
+                IgnoreCols(true);
             }
         }
         else
         {
             if (ownedCharacterController == null || isSticky!=null) { return; }
-            Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, false);
+            IgnoreCols(false);
             ownedCharacterController = null;
+        }
+    }
+
+    private void IgnoreCols(bool newState)
+    {
+        foreach (Collider col in collidersDynamic)
+        {
+            Physics.IgnoreCollision(col, ownedCharacterController, newState);
         }
     }
 

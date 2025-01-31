@@ -12,7 +12,7 @@ public class BasicPhysicsObject : DynamicInteractableObject
 
     protected override void Start()
     {
-
+        base.Start();
     }
     public override void SpecialInteraction(InteractionEnum interaction, Component caller)
     {
