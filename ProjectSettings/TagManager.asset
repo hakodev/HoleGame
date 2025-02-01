@@ -16,6 +16,7 @@ TagManager:
   - Ball
   - HumanMesh
   - LastChanceDisplay
+  - replacingThisObjectWithPrefab
   layers:
   - Default
   - TransparentFX

@@ -82,6 +82,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         {
             //Physics.IgnoreCollision(collidersDynamic[i], currentController, newState);
             collidersDynamic[i].enabled = !newState;
+
         }
     }
 
