@@ -37,7 +37,6 @@ public class AssignPlayerProgileTexture : AttributesSync {
     {
         texture = new Texture2D(TexturesManager.Instance.width, TexturesManager.Instance.height, TextureFormat.RGBA32, false);
 
-
         //Unity.Collections.NotBurstCompatible.Extensions.CopyFromNBC<Color32>(colors, texturearray);
 
         texture.SetPixelData(texturearray, 0, 0);

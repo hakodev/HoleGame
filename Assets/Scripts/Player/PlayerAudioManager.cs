@@ -12,6 +12,7 @@ public class PlayerAudioManager : MonoBehaviour
     [SerializeField] private AudioClipSettings stickyHit;
     [SerializeField] private AudioClipSettings mugHit;
     [SerializeField] private AudioClipSettings bouncyHit;
+    [SerializeField] private AudioClipSettings paperCrumple;
 
     #region Properties
     public AudioClipSettings GetHeavyHit { get => heavyHit; }
@@ -23,6 +24,7 @@ public class PlayerAudioManager : MonoBehaviour
     public AudioClipSettings GetSticky { get => stickyHit; }
     public AudioClipSettings GetMug { get => mugHit; }
     public AudioClipSettings GetBouncyBall { get => bouncyHit; }
+    public AudioClipSettings GetCrumple { get => paperCrumple; }
 
     private static PlayerAudioManager instance;
 

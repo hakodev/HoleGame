@@ -127,7 +127,7 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
 
             TexturesManager.Instance.width = screenTexture.width/7;
             TexturesManager.Instance.height = screenTexture.height/7;
-            TexturesManager.Instance.SetTextureParams( texture2D.GetPixelData<Color32>(0).ToArray(), screenTexture.width/7, screenTexture.height/7);
+            TexturesManager.Instance.SetTextureParams(texture2D.GetPixelData<Color32>(0).ToArray(), screenTexture.width/7, screenTexture.height/7);
             
 
             //RenderTexture.active = previous;
