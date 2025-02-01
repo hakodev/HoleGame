@@ -21,7 +21,7 @@ public class SymptomNotifText : AttributesSync
     private new void OnEnable()
     {
         base.OnEnable();
-       // if (lobbySystem != null) {return;}
+        if(lobbySystem.gameObject.activeSelf) {return;}
         SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
     }
 
