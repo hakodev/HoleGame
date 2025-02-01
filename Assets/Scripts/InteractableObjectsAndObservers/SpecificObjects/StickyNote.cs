@@ -90,12 +90,16 @@ public class StickyNote : DynamicInteractableObject
     {
         base.OnCollisionEnter(collision);
         if (collision.gameObject.layer == selfLayer) { return; }
-        if (isThrown || isGameStart)
-        {
-            AlignWithSurface(collision);
-            Stick();
-            // PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
+
+        if (!isPlaced) {
+            if (isThrown || isGameStart)
+            {
+                AlignWithSurface(collision);
+                Stick();
+                if (RoleAssignment.hasGameStarted) PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
+            }
         }
+            
     }
 
     public override void Use()
@@ -257,10 +261,18 @@ public class StickyNote : DynamicInteractableObject
                 parentRB.linearVelocity = Vector3.zero;
                 parentRB.angularVelocity = Vector3.zero;
             }
+            else
+            {
+                if (parentedTo.gameObject.layer == 9 || parentedTo.gameObject.layer == 10)
+                {
+                    playerParentCollider = parentedTo.GetComponent<CharacterController>();
+                }
+            }
 
             for (int j = 0; j < allStickyColliders.Count; j++)
             {
-                Physics.IgnoreCollision(parentCollider, allStickyColliders[j]);
+                if (playerParentCollider == null) Physics.IgnoreCollision(parentCollider, allStickyColliders[j]);
+                if (playerParentCollider != null) Physics.IgnoreCollision(playerParentCollider, allStickyColliders[j]);
             }
         }
     }
@@ -280,12 +292,15 @@ public class StickyNote : DynamicInteractableObject
     private void GnoreCollisions()
     {
         if (parentCollider == null) { return; }
-        foreach (Collider col in allStickyColliders)
+        for (int j = 0; j < allStickyColliders.Count; j++)
         {
-            Physics.IgnoreCollision(parentCollider, col, false);
+            if (playerParentCollider == null) Physics.IgnoreCollision(parentCollider, allStickyColliders[j], false);
+            if (playerParentCollider != null) Physics.IgnoreCollision(playerParentCollider, allStickyColliders[j], false);
         }
+    
 
         parentCollider = null;
+        playerParentCollider= null;
         //allStickyColliders.Clear();
     }
 
