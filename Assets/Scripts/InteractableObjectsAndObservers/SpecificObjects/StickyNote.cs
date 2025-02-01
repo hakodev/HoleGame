@@ -194,19 +194,21 @@ public class StickyNote : DynamicInteractableObject
         {
             point = col.ClosestPoint(transform.position);
 
-            
+            //the world is too young for these nonconvex ideas
+            /*
             if (col is MeshCollider)
             {
                 MeshCollider meshCol = (MeshCollider)col;
                 if(!meshCol.convex)
                 {
                     RaycastHit slaviOtTheClashers;
-                    Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized, out slaviOtTheClashers, 500);
-                    Debug.DrawRay(transform.position, (col.transform.position - transform.position).normalized * 500);
+                    Physics.Raycast(transform.position, transform.forward, out slaviOtTheClashers, 500);
+                    Debug.DrawRay(transform.position, transform.forward * 500);
                     Debug.Break();
                     point = slaviOtTheClashers.point;
                 }   
             }
+            */
         }
         Debug.Log("kranken " + point + collision.gameObject.name);
         //its this, cant find point on player's controller collider

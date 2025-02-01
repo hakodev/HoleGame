@@ -55,7 +55,7 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: -0.4
+    m_Value: 0
   contrast:
     m_OverrideState: 1
     m_Value: -10.2
@@ -67,7 +67,7 @@ MonoBehaviour:
     m_Value: 0
   saturation:
     m_OverrideState: 1
-    m_Value: 4.1
+    m_Value: -3
 --- !u!114 &-830266327634610849
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -105,7 +105,7 @@ MonoBehaviour:
     m_Value: 0.91
   intensity:
     m_OverrideState: 1
-    m_Value: 4.23
+    m_Value: 5.4
   scatter:
     m_OverrideState: 1
     m_Value: 0.506
@@ -241,7 +241,7 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0.025751054
+          value: 0.089980066
           inSlope: 0
           outSlope: 1
           tangentMode: 0

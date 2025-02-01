@@ -281,21 +281,21 @@ public class Interact : AttributesSync, IObserver
             if (heldObject.gameObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) divider = 20;
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
 
-            //rbToTrack.SetPosition(heldObject.transform.position);
+            rbToTrack.SetPosition(heldObject.transform.position);
 
 
 
             if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster"))
             {
                 heldObject.transform.forward = -hit.normal;
-                //rbToTrack.SetRotation(heldObject.transform.rotation);
+                rbToTrack.SetRotation(heldObject.transform.rotation);
                 heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.PlacedStickyNote, this);
             }
             else
             {
                 //angle for normally placed objects
                 heldObject.transform.up = hit.normal;
-                //rbToTrack.SetRotation(heldObject.transform.rotation);
+                rbToTrack.SetRotation(heldObject.transform.rotation);
             }
             //Debug.Log(hit.collider.gameObject.name);
             CoffeeMachine KAFFEEMASCHINE = hit.collider.transform.root.GetComponentInChildren<CoffeeMachine>();
