@@ -15,6 +15,7 @@ TagManager:
   - Carpet
   - Ball
   - HumanMesh
+  - LastChanceDisplay
   layers:
   - Default
   - TransparentFX

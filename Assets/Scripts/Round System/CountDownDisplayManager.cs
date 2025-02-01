@@ -10,8 +10,9 @@ public class CountDownDisplayManager : AttributesSync {
     [SerializeField] GameObject CountDown;
 
     public static bool hasInitiatedTheTimer = false;
-    [field: SerializeField] public int RoundsLeft { get; set; } = 2;
 
+    [field: SerializeField][field: SynchronizableField] public int RoundsLeft { get; set; } = 2;
+    public string lastChanceText = "End Round";
 
     private void Start()
     {

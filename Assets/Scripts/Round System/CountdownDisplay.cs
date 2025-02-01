@@ -32,12 +32,16 @@ public class CountdownDisplay : AttributesSync {
         sendFlavorTextToUI = "";
     }
 
-    private void Start()
+    private void Awake()
     {
         maxTime = time;
+        sendRoundsLeft = manager.RoundsLeft;
+    }
+
+    private void Start()
+    {
         sendFlavorTextToUI = flavorTextMesh.text;
         roundNumberText.text = manager.RoundsLeft.ToString();
-        sendRoundsLeft = manager.RoundsLeft;
     }
     
 
@@ -61,10 +65,16 @@ public class CountdownDisplay : AttributesSync {
     {
         sendRoundsLeft = manager.RoundsLeft;
         roundNumberText.text = manager.RoundsLeft.ToString();
+        sendRoundsLeft = manager.RoundsLeft;
+
+        if(manager.RoundsLeft<=1)
+        {
+            flavorTextMesh.text = manager.lastChanceText;
+            sendFlavorTextToUI = manager.lastChanceText;
+        }
+
 
         //Debug.Log("vvv " + manager.RoundsLeft);
-        //manager.RoundsLeft--;
-        //Debug.Log("vvv2 " + manager.RoundsLeft + gameObject.name + " " + Multiplayer.GetUser() + " " + Multiplayer.GetAvatar() + " " + (RoleAssignment.playerID - 1));
 
         VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
         player.EndVotingPhase();
@@ -119,6 +129,11 @@ public class CountdownDisplay : AttributesSync {
         }
         else
         {
+            if (gameObject.CompareTag("VotingDisplay"))
+            {
+                manager.RoundsLeft--;
+            }
+
             manager.BroadcastRemoteMethod("ActivateTimer", parameters: gameObject.name);
             BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
             

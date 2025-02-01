@@ -70,7 +70,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.807, y: -0.092}
+  m_AnchoredPosition: {x: -2.38, y: -0.09}
   m_SizeDelta: {x: 4, y: 1.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3583343577092170808
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -827,13 +827,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: adbed315-043e-42ec-bd9d-979087e09257
+  _uidString: 552d9d51-3d6d-491b-9d9d-206c1e8da89f
   Reliability: 1
   LocalMethodBehavior: 1
   StartDowntime: {fileID: 8094665353037796566}
   PickTaskManager: {fileID: 1280497274071223182}
   CountDown: {fileID: 2442491278287635470}
-  <RoundsLeft>k__BackingField: 4
+  <RoundsLeft>k__BackingField: 2
+  lastChanceText: Shoot or DIE
 --- !u!1 &1723619830740558974
 GameObject:
   m_ObjectHideFlags: 0
@@ -963,7 +964,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2176385990356050410}
   m_LocalRotation: {x: -0, y: -0, z: 0.000000007450579, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -971,7 +972,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.807, y: -0.092}
+  m_AnchoredPosition: {x: -2.324, y: -0.092}
   m_SizeDelta: {x: 4, y: 1.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2507103167230714062
@@ -1036,7 +1037,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -3035,7 +3036,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.807, y: -0.092}
+  m_AnchoredPosition: {x: -2.39, y: -0.09}
   m_SizeDelta: {x: 4, y: 1.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2467497889449411268
@@ -3100,7 +3101,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -3458,7 +3459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: b9cf21fa-9c21-422f-8ad2-1ba6a0a1cc9b
+  _uidString: 9fc0e0b2-4bbf-4d2d-b364-a3a8b18db8a6
   Reliability: 1
   LocalMethodBehavior: 1
   secondsRemainingToTurnRed: 20
@@ -3502,7 +3503,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.807, y: -0.092}
+  m_AnchoredPosition: {x: -2.283, y: -0.09}
   m_SizeDelta: {x: 4, y: 1.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5773849701302763143
@@ -3567,7 +3568,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
