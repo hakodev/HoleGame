@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Unity.Collections.NotBurstCompatible;
 
 public class AssignPlayerProgileTexture : AttributesSync { 
     public Texture2D texture;
     private Renderer screenrenderer;
-    [SynchronizableField] public NativeArray<Color32> texturearray;
+    [SynchronizableField] public Color32[] texturearray;
 
     private Alteruna.Avatar avatar;
-
+    //NativeList<Color32> colors = new NativeList<Color32>();
     void Start()
     {
         
@@ -19,13 +20,16 @@ public class AssignPlayerProgileTexture : AttributesSync {
 
         BroadcastRemoteMethod(nameof(SetTextureArray));
 
-        BroadcastRemoteMethod(nameof(SetDrawing));
+        
     }
     [SynchronizableMethod]
     public void SetTextureArray()
     {
-        if (!Multiplayer.GetAvatar().IsMe) return;
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        if (!avatar.IsMe) return;
+        
         texturearray = TexturesManager.Instance.texturearray;
+        BroadcastRemoteMethod(nameof(SetDrawing));
     }
 
     [SynchronizableMethod]
@@ -33,8 +37,14 @@ public class AssignPlayerProgileTexture : AttributesSync {
     {
         texture = new Texture2D(TexturesManager.Instance.width, TexturesManager.Instance.height, TextureFormat.RGBA32, false);
 
+
+        //Unity.Collections.NotBurstCompatible.Extensions.CopyFromNBC<Color32>(colors, texturearray);
+
         texture.SetPixelData(texturearray, 0, 0);
+
+
         texture.Apply(false);
+
 
     }
 
@@ -43,12 +53,23 @@ public class AssignPlayerProgileTexture : AttributesSync {
         BroadcastRemoteMethod(nameof(SyncTexture));
     }
 
+    
+
     [SynchronizableMethod]
     void SyncTexture()
     {
-        avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        if(avatar == null)
+        {
+            avatar = transform.root.GetComponent<Alteruna.Avatar>();
+        }
+       
         if (avatar.IsMe) return;
-        screenrenderer = GetComponent<Renderer>();
+
+        if (screenrenderer == null)
+        {
+
+            screenrenderer = GetComponent<Renderer>();
+        }
         screenrenderer.material.SetTexture("_MaskTexture", texture);
     }
 }

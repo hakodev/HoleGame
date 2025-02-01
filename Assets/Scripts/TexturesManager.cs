@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 public class TexturesManager : MonoBehaviour
 {
-    public NativeArray<Color32> texturearray;
+    public Color32[] texturearray;
 
     public Texture2D currentTexture;
     private static TexturesManager instance;
@@ -27,11 +27,11 @@ public class TexturesManager : MonoBehaviour
     }
 
 
-    public void SetTextureParams(NativeArray<Color32> array, int width, int height)
+    public void SetTextureParams(Color32[] array, int width, int height)
     {
 
         currentTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
-        texturearray = currentTexture.GetPixelData<Color32>(0);
+        texturearray = currentTexture.GetPixelData<Color32>(0).ToArray();
         for (int i = 0; i < array.Length; i++)
         {
             texturearray[i] = array[i];
