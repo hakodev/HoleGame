@@ -78,13 +78,11 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
         Debug.Log("krank human collider3" + currentController + collidersDynamic.Count);
 
-
-        //  if (collidersDynamic != null && CurrentHumanCollider != null && collidersDynamic.Count > 0) {
-        foreach (Collider col in collidersDynamic)
+        for (int i = 0; i<collidersDynamic.Count; i++)
         {
-            Physics.IgnoreCollision(col, currentController, newState);
+            //Physics.IgnoreCollision(collidersDynamic[i], currentController, newState);
+            collidersDynamic[i].enabled = !newState;
         }
-        // }
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
@@ -111,7 +109,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
         if (currentlyOwnedByAvatar == null)
         {
-            if (rbDynamic.linearVelocity.magnitude < 0.1f)
+            if (rbDynamic.linearVelocity.magnitude < 0.05f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
                 if (timeSinceLastSignificantMovement > 3f)
@@ -151,9 +149,9 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     public void DynamicAwake()
     {
         awake = true;
-        rbSyncDynamic.SyncEveryNUpdates = 1;
-        rbSyncDynamic.FullSyncEveryNSync = 1;
-        Debug.Log("awake " + gameObject.name); //keep this here so we know what causes problems with latency in the future
+        rbSyncDynamic.SyncEveryNUpdates = 2;
+        rbSyncDynamic.FullSyncEveryNSync = 4;
+        Debug.Log("awake " + gameObject.name + " " + rbDynamic.linearVelocity.magnitude); //keep this here so we know what causes problems with latency in the future
     }
 
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()

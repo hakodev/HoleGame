@@ -33,6 +33,7 @@ public class StickyNote : DynamicInteractableObject
     Collider parentCollider;
     CharacterController playerParentCollider;
     Transform parentedTo;
+
     public bool IsPoster { get; private set; } = false;
 
 
@@ -73,6 +74,7 @@ public class StickyNote : DynamicInteractableObject
         {
             isPlaced = false;
             originalPos = transform.position;
+            ChangeLayerIfStuckToPlayer(7);
             BroadcastRemoteMethod(nameof(GnoreCollisions));
         }
         if (interaction == InteractionEnum.MarkerOnPosterOrStickyNote)
@@ -99,7 +101,7 @@ public class StickyNote : DynamicInteractableObject
                 if (RoleAssignment.hasGameStarted) PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
             }
         }
-            
+
     }
 
     public override void Use()
@@ -165,8 +167,12 @@ public class StickyNote : DynamicInteractableObject
         }
     }*/
 
+
+
     private void Stick()
     {
+        ChangeLayerIfStuckToPlayer(10);
+
 
         ResetMomentum();
 
@@ -182,6 +188,40 @@ public class StickyNote : DynamicInteractableObject
         BroadcastRemoteMethod(nameof(ToggleRigidbody), false);
 
     }
+    private void ChangeLayerIfStuckToPlayer(int newLayer) //changes layer only for player it is stuck to
+    {
+        if (playerParentCollider == null) { return; }
+
+        UserId parentAvatarUserIndex = (UserId)playerParentCollider.GetComponent<Alteruna.Avatar>().Owner.Index;
+        Debug.Log("grill " + parentAvatarUserIndex);
+        InvokeRemoteMethod(nameof(ChangeChildrenLayers), parentAvatarUserIndex, newLayer); //removes sticky note on parent's side, enables it in trytopickup
+    }
+
+    [SynchronizableMethod]
+    private void ChangeChildrenLayers(int newLayer)
+    {
+        List<GameObject> tempList = new List<GameObject>();
+        tempList.Add(gameObject);
+        GetChildRecursive(gameObject, tempList);
+        foreach (GameObject child in tempList)
+        {
+            child.gameObject.layer = newLayer;
+        }
+        tempList.Clear();
+    }
+
+    private void GetChildRecursive(GameObject obj, List<GameObject> tempChildList)
+    {
+        if (null == obj) { return; }
+
+        foreach (Transform child in obj.transform)
+        {
+            if (null == child) { continue; }
+            tempChildList.Add(child.gameObject);
+            GetChildRecursive(child.gameObject, tempChildList);
+        }
+    }
+
 
     private void AlignWithSurface(Collision collision)
     {

@@ -201,7 +201,7 @@ public class Interact : AttributesSync, IObserver
         if (objectToApply == currentOutlinedObject) { return; }
         if (currentOutlinedObject != null && objectToApply != currentOutlinedObject)
         {
-            ChangeChildrenLayers("Default", tempChildList);
+            ChangeChildrenLayers("DynamicInteractableObject", tempChildList);
             StickyNote.AmendShaderLayeringInInteract(currentOutlinedObject.gameObject);
         }
 
@@ -213,7 +213,7 @@ public class Interact : AttributesSync, IObserver
         StickyNote.AmendShaderLayeringInInteract(objectToApply);
     }
 
-    private void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
+    public void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
     {
         GetChildRecursive(currentOutlinedObject.gameObject, tempChildList);
         foreach (GameObject child in tempChildList)
@@ -221,7 +221,6 @@ public class Interact : AttributesSync, IObserver
             child.gameObject.layer = LayerMask.NameToLayer(layerName);
         }
         tempChildList.Clear();
-
     }
 
     private void GetChildRecursive(GameObject obj, List<GameObject> tempChildList)
@@ -426,6 +425,7 @@ public class Interact : AttributesSync, IObserver
             //Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
+                Debug.Log("pish " + DIO.GetCurrentlyOwnedByAvatar());
                 //get all necessary variales
                 heldObject = pickedUp;
                 rb = heldObject.GetComponent<Rigidbody>();
@@ -448,6 +448,8 @@ public class Interact : AttributesSync, IObserver
                 DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
                 DIO.BroadcastRemoteMethod("DynamicAwake");
                 DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), true);
+
+                Debug.Log("pish2 " + DIO.GetCurrentlyOwnedByAvatar());
                 //Physics.IgnoreCollision(heldObject.GetComponent<Collider>(), characterController, true);
 
 
