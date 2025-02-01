@@ -63,8 +63,8 @@ public class CountdownDisplay : AttributesSync {
         roundNumberText.text = manager.RoundsLeft.ToString();
 
         //Debug.Log("vvv " + manager.RoundsLeft);
-        manager.RoundsLeft--;
-        Debug.Log("vvv2 " + manager.RoundsLeft + gameObject.name + " " + Multiplayer.GetUser() + " " + Multiplayer.GetAvatar() + " " + (RoleAssignment.playerID - 1));
+        //manager.RoundsLeft--;
+        //Debug.Log("vvv2 " + manager.RoundsLeft + gameObject.name + " " + Multiplayer.GetUser() + " " + Multiplayer.GetAvatar() + " " + (RoleAssignment.playerID - 1));
 
         VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
         player.EndVotingPhase();
@@ -119,12 +119,6 @@ public class CountdownDisplay : AttributesSync {
         }
         else
         {
-            if (gameObject.name == "CountdownStartDowntime_60")
-            {
-    
-            }
-
-
             manager.BroadcastRemoteMethod("ActivateTimer", parameters: gameObject.name);
             BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
             
