@@ -11,8 +11,7 @@ public class throwBar : MonoBehaviour
     private void Start()
     {
         originalscalex = loadingBar.transform.localScale.x;       
-        loadingBar.transform.localScale = new Vector3(0, loadingBar.transform.localScale.y, loadingBar.transform.localScale.z);
-        parentObject.SetActive(false);
+        ResetBar();
     }
 
     public void IncrementBar(float currentCharge, float maxCharge)
