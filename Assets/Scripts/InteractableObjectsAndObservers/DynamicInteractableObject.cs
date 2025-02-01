@@ -74,9 +74,12 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
     private void IgnoreCols(bool newState)
     {
-        foreach (Collider col in collidersDynamic)
-        {
-            Physics.IgnoreCollision(col, CurrentHumanCollider, newState);
+        Debug.Log("ignoring a deeper bug");
+        if (CurrentHumanCollider != null && collidersDynamic != null && collidersDynamic.Count > 0) {
+            foreach (Collider col in collidersDynamic)
+            {
+                Physics.IgnoreCollision(col, CurrentHumanCollider, newState);
+            }
         }
     }
 

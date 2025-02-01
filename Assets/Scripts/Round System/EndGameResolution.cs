@@ -1,7 +1,6 @@
 
 using UnityEngine;
 using TMPro;
-using System.Collections;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using Alteruna;
@@ -34,10 +33,11 @@ public class EndGameResolution : AttributesSync
 
 
     [SynchronizableField] public bool inWildWest = false;
-
+    public static bool hasGameEnded = false;
 
     private void Awake()
-    {        endGameCanvas = GetComponent<Canvas>();
+    {
+        endGameCanvas = GetComponent<Canvas>();
         popUp = transform.GetComponentInChildren<PopUp>();
     }
     private void Start()
@@ -46,6 +46,7 @@ public class EndGameResolution : AttributesSync
         display = FindAnyObjectByType<CountDownDisplayManager>();
         wildWestExplanatoryText.gameObject.SetActive(false);
         popUp.gameObject.SetActive(false);
+        hasGameEnded = false;
     }
 
     public void CheckForEndGame()
@@ -54,7 +55,7 @@ public class EndGameResolution : AttributesSync
 
         if (VotingPhase.totalALivePlayers.Count==2 && infiltratorsCount == 1 && machinesCount ==1) WildWest();
 
-        if (display.TimeToEndTheGame<=0) GroupWon(infiltratorsWon ,timerEndedText);
+        if (CountdownDisplay.sendRoundsLeft<=0) GroupWon(infiltratorsWon ,timerEndedText);
         if (infiltratorsCount == 0) GroupWon(machinesWon, allInfiltratorsDead);
         if (machinesCount == 0) GroupWon(infiltratorsWon, allMachinesDead);      
     }
@@ -105,6 +106,8 @@ public class EndGameResolution : AttributesSync
 
     private void GroupWon(CanvasGroup group, string description)
     {
+        hasGameEnded = true;
+
         popUp.gameObject.SetActive(true);
         popUp.PopIn();
 
