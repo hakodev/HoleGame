@@ -91,7 +91,7 @@ public class StickyNote : DynamicInteractableObject
 
         if(!isPlaced)
         {
-            //if (collision.gameObject.layer == selfLayer) { return; }
+            if (collision.gameObject.layer == selfLayer) { return; }
             Debug.Log("krankenwagen" + collision.gameObject.name);// + " " + collision.transform.parent.name + " " + collision.transform.root.name);
             if (isThrown || isGameStart)
             {
@@ -188,15 +188,25 @@ public class StickyNote : DynamicInteractableObject
         ResetMomentum();
 
         Vector3 point = Vector3.zero;
-        Collider col = collision.gameObject.GetComponent<Collider>();
+        Collider col = collision.collider;
 
-        if(collision.gameObject.layer == 9 || collision.gameObject.layer ==10)
-        {
-            col = collision.gameObject.GetComponent<CharacterController>();
-        }
         if (col != null && col.enabled)
         {
             point = col.ClosestPoint(transform.position);
+
+            
+            if (col is MeshCollider)
+            {
+                MeshCollider meshCol = (MeshCollider)col;
+                if(!meshCol.convex)
+                {
+                    RaycastHit slaviOtTheClashers;
+                    Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized, out slaviOtTheClashers, 500);
+                    Debug.DrawRay(transform.position, (col.transform.position - transform.position).normalized * 500);
+                    Debug.Break();
+                    point = slaviOtTheClashers.point;
+                }   
+            }
         }
         Debug.Log("kranken " + point + collision.gameObject.name);
         //its this, cant find point on player's controller collider
@@ -249,7 +259,6 @@ public class StickyNote : DynamicInteractableObject
 
                 }
             }
-            //Debug.Break();
         }
 
     }
@@ -269,6 +278,13 @@ public class StickyNote : DynamicInteractableObject
             {
                 parentRB.linearVelocity = Vector3.zero;
                 parentRB.angularVelocity = Vector3.zero;
+            }
+            else
+            {
+                if(parentedTo.gameObject.layer == 9 || parentedTo.gameObject.layer == 10)
+                {
+                    parentCollider = parentedTo.GetComponent<PlayerController>().HumanCollider;
+                }
             }
 
             for (int j = 0; j < allStickyColliders.Count; j++)

@@ -6,17 +6,29 @@ public class UpdateMeshColliderToAnimation : MonoBehaviour
     MeshCollider meshCollider;
     Mesh bakedMesh;
 
+    Vector3 lastPos;
+    [SerializeField] int updateColliderEveryNUpdate=5;
+    int currentUpdate = 0;
+
     void Start()
     {
         skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
         meshCollider = GetComponent<MeshCollider>();
         bakedMesh = new Mesh();
+        lastPos = transform.position;
     }
 
     void LateUpdate()
     {
-        skinnedMeshRenderer.BakeMesh(bakedMesh); // Bake the current animated shape
-        meshCollider.sharedMesh = null; // Reset
-        meshCollider.sharedMesh = bakedMesh; // Apply updated mesh
+        if((transform.position - lastPos).magnitude > 0.1f)
+        {
+            currentUpdate++;
+            if(currentUpdate%updateColliderEveryNUpdate==0)
+            {
+                skinnedMeshRenderer.BakeMesh(bakedMesh);
+                meshCollider.sharedMesh = null;
+                meshCollider.sharedMesh = bakedMesh;
+            }
+        }
     }
 }
