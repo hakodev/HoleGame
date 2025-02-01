@@ -31,6 +31,7 @@ public class StickyNote : DynamicInteractableObject
 
     List<Collider> allStickyColliders;
     Collider parentCollider;
+    CharacterController playerParentCollider;
     Transform parentedTo;
     public bool IsPoster { get; private set; } = false;
 

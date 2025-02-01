@@ -6,7 +6,7 @@ using System.Linq;
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
     protected Alteruna.Avatar currentlyOwnedByAvatar;
-    protected Collider CurrentHumanCollider { get; set; }
+    protected CharacterController currentController;
     Alteruna.Avatar userAvatar;
 
     [SynchronizableField] public bool isPickedUp;
@@ -21,10 +21,10 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     bool awake = false;
 
     [Header("removed serialize fields for speed. Nsync Objects is Here. x - when object is inactive(high number), y - when object is active(low number), also in the script both are 30 2, for ease of access")]
-     Vector2 syncEveryNUpdates = new Vector2(30, 2);
-     Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
+    Vector2 syncEveryNUpdates = new Vector2(30, 2);
+    Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
 
-    [SynchronizableField]float timeSinceLastSignificantMovement = 0;
+    [SynchronizableField] float timeSinceLastSignificantMovement = 0;
 
     protected virtual void Awake()
     {
@@ -33,9 +33,9 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     protected virtual void Start()
     {
-       //BroadcastRemoteMethod(nameof(DynamicSleep));
-        collidersDynamic = GetComponents<Collider>().ToList();
-        Debug.Log("government " + gameObject.name + " " + collidersDynamic.Count);
+        //BroadcastRemoteMethod(nameof(DynamicSleep));
+        collidersDynamic = GetComponentsInChildren<Collider>().ToList();
+        //Debug.Log("government " + gameObject.name + " " + collidersDynamic.Count);
     }
     protected virtual void Update()
     {
@@ -57,16 +57,16 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         {
             if (currentlyOwnedByAvatar != null)
             {
-                CurrentHumanCollider = currentlyOwnedByAvatar.GetComponent<PlayerController>().HumanCollider;
-                if (CurrentHumanCollider == null || isSticky!=null) { return; }
+                currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
+                if (currentController == null || isSticky != null) { return; }
                 IgnoreCols(true);
             }
         }
         else
         {
-            if (CurrentHumanCollider == null || isSticky!=null) { return; }
+            if (currentController == null || isSticky != null) { return; }
             IgnoreCols(false);
-            CurrentHumanCollider = null;
+            currentController = null;
         }
 
         Debug.Log("krank isIgnoring " + newState);
@@ -74,13 +74,17 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
     private void IgnoreCols(bool newState)
     {
-        Debug.Log("ignoring a deeper bug");
-        if (CurrentHumanCollider != null && collidersDynamic != null && collidersDynamic.Count > 0) {
-            foreach (Collider col in collidersDynamic)
-            {
-                Physics.IgnoreCollision(col, CurrentHumanCollider, newState);
-            }
+        collidersDynamic = GetComponentsInChildren<Collider>().ToList();
+        currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
+        Debug.Log("krank human collider3" + currentController + collidersDynamic.Count);
+
+
+        //  if (collidersDynamic != null && CurrentHumanCollider != null && collidersDynamic.Count > 0) {
+        foreach (Collider col in collidersDynamic)
+        {
+            Physics.IgnoreCollision(col, currentController, newState);
         }
+        // }
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
@@ -90,7 +94,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     bool initiatedPlayer = false;
     private void CheckForPlayer()
     {
-        if (!initiatedPlayer) {
+        if (!initiatedPlayer)
+        {
             if (RoleAssignment.userAvatar != null)
             {
                 userAvatar = RoleAssignment.userAvatar;
@@ -101,19 +106,19 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     private void SelfSleepIfUnmoving()
     {
         CheckForPlayer();
-        if (userAvatar==null || !userAvatar.IsMe) { return; }
+        if (userAvatar == null || !userAvatar.IsMe) { return; }
 
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
-        if (currentlyOwnedByAvatar==null)
+        if (currentlyOwnedByAvatar == null)
         {
             if (rbDynamic.linearVelocity.magnitude < 0.1f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
                 if (timeSinceLastSignificantMovement > 3f)
                 {
-                //    Debug.Log("sleep");
+                    //    Debug.Log("sleep");
                     timeSinceLastSignificantMovement = 0;
-                    if(awake) BroadcastRemoteMethod(nameof(DynamicSleep));
+                    if (awake) BroadcastRemoteMethod(nameof(DynamicSleep));
                 }
             }
         }
@@ -127,10 +132,10 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         if (userAvatar == null || !userAvatar.IsMe) { return; }
 
 
-        if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar!=null)
+        if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar != null)
         {
             timeSinceLastSignificantMovement = 0;
-            if(!awake) BroadcastRemoteMethod(nameof(DynamicAwake));
+            if (!awake) BroadcastRemoteMethod(nameof(DynamicAwake));
         }
     }
     [SynchronizableMethod]
