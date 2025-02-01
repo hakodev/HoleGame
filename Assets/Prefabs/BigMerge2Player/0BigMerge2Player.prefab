@@ -3763,6 +3763,7 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   texture: {fileID: 0}
+  texturearray: []
 --- !u!1 &7505574621674090326
 GameObject:
   m_ObjectHideFlags: 0
@@ -5373,7 +5374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1641803511725234898, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1823652560175873177, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_RaycastTarget

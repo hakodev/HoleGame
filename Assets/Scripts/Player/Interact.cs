@@ -48,6 +48,8 @@ public class Interact : AttributesSync, IObserver
     GameObject pickedUp;
     DynamicInteractableObject DIO;
 
+    throwBar throwBar;
+
 
     private void Awake()
     {
@@ -55,11 +57,13 @@ public class Interact : AttributesSync, IObserver
         spawner = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<Alteruna.Spawner>();
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
+        
     }
 
     private void Start()
     {
         hudDisplay = GetComponentInChildren<HUDDisplay>();
+        throwBar = GetComponentInChildren<throwBar>();
 
         if (!avatar.IsMe)
         {
@@ -93,7 +97,11 @@ public class Interact : AttributesSync, IObserver
 
         ProcessInput();
 
-        if (isChargingUp) currentChargeUpTime += Time.deltaTime;
+        if (isChargingUp)
+        {
+            currentChargeUpTime += Time.deltaTime;
+            throwBar.IncrementBar(currentChargeUpTime, minMaxThrowChargeUpTime.y);
+        }
     }
 
     private void FixedUpdate()
@@ -111,6 +119,8 @@ public class Interact : AttributesSync, IObserver
                 {
                     if (currentChargeUpTime > minMaxThrowChargeUpTime.y) currentChargeUpTime = minMaxThrowChargeUpTime.y;
                     currentThrowStrength = Mathf.Lerp(minMaxThrowStrength.x, minMaxThrowStrength.y, currentChargeUpTime);
+                    throwBar.gameObject.GetComponent<PopUp>().PopOut();
+                    throwBar.ResetBar();
                     BroadcastRemoteMethod(nameof(Throw));
                 }
                 else
@@ -129,6 +139,8 @@ public class Interact : AttributesSync, IObserver
             if (heldObject != null && finishedPickUp && !StickyNote.currentlyDrawing)
             {
                 isChargingUp = true;
+                throwBar.gameObject.SetActive(true);
+                throwBar.gameObject.GetComponent<PopUp>().PopIn();
             }
         }
 
