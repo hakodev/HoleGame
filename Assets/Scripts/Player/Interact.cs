@@ -106,6 +106,8 @@ public class Interact : AttributesSync, IObserver
 
     private void FixedUpdate()
     {
+        if (!avatar.IsMe) { return; }
+
         UpdateHeldObjectPhysics();
     }
 
@@ -220,8 +222,11 @@ public class Interact : AttributesSync, IObserver
     {
         List<GameObject> tempChildList = new List<GameObject>();
         if (objectToApply == currentOutlinedObject) { return; }
+
         if (currentOutlinedObject != null && objectToApply != currentOutlinedObject)
         {
+            if (currentOutlinedObject.gameObject.layer == 10) { return; } //when it's being placed could be hitrayed by this and affect it
+
             ChangeChildrenLayers("DynamicInteractableObject", tempChildList);
             StickyNote.AmendShaderLayeringInInteract(currentOutlinedObject.gameObject);
         }
@@ -236,6 +241,7 @@ public class Interact : AttributesSync, IObserver
 
     public void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
     {
+
         GetChildRecursive(currentOutlinedObject.gameObject, tempChildList);
         foreach (GameObject child in tempChildList)
         {
