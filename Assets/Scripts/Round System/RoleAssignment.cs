@@ -64,10 +64,10 @@ public class RoleAssignment : AttributesSync
     [SynchronizableMethod]
     public void SetHasGameStarted(bool newState)
     {
-        hasGameStarted = newState; 
+        hasGameStarted = newState;
     }
 
-   
+
     private void Update()
     {
         if(!hasGameStarted)

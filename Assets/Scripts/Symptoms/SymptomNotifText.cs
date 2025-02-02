@@ -21,8 +21,11 @@ public class SymptomNotifText : AttributesSync
     private new void OnEnable()
     {
         base.OnEnable();
-        if(lobbySystem!=null && lobbySystem.gameObject.activeSelf) {return;}  //NE
-        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+        if(RoleAssignment.hasGameStarted) {
+            SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+            lobbySystem.gameObject.SetActive(false);
+            //DestroyImmediate(lobbySystem.gameObject);
+        }
     }
 
     List<CarpetData> allCarpets;
