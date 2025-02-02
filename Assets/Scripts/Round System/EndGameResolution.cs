@@ -51,6 +51,8 @@ public class EndGameResolution : AttributesSync
 
     public void CheckForEndGame()
     {
+        if (Multiplayer.GetAvatar() != transform.root.GetComponent<Alteruna.Avatar>()) { return; }
+
         RecountPlayers();
 
         if (VotingPhase.totalALivePlayers.Count==2 && infiltratorsCount == 1 && machinesCount ==1) WildWest();

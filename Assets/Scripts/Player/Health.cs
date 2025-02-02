@@ -1,8 +1,7 @@
 using UnityEngine;
 using Alteruna;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine.Rendering;
+
 
 public class Health : AttributesSync {
 
@@ -15,11 +14,6 @@ public class Health : AttributesSync {
     private CharacterController characterController;
     private MishSyncAnimations mishSync;
 
-
-
-    private EndGameResolution endGameResolution;
-    private List<EndGameResolution> endGameResolutions = new List<EndGameResolution>(); 
-
     private void Awake() {
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
@@ -30,8 +24,6 @@ public class Health : AttributesSync {
     }
 
     private void Start() {
-        endGameResolution = GetComponentInChildren<EndGameResolution>();
-
         if (!avatar.IsMe) { return; }
         currentHealth = maxHealth;
     }
@@ -45,7 +37,7 @@ public class Health : AttributesSync {
             currentHealth = 0;
             Debug.Log("Reduced HP");
             PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetDeathStatic);
-            BroadcastRemoteMethod("KillPlayer");
+            BroadcastRemoteMethod(nameof(KillPlayer));
             //mishSync.SetStance(StanceEnum.Dead);
         }
     }
@@ -57,7 +49,7 @@ public class Health : AttributesSync {
         characterController.enabled = false;
         deadScreen.SetActive(true);
         mishSync.SetStance(StanceEnum.Dead);
-        Debug.Log("Player died!" + mishSync.GetCurrentStance() + endGameResolution.transform.root.name);
+        Debug.Log("Player died!" + mishSync.GetCurrentStance());
         VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
         Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>().CheckForEndGame();
     }
