@@ -17,7 +17,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     RigidbodySynchronizable rbSyncDynamic;
     Rigidbody rbDynamic;
     List<Collider> collidersDynamic;
-    protected float minVelocityToProduceSound = 0.1f;
+    [SerializeField] protected float minVelocityToProduceSound = 0.1f;
 
     bool awake = false;
 
