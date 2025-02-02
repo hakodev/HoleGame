@@ -1,6 +1,8 @@
 using UnityEngine;
 using Alteruna;
-
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.Rendering;
 
 public class Health : AttributesSync {
 
@@ -11,24 +13,30 @@ public class Health : AttributesSync {
     private PlayerController playerController;
     private Alteruna.Avatar avatar;
     private CharacterController characterController;
-    //bool dead = false;
     private MishSyncAnimations mishSync;
+
+
+
     private EndGameResolution endGameResolution;
+    private List<EndGameResolution> endGameResolutions = new List<EndGameResolution>(); 
 
     private void Awake() {
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
         mishSync = GetComponent<MishSyncAnimations>();
-        endGameResolution = GetComponentInChildren<EndGameResolution>();
 
         deadScreen.SetActive(false);
     }
 
     private void Start() {
+        endGameResolution = GetComponentInChildren<EndGameResolution>();
+
         if (!avatar.IsMe) { return; }
         currentHealth = maxHealth;
     }
+
+    bool firstTimeAdding = true;
     public void DamagePlayer(float damageAmount) {
         currentHealth -= damageAmount;
         Debug.Log(damageAmount);
@@ -38,18 +46,20 @@ public class Health : AttributesSync {
             Debug.Log("Reduced HP");
             PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetDeathStatic);
             BroadcastRemoteMethod("KillPlayer");
+            //mishSync.SetStance(StanceEnum.Dead);
         }
     }
 
+
     [SynchronizableMethod]
     private void KillPlayer() {
-        Debug.Log("Player died!");
         playerController.MovementEnabled = false;
         characterController.enabled = false;
         deadScreen.SetActive(true);
         mishSync.SetStance(StanceEnum.Dead);
+        Debug.Log("Player died!" + mishSync.GetCurrentStance() + endGameResolution.transform.root.name);
         VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
-        endGameResolution.CheckForEndGame();
+        Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>().CheckForEndGame();
     }
 
     public float GetHealth()
