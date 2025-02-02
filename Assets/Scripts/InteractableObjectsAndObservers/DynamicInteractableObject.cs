@@ -58,15 +58,17 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
             if (currentlyOwnedByAvatar != null)
             {
                 currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
-                if (currentController == null || isSticky != null) { return; }
+                //if (currentController == null || isSticky != null) { return; }
+                if (isSticky != null) { return; }
                 IgnoreCols(true);
             }
         }
         else
         {
-            if (currentController == null || isSticky != null) { return; }
+            //if (currentController == null || isSticky != null) { return; }
+            if (isSticky != null) { return; }
             IgnoreCols(false);
-            currentController = null;
+            //currentController = null;
         }
 
         Debug.Log("krank isIgnoring " + newState);
@@ -75,8 +77,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     private void IgnoreCols(bool newState)
     {
         collidersDynamic = GetComponentsInChildren<Collider>().ToList();
-        currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
-        Debug.Log("krank human collider3" + currentController + collidersDynamic.Count);
+        //currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
+        Debug.Log("krank human collider3" + currentController + collidersDynamic[0]);
 
         for (int i = 0; i<collidersDynamic.Count; i++)
         {
@@ -170,6 +172,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         {
             currentlyOwnedByAvatar = null;
         }
+        Commit();
         //    Debug.Log("owned by " + currentlyOwnedByAvatar.gameObject.name);
     }
 
