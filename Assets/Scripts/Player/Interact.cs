@@ -119,8 +119,8 @@ public class Interact : AttributesSync, IObserver
                 {
                     if (currentChargeUpTime > minMaxThrowChargeUpTime.y) currentChargeUpTime = minMaxThrowChargeUpTime.y;
                     currentThrowStrength = Mathf.Lerp(minMaxThrowStrength.x, minMaxThrowStrength.y, currentChargeUpTime);
-                    throwBar.gameObject.GetComponent<PopUp>().PopOut();
-                    throwBar.ResetBar();
+                    
+                    
                     BroadcastRemoteMethod(nameof(Throw));
                 }
                 else
@@ -129,6 +129,8 @@ public class Interact : AttributesSync, IObserver
                 }
             }
             finishedPickUp = true;
+            throwBar.gameObject.GetComponent<PopUp>().PopOut();
+            throwBar.ResetBar();
             currentChargeUpTime = 0;
             isChargingUp = false;
         }

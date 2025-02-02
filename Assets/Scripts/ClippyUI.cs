@@ -1,4 +1,5 @@
 using DG.Tweening;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -56,6 +57,8 @@ public class ClippyUI : MonoBehaviour
             Debug.Log(time);
             image.color = Color.Lerp(startColor, blinkColor, time);
         }
+
+        if (Input.GetKeyDown(KeyCode.Tab)) ClickedClippy();
     }
 
     
