@@ -118,7 +118,6 @@ public class StickyNote : DynamicInteractableObject
             currentlyOwnedByAvatar.gameObject.GetComponentInChildren<CameraMovement>().enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            originalPos = transform.position;
 
             DrawPosition(transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f, Multiplayer.GetUser().Index);
         }

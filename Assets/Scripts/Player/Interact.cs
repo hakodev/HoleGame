@@ -109,6 +109,7 @@ public class Interact : AttributesSync, IObserver
         UpdateHeldObjectPhysics();
     }
 
+    bool hasCompletedClick1 = true;
     private void ProcessInput()
     {        //release / place
         if (Input.GetMouseButtonUp(0) && heldObject != null)
@@ -145,15 +146,22 @@ public class Interact : AttributesSync, IObserver
         }
 
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && hasCompletedClick1)
         {
+            hasCompletedClick1 = false;
+
             if (heldObject != null)
             {
                 heldObject.GetComponent<DynamicInteractableObject>().Use();
+                Debug.Log("Debussy" + hasCompletedClick1);
             }
 
         }
-
+        if(Input.GetMouseButtonUp(1))
+        {
+            hasCompletedClick1 = true;
+            Debug.Log("Deb" + hasCompletedClick1);
+        }
 
         if (heldObject)
         {
