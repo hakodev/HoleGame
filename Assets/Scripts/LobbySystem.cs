@@ -61,6 +61,7 @@ public class LobbySystem : MonoBehaviour {
 
     void SetCarpetParams()
     {
+        CarpetManager.Instance.RandomizeCarpetColor();
         switch (CarpetManager.Instance.GetCarpetColorRandomNum())
         {
             case 0:
