@@ -13,6 +13,10 @@ TagManager:
   - RoomMenu
   - nameInput
   - Carpet
+  - Ball
+  - HumanMesh
+  - LastChanceDisplay
+  - replacingThisObjectWithPrefab
   layers:
   - Default
   - TransparentFX

@@ -51,17 +51,13 @@ public class EndGameResolution : AttributesSync
 
     public void CheckForEndGame()
     {
-        //if (Multiplayer.GetAvatar().IsMe)
-       // {
-            Debug.Log("dead endgame " + transform.root.name + " " + Multiplayer.GetAvatar().name + Multiplayer.GetUser().Name);
-            RecountPlayers();
+        RecountPlayers();
 
-            if (VotingPhase.totalALivePlayers.Count == 2 && infiltratorsCount == 1 && machinesCount == 1) WildWest();
+        if (VotingPhase.totalALivePlayers.Count==2 && infiltratorsCount == 1 && machinesCount ==1) WildWest();
 
-           // if (CountdownDisplay.sendRoundsLeft <= 0) GroupWon(infiltratorsWon, timerEndedText); //yes it is 1 bc this gets called before the sendroundsleft is reduced
-            if (infiltratorsCount == 0) GroupWon(machinesWon, allInfiltratorsDead);
-            if (machinesCount == 0) GroupWon(infiltratorsWon, allMachinesDead);
-       // }      
+        if (CountdownDisplay.sendRoundsLeft<=0) GroupWon(infiltratorsWon ,timerEndedText); //yes it is 1 bc this gets called before the sendroundsleft is reduced
+        if (infiltratorsCount == 0) GroupWon(machinesWon, allInfiltratorsDead);
+        if (machinesCount == 0) GroupWon(infiltratorsWon, allMachinesDead);      
     }
     private void LastChanceToShoot()
     {

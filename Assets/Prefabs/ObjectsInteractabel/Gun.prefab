@@ -26,13 +26,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 430255500350342772}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0044449004, y: -0, z: -0, w: 0.9999901}
-  m_LocalPosition: {x: -0.0005, y: -0.0015, z: 0.2841}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.005, z: 0.24}
   m_LocalScale: {x: 0.061851688, y: 0.061851688, z: 0.061851688}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 858516863371319017}
-  m_LocalEulerAnglesHint: {x: -0.509, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &4231886125591197383
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5204,7 +5204,7 @@ Transform:
   m_GameObject: {fileID: 8349825907078539650}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.056812197, y: 0.2809997, z: -5.229317}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5247,7 +5247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: a835fa9e-ec5f-48ec-ba3f-e82ea032758a
+  _uidString: 7cc4fb63-edc5-47bf-93e1-4af6b8f8ef6c
   Reliability: 2
   LocalMethodBehavior: 1
   isPickedUp: 0
@@ -5295,7 +5295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: ee087194-fc10-459c-9943-93f24451a82c
+  _uidString: 7993c898-86a7-4ab0-970b-8f0d8ec4160e
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
@@ -5313,8 +5313,8 @@ MonoBehaviour:
     NetLOD: 4
     Frequency: 120
   Reliability: 1
-  SyncEveryNUpdates: 10
-  FullSyncEveryNSync: 4
+  SyncEveryNUpdates: 999999
+  FullSyncEveryNSync: 999999
   SendData: 1
   ApplyAsTransform: 0
   AllowCollisionToAssumeOwner: 1
@@ -5345,14 +5345,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8443463744637490244}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.99997383, z: -0, w: 0.007236157}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.15703659, y: 0.0413, z: 0.49555}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6151602220308632060}
   m_Father: {fileID: 858516863371319017}
-  m_LocalEulerAnglesHint: {x: 0, y: 179.171, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &878788793141445622
 MeshFilter:
   m_ObjectHideFlags: 0

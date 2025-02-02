@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8024720416746684832}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 12.25, y: -0.528, z: 0.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: c7f18279-94c7-41e1-8f23-2422aa044336
+  _uidString: 75b5f72d-f17b-4d97-b99e-8949528c03e4
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 9d9f4077-cbd7-40b1-bf46-d8f570da9c29
+  _uidString: d0580a3b-09b5-434f-a3b4-3a0981c6c166
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
@@ -137,7 +137,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.46080017, y: 0.7947607, z: 0.44389534}
-  m_Center: {x: 0.017723083, y: 0.3758602, z: -0.0016679764}
+  m_Center: {x: 0.017723083, y: -0.63, z: -0.0016679764}
 --- !u!1001 &6615565043470726552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 208311e2636735b45bf66d5ec95e44dd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.99952066
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 208311e2636735b45bf66d5ec95e44dd, type: 3}
       propertyPath: m_LocalPosition.z

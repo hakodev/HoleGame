@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private GameObject animationTie;
     MishSyncAnimations mishSync;
 
+
     [Header("Nerd SHIT - Programming")]
     [SerializeField] Transform cameraTransform;
     [SerializeField] Transform moveTransform;

@@ -31,17 +31,17 @@ public class LobbySystem : MonoBehaviour {
 
         // we are calling the symptom twice with these, once in setsymptom and once in the chain of calls bc we are displaying the notif canvas
 
-        
+        /*
         if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
             SymptomsManager.Instance.JustSetSymptom(0); // Inverted controls
             ResetCarpetParams();
-            //DisplayNotificationText();
+            DisplayNotificationText();
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) {
             SymptomsManager.Instance.JustSetSymptom(1);// Jumpy carpets
             SetCarpetParams();
-            //DisplayNotificationText();
+            DisplayNotificationText();
 
 
 
@@ -50,19 +50,19 @@ public class LobbySystem : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) {
             SymptomsManager.Instance.JustSetSymptom(2); // Render distance
             ResetCarpetParams();
-            //DisplayNotificationText();
+            DisplayNotificationText();
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) {
             SymptomsManager.Instance.JustSetSymptom(999); // no symptom
             ResetCarpetParams();
-            //DisplayNoSymptomText();
+            DisplayNoSymptomText();
         }
-        
+        */
     }
 
     private void OnDestroy() {
-        SymptomsManager.Instance.JustSetSymptom(999); // no symptom
+       // SymptomsManager.Instance.JustSetSymptom(999); // no symptom
     }
 
     void SetCarpetParams()

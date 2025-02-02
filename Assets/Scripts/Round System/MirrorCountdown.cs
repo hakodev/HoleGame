@@ -4,17 +4,15 @@ using UnityEngine;
 public class MirrorCountdown : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI countdown;
-    TextMeshProUGUI flavorText;
+    [SerializeField]TextMeshProUGUI flavorText;
+    [SerializeField]TextMeshProUGUI roundNumberText;
 
-    private void Start()
-    {
-        flavorText = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
-    }
 
     private void LateUpdate()
     {
         countdown.text = CountdownDisplay.sendTimeToUI.ToString();
-              flavorText.text = CountdownDisplay.sendFlavorTextToUI;
-              countdown.color = CountdownDisplay.countdownColor;
+        flavorText.text = CountdownDisplay.sendFlavorTextToUI;
+        countdown.color = CountdownDisplay.countdownColor;
+        roundNumberText.text = CountdownDisplay.sendRoundsLeft.ToString();
     }
 }

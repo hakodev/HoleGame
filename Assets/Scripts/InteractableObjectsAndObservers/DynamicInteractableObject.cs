@@ -1,11 +1,13 @@
 using Alteruna;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public abstract class DynamicInteractableObject : AttributesSync, IObserver, IInteractableObject
 {
     protected Alteruna.Avatar currentlyOwnedByAvatar;
-    protected CharacterController ownedCharacterController;
-
+    protected CharacterController currentController;
+    Alteruna.Avatar userAvatar;
 
     [SynchronizableField] public bool isPickedUp;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
@@ -13,30 +15,32 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
     RigidbodySynchronizable rbSyncDynamic;
     Rigidbody rbDynamic;
-    Collider colliderDynamic;
+    List<Collider> collidersDynamic;
+    protected float minVelocityToProduceSound = 0.1f;
 
-    float minVelocityToProduceSound = 0.05f;
+    bool awake = false;
 
     [Header("removed serialize fields for speed. Nsync Objects is Here. x - when object is inactive(high number), y - when object is active(low number), also in the script both are 30 2, for ease of access")]
-     Vector2 syncEveryNUpdates = new Vector2(30, 2);
-     Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
+    Vector2 syncEveryNUpdates = new Vector2(30, 2);
+    Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
 
-    [SynchronizableField]float timeSinceLastSignificantMovement = 0;
+    [SynchronizableField] float timeSinceLastSignificantMovement = 0;
 
     protected virtual void Awake()
     {
         rbSyncDynamic = GetComponent<RigidbodySynchronizable>();
         rbDynamic = GetComponent<Rigidbody>();
-        colliderDynamic = GetComponent<Collider>();
     }
     protected virtual void Start()
     {
-        BroadcastRemoteMethod(nameof(DynamicSleep));
+        //BroadcastRemoteMethod(nameof(DynamicSleep));
+        collidersDynamic = GetComponentsInChildren<Collider>().ToList();
+        //Debug.Log("government " + gameObject.name + " " + collidersDynamic.Count);
     }
     protected virtual void Update()
     {
-        //SelfSleepIfUnmoving();
-        //CheckForMovement();
+        SelfSleepIfUnmoving();
+        CheckForMovement();
     }
     [SynchronizableMethod]
     public void ToggleRigidbody(bool newstate)
@@ -53,50 +57,69 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         {
             if (currentlyOwnedByAvatar != null)
             {
-                ownedCharacterController =currentlyOwnedByAvatar.gameObject.GetComponent<CharacterController>();
-                if (ownedCharacterController == null || isSticky!=null) { return; }
-                Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, true);
+                currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
+                //if (currentController == null || isSticky != null) { return; }
+                if (isSticky != null) { return; }
+                IgnoreCols(true);
             }
         }
         else
         {
-            if (ownedCharacterController == null || isSticky!=null) { return; }
-            Physics.IgnoreCollision(colliderDynamic, ownedCharacterController, false);
-            ownedCharacterController = null;
-        }      
-    }
-
-        protected virtual void OnCollisionEnter(Collision collision)
-        {
-            if (isPickedUp) { return; }
-            if (rbDynamic.linearVelocity.magnitude > minVelocityToProduceSound)
-            {
-                if (rbDynamic.mass > 1)
-                {
-                    PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit);
-                }
-                else
-                {
-                    PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit);
-                }
-            Debug.Log("bratle " + gameObject.name + " " + rbDynamic.linearVelocity.magnitude);
-            }
+            //if (currentController == null || isSticky != null) { return; }
+            if (isSticky != null) { return; }
+            IgnoreCols(false);
+            //currentController = null;
         }
 
+        Debug.Log("krank isIgnoring " + newState);
+    }
+
+    private void IgnoreCols(bool newState)
+    {
+        collidersDynamic = GetComponentsInChildren<Collider>().ToList();
+        //currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
+        Debug.Log("krank human collider3" + currentController + collidersDynamic[0]);
+
+        for (int i = 0; i<collidersDynamic.Count; i++)
+        {
+            //Physics.IgnoreCollision(collidersDynamic[i], currentController, newState);
+            collidersDynamic[i].enabled = !newState;
+
+        }
+    }
+
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+
+    }
+    bool initiatedPlayer = false;
+    private void CheckForPlayer()
+    {
+        if (!initiatedPlayer)
+        {
+            if (RoleAssignment.userAvatar != null)
+            {
+                userAvatar = RoleAssignment.userAvatar;
+                initiatedPlayer = true;
+            }
+        }
+    }
     private void SelfSleepIfUnmoving()
     {
-        if (RoleAssignment.playerID - 1 != Multiplayer.GetUser().Index) { return; }
+        CheckForPlayer();
+        if (userAvatar == null || !userAvatar.IsMe) { return; }
+
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
-        if (currentlyOwnedByAvatar==null)
+        if (currentlyOwnedByAvatar == null)
         {
-            if (rbDynamic.linearVelocity.magnitude < 0.1f)
+            if (rbDynamic.linearVelocity.magnitude < 0.05f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
-                if (timeSinceLastSignificantMovement > 5f)
+                if (timeSinceLastSignificantMovement > 3f)
                 {
-                //    Debug.Log("sleep");
+                    //    Debug.Log("sleep");
                     timeSinceLastSignificantMovement = 0;
-                    BroadcastRemoteMethod(nameof(DynamicSleep));
+                    if (awake) BroadcastRemoteMethod(nameof(DynamicSleep));
                 }
             }
         }
@@ -107,31 +130,33 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     private void CheckForMovement()
     {
-        if (currentlyOwnedByAvatar == null || !currentlyOwnedByAvatar.IsMe) { return; }
+        if (userAvatar == null || !userAvatar.IsMe) { return; }
 
 
-        if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar!=null)
+        if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar != null)
         {
-        //    Debug.Log("awake");
-            BroadcastRemoteMethod(nameof(DynamicAwake));
+            timeSinceLastSignificantMovement = 0;
+            if (!awake) BroadcastRemoteMethod(nameof(DynamicAwake));
         }
     }
     [SynchronizableMethod]
     public void DynamicSleep()
     {
+        awake = false;
         timeSinceLastSignificantMovement = 0;
         rbSyncDynamic.SyncEveryNUpdates = 999999;
         rbSyncDynamic.FullSyncEveryNSync = 999999;
-        // Debug.Log("sleep " + transform.root.gameObject.name);
+        Debug.Log("sleep " + gameObject.name);
     }
     [SynchronizableMethod]
     public void DynamicAwake()
     {
-        timeSinceLastSignificantMovement = 0;
-        rbSyncDynamic.SyncEveryNUpdates = 2;
+        awake = true;
+        rbSyncDynamic.SyncEveryNUpdates = 1;
         rbSyncDynamic.FullSyncEveryNSync = 4;
+        Debug.Log("awake " + gameObject.name + " " + rbDynamic.linearVelocity.magnitude); //keep this here so we know what causes problems with latency in the future
     }
-    
+
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()
     {
         return currentlyOwnedByAvatar;
@@ -147,6 +172,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         {
             currentlyOwnedByAvatar = null;
         }
+        Commit();
         //    Debug.Log("owned by " + currentlyOwnedByAvatar.gameObject.name);
     }
 

@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 1888776f-35dd-4cb7-8af3-e1445122172f
+  _uidString: d9a007ce-cdc3-4d76-b197-2cfaa6d84cd8
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
@@ -76,6 +76,7 @@ MonoBehaviour:
   notPlayerMask:
     serializedVersion: 2
     m_Bits: 7103
+  isFreeForm: 0
 --- !u!54 &7247470690035662544
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -102,7 +103,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &8726033799619441643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 6c23109c-2d38-4186-a6bd-c9424916f2cc
+  _uidString: 56c21207-8abe-48f2-aa67-2de1caf0d3c6
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
@@ -134,8 +135,8 @@ MonoBehaviour:
     NetLOD: 4
     Frequency: 120
   Reliability: 1
-  SyncEveryNUpdates: 2
-  FullSyncEveryNSync: 2
+  SyncEveryNUpdates: 999999
+  FullSyncEveryNSync: 999999
   SendData: 1
   ApplyAsTransform: 0
   AllowCollisionToAssumeOwner: 1

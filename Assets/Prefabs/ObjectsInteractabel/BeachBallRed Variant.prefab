@@ -16,6 +16,14 @@ PrefabInstance:
       propertyPath: _uidString
       value: 2145f514-d73c-47f4-9cad-ebb107991eb4
       objectReference: {fileID: 0}
+    - target: {fileID: 1566520578020904309, guid: 87dbc2de45cbaf94686395be0f09b928, type: 3}
+      propertyPath: SyncEveryNUpdates
+      value: 999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1566520578020904309, guid: 87dbc2de45cbaf94686395be0f09b928, type: 3}
+      propertyPath: FullSyncEveryNSync
+      value: 999999
+      objectReference: {fileID: 0}
     - target: {fileID: 1731013900170456044, guid: 87dbc2de45cbaf94686395be0f09b928, type: 3}
       propertyPath: m_LocalPosition.x
       value: -228.42798
