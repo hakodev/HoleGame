@@ -150,7 +150,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     public void DynamicAwake()
     {
         awake = true;
-        rbSyncDynamic.SyncEveryNUpdates = 2;
+        rbSyncDynamic.SyncEveryNUpdates = 1;
         rbSyncDynamic.FullSyncEveryNSync = 4;
         Debug.Log("awake " + gameObject.name + " " + rbDynamic.linearVelocity.magnitude); //keep this here so we know what causes problems with latency in the future
     }

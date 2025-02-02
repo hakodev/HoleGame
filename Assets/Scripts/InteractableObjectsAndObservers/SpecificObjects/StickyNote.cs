@@ -277,7 +277,7 @@ public class StickyNote : DynamicInteractableObject
                 else
                 {
                     //all of the walls, yes this code sucks ty
-                    BroadcastRemoteMethod(nameof(SyncSetParentWalls));
+                //    BroadcastRemoteMethod(nameof(SyncSetParentWalls));
 
                 }
             }

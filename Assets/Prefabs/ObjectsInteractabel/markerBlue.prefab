@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: f6672c3c-7c3a-4eda-b847-afd45e253674
+  _uidString: 1e7d5657-0fa6-42d6-8f32-a0957f1dab7b
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
@@ -135,8 +135,8 @@ MonoBehaviour:
     NetLOD: 4
     Frequency: 120
   Reliability: 1
-  SyncEveryNUpdates: 2
-  FullSyncEveryNSync: 2
+  SyncEveryNUpdates: 999999
+  FullSyncEveryNSync: 999999
   SendData: 1
   ApplyAsTransform: 0
   AllowCollisionToAssumeOwner: 1
