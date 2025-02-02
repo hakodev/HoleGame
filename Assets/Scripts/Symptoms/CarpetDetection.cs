@@ -14,8 +14,6 @@ public class CarpetDetection : MonoBehaviour
 
     private AudioSource[] audioSources;
 
-    public bool IsStandingOnCarpet { get; private set; } = false;
-
     LobbySystem lobby;
     void Start()
     {
@@ -40,11 +38,6 @@ public class CarpetDetection : MonoBehaviour
 
         foreach (Collider collider in currentColliders)
         {
-            if(!collider.gameObject.CompareTag("Carpet")) {
-                IsStandingOnCarpet = false;
-                return;
-            }
-            IsStandingOnCarpet = true;
 
             //so this only happens once guys
             if(collider != thisCarpetCollider)
@@ -59,7 +52,7 @@ public class CarpetDetection : MonoBehaviour
 
             if (collider == thisCarpetCollider)
             {
-                if (lobby == null)
+                if (lobby == null && !lobby.gameObject.activeSelf)
                 {
                     if (carpetData.IsCorrupted)
                     {

@@ -6,60 +6,73 @@ public class BeachBallBehaviour : MonoBehaviour {
     private CharacterController characterController;
     private PlayerController playerController;
 
+    [SerializeField] private Vector3 extents;
+    [SerializeField] private Vector3 offset;
+    private Collider[] currentColliders;
+
+
     private void Start() {
         characterController = transform.root.gameObject.GetComponent<CharacterController>();
         playerController = transform.root.gameObject.GetComponent<PlayerController>();
     }
 
-    private void Update() {
-        if((characterController.collisionFlags & CollisionFlags.CollidedBelow) != 0)
-        {
-
-        }
-    }
 
     Rigidbody ballRigidbody;
     GameObject previouslyCollidedWithThisBall;
     int ignoreSelfPlayerLayer = ~(1 << 10);
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    private void FixedUpdate()
     {
-        DoBalls(hit);
+        DoBalls();
     }
 
-    private void DoBalls(ControllerColliderHit conHit)
+    private void DoBalls()
     {
-        if (conHit.gameObject.CompareTag("Ball")) //yes this is only for yoga balls
+        currentColliders = Physics.OverlapBox(transform.position + offset, extents, Quaternion.identity);
+
+        if (currentColliders.Length == 0) return;
+
+        foreach (Collider conHit in currentColliders)
         {
-            if (previouslyCollidedWithThisBall != conHit.gameObject)
+            if (conHit.gameObject.CompareTag("Ball")) //yes this is only for yoga balls
             {
-                previouslyCollidedWithThisBall = conHit.gameObject;
-                ballRigidbody = previouslyCollidedWithThisBall.GetComponent<Rigidbody>();
-            }
+                if (previouslyCollidedWithThisBall != conHit.gameObject)
+                {
+                    previouslyCollidedWithThisBall = conHit.gameObject;
+                    ballRigidbody = previouslyCollidedWithThisBall.GetComponent<Rigidbody>();
+                }
 
-            if (characterController.isGrounded)
-            {
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, Vector3.down, out hit, characterController.height, ignoreSelfPlayerLayer)) //last number ignores selfplayer layer              
-                {  
-                    if (hit.collider == conHit.collider)
+                if (characterController.isGrounded)
+                {
+                    RaycastHit hit;
+                    if (Physics.Raycast(transform.position, Vector3.down, out hit, characterController.height, ignoreSelfPlayerLayer)) //last number ignores selfplayer layer              
                     {
-                        playerController.Jump();
-
-
-                        RaycastHit ballHitGround;
-                        if (!Physics.Raycast(previouslyCollidedWithThisBall.transform.position, Vector3.down, out ballHitGround, 0.55f))
+                        if (hit.collider == conHit)
                         {
-                            ballRigidbody.linearVelocity = -ballRigidbody.linearVelocity / 2f;
+                            playerController.Jump();
+                            PlayerAudioManager.Instance.PlaySound(conHit.gameObject, PlayerAudioManager.Instance.GetBouncyBall);
+
+
+                            RaycastHit ballHitGround;
+                            if (!Physics.Raycast(previouslyCollidedWithThisBall.transform.position, Vector3.down, out ballHitGround, 0.55f))
+                            {
+                                ballRigidbody.linearVelocity = -ballRigidbody.linearVelocity / 2f;
+                                PlayerAudioManager.Instance.PlaySound(conHit.gameObject, PlayerAudioManager.Instance.GetBouncyBall);
+                            }
+                        }
+                        else
+                        {
+                            Vector3 direction = (ballRigidbody.transform.position - this.transform.position).normalized;
+                            ballRigidbody.AddForce(direction * kickForce, ForceMode.Impulse);
                         }
                     }
-                    else
-                    {
-                        Vector3 direction = (ballRigidbody.transform.position - this.transform.position).normalized;
-                        ballRigidbody.AddForce(direction * kickForce, ForceMode.Impulse);
-                    }
                 }
-            }
+            }           
         }
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position+ offset, extents * 2);
+    }
+
 }

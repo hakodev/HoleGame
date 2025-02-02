@@ -7,7 +7,8 @@ public class CountdownDisplay : AttributesSync {
 
     [SerializeField] private int secondsRemainingToTurnRed;
     [SerializeField] TextMeshProUGUI countdown;
-    TextMeshProUGUI flavorTextMesh;
+    [SerializeField] TextMeshProUGUI roundNumberText;
+    [SerializeField] TextMeshProUGUI flavorTextMesh;
     [SerializeField] private CountDownDisplayManager manager;
 
     [SynchronizableField] public int time;
@@ -16,8 +17,10 @@ public class CountdownDisplay : AttributesSync {
     public int maxTime;
 
 
+
     public static int sendTimeToUI;
     public static string sendFlavorTextToUI;
+    public static int sendRoundsLeft;
 
     EndGameResolution endGameResolution;
     // countdowns left
@@ -29,15 +32,16 @@ public class CountdownDisplay : AttributesSync {
         sendFlavorTextToUI = "";
     }
 
-
-    private void Awake() {
+    private void Awake()
+    {
         maxTime = time;
-        flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
+        sendRoundsLeft = manager.RoundsLeft;
     }
+
     private void Start()
     {
-        //flavorTextMesh = transform.Find("CountdownPrefix").GetComponent<TextMeshProUGUI>();
-        //sendFlavorTextToUI = flavorTextMesh.text;
+        sendFlavorTextToUI = flavorTextMesh.text;
+        roundNumberText.text = manager.RoundsLeft.ToString();
     }
     
 
@@ -53,34 +57,38 @@ public class CountdownDisplay : AttributesSync {
         VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
         foreach (VotingPhase player in allVotingPhases)
         {
-           // Debug.Log(player.gameObject.name);
             player.InitiateVotingPhase();
         }
     }
     [SynchronizableMethod]
     private void EndVotingPhaseForAllPlayers()
     {
-        //VotingPhase[] allVotingPhases = FindObjectsByType<VotingPhase>(FindObjectsSortMode.None);
-        VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
-        //Debug.Log(player.gameObject.name);
-        player.EndVotingPhase();
+        sendRoundsLeft = manager.RoundsLeft;
+        roundNumberText.text = manager.RoundsLeft.ToString();
+        sendRoundsLeft = manager.RoundsLeft;
 
-        /*
-        SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
-        SymptomNotifText[] allNotifTexts = FindObjectsByType<SymptomNotifText>(FindObjectsSortMode.None);
-        foreach(SymptomNotifText notifText in allNotifTexts)
+        if(manager.RoundsLeft<=1)
         {
-            // This will enable the notification canvas for all players
-            notifText.transform.parent.parent.gameObject.SetActive(true);
-        }*/
+            flavorTextMesh.text = manager.lastChanceText;
+            sendFlavorTextToUI = manager.lastChanceText;
+        }
+
+
+        //Debug.Log("vvv " + manager.RoundsLeft);
+
+        VotingPhase player = Multiplayer.GetAvatar().gameObject.GetComponent<VotingPhase>();
+        player.EndVotingPhase();
     }
 
     private void Update() {
         if (CountDownDisplayManager.hasInitiatedTheTimer)
         {
-            UpdateTickDown();
-            UpdateUI();
-            sendTimeToUI = time;
+            if(!EndGameResolution.hasGameEnded)
+            {
+                UpdateTickDown();
+                UpdateUI();
+                sendTimeToUI = time;
+            }
         }
     }
 
@@ -114,15 +122,18 @@ public class CountdownDisplay : AttributesSync {
                         if(endGameResolution==null) endGameResolution = Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>();
                         //if (!endGameResolution.inWildWest) {
                             time--;
-                            manager.TimeToEndTheGame--;
                         //}
                     }
                 }
-                //Debug.Log(gameObject.name);
             }
         }
         else
         {
+            if (gameObject.CompareTag("VotingDisplay"))
+            {
+                manager.RoundsLeft--;
+            }
+
             manager.BroadcastRemoteMethod("ActivateTimer", parameters: gameObject.name);
             BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
             

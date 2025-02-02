@@ -21,8 +21,11 @@ public class SymptomNotifText : AttributesSync
     private new void OnEnable()
     {
         base.OnEnable();
-       // if (lobbySystem != null) {return;}
-        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+        if(RoleAssignment.hasGameStarted) {
+            SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+            lobbySystem.gameObject.SetActive(false);
+            //DestroyImmediate(lobbySystem.gameObject);
+        }
     }
 
     List<CarpetData> allCarpets;
@@ -35,6 +38,8 @@ public class SymptomNotifText : AttributesSync
 
         if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && transform.root.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
         {
+            CarpetManager.Instance.RandomizeCarpetColor(); //if carpet pick color
+
             switch (CarpetManager.Instance.GetCarpetColorRandomNum())
             {
                 case 0:

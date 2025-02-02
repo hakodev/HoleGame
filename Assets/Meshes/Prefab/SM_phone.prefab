@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6930578690146550133}
-  - component: {fileID: 2955375860097838652}
   - component: {fileID: 6454537824538297227}
   m_Layer: 0
   m_Name: SM_phone
@@ -34,23 +33,6 @@ Transform:
   - {fileID: 9154082765339709548}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2955375860097838652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6108373647412738832}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64fb435e20e4d394a8e60948a8999407, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: e528be38-9396-45f5-bba2-bbd04b44703c
-  Reliability: 1
-  LocalMethodBehavior: 1
-  isPickedUp: 0
 --- !u!65 &6454537824538297227
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -331,7 +313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 350f7175-5d76-40bf-86ff-319062fe2eae
+  _uidString: ea5d40e8-077f-41e8-a11f-0f62e2ec8410
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
@@ -368,7 +350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 23276651-29de-4326-a2bc-72f175281940
+  _uidString: 33a63117-1dd7-4a5e-bcb3-7f97301373ce
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0

@@ -8,7 +8,7 @@ public class Gun : DynamicInteractableObject
     [SerializeField] int maxAmmo;
     [SynchronizableField] int currentAmmo;
     [SerializeField] float bulletMaxDistance;
-    LayerMask otherPlayerLayerMask;
+    LayerMask otherPlayerLayerMask; //everything but the self player layer
     [SynchronizableField] [SerializeField] int damage;
 
     public Transform recoilRotationTransform;
@@ -27,7 +27,7 @@ public class Gun : DynamicInteractableObject
     {
         base.Start();
         currentAmmo = maxAmmo;
-        otherPlayerLayerMask = LayerMask.GetMask("PlayerLayer");
+        otherPlayerLayerMask = ~(1 << 10);
         childTransform = transform.GetChild(0);
 
         startRotation = childTransform.localRotation;

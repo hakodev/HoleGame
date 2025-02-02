@@ -55,28 +55,34 @@ public class VotingPhase : AttributesSync {
     }
 
     public bool once = false;
+    bool wildWestPopUpOnce = false;
     public void InitiateVotingPhase() {
-
         if (!avatar.IsMe) { return; }
-        //if (totalPlayers.Count <= 1) { return; }
-        votingCanvas.SetActive(true);
         endGameResolution.CheckForEndGame();
-        votingPopUp.PopIn();
-        
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        player.VotedCount = 0;
-        hasVoted = false;
-
-        player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
         DespawnAllGuns();
 
-        if (player.IsTaskManager) { // Player who was task manager in the previous round can't be it again
+        if (!wildWestPopUpOnce) { //ensures that the popup for voting doesnt appear if this is hte second time they're gonna get it
+            if(endGameResolution.inWildWest) wildWestPopUpOnce = true;
+
+            //if (totalPlayers.Count <= 1) { return; }
+            votingCanvas.SetActive(true);
+            votingPopUp.PopIn();
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            player.VotedCount = 0;
+            hasVoted = false;
+
+            player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
+
+            if (player.IsTaskManager)
+            { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
-        }
-        else 
-        {
-            if(!endGameResolution.inWildWest) SpawnVotingButtons();
+            }
+            else
+            {
+                if (!endGameResolution.inWildWest) SpawnVotingButtons();
+            }
         }
     }
 
@@ -281,7 +287,7 @@ public class VotingPhase : AttributesSync {
         {
             votingPlayers[i].BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
         }
-        //BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
+        BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
     }
 
     public void DespawnAllGuns()

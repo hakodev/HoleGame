@@ -24,11 +24,14 @@ public class AlarmsControl : AttributesSync
     private bool isTurnedOn = false;
     private bool isBeeping = false;
 
+    private CountDownDisplayManager countDownDisplayManager;
+
 
     private void Start()
     {
         overallTimer = overallTimerGeneral;
         allAlarms = GetComponentsInChildren<Alarm>().ToList();
+        countDownDisplayManager = FindAnyObjectByType<CountDownDisplayManager>();
 
         foreach (Alarm alarm in allAlarms)
         {

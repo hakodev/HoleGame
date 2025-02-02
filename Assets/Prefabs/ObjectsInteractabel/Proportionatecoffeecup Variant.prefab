@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2252896850594740707, guid: d6b5aef5aa235e64d802bda5bd5135a7, type: 3}
       propertyPath: _uidString
-      value: 085108cb-193c-4105-9271-c6f565104f67
+      value: acf01e59-035d-4444-9c0d-e6c8696a7b8b
       objectReference: {fileID: 0}
     - target: {fileID: 2726953757054406563, guid: d6b5aef5aa235e64d802bda5bd5135a7, type: 3}
       propertyPath: _uidString
