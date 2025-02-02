@@ -120,6 +120,7 @@ MonoBehaviour:
   _uidString: e7da4fcf-f92a-4474-8953-54a81aa26dd8
   Reliability: 1
   LocalMethodBehavior: 1
+  isPickedUp: 0
 --- !u!54 &-6206243708122861177
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -160,7 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 0b9eb679-4c54-4c2b-b8fb-07fb85056d8b
+  _uidString: c17c8992-8fc2-4869-af73-6669a4d4a2f7
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
@@ -178,8 +179,8 @@ MonoBehaviour:
     NetLOD: 4
     Frequency: 120
   Reliability: 1
-  SyncEveryNUpdates: 10
-  FullSyncEveryNSync: 4
+  SyncEveryNUpdates: 999999
+  FullSyncEveryNSync: 999999
   SendData: 1
   ApplyAsTransform: 0
   AllowCollisionToAssumeOwner: 1

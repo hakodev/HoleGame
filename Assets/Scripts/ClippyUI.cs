@@ -54,7 +54,7 @@ public class ClippyUI : MonoBehaviour
         if (!hasBeenInteractedWith)
         {
             time = Mathf.Abs(Mathf.Sin(Time.time * 2));
-            Debug.Log(time);
+            //Debug.Log(time);
             image.color = Color.Lerp(startColor, blinkColor, time);
         }
 

@@ -1,5 +1,6 @@
 using Alteruna;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,16 +27,17 @@ public class StickyNote : DynamicInteractableObject
 
     private MousePainter mousePainter;
     private Camera tempCamRef;
-    [SynchronizableField]
-    private int userID;
+    [SynchronizableField] private int userID;
 
     List<Collider> allStickyColliders;
     Collider parentCollider;
+    CharacterController playerParentCollider;
     Transform parentedTo;
+
     public bool IsPoster { get; private set; } = false;
 
 
-    public static bool currentlyDrawing=false;
+    public static bool currentlyDrawing = false;
 
     protected override void Awake()
     {
@@ -72,9 +74,11 @@ public class StickyNote : DynamicInteractableObject
         {
             isPlaced = false;
             originalPos = transform.position;
+            parentRB = null;
+            ChangeLayerIfStuckToPlayer(7);
             BroadcastRemoteMethod(nameof(GnoreCollisions));
         }
-        if(interaction == InteractionEnum.MarkerOnPosterOrStickyNote)
+        if (interaction == InteractionEnum.MarkerOnPosterOrStickyNote)
         {
             Collider boxy = GetComponent<Collider>();
             boxy.enabled = false;
@@ -88,18 +92,17 @@ public class StickyNote : DynamicInteractableObject
     protected override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
+        if (collision.gameObject.layer == selfLayer) { return; }
 
-        if(!isPlaced)
-        {
-            if (collision.gameObject.layer == selfLayer) { return; }
-            Debug.Log("krankenwagen" + collision.gameObject.name);// + " " + collision.transform.parent.name + " " + collision.transform.root.name);
+        //if (!isPlaced) {
             if (isThrown || isGameStart)
             {
                 AlignWithSurface(collision);
                 Stick();
                 if (RoleAssignment.hasGameStarted) PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
             }
-        }  
+       // }
+
     }
 
     public override void Use()
@@ -115,8 +118,8 @@ public class StickyNote : DynamicInteractableObject
             currentlyOwnedByAvatar.gameObject.GetComponentInChildren<CameraMovement>().enabled = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            originalPos = transform.position;
-            BroadcastRemoteMethod(nameof(DrawPosition), transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f, Multiplayer.GetUser().Index);
+
+            DrawPosition(transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f, Multiplayer.GetUser().Index);
         }
         else
         {
@@ -125,31 +128,42 @@ public class StickyNote : DynamicInteractableObject
             currentlyOwnedByAvatar.gameObject.GetComponentInChildren<CameraMovement>().enabled = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            BroadcastRemoteMethod(nameof(DrawPosition), originalPos, Multiplayer.GetUser().Index);
+            DrawPosition(originalPos, Multiplayer.GetUser().Index);
         }
 
     }
 
-    [SynchronizableMethod]
     public void DrawPosition(Vector3 finalPos, int userId)
     {
         transform.position = finalPos;
+        rbToTrack.MovePosition(finalPos);
         isInteractedWith = !isInteractedWith;
         userID = userId;
     }
 
+    int updateCount;
     protected override void Update()
     {
         base.Update();
-        if (isPlaced && transform.parent != null && !transform.parent.gameObject.name.Contains("Hand"))
-        {
-            StasisInPlace();
-        }
-        if(userID != Multiplayer.GetUser().Index) { return; }
+
+        if (userID != Multiplayer.GetUser().Index) { return; }
         if (isInteractedWith && Input.GetMouseButton(0))
         {
-            //Debug.Log("wa");
             mousePainter.Paint(tempCamRef);
+        }
+        else
+        {
+            originalPos = transform.position;
+        }
+    }
+    private void FixedUpdate()
+    {
+        if (isPlaced && transform.parent != null && !transform.parent.gameObject.name.Contains("Hand"))
+        {
+           // if (parentRB != null || playerParentCollider != null)
+           // {
+                StasisInPlace();
+           // }
         }
     }
 
@@ -165,8 +179,12 @@ public class StickyNote : DynamicInteractableObject
         }
     }*/
 
+
+
     private void Stick()
     {
+        ChangeLayerIfStuckToPlayer(10);
+
 
         ResetMomentum();
 
@@ -182,34 +200,52 @@ public class StickyNote : DynamicInteractableObject
         BroadcastRemoteMethod(nameof(ToggleRigidbody), false);
 
     }
+    private void ChangeLayerIfStuckToPlayer(int newLayer) //changes layer only for player it is stuck to
+    {
+        if (playerParentCollider == null) { return; }
+
+        UserId parentAvatarUserIndex = (UserId)playerParentCollider.GetComponent<Alteruna.Avatar>().Owner.Index;
+        Debug.Log("grill " + parentAvatarUserIndex);
+        InvokeRemoteMethod(nameof(ChangeChildrenLayers), parentAvatarUserIndex, newLayer); //removes sticky note on parent's side, enables it in trytopickup
+    }
+
+    [SynchronizableMethod]
+    private void ChangeChildrenLayers(int newLayer)
+    {
+        List<GameObject> tempList = new List<GameObject>();
+        tempList.Add(gameObject);
+        GetChildRecursive(gameObject, tempList);
+        foreach (GameObject child in tempList)
+        {
+            child.gameObject.layer = newLayer;
+        }
+        tempList.Clear();
+    }
+
+    private void GetChildRecursive(GameObject obj, List<GameObject> tempChildList)
+    {
+        if (null == obj) { return; }
+
+        foreach (Transform child in obj.transform)
+        {
+            if (null == child) { continue; }
+            tempChildList.Add(child.gameObject);
+            GetChildRecursive(child.gameObject, tempChildList);
+        }
+    }
+
 
     private void AlignWithSurface(Collision collision)
     {
         ResetMomentum();
 
         Vector3 point = Vector3.zero;
-        Collider col = collision.collider;
-
+        Collider col = collision.gameObject.GetComponent<Collider>();
         if (col != null && col.enabled)
         {
             point = col.ClosestPoint(transform.position);
-
-            
-            if (col is MeshCollider)
-            {
-                MeshCollider meshCol = (MeshCollider)col;
-                if(!meshCol.convex)
-                {
-                    RaycastHit slaviOtTheClashers;
-                    Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized, out slaviOtTheClashers, 500);
-                    Debug.DrawRay(transform.position, (col.transform.position - transform.position).normalized * 500);
-                    Debug.Break();
-                    point = slaviOtTheClashers.point;
-                }   
-            }
         }
-        Debug.Log("kranken " + point + collision.gameObject.name);
-        //its this, cant find point on player's controller collider
+
 
         Vector3 hitNormal = transform.position - point;
         Vector3 alignsBestWith = GetClosestAxis(hitNormal);
@@ -233,12 +269,11 @@ public class StickyNote : DynamicInteractableObject
     }
     private void CheckRaycastForRigidbody()
     {
-        //Debug.DrawRay(transform.position, transform.forward * 500, Color.yellow);
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, 500))
         {
             RigidbodySynchronizable potentialParentRBSync = hit.collider.gameObject.GetComponent<RigidbodySynchronizable>();
-            if (potentialParentRBSync!=null)
+            if (potentialParentRBSync != null)
             {
                 Guid aaa = potentialParentRBSync.GetUID();
                 BroadcastRemoteMethod(nameof(SyncSetParent), aaa);
@@ -249,13 +284,12 @@ public class StickyNote : DynamicInteractableObject
                 if (transSync != null)
                 {
                     Guid aaa = transSync.GetUID();
-                    Debug.Log("krankenwagen passed transform");
                     BroadcastRemoteMethod(nameof(SyncSetParent), aaa);
                 }
                 else
                 {
                     //all of the walls, yes this code sucks ty
-                    BroadcastRemoteMethod(nameof(SyncSetParentWalls));
+                //    BroadcastRemoteMethod(nameof(SyncSetParentWalls));
 
                 }
             }
@@ -263,37 +297,42 @@ public class StickyNote : DynamicInteractableObject
 
     }
 
+    Rigidbody parentRB;
     [SynchronizableMethod]
     private void SyncSetParent(Guid hitObjID)
     {
         parentedTo = Multiplayer.GetGameObjectById(hitObjID).transform;
-        if (parentedTo != null) 
+        if (parentedTo != null)
         {
-            Rigidbody parentRB = parentedTo.GetComponent<Rigidbody>();
-
-            transform.SetParent(parentedTo, true);
+            parentRB = parentedTo.GetComponent<Rigidbody>();
             parentCollider = parentedTo.GetComponent<Collider>();
 
+            transform.SetParent(parentedTo, true);
+
+            /*  //makes the game boring
             if (parentRB != null)
             {
                 parentRB.linearVelocity = Vector3.zero;
                 parentRB.angularVelocity = Vector3.zero;
             }
-            else
+            */
+            if(parentRB==null)
             {
-                if(parentedTo.gameObject.layer == 9 || parentedTo.gameObject.layer == 10)
+                if (parentedTo.gameObject.layer == 9 || parentedTo.gameObject.layer == 10)
                 {
-                    parentCollider = parentedTo.GetComponent<PlayerController>().HumanCollider;
+                    playerParentCollider = parentedTo.GetComponent<CharacterController>();
                 }
             }
 
             for (int j = 0; j < allStickyColliders.Count; j++)
             {
-                Physics.IgnoreCollision(parentCollider, allStickyColliders[j]);
+                if (playerParentCollider == null) Physics.IgnoreCollision(parentCollider, allStickyColliders[j]);
+                if (playerParentCollider != null) Physics.IgnoreCollision(playerParentCollider, allStickyColliders[j]);
             }
         }
     }
 
+    /*
     [SynchronizableMethod]
     private void SyncSetParentWalls()
     {
@@ -304,18 +343,21 @@ public class StickyNote : DynamicInteractableObject
             transform.SetParent(parentedTo, true);
         }
     }
+    */
 
     [SynchronizableMethod]
     private void GnoreCollisions()
     {
         if (parentCollider == null) { return; }
-            foreach (Collider col in allStickyColliders)
-            {
-                Physics.IgnoreCollision(parentCollider, col, false);
-            }
+        for (int j = 0; j < allStickyColliders.Count; j++)
+        {
+            if (playerParentCollider == null) Physics.IgnoreCollision(parentCollider, allStickyColliders[j], false);
+            if (playerParentCollider != null) Physics.IgnoreCollision(playerParentCollider, allStickyColliders[j], false);
+        }
+    
 
         parentCollider = null;
-        //allStickyColliders.Clear();
+        playerParentCollider= null;
     }
 
     public static void AmendShaderLayeringInInteract(GameObject objectToApply)
@@ -332,7 +374,7 @@ public class StickyNote : DynamicInteractableObject
     }
     private void StasisInPlace()
     {
-      //  ResetMomentum();
+        //  ResetMomentum();
         transform.localPosition = placedLocalPos;
         transform.localRotation = Quaternion.Euler(placedLocalRot);
     }

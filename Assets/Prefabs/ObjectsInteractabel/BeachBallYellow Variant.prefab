@@ -14,7 +14,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1566520578020904309, guid: 87dbc2de45cbaf94686395be0f09b928, type: 3}
       propertyPath: _uidString
-      value: d4140a70-0f77-41ba-ac14-12784f777069
+      value: 525d2a21-95b4-46e4-8753-763a1ca5d5e5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1566520578020904309, guid: 87dbc2de45cbaf94686395be0f09b928, type: 3}
+      propertyPath: SyncEveryNUpdates
+      value: 999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1566520578020904309, guid: 87dbc2de45cbaf94686395be0f09b928, type: 3}
+      propertyPath: FullSyncEveryNSync
+      value: 999999
       objectReference: {fileID: 0}
     - target: {fileID: 1731013900170456044, guid: 87dbc2de45cbaf94686395be0f09b928, type: 3}
       propertyPath: m_LocalPosition.x
