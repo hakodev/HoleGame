@@ -38,8 +38,6 @@ public class SymptomNotifText : AttributesSync
 
         if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && transform.root.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
         {
-            CarpetManager.Instance.RandomizeCarpetColor(); //if carpet pick color
-
             switch (CarpetManager.Instance.GetCarpetColorRandomNum())
             {
                 case 0:
@@ -49,12 +47,12 @@ public class SymptomNotifText : AttributesSync
                         if (carpet.GetColor() == CarpetColor.Red)
                         {
                             carpet.IsCorrupted = true;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                         }
                         else
                         {
                             carpet.IsCorrupted = false;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                         }
                     }
                     break;
@@ -65,12 +63,12 @@ public class SymptomNotifText : AttributesSync
                         if (carpet.GetColor() == CarpetColor.Green)
                         {
                             carpet.IsCorrupted = true;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                         }
                         else
                         {
                             carpet.IsCorrupted = false;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                         }
                     }
                     break;
@@ -81,12 +79,12 @@ public class SymptomNotifText : AttributesSync
                         if (carpet.GetColor() == CarpetColor.Blue)
                         {
                             carpet.IsCorrupted = true;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                         }
                         else
                         {
                             carpet.IsCorrupted = false;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                         }
                     }
                     break;
@@ -99,7 +97,7 @@ public class SymptomNotifText : AttributesSync
             foreach (CarpetData carpet in allCarpets)
             {
                 carpet.IsCorrupted = false;
-                carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
             }
         }
 

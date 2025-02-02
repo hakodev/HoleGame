@@ -4,7 +4,7 @@ using UnityEngine;
 public class CarpetManager : AttributesSync {
     public static CarpetManager Instance { get; private set; }
 
-    [SynchronizableField] public int carpetColorRandNum;
+    [SynchronizableField] public int carpetColorRandNum = 0;
     private const int numOfTotalCarpetColors = 3;
 
     private void Awake() {
@@ -19,6 +19,7 @@ public class CarpetManager : AttributesSync {
     public int GetCarpetColorRandomNum() {
         return carpetColorRandNum;
     }
+    [SynchronizableMethod]
     public void RandomizeCarpetColor()
     {
         carpetColorRandNum = Random.Range(0, numOfTotalCarpetColors);

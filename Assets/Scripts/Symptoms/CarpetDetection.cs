@@ -52,7 +52,7 @@ public class CarpetDetection : MonoBehaviour
 
             if (collider == thisCarpetCollider)
             {
-                if (lobby == null && !lobby.gameObject.activeSelf)
+                if (!lobby.gameObject.activeSelf)
                 {
                     if (carpetData.IsCorrupted)
                     {

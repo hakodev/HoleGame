@@ -122,7 +122,7 @@ public class Interact : AttributesSync, IObserver
                 {
                     if (currentChargeUpTime > minMaxThrowChargeUpTime.y) currentChargeUpTime = minMaxThrowChargeUpTime.y;
                     currentThrowStrength = Mathf.Lerp(minMaxThrowStrength.x, minMaxThrowStrength.y, currentChargeUpTime);
-                    
+                       
                     
                     BroadcastRemoteMethod(nameof(Throw));
                 }
@@ -414,6 +414,7 @@ public class Interact : AttributesSync, IObserver
         //    DespawningItems.DespawnItem(heldObject);
         //    StartCoroutine(DespawningItems.DestroyItem(heldObject));
         //}
+        if (heldObject.GetComponent<CrumpablePaper>()) heldObject.GetComponent<CrumpablePaper>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
 
         DIO = heldObject.GetComponent<DynamicInteractableObject>();
         DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", -1);
