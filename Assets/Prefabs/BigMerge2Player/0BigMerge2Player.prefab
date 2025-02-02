@@ -5507,7 +5507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2337578548009178895, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3797304528183762672, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
       propertyPath: lobbySystem

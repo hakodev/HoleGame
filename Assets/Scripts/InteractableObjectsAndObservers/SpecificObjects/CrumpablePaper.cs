@@ -21,6 +21,7 @@ public class CrumpablePaper : DynamicInteractableObject
     }
     public override void SpecialInteraction(InteractionEnum interaction, Component caller)
     {
+        planeCollider.enabled = false;
     }
 
     public override void Use()
