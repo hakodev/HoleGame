@@ -1,7 +1,6 @@
 using UnityEngine;
 using Alteruna;
 using System.Collections;
-using System.Collections.Generic;
 
 
 public class Health : AttributesSync {
@@ -19,19 +18,20 @@ public class Health : AttributesSync {
     private TransformSynchronizable transformSynchronizable;
 
     //[SerializeField] private List<Object> objectsToDestroyUponDeath;
-
+    [SynchronizableField] bool dead = false;
     private void Awake() {
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
         avatar = GetComponent<Alteruna.Avatar>();
         mishSync = GetComponent<MishSyncAnimations>();
-        endGameResolution = GetComponentInChildren<EndGameResolution>();
         transformSynchronizable = GetComponent<TransformSynchronizable>();
 
         deadScreen.SetActive(false);
     }
 
     private void Start() {
+        endGameResolution = GetComponentInChildren<EndGameResolution>();
+
         if (!avatar.IsMe) { return; }
         currentHealth = maxHealth;
     }
@@ -43,6 +43,7 @@ public class Health : AttributesSync {
             currentHealth = 0;
             Debug.Log("Reduced HP");
             PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetDeathStatic);
+            dead = true;
             BroadcastRemoteMethod(nameof(KillPlayer));
         }
     }

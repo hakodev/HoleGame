@@ -657,7 +657,6 @@ MonoBehaviour:
   isMoving: 0
   isRunning: 0
   timeSavingJumpInput: 0.2
-  <HumanCollider>k__BackingField: {fileID: 8037317931813873023}
   cameraTransform: {fileID: 4449355787945441573}
   moveTransform: {fileID: 187019746038438773}
 --- !u!114 &3247772703483496256
@@ -699,7 +698,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
   _uidString: 2f194280-9514-4e4a-b01e-8aeb09d19a5b
-  Reliability: 2
+  Reliability: 1
   LocalMethodBehavior: 1
   Jumping: 0
   animationSmoothing: 4

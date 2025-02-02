@@ -149,7 +149,7 @@ public class MishSyncAnimations : AttributesSync
 
         if (stance == StanceEnum.Dead) { return; }
 
-
+        Debug.Log("dead " + gameObject.name);
         animator.transform.localPosition = Vector3.zero;
         animator.transform.rotation = transform.rotation;
 

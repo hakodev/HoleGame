@@ -31,7 +31,7 @@ public class LobbySystem : MonoBehaviour {
 
         // we are calling the symptom twice with these, once in setsymptom and once in the chain of calls bc we are displaying the notif canvas
 
-        
+        /*
         if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
             SymptomsManager.Instance.JustSetSymptom(0); // Inverted controls
             ResetCarpetParams();
@@ -58,11 +58,11 @@ public class LobbySystem : MonoBehaviour {
             ResetCarpetParams();
             DisplayNoSymptomText();
         }
-        
+        */
     }
 
     private void OnDestroy() {
-        SymptomsManager.Instance.JustSetSymptom(999); // no symptom
+       // SymptomsManager.Instance.JustSetSymptom(999); // no symptom
     }
 
     void SetCarpetParams()
