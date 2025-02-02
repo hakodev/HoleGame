@@ -59,7 +59,7 @@ public class VotingPhase : AttributesSync {
     public void InitiateVotingPhase() {
         if (!avatar.IsMe) { return; }
         endGameResolution.CheckForEndGame();
-        
+        DespawnAllGuns();
 
         if (!wildWestPopUpOnce) { //ensures that the popup for voting doesnt appear if this is hte second time they're gonna get it
             if(endGameResolution.inWildWest) wildWestPopUpOnce = true;
@@ -74,7 +74,6 @@ public class VotingPhase : AttributesSync {
             hasVoted = false;
 
             player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
-            DespawnAllGuns();
 
             if (player.IsTaskManager)
             { // Player who was task manager in the previous round can't be it again
@@ -288,7 +287,7 @@ public class VotingPhase : AttributesSync {
         {
             votingPlayers[i].BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
         }
-        //BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
+        BroadcastRemoteMethod(nameof(DisplaySymptomNotifSync));
     }
 
     public void DespawnAllGuns()

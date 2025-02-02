@@ -162,31 +162,32 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         return currentlyOwnedByAvatar;
     }
     [SynchronizableMethod]
-    public void SetCurrentlyOwnedByAvatar(int newIndex)
+    public void SetCurrentlyOwnedByAvatar(int roleAssignmentIndex)
     {
-        if (newIndex != -1)
+        if (roleAssignmentIndex != -1)
         {
-            currentlyOwnedByAvatar = GetAvatarByOwnerIndex(newIndex);
+            currentlyOwnedByAvatar = GetAvatarByOwnerIndex(roleAssignmentIndex);
+            //Debug.Log("owned by " + currentlyOwnedByAvatar);
         }
         else
         {
             currentlyOwnedByAvatar = null;
+            //Debug.Log("not owned " + null);
         }
         Commit();
-        //    Debug.Log("owned by " + currentlyOwnedByAvatar.gameObject.name);
     }
 
-    public Alteruna.Avatar GetAvatarByOwnerIndex(int ownerIndex)
+    public Alteruna.Avatar GetAvatarByOwnerIndex(int roleAssignmentIndex)
     {
-        Alteruna.Avatar[] avatars = FindObjectsByType<Alteruna.Avatar>(FindObjectsSortMode.None);
-        foreach (Alteruna.Avatar avatar in avatars)
+        if(roleAssignmentIndex != -1)
         {
-            if (avatar.Owner.Index == ownerIndex)
-            {
-                return avatar;
-            }
+            List<Alteruna.Avatar> avatars = Multiplayer.GetAvatars(); 
+            return avatars[roleAssignmentIndex];
         }
-        return null;
+        else
+        {
+            return null;
+        }
     }
 
 

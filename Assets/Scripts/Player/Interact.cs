@@ -106,6 +106,8 @@ public class Interact : AttributesSync, IObserver
 
     private void FixedUpdate()
     {
+        if (!avatar.IsMe) { return; }
+
         UpdateHeldObjectPhysics();
     }
 
@@ -222,8 +224,11 @@ public class Interact : AttributesSync, IObserver
     {
         List<GameObject> tempChildList = new List<GameObject>();
         if (objectToApply == currentOutlinedObject) { return; }
+
         if (currentOutlinedObject != null && objectToApply != currentOutlinedObject)
         {
+            if (currentOutlinedObject.gameObject.layer == 10) { return; } //when it's being placed could be hitrayed by this and affect it
+
             ChangeChildrenLayers("DynamicInteractableObject", tempChildList);
             StickyNote.AmendShaderLayeringInInteract(currentOutlinedObject.gameObject);
         }
@@ -238,6 +243,7 @@ public class Interact : AttributesSync, IObserver
 
     public void ChangeChildrenLayers(string layerName, List<GameObject> tempChildList)
     {
+
         GetChildRecursive(currentOutlinedObject.gameObject, tempChildList);
         foreach (GameObject child in tempChildList)
         {
@@ -430,14 +436,14 @@ public class Interact : AttributesSync, IObserver
         if (heldObject != null) { return; }
         finishedPickUp = false;
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, interactableLayerMask) || pickedUp == spawnedGun)
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, dynamicLayerMask) || pickedUp == spawnedGun)
         {
             PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetPickUp);
             DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
+            Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
-                Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
                 heldObject = pickedUp;
                 rb = heldObject.GetComponent<Rigidbody>();
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
@@ -455,7 +461,7 @@ public class Interact : AttributesSync, IObserver
                 //actually move
                 UpdateHeldObjectPhysics();
 
-                DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", avatar.Owner.Index);
+                DIO.BroadcastRemoteMethod("SetCurrentlyOwnedByAvatar", RoleAssignment.playerNumber-1);
                 DIO.BroadcastRemoteMethod("DynamicAwake");
                 DIO.BroadcastRemoteMethod(nameof(DIO.ToggleIgnoreCollisionsWithOwner), true);
             }
