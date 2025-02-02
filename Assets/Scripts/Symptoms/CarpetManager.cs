@@ -17,8 +17,11 @@ public class CarpetManager : AttributesSync {
     }
 
     public int GetCarpetColorRandomNum() {
-        carpetColorRandNum = Random.Range(0, numOfTotalCarpetColors);
         return carpetColorRandNum;
+    }
+    public void RandomizeCarpetColor()
+    {
+        carpetColorRandNum = Random.Range(0, numOfTotalCarpetColors);
     }
 }
 
