@@ -10,13 +10,14 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     Alteruna.Avatar userAvatar;
 
     [SynchronizableField] public bool isPickedUp;
+    [SynchronizableField] private bool wasMoved = false;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
     public abstract void Use();
 
     RigidbodySynchronizable rbSyncDynamic;
     Rigidbody rbDynamic;
     List<Collider> collidersDynamic;
-    protected float minVelocityToProduceSound = 0.1f;
+    [SerializeField] protected float minVelocityToProduceSound = 0.1f;
 
     bool awake = false;
 
@@ -37,6 +38,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         collidersDynamic = GetComponentsInChildren<Collider>().ToList();
         //Debug.Log("government " + gameObject.name + " " + collidersDynamic.Count);
     }
+
+
     protected virtual void Update()
     {
         SelfSleepIfUnmoving();
@@ -136,7 +139,11 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar != null)
         {
             timeSinceLastSignificantMovement = 0;
-            if (!awake) BroadcastRemoteMethod(nameof(DynamicAwake));
+            if (!awake)
+            {
+                wasMoved = true;
+                BroadcastRemoteMethod(nameof(DynamicAwake));
+            }
         }
     }
     [SynchronizableMethod]
@@ -152,8 +159,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     public void DynamicAwake()
     {
         awake = true;
-        rbSyncDynamic.SyncEveryNUpdates = 1;
-        rbSyncDynamic.FullSyncEveryNSync = 4;
+        rbSyncDynamic.SyncEveryNUpdates = 4;
+        rbSyncDynamic.FullSyncEveryNSync = 8;
         Debug.Log("awake " + gameObject.name + " " + rbDynamic.linearVelocity.magnitude); //keep this here so we know what causes problems with latency in the future
     }
 

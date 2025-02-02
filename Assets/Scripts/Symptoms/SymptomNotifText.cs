@@ -1,5 +1,4 @@
 using Alteruna;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -11,10 +10,6 @@ public class SymptomNotifText : AttributesSync
     [SerializeField] LobbySystem lobbySystem;
     Alteruna.Avatar avatar;
 
-    public Material ditheringMat;
-
-    private float ditheringStartFloat;
-
     private void Awake()
     {
         //fsr awakes just dont work
@@ -25,11 +20,12 @@ public class SymptomNotifText : AttributesSync
     
     private new void OnEnable()
     {
-        ditheringStartFloat = ditheringMat.GetFloat("_Pixelate");
-        ditheringMat.SetFloat("_Pixelate", 350);
         base.OnEnable();
-        if(lobbySystem!=null && lobbySystem.gameObject.activeSelf) {return;}  
-        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+        if(RoleAssignment.hasGameStarted) {
+            SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+            lobbySystem.gameObject.SetActive(false);
+            //DestroyImmediate(lobbySystem.gameObject);
+        }
     }
 
     List<CarpetData> allCarpets;
@@ -38,15 +34,12 @@ public class SymptomNotifText : AttributesSync
         if (avatar == null) avatar = Multiplayer.GetAvatar();
         if(!avatar.IsMe) { return; }
 
-        if(transform.root.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
-        {
-            StartCoroutine(LerpDithering());
-        }
-
-        if (allCarpets==null) allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
+        if(allCarpets==null) allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
 
         if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && transform.root.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
         {
+            CarpetManager.Instance.RandomizeCarpetColor(); //if carpet pick color
+
             switch (CarpetManager.Instance.GetCarpetColorRandomNum())
             {
                 case 0:
@@ -113,42 +106,6 @@ public class SymptomNotifText : AttributesSync
         allCarpets.Clear();
     }
 
-    public IEnumerator LerpDithering()
-    {
-        //PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetGlitch);
-        bool isBlinkingUp = true;
-        float timer = 0f;
-        if (isBlinkingUp)
-        {
-            while(timer < 1)
-            {
-                timer += Time.deltaTime * 2.5f;
-                ditheringMat.SetFloat("_Pixelate", Mathf.Lerp(350, 20, timer));
-
-                if (timer >= 1)
-                {
-                    isBlinkingUp = false;
-                }
-                yield return new WaitForEndOfFrame();
-            }
-            
-        }
-        if(!isBlinkingUp) 
-        {
-            while (timer > 0)
-            {
-                timer -= Time.deltaTime * 2.5f;
-                ditheringMat.SetFloat("_Pixelate", Mathf.Lerp(350, 20, timer));
-
-                if (timer <= 0)
-                {
-                    yield return null;
-                }
-                yield return new WaitForEndOfFrame();
-            }
-        }
-    }
-
     public void ChangeNotifText()
     {
         if (avatar == null) avatar = Multiplayer.GetAvatar();
@@ -182,5 +139,4 @@ public class SymptomNotifText : AttributesSync
         // yield return new WaitForSeconds(30f);
         // this.transform.parent.parent.gameObject.SetActive(false); // disable canvas
     }
-
 }

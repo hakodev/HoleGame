@@ -793,6 +793,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kickForce: 3
+  extents: {x: 0.17, y: 1, z: 0.17}
+  offset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &2380961244887926389
 GameObject:
   m_ObjectHideFlags: 0

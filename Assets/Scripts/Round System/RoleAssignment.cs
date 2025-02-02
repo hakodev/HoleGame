@@ -67,7 +67,7 @@ public class RoleAssignment : AttributesSync
         hasGameStarted = newState;
     }
 
-   
+
     private void Update()
     {
         if(!hasGameStarted)

@@ -19,6 +19,7 @@ public class LobbySystem : MonoBehaviour {
     private void Start()
     {
         allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
+        if (!avatar.IsMe) controlsText.enabled = false;
     }
 
     private void Update() {
@@ -28,10 +29,6 @@ public class LobbySystem : MonoBehaviour {
             controlsText.enabled = !controlsText.enabled;
         }
 
-
-        // we are calling the symptom twice with these, once in setsymptom and once in the chain of calls bc we are displaying the notif canvas
-
-        
         if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
             SymptomsManager.Instance.JustSetSymptom(0); // Inverted controls
             ResetCarpetParams();
@@ -42,9 +39,6 @@ public class LobbySystem : MonoBehaviour {
             SymptomsManager.Instance.JustSetSymptom(1);// Jumpy carpets
             SetCarpetParams();
             DisplayNotificationText();
-
-
-
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) {
@@ -61,15 +55,14 @@ public class LobbySystem : MonoBehaviour {
         
     }
 
-    private void OnDestroy() {
-       // SymptomsManager.Instance.JustSetSymptom(999); // no symptom
+    private void OnDisabled() {
+        SymptomsManager.Instance.JustSetSymptom(999); // no symptom
     }
 
     void SetCarpetParams()
     {
         switch (CarpetManager.Instance.GetCarpetColorRandomNum())
         {
-
             case 0:
                 // red carpets
                 foreach (CarpetData carpet in allCarpets)
