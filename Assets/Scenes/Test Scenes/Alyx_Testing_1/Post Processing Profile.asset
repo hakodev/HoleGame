@@ -55,7 +55,7 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: -0.4
   contrast:
     m_OverrideState: 1
     m_Value: -10.2
@@ -105,7 +105,7 @@ MonoBehaviour:
     m_Value: 0.91
   intensity:
     m_OverrideState: 1
-    m_Value: 5.4
+    m_Value: 6.56
   scatter:
     m_OverrideState: 1
     m_Value: 0.506
@@ -240,8 +240,8 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 0.089980066
+          time: 0.03266091
+          value: 0.08179909
           inSlope: 0
           outSlope: 1
           tangentMode: 0
