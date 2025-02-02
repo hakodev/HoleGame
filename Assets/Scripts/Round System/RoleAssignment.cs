@@ -64,7 +64,7 @@ public class RoleAssignment : AttributesSync
     [SynchronizableMethod]
     public void SetHasGameStarted(bool newState)
     {
-        hasGameStarted = newState; 
+        hasGameStarted = newState;
     }
 
    
@@ -82,6 +82,8 @@ public class RoleAssignment : AttributesSync
                         FindRolelessPlayers();
                         DetermineMaxNumberOfInfiltrators();
                         AssignRoles();
+
+
                         //BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
                         //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
                         VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();

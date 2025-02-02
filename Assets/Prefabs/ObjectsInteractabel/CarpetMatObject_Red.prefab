@@ -1266,7 +1266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: d8b80937-ddfc-4faf-8c1e-54f2ec55c47c
+  _uidString: 894e5a8d-32b0-4383-b1d5-1e43de92b906
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
@@ -1310,7 +1310,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1331,7 +1331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: b8969ec1-657e-44e5-aca5-ef68a7ac9938
+  _uidString: f44ae2b4-0811-460c-bf8a-f761d017a765
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
@@ -1368,7 +1368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 64003fd3-803d-41c6-904a-43157dcd4cba
+  _uidString: c6ba42c7-db17-473b-b501-b07ff2e94ed8
   Reliability: 1
   LocalMethodBehavior: 1
   carpetColor: 0
