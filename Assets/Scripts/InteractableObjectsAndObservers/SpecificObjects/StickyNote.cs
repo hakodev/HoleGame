@@ -33,6 +33,7 @@ public class StickyNote : DynamicInteractableObject
     Collider parentCollider;
     CharacterController playerParentCollider;
     Transform parentedTo;
+    AudioSource source;
 
     StickyNote stackPseudoChild;
     [SynchronizableField] bool isStasis = false;
@@ -66,7 +67,7 @@ public class StickyNote : DynamicInteractableObject
             // BroadcastRemoteMethod(nameof(SyncSetParent));
             CheckRaycastForRigidbody();
             Stick();
-            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
+            PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetSticky);
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
@@ -103,7 +104,7 @@ public class StickyNote : DynamicInteractableObject
             {
                 AlignWithSurface(collision);
                 Stick();
-                if (RoleAssignment.hasGameStarted) PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
+                PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetSticky);
             }
        // }
 
