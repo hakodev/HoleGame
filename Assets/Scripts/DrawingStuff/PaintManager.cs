@@ -76,7 +76,7 @@ public class PaintManager : AttributesSync{
     }
 
     [SynchronizableMethod]
-    public void paint(Guid guid, Vector3 pos, float radius = 1f, float hardness = .5f, float strength = .5f, Color? color = null){
+    public void paint(Guid guid, Vector3 pos, float radius = 1f, Color? color = null){
         Debug.Log(Multiplayer.GetUser().Name);
 
         Paintable paintable = Multiplayer.GetGameObjectById(guid).GetComponent<Paintable>();
@@ -91,8 +91,8 @@ public class PaintManager : AttributesSync{
 
         paintMaterial.SetFloat(prepareUVID, 0);
         paintMaterial.SetVector(positionID, pos);
-        paintMaterial.SetFloat(hardnessID, hardness);
-        paintMaterial.SetFloat(strengthID, strength);
+        paintMaterial.SetFloat(hardnessID, 1);
+        paintMaterial.SetFloat(strengthID, 1);
         paintMaterial.SetFloat(radiusID, radius);
         paintMaterial.SetTexture(textureID,support);
         paintMaterial.SetColor(colorID, color ?? Color.red);
