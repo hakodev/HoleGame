@@ -112,6 +112,6 @@ public class PlayerRole : AttributesSync
 
     private void OnApplicationQuit()
     {
-        Multiplayer.OnDisconnected();
+        
     }
 }
