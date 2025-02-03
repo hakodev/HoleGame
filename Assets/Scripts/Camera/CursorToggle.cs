@@ -13,10 +13,6 @@ public class CursorToggle : MonoBehaviour
 
     bool once = true;
 
-    private void Awake()
-    {
-
-    }
     private void Start()
     {
         canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
@@ -34,7 +30,7 @@ public class CursorToggle : MonoBehaviour
     bool performedAnAction = false;
     private void CheckForEsc()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             if (Escape == layerOfUI.inGame && !performedAnAction)
             {
@@ -83,13 +79,13 @@ public class CursorToggle : MonoBehaviour
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            //camMovement.FreezeCameraRotation = true;
+            camMovement.FreezeCameraRotation = true;
         }
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            //camMovement.FreezeCameraRotation = false;
+            camMovement.FreezeCameraRotation = false;
         }
     }
     private bool HitUI()
