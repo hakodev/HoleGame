@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class RoleAssignment : AttributesSync
-{
+public class RoleAssignment : AttributesSync {
     private List<PlayerRole> rolelessPlayers = new List<PlayerRole>();
     private static List<PlayerRole> totalPlayers = new List<PlayerRole>();
     public static bool hasGameStarted = false;
@@ -16,6 +15,11 @@ public class RoleAssignment : AttributesSync
     public static Alteruna.Avatar userAvatar;
     CanvasGroup youNeedFriends;
 
+    [SerializeField] private TextMeshProUGUI hostPressGtoStart;
+    [SerializeField] private TextMeshProUGUI pressGtoReady;
+    [SerializeField] private TextMeshProUGUI youAreReadyOrWaitingForOthers;
+
+    public int NumberOfReadyPlayers { get; set; } = 0;
 
     [SerializeField] List<Vector2> InfiltratorsToPlayers;
     //x - alll players
@@ -25,10 +29,11 @@ public class RoleAssignment : AttributesSync
     [SerializeField] private GameObject lobbyCanvas;
 
 
-    [SynchronizableField] public static int playerNumber=0;
-    public static int playerID=-10; //client based id
+    [SynchronizableField] public static int playerNumber = 0;
+    public static int playerID = -10; //client based id
     [SynchronizableField] bool assignedRole = false;
-
+    [SynchronizableField] int readyPlayerCount = 0;
+    private bool thisPlayerIsReady = false;
 
     public static void ResetStatic()
     {
@@ -54,13 +59,19 @@ public class RoleAssignment : AttributesSync
         if (playerID == -10) playerID = playerNumber; //sets proper number
         Debug.Log("player's count " + totalPlayers.Count);
 
-        if (playerNumber != 1)
-        {
-        //    transform.parent.parent.gameObject.SetActive(false);
-        gameObject.SetActive(false);
-            
+        if(Multiplayer.GetUser().IsHost) {
+            hostPressGtoStart.enabled = false;
+            pressGtoReady.enabled = false;
+            youAreReadyOrWaitingForOthers.enabled = true;
+            thisPlayerIsReady = true;
+            readyPlayerCount++;
+        } else {
+            hostPressGtoStart.enabled = false;
+            pressGtoReady.enabled = true;
+            youAreReadyOrWaitingForOthers.enabled = false;
         }
     }
+
     [SynchronizableMethod]
     public void SetHasGameStarted(bool newState)
     {
@@ -70,29 +81,41 @@ public class RoleAssignment : AttributesSync
 
     private void Update()
     {
-        if(!hasGameStarted)
-        {
-            if (Multiplayer.GetUser().IsHost)
-            {
-                if (Input.GetKeyUp(KeyCode.G))
-                {
-                    if (totalPlayers.Count > 1)
-                    {
-                        BroadcastRemoteMethod(nameof(SetHasGameStarted), true);
-                        FindRolelessPlayers();
-                        DetermineMaxNumberOfInfiltrators();
-                        AssignRoles();
+        if(Multiplayer.GetUser().IsHost && readyPlayerCount == totalPlayers.Count) {
+            hostPressGtoStart.enabled = true;
+            pressGtoReady.enabled = false;
+            youAreReadyOrWaitingForOthers.enabled = false;
+        }
+
+        if(!hasGameStarted && Input.GetKeyUp(KeyCode.G)) {
+            if(!Multiplayer.GetUser().IsHost && !thisPlayerIsReady) {
+                hostPressGtoStart.enabled = false;
+                pressGtoReady.enabled = false;
+                youAreReadyOrWaitingForOthers.enabled = true;
+                thisPlayerIsReady = true;
+                readyPlayerCount++;
+            }
+
+            if(Multiplayer.GetUser().IsHost) {
+                VotingPhase voting = transform.root.GetComponent<VotingPhase>();
+
+                if(totalPlayers.Count > 1 && readyPlayerCount == voting.GetTotalAlivePlayerCount()) {
+                    hostPressGtoStart.enabled = false;
+                    pressGtoReady.enabled = false;
+                    youAreReadyOrWaitingForOthers.enabled = false;
+
+                    BroadcastRemoteMethod(nameof(SetHasGameStarted), true);
+                    FindRolelessPlayers();
+                    DetermineMaxNumberOfInfiltrators();
+                    AssignRoles();
 
 
-                        //BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
-                        //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
-                        VotingPhase voting = transform.root.GetComponentInChildren<VotingPhase>();
-                        voting.AllVotersSymptomNotifStartOfGame();
-                    }
-                    else
-                    {
-                        StartCoroutine(DisplayFriends());
-                    }
+                    //BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
+                    //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
+                    
+                    voting.AllVotersSymptomNotifStartOfGame();
+                } else if(totalPlayers.Count == 1) {
+                    StartCoroutine(DisplayFriends());
                 }
             }
         }

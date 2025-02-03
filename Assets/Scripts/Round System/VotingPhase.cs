@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Alteruna;
-using System.Linq;
+
 public class VotingPhase : AttributesSync {
 
     public static List<PlayerRole> totalALivePlayers = new List<PlayerRole>();
@@ -52,6 +52,17 @@ public class VotingPhase : AttributesSync {
         totalALivePlayers.Add(player);
         votingPlayers.Add(this);
 
+    }
+
+    private void OnApplicationQuit() {
+        if(player.gameObject != null) {
+            totalALivePlayers.Remove(player);
+            Destroy(player.gameObject);
+        }
+    }
+
+    public int GetTotalAlivePlayerCount() {
+        return totalALivePlayers.Count;
     }
 
     public bool once = false;

@@ -28,6 +28,7 @@ public class PlayerNameDisplay : AttributesSync
     private void SufferingInTheAbyss()
     {
         playerNameText.text = transform.root.GetComponentInChildren<PlayerRole>().GetName();
+        avatar.name = playerNameText.text;
         transform.root.gameObject.name = playerNameText.text;
 
         Debug.Log("3 " + playerNameText.text);
