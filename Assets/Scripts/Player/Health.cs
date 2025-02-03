@@ -65,4 +65,15 @@ public class Health : AttributesSync {
         return maxHealth;
     }
 
+    private void OnApplicationQuit()
+    {
+        BroadcastRemoteMethod(nameof(RemovePlayer));
+    }
+
+    [SynchronizableMethod] 
+    void RemovePlayer()
+    {
+        VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
+    }
+
 }
