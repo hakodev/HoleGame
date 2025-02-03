@@ -25,9 +25,9 @@ public class LobbySystem : MonoBehaviour {
     private void Update() {
 
         if(!avatar.IsMe) { return; }
-        if(Input.GetKeyDown(KeyCode.Tab)) {
-            controlsText.enabled = !controlsText.enabled;
-        }
+        //if(Input.GetKeyDown(KeyCode.Tab)) {
+            //controlsText.enabled = !controlsText.enabled;
+        //}
 
         if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
             SymptomsManager.Instance.JustSetSymptom(0); // Inverted controls
@@ -133,7 +133,7 @@ public class LobbySystem : MonoBehaviour {
     private void DisplayNotificationText() {
 
         symptomNotifText.DOKill();
-        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
+        symptomNotifText.transform.parent.gameObject.SetActive(true);
         symptomNotifText.alpha = 1f;
         symptomNotifText.text = "Simulating new symptom!\n\n" +
                                $"\"{SymptomsManager.Instance.GetSymptom().Name}\"\n" +
@@ -150,14 +150,14 @@ public class LobbySystem : MonoBehaviour {
             };
         }
 
-        symptomNotifText.DOFade(0f, 10f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
+        //symptomNotifText.DOFade(0f, 10f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
     }
 
     private void DisplayNoSymptomText() {
         symptomNotifText.DOKill();
-        symptomNotifText.transform.parent.parent.gameObject.SetActive(true);
+        symptomNotifText.transform.parent.gameObject.SetActive(true);
         symptomNotifText.alpha = 1f;
         symptomNotifText.text = "All symptoms removed!";
-        symptomNotifText.DOFade(0f, 5f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
+        //symptomNotifText.DOFade(0f, 5f).OnComplete(() => symptomNotifText.transform.parent.parent.gameObject.SetActive(false));
     }
 }
