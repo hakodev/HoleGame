@@ -11,6 +11,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
     [SynchronizableField] public bool isPickedUp;
     [SynchronizableField] private bool wasMoved = false;
+
+    [field: SerializeField] public float forceWhenThrownMultiplier { get; private set; } = 1;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
     public abstract void Use();
 
