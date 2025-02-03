@@ -11,6 +11,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
     [SynchronizableField] public bool isPickedUp;
     [SynchronizableField] private bool wasMoved = false;
+
+    [field: SerializeField] public float forceWhenThrownMultiplier { get; private set; } = 1;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
     public abstract void Use();
 
@@ -35,8 +37,9 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     protected virtual void Start()
     {
         //BroadcastRemoteMethod(nameof(DynamicSleep));
-        collidersDynamic = GetComponentsInChildren<Collider>().ToList();
-        //Debug.Log("government " + gameObject.name + " " + collidersDynamic.Count);
+        collidersDynamic = GetComponentsInChildren<Collider>()
+            .Where(c => !c.isTrigger)
+            .ToList();
     }
 
 
@@ -54,40 +57,61 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void ToggleIgnoreCollisionsWithOwner(bool newState)
     {
-        StickyNote isSticky = GetComponent<StickyNote>();
+        bool isSticky = this is StickyNote; //dont delete theese bools
+        bool isChair = (gameObject.CompareTag("Chair"));
+        bool isBall = this is Ball;
+        bool Special = (isSticky || isChair || isBall);
+       
 
         if (newState)
         {
             if (currentlyOwnedByAvatar != null)
             {
-                currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
-                //if (currentController == null || isSticky != null) { return; }
-                if (isSticky != null) { return; }
-                IgnoreCols(true);
+                if (Special)
+                {
+                    if (isSticky) ToTriggerCols(true);
+                    if (!isSticky)IgnoreCols(true);
+                }
+                else
+                {
+                    DisableCols(true);
+                }
             }
         }
         else
         {
-            //if (currentController == null || isSticky != null) { return; }
-            if (isSticky != null) { return; }
-            IgnoreCols(false);
-            //currentController = null;
+            if (Special) {
+                if (isSticky) ToTriggerCols(false);
+                if (!isSticky) IgnoreCols(false);
+            }
+            else
+            {
+                DisableCols(false);
+            }
         }
-
-        Debug.Log("krank isIgnoring " + newState);
     }
 
-    private void IgnoreCols(bool newState)
+    private void ToTriggerCols(bool newState) //because the sticky notes are just so god damn special
     {
-        collidersDynamic = GetComponentsInChildren<Collider>().ToList();
-        //currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
-        Debug.Log("krank human collider3" + currentController + collidersDynamic[0]);
+        for (int i = 0; i < collidersDynamic.Count; i++)
+        {
+            collidersDynamic[i].isTrigger = newState;
 
+        }
+    }
+    private void DisableCols(bool newState)
+    {
         for (int i = 0; i<collidersDynamic.Count; i++)
         {
-            //Physics.IgnoreCollision(collidersDynamic[i], currentController, newState);
             collidersDynamic[i].enabled = !newState;
 
+        }
+    }
+    private void IgnoreCols(bool newState)
+    {
+        for (int i = 0; i < collidersDynamic.Count; i++)
+        {
+            Physics.IgnoreCollision(collidersDynamic[i], currentController, newState);
         }
     }
 
@@ -174,11 +198,13 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         if (roleAssignmentIndex != -1)
         {
             currentlyOwnedByAvatar = GetAvatarByOwnerIndex(roleAssignmentIndex);
+            currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
             //Debug.Log("owned by " + currentlyOwnedByAvatar);
         }
         else
         {
             currentlyOwnedByAvatar = null;
+            currentController = null;
             //Debug.Log("not owned " + null);
         }
         Commit();

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class CursorToggle : MonoBehaviour
 {
-    private PlayerRole player;
+    private CameraMovement camMovement;
     List<Canvas> canvases;
 
     private layerOfUI Escape { get; set; } = layerOfUI.inGame;
@@ -20,6 +20,9 @@ public class CursorToggle : MonoBehaviour
     private void Start()
     {
         canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
+        camMovement = GetComponentInChildren<CameraMovement>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()
@@ -33,15 +36,11 @@ public class CursorToggle : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-         //   player = FindAnyObjectByType<PlayerRole>();
-          //  if (player == null) { return; }
-
             if (Escape == layerOfUI.inGame && !performedAnAction)
             {
                 performedAnAction = true;
                 Escape = layerOfUI.interactWithPopUps;
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                UICursorAndCam(true);
             }
 
 
@@ -49,8 +48,7 @@ public class CursorToggle : MonoBehaviour
             {
                 performedAnAction = true;
                 Escape = layerOfUI.inGame;
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                UICursorAndCam(false);
             }
 
             performedAnAction = false;
@@ -73,10 +71,25 @@ public class CursorToggle : MonoBehaviour
             {
                 if(!StickyNote.currentlyDrawing)
                 {
-                    Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
+                    UICursorAndCam(true);
                 }
             }
+        }
+    }
+
+    public void UICursorAndCam(bool enterUIMode)
+    {
+        if (enterUIMode)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            camMovement.FreezeCameraRotation = true;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            camMovement.FreezeCameraRotation = false;
         }
     }
     private bool HitUI()

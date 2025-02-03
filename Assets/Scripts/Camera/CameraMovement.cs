@@ -19,22 +19,12 @@ public class CameraMovement : MonoBehaviour
 
     private float mouseX, mouseY;
 
+    public bool FreezeCameraRotation { get; set; } = false;
+
     private void Awake()
     {
         avatar = GetComponentInParent<Alteruna.Avatar>();
         playerController = GetComponentInParent<PlayerController>();
-    }
-
-    private void Start()
-    {
-
-        if (!avatar.IsMe)
-        {
-            return;
-        }
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     private void Update()
@@ -44,8 +34,11 @@ public class CameraMovement : MonoBehaviour
         {
             return;
         }
-        ProcessCameraInput();
-        ProcessCamera();
+        if(!FreezeCameraRotation)
+        {
+            ProcessCameraInput();
+            ProcessCamera();
+        }
     }
 
     private void LateUpdate()
@@ -56,7 +49,7 @@ public class CameraMovement : MonoBehaviour
         {
             return;
         }
-        ProcessCameraCrouched();
+        if (!FreezeCameraRotation) ProcessCameraCrouched();
     }
 
     private void ProcessCameraInput()

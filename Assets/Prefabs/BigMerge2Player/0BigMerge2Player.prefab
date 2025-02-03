@@ -5306,7 +5306,7 @@ MonoBehaviour:
   youAreReadyOrWaitingForOthers: {fileID: 8446830133360875623}
   InfiltratorsToPlayers:
   - {x: 1, y: 1}
-  - {x: 6, y: 2}
+  - {x: 5, y: 2}
   - {x: 9, y: 3}
   lobbyCanvas: {fileID: 7786332907640270110}
 --- !u!1 &8978290959981016378
