@@ -33,8 +33,10 @@ public class StickyNote : DynamicInteractableObject
     Collider parentCollider;
     CharacterController playerParentCollider;
     Transform parentedTo;
-
     AudioSource source;
+
+    StickyNote stackPseudoChild;
+    [SynchronizableField] bool isStasis = false;
 
     public bool IsPoster { get; private set; } = false;
 
@@ -101,7 +103,7 @@ public class StickyNote : DynamicInteractableObject
             {
                 AlignWithSurface(collision);
                 Stick();
-                if (RoleAssignment.hasGameStarted) PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetSticky);
+                PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetSticky);
             }
        // }
 

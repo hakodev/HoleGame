@@ -719,6 +719,7 @@ MonoBehaviour:
   minMaxThrowStrength: {x: 3, y: 20}
   minMaxThrowChargeUpTime: {x: 0.3, y: 1}
   smoothingHeldObjectMovement: 0.1
+  spamProtectUseButton: 0.02
 --- !u!114 &4068735110024494927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -828,7 +829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kickForce: 3
-  extents: {x: 0.17, y: 1, z: 0.17}
+  extents: {x: 0.21, y: 1, z: 0.21}
   offset: {x: 0, y: -0.25, z: 0}
 --- !u!1 &2380961244887926389
 GameObject:
