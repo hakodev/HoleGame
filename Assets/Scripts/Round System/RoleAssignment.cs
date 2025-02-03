@@ -19,8 +19,6 @@ public class RoleAssignment : AttributesSync {
     [SerializeField] private TextMeshProUGUI pressGtoReady;
     [SerializeField] private TextMeshProUGUI youAreReadyOrWaitingForOthers;
 
-    public int NumberOfReadyPlayers { get; set; } = 0;
-
     [SerializeField] List<Vector2> InfiltratorsToPlayers;
     //x - alll players
     //y - humans
