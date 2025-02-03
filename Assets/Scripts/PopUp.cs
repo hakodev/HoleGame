@@ -6,6 +6,7 @@ using TMPro;
 using System.IO;
 using UnityEditor;
 using System;
+using Unity.VisualScripting;
 
 
 public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
@@ -50,6 +51,11 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         }
         canvas = GetComponentInParent<Canvas>();
         uiInput = transform.root.GetComponentInChildren<UIInput>();
+       
+    }
+
+    void OnEnable()
+    {
         PopIn();
     }
     public void OnBeginDrag(PointerEventData eventData)

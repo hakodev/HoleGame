@@ -3,7 +3,6 @@ using UnityEngine;
 public class BasketballHoop : StationaryInteractableObject
 {
     [SerializeField] BasketballTable table;
-
     public override void SpecialInteraction(InteractionEnum interaction, Component caller)
     {
         throw new System.NotImplementedException();
@@ -19,7 +18,7 @@ public class BasketballHoop : StationaryInteractableObject
         if (other.gameObject.GetComponent<Rigidbody>() != null)
         {
             table.BroadcastRemoteMethod(nameof(table.IncrementText));
-            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetBasketballBeep);
+            PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetBasketballBeep);
         }
     }
 }

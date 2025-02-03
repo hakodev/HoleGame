@@ -29,6 +29,7 @@ public class PlayerNameDisplay : AttributesSync
     {
         playerNameText.text = transform.root.GetComponentInChildren<PlayerRole>().GetName();
         transform.root.gameObject.name = playerNameText.text;
+        avatar.name = playerNameText.text;
 
         Debug.Log("3 " + playerNameText.text);
     }
