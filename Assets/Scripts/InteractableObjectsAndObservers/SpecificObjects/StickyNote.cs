@@ -202,6 +202,7 @@ public class StickyNote : DynamicInteractableObject
         isGameStart = false;
 
         BroadcastRemoteMethod(nameof(ToggleRigidbody), false);
+        Debug.Log("ball ");
 
     }
     private void ChangeLayerIfStuckToPlayer(int newLayer) //changes layer only for player it is stuck to
@@ -313,7 +314,8 @@ public class StickyNote : DynamicInteractableObject
 
             transform.SetParent(parentedTo, true);
 
-            /*  //makes the game boring
+              //makes the game boring
+              /*
             if (parentRB != null)
             {
                 parentRB.linearVelocity = Vector3.zero;

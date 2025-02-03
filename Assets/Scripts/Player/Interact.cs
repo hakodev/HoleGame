@@ -451,7 +451,6 @@ public class Interact : AttributesSync, IObserver
     {
         if (!avatar.IsMe) return;
         if (heldObject != null) { return; }
-        finishedPickUp = false;
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, dynamicLayerMask) || pickedUp == spawnedGun)
         {
@@ -461,6 +460,8 @@ public class Interact : AttributesSync, IObserver
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
+                finishedPickUp = false;
+
                 heldObject = pickedUp;
                 rb = heldObject.GetComponent<Rigidbody>();
                 rbToTrack = heldObject.GetComponent<RigidbodySynchronizable>();
@@ -485,6 +486,7 @@ public class Interact : AttributesSync, IObserver
             else
             {
                 Debug.Log("You can't pick up that");
+                DIO = null;
             }
         }
     }
