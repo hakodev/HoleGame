@@ -29,7 +29,7 @@ public class BasicPhysicsObject : DynamicInteractableObject
         if (isPickedUp) { return; }
         if(!RoleAssignment.hasGameStarted) { return; }
 
-        if (rb.linearVelocity.magnitude > minVelocityToProduceSound)
+        if (rb.linearVelocity.magnitude > 1f)
         {
             if (rb.mass > 1)
             {

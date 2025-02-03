@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using Alteruna.Trinity;
+using TMPro;
 
 namespace Alteruna
 {
@@ -319,7 +320,7 @@ namespace Alteruna
 		private struct RoomObject
 		{
 			public readonly GameObject GameObject;
-			public readonly Text Text;
+			public readonly TextMeshProUGUI Text;
 			public readonly Button Button;
 			public readonly uint ID;
 			public readonly bool Lan;
@@ -327,7 +328,7 @@ namespace Alteruna
 			public RoomObject(GameObject obj, uint id, bool lan = false)
 			{
 				GameObject = obj;
-				Text = obj.GetComponentInChildren<Text>();
+				Text = obj.GetComponentInChildren<TextMeshProUGUI>();
 				Button = obj.GetComponentInChildren<Button>();
 				ID = id;
 				Lan = lan;

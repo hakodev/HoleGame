@@ -11,8 +11,8 @@ public class CountDownDisplayManager : AttributesSync {
 
     public static bool hasInitiatedTheTimer = false;
 
-    [SynchronizableField] public int TimeToEndTheGame = 60 * 6 + 20 * 5;
-
+    [field: SerializeField][field: SynchronizableField] public int RoundsLeft { get; set; } = 2;
+    public string lastChanceText = "End Round";
 
     private void Start()
     {

@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using Alteruna;
 public class GunBehaviour : AttributesSync {
+    /*
     [SerializeField] private Camera playerCamera;
     [SerializeField] private int maxShotsBeforeReloading;
     [SerializeField] private float bulletMaxDistance;
@@ -52,7 +53,7 @@ public class GunBehaviour : AttributesSync {
             Debug.Log(hit.collider.gameObject.name + " " + transform.parent.gameObject.name);
             if(hit.collider.gameObject != transform.parent.gameObject && hit.collider.gameObject.CompareTag("Player")) {
                // UserId targetUserId = hit.collider.gameObject.GetComponent<UserId>();
-                    hit.collider.gameObject.GetComponent<Health>().DamagePlayer(Random.Range(3, 7)); // Change later
+                 //   hit.collider.gameObject.GetComponent<Health>().DamagePlayer(Random.Range(3, 7)); // Change later
                 //   Debug.Log("BULLSEYE!");
             }
         }
@@ -71,4 +72,5 @@ public class GunBehaviour : AttributesSync {
       //  Debug.Log("Reloading...");
         shotsTaken = 0;
     }
+    */
 }

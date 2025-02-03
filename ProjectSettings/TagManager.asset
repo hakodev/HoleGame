@@ -15,6 +15,9 @@ TagManager:
   - Carpet
   - Ball
   - HumanMesh
+  - LastChanceDisplay
+  - replacingThisObjectWithPrefab
+  - Chair
   layers:
   - Default
   - TransparentFX

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4657843556870487196}
   m_Layer: 7
   m_Name: Chair
-  m_TagString: Untagged
+  m_TagString: Chair
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -88,7 +88,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8852682572619713043}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a586a7db09fc4dd45a463c03f348234d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -149,7 +149,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &149257598971334870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 16f5afe7-94af-42e3-a384-4f02e87a21f5
+  _uidString: 0800e61e-df92-4fc6-bbfb-7adfa4f28deb
   BucketBehaviors:
   - Name: Min
     NetLOD: 0
@@ -181,8 +181,8 @@ MonoBehaviour:
     NetLOD: 4
     Frequency: 120
   Reliability: 1
-  SyncEveryNUpdates: 10
-  FullSyncEveryNSync: 4
+  SyncEveryNUpdates: 999999
+  FullSyncEveryNSync: 999999
   SendData: 1
   ApplyAsTransform: 0
   AllowCollisionToAssumeOwner: 1
@@ -204,6 +204,8 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
+  minVelocityToProduceSound: 0.1
 --- !u!1001 &2878560554623881594
 PrefabInstance:
   m_ObjectHideFlags: 0

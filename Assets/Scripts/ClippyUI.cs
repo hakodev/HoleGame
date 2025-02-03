@@ -19,6 +19,7 @@ public class ClippyUI : MonoBehaviour
     float time = 0;
 
     Image image;
+    public GameObject doggo;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ public class ClippyUI : MonoBehaviour
         if(!isClippyOpen)
         {
             hasBeenInteractedWith = true;
+            doggo.SetActive(false);
             image.color = startColor;
             isClippyOpen = true;
             rulesPopUp.gameObject.SetActive(true);
@@ -54,7 +56,7 @@ public class ClippyUI : MonoBehaviour
         if (!hasBeenInteractedWith)
         {
             time = Mathf.Abs(Mathf.Sin(Time.time * 2));
-            Debug.Log(time);
+            //Debug.Log(time);
             image.color = Color.Lerp(startColor, blinkColor, time);
         }
 

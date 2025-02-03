@@ -16,7 +16,6 @@ public class AlarmsControl : AttributesSync
     private float timer = 0;
 
     public float overallTimerGeneral;
-    private float overallTimer;
 
     private bool isBlinkingUp;
     private bool isBlinkingDown;
@@ -24,10 +23,15 @@ public class AlarmsControl : AttributesSync
     private bool isTurnedOn = false;
     private bool isBeeping = false;
 
+    private int maxRounds;
+
+    private CountDownDisplayManager countDownDisplayManager;
+
 
     private void Start()
     {
-        overallTimer = overallTimerGeneral;
+        countDownDisplayManager = FindAnyObjectByType<CountDownDisplayManager>();
+        maxRounds = countDownDisplayManager.RoundsLeft;
         allAlarms = GetComponentsInChildren<Alarm>().ToList();
 
         foreach (Alarm alarm in allAlarms)
@@ -55,25 +59,16 @@ public class AlarmsControl : AttributesSync
 
     private void Update()
     {
-        if (overallTimer >= 0)
-        {
-            overallTimer -= Time.deltaTime;
-        }
-        else
-        {
-            DisableFunctionality();
-            return;
-        }
         
-        if(overallTimer < (overallTimerGeneral * 0.75f) && !isTurnedOn)
+        if(CountDownDisplayManager.hasInitiatedTheTimer && !isTurnedOn)
         {
             TurnOn();
         }
-        if(overallTimer < (overallTimerGeneral * 0.4f) && !isBlinking)
+        if((countDownDisplayManager.RoundsLeft / maxRounds < 0.4f) && !isBlinking)
         {
             StartBlink();
         }
-        if (overallTimer < (overallTimerGeneral * 0.2f) && !isBeeping)
+        if ((countDownDisplayManager.RoundsLeft / maxRounds < 0.15f) && !isBeeping)
         {
             StartBeeping();
         }

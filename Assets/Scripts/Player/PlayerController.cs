@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
     private GameObject animationTie;
     MishSyncAnimations mishSync;
 
-    [field: SerializeField] public Collider HumanCollider { get; set; }
 
     [Header("Nerd SHIT - Programming")]
     [SerializeField] Transform cameraTransform;

@@ -1,4 +1,5 @@
 using Alteruna;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -10,19 +11,28 @@ public class SymptomNotifText : AttributesSync
     [SerializeField] LobbySystem lobbySystem;
     Alteruna.Avatar avatar;
 
+    public Material ditheringMat;
+
+    private float ditheringStartFloat;
+
+
     private void Awake()
     {
         //fsr awakes just dont work
         notificationText = GetComponent<TextMeshProUGUI>();
-
+        ditheringStartFloat = ditheringMat.GetFloat("_Pixelate");
+        ditheringMat.SetFloat("_Pixelate", 350);
     }
     
     
     private new void OnEnable()
     {
         base.OnEnable();
-        if(lobbySystem.gameObject.activeSelf) {return;}
-        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+        if(RoleAssignment.hasGameStarted) {
+            SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+            lobbySystem.gameObject.SetActive(false);
+            //DestroyImmediate(lobbySystem.gameObject);
+        }
     }
 
     List<CarpetData> allCarpets;
@@ -31,7 +41,12 @@ public class SymptomNotifText : AttributesSync
         if (avatar == null) avatar = Multiplayer.GetAvatar();
         if(!avatar.IsMe) { return; }
 
-        if(allCarpets==null) allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
+        if (transform.root.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
+        {
+            StartCoroutine(LerpDithering());
+        }
+
+        if (allCarpets==null) allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
 
         if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && transform.root.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
         {
@@ -44,12 +59,12 @@ public class SymptomNotifText : AttributesSync
                         if (carpet.GetColor() == CarpetColor.Red)
                         {
                             carpet.IsCorrupted = true;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                         }
                         else
                         {
                             carpet.IsCorrupted = false;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                         }
                     }
                     break;
@@ -60,12 +75,12 @@ public class SymptomNotifText : AttributesSync
                         if (carpet.GetColor() == CarpetColor.Green)
                         {
                             carpet.IsCorrupted = true;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                         }
                         else
                         {
                             carpet.IsCorrupted = false;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                         }
                     }
                     break;
@@ -76,12 +91,12 @@ public class SymptomNotifText : AttributesSync
                         if (carpet.GetColor() == CarpetColor.Blue)
                         {
                             carpet.IsCorrupted = true;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.CorruptedMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                         }
                         else
                         {
                             carpet.IsCorrupted = false;
-                            carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                            carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                         }
                     }
                     break;
@@ -94,7 +109,7 @@ public class SymptomNotifText : AttributesSync
             foreach (CarpetData carpet in allCarpets)
             {
                 carpet.IsCorrupted = false;
-                carpet.gameObject.GetComponent<MeshRenderer>().material = carpet.NormalMat;
+                carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
             }
         }
 
@@ -133,5 +148,41 @@ public class SymptomNotifText : AttributesSync
 
         // yield return new WaitForSeconds(30f);
         // this.transform.parent.parent.gameObject.SetActive(false); // disable canvas
+    }
+
+    public IEnumerator LerpDithering()
+    {
+        //PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetGlitch);
+        bool isBlinkingUp = true;
+        float timer = 0f;
+        if (isBlinkingUp)
+        {
+            while (timer < 1)
+            {
+                timer += Time.deltaTime * 2.5f;
+                ditheringMat.SetFloat("_Pixelate", Mathf.Lerp(350, 20, timer));
+
+                if (timer >= 1)
+                {
+                    isBlinkingUp = false;
+                }
+                yield return new WaitForEndOfFrame();
+            }
+
+        }
+        if (!isBlinkingUp)
+        {
+            while (timer > 0)
+            {
+                timer -= Time.deltaTime * 2.5f;
+                ditheringMat.SetFloat("_Pixelate", Mathf.Lerp(350, 20, timer));
+
+                if (timer <= 0)
+                {
+                    yield return null;
+                }
+                yield return new WaitForEndOfFrame();
+            }
+        }
     }
 }

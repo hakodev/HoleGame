@@ -49,6 +49,8 @@ public class SymptomsManager : AttributesSync {
             avatar = Multiplayer.GetAvatar();
             thisAvatarSymptomNotifText = avatar.transform.GetComponentInChildren<SymptomNotifText>(true);
         }
+
+       
         thisAvatarSymptomNotifText.ApplyEffectsOfSymptom();
         thisAvatarSymptomNotifText.ChangeNotifText();
     }
