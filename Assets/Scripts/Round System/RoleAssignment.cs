@@ -32,6 +32,8 @@ public class RoleAssignment : AttributesSync {
     [SynchronizableField] bool assignedRole = false;
     [SynchronizableField] int readyPlayerCount = 0;
     private bool thisPlayerIsReady = false;
+    RoleAssignment raHost;
+
 
     public static void ResetStatic()
     {
@@ -43,26 +45,33 @@ public class RoleAssignment : AttributesSync {
     }
     private void Awake()
     {
-
+        avatar = transform.root.GetComponent<Alteruna.Avatar>();
         playerNumber++;
     }
     private void Start()
     {
         totalPlayers.Add(transform.root.GetComponent<PlayerRole>());
-        avatar = transform.root.GetComponent<Alteruna.Avatar>();
-        if(avatar.IsMe) userAvatar = avatar;
+
+        if (avatar.IsMe) userAvatar = avatar;
         youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
+
+        raHost = Multiplayer.GetAvatars()[0].GetComponent<RoleAssignment>();
+        
         // totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None).ToList();
 
         if (playerID == -10) playerID = playerNumber; //sets proper number
         Debug.Log("player's count " + totalPlayers.Count);
 
-        if(Multiplayer.GetUser().IsHost) {
+
+        if (!avatar.IsMe) { return; }
+        if (Multiplayer.GetUser().IsHost) {
             hostPressGtoStart.enabled = false;
             pressGtoReady.enabled = false;
             youAreReadyOrWaitingForOthers.enabled = true;
-            thisPlayerIsReady = true;
-            readyPlayerCount++;
+
+                thisPlayerIsReady = true;
+                BroadcastRemoteMethod(nameof(raHost.AAA));
+            
         } else {
             hostPressGtoStart.enabled = false;
             pressGtoReady.enabled = true;
@@ -76,28 +85,43 @@ public class RoleAssignment : AttributesSync {
         hasGameStarted = newState;
     }
 
-
+    [SynchronizableMethod]
+    private void AAA()
+    {
+        readyPlayerCount++;
+    }
+    
     private void Update()
     {
-        if(Multiplayer.GetUser().IsHost && readyPlayerCount == totalPlayers.Count) {
+        if (!avatar.IsMe) { return; }
+
+        Debug.Log("AAA " + totalPlayers.Count);
+        if (Multiplayer.GetUser().IsHost && readyPlayerCount == totalPlayers.Count)
+        {
             hostPressGtoStart.enabled = true;
             pressGtoReady.enabled = false;
             youAreReadyOrWaitingForOthers.enabled = false;
         }
 
-        if(!hasGameStarted && Input.GetKeyUp(KeyCode.G)) {
-            if(!Multiplayer.GetUser().IsHost && !thisPlayerIsReady) {
-                hostPressGtoStart.enabled = false;
+        if (!hasGameStarted && Input.GetKeyUp(KeyCode.G))
+        {
+            if (!thisPlayerIsReady)
+            {
+
                 pressGtoReady.enabled = false;
                 youAreReadyOrWaitingForOthers.enabled = true;
                 thisPlayerIsReady = true;
-                readyPlayerCount++;
+                raHost.BroadcastRemoteMethod(nameof(raHost.AAA));
             }
 
-            if(Multiplayer.GetUser().IsHost) {
+            if (Multiplayer.GetUser().IsHost)
+            {
+
                 VotingPhase voting = transform.root.GetComponent<VotingPhase>();
 
-                if(totalPlayers.Count > 1 && readyPlayerCount == voting.GetTotalAlivePlayerCount()) {
+                Debug.Log("AAA2" + readyPlayerCount + " " + " " + totalPlayers.Count);
+                if (totalPlayers.Count > 1 && readyPlayerCount == totalPlayers.Count)
+                {
                     hostPressGtoStart.enabled = false;
                     pressGtoReady.enabled = false;
                     youAreReadyOrWaitingForOthers.enabled = false;
@@ -111,9 +135,11 @@ public class RoleAssignment : AttributesSync {
                     //BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
                     SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
                     //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
-                    
+
                     voting.AllVotersSymptomNotifStartOfGame();
-                } else if(totalPlayers.Count == 1) {
+                }
+                else
+                {
                     StartCoroutine(DisplayFriends());
                 }
             }

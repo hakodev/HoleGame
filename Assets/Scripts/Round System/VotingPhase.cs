@@ -24,6 +24,8 @@ public class VotingPhase : AttributesSync {
     EndGameResolution endGameResolution;
     Alteruna.Avatar avatar;
 
+    [SerializeField] CursorToggle cursorToggle;
+
 
     int randomlyPickedPlayer;
     public static List<VotingPhase> votingPlayers = new List<VotingPhase>();
@@ -42,13 +44,13 @@ public class VotingPhase : AttributesSync {
     {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
+        cursorToggle = GetComponent<CursorToggle>();
     }
     private void Start() {
 
         spawner = FindAnyObjectByType<Alteruna.Spawner>();
         endGameResolution = GetComponentInChildren<EndGameResolution>();
         votingPopUp = votingCanvas.GetComponentInChildren<PopUp>();
-
         totalALivePlayers.Add(player);
         votingPlayers.Add(this);
 
@@ -79,8 +81,7 @@ public class VotingPhase : AttributesSync {
             votingCanvas.SetActive(true);
             votingPopUp.PopIn();
 
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            cursorToggle.UICursorAndCam(true);
             player.VotedCount = 0;
             hasVoted = false;
 
@@ -147,9 +148,11 @@ public class VotingPhase : AttributesSync {
 
         votingCanvas.SetActive(false);
         votedCanvas.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-      //  player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
+
+        //toggle mouse
+        cursorToggle.UICursorAndCam(false);
+
+        //  player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
         EndVotingPhaseHost();
     }
@@ -216,8 +219,8 @@ public class VotingPhase : AttributesSync {
 
     public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
     {
-        if(!avatar.IsMe) { return; }
-
+        if (!avatar.IsMe) { return; }
+        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
         if (endGameResolution.inWildWest)
         {
             endGameResolution.HandOutGuns();
@@ -244,7 +247,7 @@ public class VotingPhase : AttributesSync {
         }
     }
 
-    private void VoteRandomly()
+        private void VoteRandomly()
     {
         /*
         List<PlayerRole> votableCandidates = new List<PlayerRole>();
