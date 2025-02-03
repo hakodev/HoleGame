@@ -15,11 +15,11 @@ public class CoffeeCup : DynamicInteractableObject
 
     public float coffeeFillHeight;
 
+
     protected override void Start()
     {
         base.Start();
         coffeeFill = transform.GetChild(0).gameObject;
-        hitSource = GetComponent<AudioSource>();
     }
     public override void SpecialInteraction(InteractionEnum interaction, Component caller)
     {
@@ -76,7 +76,7 @@ public class CoffeeCup : DynamicInteractableObject
             BroadcastRemoteMethod(nameof(CreateDecalPrefab), pos, normal);
         }
 
-        PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetMug);
+        PlayerAudioManager.Instance.PlaySound(gameObject, hitSource, PlayerAudioManager.Instance.GetMug);
     }
 
     [SynchronizableMethod]

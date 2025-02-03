@@ -14,6 +14,8 @@ public class Health : AttributesSync {
     private CharacterController characterController;
     private MishSyncAnimations mishSync;
 
+    AudioSource source;
+
     private void Awake() {
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
@@ -36,7 +38,7 @@ public class Health : AttributesSync {
         {
             currentHealth = 0;
             Debug.Log("Reduced HP");
-            PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetDeathStatic);
+            PlayerAudioManager.Instance.PlaySound(this.gameObject, source, PlayerAudioManager.Instance.GetDeathStatic);
             BroadcastRemoteMethod(nameof(KillPlayer));
             //mishSync.SetStance(StanceEnum.Dead);
         }
@@ -61,6 +63,17 @@ public class Health : AttributesSync {
     public float GetMaxHealth()
     {
         return maxHealth;
+    }
+
+    private void OnApplicationQuit()
+    {
+        BroadcastRemoteMethod(nameof(RemovePlayer));
+    }
+
+    [SynchronizableMethod] 
+    void RemovePlayer()
+    {
+        VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
     }
 
 }

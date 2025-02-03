@@ -10,7 +10,7 @@ public class BeachBallBehaviour : MonoBehaviour {
     [SerializeField] private Vector3 offset;
     private Collider[] currentColliders;
 
-
+    AudioSource source;
     private void Start() {
         characterController = transform.root.gameObject.GetComponent<CharacterController>();
         playerController = transform.root.gameObject.GetComponent<PlayerController>();
@@ -51,14 +51,14 @@ public class BeachBallBehaviour : MonoBehaviour {
                         if (hit.collider == conHit)
                         {
                             playerController.Jump();
-                            PlayerAudioManager.Instance.PlaySound(conHit.gameObject, PlayerAudioManager.Instance.GetBouncyBall);
+                            PlayerAudioManager.Instance.PlaySound(conHit.gameObject, source, PlayerAudioManager.Instance.GetBouncyBall);
 
 
                             RaycastHit ballHitGround;
                             if (!Physics.Raycast(previouslyCollidedWithThisBall.transform.position, Vector3.down, out ballHitGround, 0.55f))
                             {
                                 ballRigidbody.linearVelocity = -ballRigidbody.linearVelocity / 2f;
-                                PlayerAudioManager.Instance.PlaySound(conHit.gameObject, PlayerAudioManager.Instance.GetBouncyBall);
+                                PlayerAudioManager.Instance.PlaySound(conHit.gameObject, source, PlayerAudioManager.Instance.GetBouncyBall);
                             }
                         }
                         else

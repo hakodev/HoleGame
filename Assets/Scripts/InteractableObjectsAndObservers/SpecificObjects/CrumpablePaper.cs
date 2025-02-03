@@ -11,6 +11,8 @@ public class CrumpablePaper : DynamicInteractableObject
 
     private bool isCrumpled = false;
 
+    AudioSource source;
+
     private new void Start()
     {
         base.Start();
@@ -36,7 +38,7 @@ public class CrumpablePaper : DynamicInteractableObject
     {
         if (!isCrumpled)
         {
-            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetCrumple);
+            PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetCrumple);
             crumple.SetActive(true);
             straight.SetActive(false);
             sphereCollider.enabled = true;
