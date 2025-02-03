@@ -53,6 +53,8 @@ public class Interact : AttributesSync, IObserver
     throwBar throwBar;
     
 
+    AudioSource source;
+
 
     private void Awake()
     {
@@ -300,7 +302,8 @@ public class Interact : AttributesSync, IObserver
 
 
             float divider = 3f;
-            if (heldObject.gameObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) divider = 20;
+            if (heldObject.gameObject.name.Contains("StickyNote")) divider = 10;
+            if (heldObject.name.Contains("Poster")) divider = 20;
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
 
             rbToTrack.SetPosition(heldObject.transform.position);
@@ -339,7 +342,7 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) return;
         PrepareForDropping();
         DIO.isPickedUp = false;
-        PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetThrowAudio);
+        PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetThrowAudio);
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
@@ -452,7 +455,7 @@ public class Interact : AttributesSync, IObserver
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, dynamicLayerMask) || pickedUp == spawnedGun)
         {
-            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetPickUp);
+            PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetPickUp);
             DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
             Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());

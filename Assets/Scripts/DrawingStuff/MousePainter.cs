@@ -40,7 +40,7 @@ public class MousePainter : MonoBehaviour {
                 CommunicationBridgeUID puid = p.GetComponent<CommunicationBridgeUID>();
                 Guid id = puid.GetUID();
 
-                paintManager.BroadcastRemoteMethod("paint", id, hit.point, radius, hardness, strength, paintColor);
+                paintManager.BroadcastRemoteMethod("paint", id, hit.point, radius, paintColor);
                
             }
         }

@@ -7,7 +7,7 @@ public class Ball : DynamicInteractableObject
     Rigidbody rb;
     //[SerializeField] float extraBounce;
     // [SerializeField] float kickStrength;
-
+    AudioSource source;
     protected override void Awake()
     {
         base.Awake();
@@ -29,7 +29,7 @@ public class Ball : DynamicInteractableObject
     protected override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
-        if(!collision.gameObject.CompareTag("Player") && rb.linearVelocity.magnitude > minVelocityToProduceSound) PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetBouncyBall);
+        if(!collision.gameObject.CompareTag("Player") && rb.linearVelocity.magnitude > minVelocityToProduceSound) PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetBouncyBall);
 
         // && rb.
         //for the ball collision with player for kicking go to BeachBallBehavior

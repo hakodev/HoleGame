@@ -15,7 +15,8 @@ public class Gun : DynamicInteractableObject
     Quaternion startRotation;
     Transform childTransform;
     ParticleSystem glitchParticle;
-    
+
+    AudioSource source;
     // Animator playerAnimator;
     // AnimationSynchronizable playerAnimatorSync;
     public int Damage() {
@@ -46,7 +47,7 @@ public class Gun : DynamicInteractableObject
     }
     private void Fire()
     {
-        PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLaserBeep);
+        PlayerAudioManager.Instance.PlaySound(this.gameObject, source, PlayerAudioManager.Instance.GetLaserBeep);
         StartCoroutine(Recoil(childTransform.localRotation));
         glitchParticle.Play();
 
