@@ -261,7 +261,7 @@ public class VotingPhase : AttributesSync {
     private IEnumerator DisplaySymptomNotif() {
         symptomsNotifCanvas.SetActive(true);
        // symptomsNotifCanvas.DOFade(1f, 0.1f);
-        yield return new WaitForSeconds(10f); // How many seconds to display it on screen
+        yield return new WaitForSeconds(15f); // How many seconds to display it on screen
       //  symptomsNotifCanvas.DOFade(0f, 2f);
         symptomsNotifCanvas.SetActive(false);
     }
