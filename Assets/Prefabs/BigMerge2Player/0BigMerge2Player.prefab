@@ -761,6 +761,7 @@ MonoBehaviour:
   IsTaskManager: 0
   ceoFlashScreen: {fileID: 4566744043790251347}
   playerNameSync: 
+  lobbyCanvas: {fileID: 7786332907640270110}
 --- !u!114 &7886903507939173138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,7 +801,7 @@ MonoBehaviour:
   votedCanvas: {fileID: 7166953529897648272}
   taskManagerPickedDisplayCanvas: {fileID: 3993467346638926968}
   randomlyVotedPlayer: {fileID: 4478109256786002089}
-  symptomsNotifCanvas: {fileID: 1165480473783963065}
+  symptomsNotifCanvas: {fileID: 6990669613581925008}
   votingPhaseObject: {fileID: 6232832942830504302}
   taskManagerNameInHost: 
   once: 0
@@ -6104,11 +6105,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8305222489421702235}
   m_SourcePrefab: {fileID: 100100000, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
---- !u!1 &1165480473783963065 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2337578548009178895, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}
-  m_PrefabInstance: {fileID: 3484696620319447734}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5908833539297498400 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7087616678575001494, guid: 4b11d0048577eb0459e7891a473b8f73, type: 3}

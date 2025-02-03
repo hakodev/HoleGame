@@ -109,6 +109,7 @@ public class RoleAssignment : AttributesSync {
 
 
                     //BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
+                    SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
                     //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
                     
                     voting.AllVotersSymptomNotifStartOfGame();
@@ -131,7 +132,7 @@ public class RoleAssignment : AttributesSync {
     {
         //yeah so im not doing this
         Debug.Log("damn " + Multiplayer.GetUser());
-        Destroy(lobbyCanvas);
+        
     }
 
     private void FindRolelessPlayers()

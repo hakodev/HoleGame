@@ -23,6 +23,8 @@ public class PlayerRole : AttributesSync
 
     [SynchronizableField] public string playerNameSync;
 
+    public GameObject lobbyCanvas;
+
 
     public static void ResetStatic()
     {
@@ -37,13 +39,17 @@ public class PlayerRole : AttributesSync
 
     private void Start()
     {
+        lobbyCanvas = gameObject.GetComponentInChildren<LobbySystem>().gameObject;
         if (!avatar.IsMe) { return; }
         BroadcastRemoteMethod(nameof(SetName), UIInput.PlayerNameSync);
+        
     }
     [SynchronizableMethod]
     public void DisplayRole()
     {
+        lobbyCanvas.SetActive(false);
         if (!avatar.IsMe) { return; }
+
         // Display the local player's role
         if (role == Roles.Infiltrator)
         {

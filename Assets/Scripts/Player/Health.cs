@@ -74,6 +74,7 @@ public class Health : AttributesSync {
     void RemovePlayer()
     {
         VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
+        VotingPhase.votingPlayers.Remove(GetComponent<VotingPhase>());
     }
 
 }
