@@ -300,7 +300,8 @@ public class Interact : AttributesSync, IObserver
 
 
             float divider = 3f;
-            if (heldObject.gameObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) divider = 20;
+            if (heldObject.gameObject.name.Contains("StickyNote")) divider = 10;
+            if (heldObject.name.Contains("Poster")) divider = 20;
             heldObject.transform.position = hit.point + Vector3.Scale(hit.normal.normalized, temp) / divider;
 
             rbToTrack.SetPosition(heldObject.transform.position);
