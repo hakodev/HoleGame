@@ -26,6 +26,7 @@ public class BeachBallBehaviour : MonoBehaviour {
         DoBalls();
     }
 
+
     private void DoBalls()
     {
         currentColliders = Physics.OverlapBox(transform.position + offset, extents, Quaternion.identity);

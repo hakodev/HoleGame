@@ -48,6 +48,7 @@ public class MishSyncAnimations : AttributesSync
     public void SetJumping(bool newState)
     {
         Jumping = newState;
+        Debug.Log("Jump Set " + Jumping);
         Commit();
     }
     public void SetShooting(bool newState)
@@ -105,6 +106,7 @@ public class MishSyncAnimations : AttributesSync
         }
 
         animator.SetBool("Jumping", Jumping);
+        Debug.Log("Jump Exec " + Jumping);
 
         //stances
         foreach (StanceEnum s in Enum.GetValues(typeof(StanceEnum)))
