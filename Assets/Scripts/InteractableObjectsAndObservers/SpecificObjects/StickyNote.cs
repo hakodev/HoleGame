@@ -213,6 +213,7 @@ public class StickyNote : DynamicInteractableObject
 
         //if(!isHitParentSticky)
         BroadcastRemoteMethod(nameof(ToggleRigidbody), false);
+        Debug.Log("ball ");
 
     }
     private void ChangeLayerIfStuckToPlayer(int newLayer) //changes layer only for player it is stuck to
@@ -351,7 +352,8 @@ public class StickyNote : DynamicInteractableObject
 
             transform.SetParent(parentedTo, true);
 
-            /*  //makes the game boring
+              //makes the game boring
+              /*
             if (parentRB != null)
             {
                 parentRB.linearVelocity = Vector3.zero;
@@ -359,7 +361,7 @@ public class StickyNote : DynamicInteractableObject
             }
             */
 
-            /*
+            
             if(parentRB==null)
             {
                 if (parentedTo.gameObject.layer == 9 || parentedTo.gameObject.layer == 10)
@@ -373,7 +375,7 @@ public class StickyNote : DynamicInteractableObject
                 if (playerParentCollider == null) Physics.IgnoreCollision(parentCollider, allStickyColliders[j]);
                 if (playerParentCollider != null) Physics.IgnoreCollision(playerParentCollider, allStickyColliders[j]);
             }
-            */
+            
         }
     }
 
