@@ -330,8 +330,8 @@ public class Interact : AttributesSync, IObserver
 
         //specifics t thowing
         // animatorSync.Animator.SetTrigger("Throwing");
-        rb.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
-        rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength, ForceMode.Impulse);
+        rb.AddForce(playerCamera.transform.forward * currentThrowStrength * DIO.forceWhenThrownMultiplier, ForceMode.Impulse);
+        rbToTrack.AddForce(playerCamera.transform.forward * currentThrowStrength * DIO.forceWhenThrownMultiplier, ForceMode.Impulse);
         //Debug.Log((playerCamera.transform.forward * currentThrowStrength).normalized);
         currentThrowStrength = 0;
         if (heldObject.name.Contains("StickyNote") || heldObject.name.Contains("Poster")) heldObject.GetComponent<StickyNote>().SpecialInteraction(InteractionEnum.ThrownStickyNote, this);
