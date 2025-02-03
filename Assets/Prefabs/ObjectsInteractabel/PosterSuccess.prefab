@@ -139,6 +139,8 @@ MonoBehaviour:
   Reliability: 2
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
+  minVelocityToProduceSound: 0.1
   isPlaced: 0
   isInteractedWith: 0
 --- !u!1 &7126171033125899881
@@ -156,11 +158,11 @@ GameObject:
   - component: {fileID: 4440522929662934999}
   m_Layer: 7
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: drawnOn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &947028089222640461
 Transform:
   m_ObjectHideFlags: 0

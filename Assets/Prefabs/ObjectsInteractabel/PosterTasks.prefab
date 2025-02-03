@@ -135,10 +135,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: f6e62c6b-53c7-4aaf-95b9-90e7cce1e189
+  _uidString: 95c986ab-f669-4a9a-9c70-bf77dd953279
   Reliability: 2
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
+  minVelocityToProduceSound: 0.1
   isPlaced: 0
   isInteractedWith: 0
 --- !u!1 &7126171033125899881

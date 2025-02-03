@@ -26,6 +26,8 @@ public class Interact : AttributesSync, IObserver
     [SerializeField] Vector2 minMaxThrowStrength;
     [SerializeField] Vector2 minMaxThrowChargeUpTime;
     [SerializeField] float smoothingHeldObjectMovement;
+    [SerializeField] float spamProtectUseButton = 0.02f;
+    float spamProtectUseButtonMax;
 
     float currentChargeUpTime = 0;
     float currentThrowStrength = 0;
@@ -49,6 +51,7 @@ public class Interact : AttributesSync, IObserver
     DynamicInteractableObject DIO;
 
     throwBar throwBar;
+    
 
 
     private void Awake()
@@ -67,6 +70,7 @@ public class Interact : AttributesSync, IObserver
 
         if (!avatar.IsMe)
         {
+            spamProtectUseButtonMax = spamProtectUseButton;
             int playerLayer = LayerMask.NameToLayer("PlayerLayer");
             gameObject.layer = playerLayer;
             SetLayerRecursively(gameObject, playerLayer);
@@ -112,6 +116,7 @@ public class Interact : AttributesSync, IObserver
     }
 
     bool hasCompletedClick1 = true;
+    
     private void ProcessInput()
     {        //release / place
         if (Input.GetMouseButtonUp(0) && heldObject != null)
@@ -149,44 +154,52 @@ public class Interact : AttributesSync, IObserver
             }
         }
 
-
-        if (Input.GetMouseButtonDown(1) && hasCompletedClick1)
+        //using
+        if (spamProtectUseButton < spamProtectUseButtonMax)
         {
-            hasCompletedClick1 = false;
-
-            if (heldObject != null)
-            {
-                heldObject.GetComponent<DynamicInteractableObject>().Use();
-                Debug.Log("Debussy" + hasCompletedClick1);
-            }
-
-        }
-        if(Input.GetMouseButtonUp(1))
-        {
-            hasCompletedClick1 = true;
-            Debug.Log("Deb" + hasCompletedClick1);
-        }
-
-        if (heldObject)
-        {
-            if (DIO is StickyNote)
-            {
-                hudDisplay.SetState(new StickyNoteDisplay(hudDisplay));
-            }
-            else if (DIO is Marker)
-            {
-                hudDisplay.SetState(new MarkerDisplay(hudDisplay));
-            }
-            else
-            {
-                hudDisplay.SetState(new CarryDisplay(hudDisplay));
-            }
-
+            spamProtectUseButton += Time.deltaTime;
         }
         else
         {
-            hudDisplay.SetState(new EmptyDisplay(hudDisplay));
+            if (Input.GetMouseButtonDown(1) && hasCompletedClick1)
+            {
+                hasCompletedClick1 = false;
+
+                if (heldObject != null)
+                {
+                    heldObject.GetComponent<DynamicInteractableObject>().Use();
+                    Debug.Log("Debussy " + Multiplayer.GetAvatar().name + " " + hasCompletedClick1);
+                }
+
+            }
+            if (Input.GetMouseButtonUp(1))
+            {
+                hasCompletedClick1 = true;
+                Debug.Log("Deb " + Multiplayer.GetAvatar().name + " " + hasCompletedClick1);
+            }
+
+            if (heldObject)
+            {
+                if (DIO is StickyNote)
+                {
+                    hudDisplay.SetState(new StickyNoteDisplay(hudDisplay));
+                }
+                else if (DIO is Marker)
+                {
+                    hudDisplay.SetState(new MarkerDisplay(hudDisplay));
+                }
+                else
+                {
+                    hudDisplay.SetState(new CarryDisplay(hudDisplay));
+                }
+
+            }
+            else
+            {
+                hudDisplay.SetState(new EmptyDisplay(hudDisplay));
+            }
         }
+
 
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, Mathf.Infinity, interactableLayerMask))

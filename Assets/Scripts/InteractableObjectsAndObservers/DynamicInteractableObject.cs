@@ -37,8 +37,9 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     protected virtual void Start()
     {
         //BroadcastRemoteMethod(nameof(DynamicSleep));
-        collidersDynamic = GetComponentsInChildren<Collider>().ToList();
-        //Debug.Log("government " + gameObject.name + " " + collidersDynamic.Count);
+        collidersDynamic = GetComponentsInChildren<Collider>()
+            .Where(c => !c.isTrigger)
+            .ToList();
     }
 
 
@@ -56,16 +57,20 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void ToggleIgnoreCollisionsWithOwner(bool newState)
     {
-        bool isSticky = this is StickyNote;
+        bool isSticky = this is StickyNote; //dont delete theese bools
         bool isChair = (gameObject.CompareTag("Chair"));
+        bool isBall = this is Ball;
+        bool Special = (isSticky || isChair || isBall);
+       
 
         if (newState)
         {
             if (currentlyOwnedByAvatar != null)
             {
-                if (isSticky || isChair)
+                if (Special)
                 {
-                    IgnoreCols(true);
+                    if (isSticky) ToTriggerCols(true);
+                    if (!isSticky)IgnoreCols(true);
                 }
                 else
                 {
@@ -75,8 +80,9 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         }
         else
         {
-            if (isSticky || isChair) {
-                IgnoreCols(false);
+            if (Special) {
+                if (isSticky) ToTriggerCols(false);
+                if (!isSticky) IgnoreCols(false);
             }
             else
             {
@@ -85,11 +91,16 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         }
     }
 
+    private void ToTriggerCols(bool newState) //because the sticky notes are just so god damn special
+    {
+        for (int i = 0; i < collidersDynamic.Count; i++)
+        {
+            collidersDynamic[i].isTrigger = newState;
+
+        }
+    }
     private void DisableCols(bool newState)
     {
-        collidersDynamic = GetComponentsInChildren<Collider>().ToList();
-        Debug.Log("krank human collider3" + currentController + collidersDynamic[0]);
-
         for (int i = 0; i<collidersDynamic.Count; i++)
         {
             collidersDynamic[i].enabled = !newState;
@@ -98,9 +109,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     private void IgnoreCols(bool newState)
     {
-        currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
-        Debug.Log("krank human collider3" + currentController + collidersDynamic[0]);
-
         for (int i = 0; i < collidersDynamic.Count; i++)
         {
             Physics.IgnoreCollision(collidersDynamic[i], currentController, newState);
