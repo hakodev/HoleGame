@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4657843556870487196}
   m_Layer: 7
   m_Name: Chair
-  m_TagString: Untagged
+  m_TagString: Chair
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -204,6 +204,8 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
+  minVelocityToProduceSound: 0.1
 --- !u!1001 &2878560554623881594
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -56,40 +56,54 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     [SynchronizableMethod]
     public void ToggleIgnoreCollisionsWithOwner(bool newState)
     {
-        StickyNote isSticky = GetComponent<StickyNote>();
+        bool isSticky = this is StickyNote;
+        bool isChair = (gameObject.CompareTag("Chair"));
 
         if (newState)
         {
             if (currentlyOwnedByAvatar != null)
             {
-                currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
-                //if (currentController == null || isSticky != null) { return; }
-                if (isSticky != null) { return; }
-                IgnoreCols(true);
+                if (isSticky || isChair)
+                {
+                    IgnoreCols(true);
+                }
+                else
+                {
+                    DisableCols(true);
+                }
             }
         }
         else
         {
-            //if (currentController == null || isSticky != null) { return; }
-            if (isSticky != null) { return; }
-            IgnoreCols(false);
-            //currentController = null;
+            if (isSticky || isChair) {
+                IgnoreCols(false);
+            }
+            else
+            {
+                DisableCols(false);
+            }
         }
-
-        Debug.Log("krank isIgnoring " + newState);
     }
 
-    private void IgnoreCols(bool newState)
+    private void DisableCols(bool newState)
     {
         collidersDynamic = GetComponentsInChildren<Collider>().ToList();
-        //currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
         Debug.Log("krank human collider3" + currentController + collidersDynamic[0]);
 
         for (int i = 0; i<collidersDynamic.Count; i++)
         {
-            //Physics.IgnoreCollision(collidersDynamic[i], currentController, newState);
             collidersDynamic[i].enabled = !newState;
 
+        }
+    }
+    private void IgnoreCols(bool newState)
+    {
+        currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
+        Debug.Log("krank human collider3" + currentController + collidersDynamic[0]);
+
+        for (int i = 0; i < collidersDynamic.Count; i++)
+        {
+            Physics.IgnoreCollision(collidersDynamic[i], currentController, newState);
         }
     }
 
@@ -176,11 +190,13 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         if (roleAssignmentIndex != -1)
         {
             currentlyOwnedByAvatar = GetAvatarByOwnerIndex(roleAssignmentIndex);
+            currentController = currentlyOwnedByAvatar.GetComponent<CharacterController>();
             //Debug.Log("owned by " + currentlyOwnedByAvatar);
         }
         else
         {
             currentlyOwnedByAvatar = null;
+            currentController = null;
             //Debug.Log("not owned " + null);
         }
         Commit();

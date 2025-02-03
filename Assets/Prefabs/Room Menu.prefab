@@ -1329,7 +1329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  TitleText: {fileID: 0}
+  TitleText: {fileID: 9020722251756319820}
   LANEntryPrefab: {fileID: 1654016712845755095}
   WANEntryPrefab: {fileID: 359521853924431154}
   ContentContainer: {fileID: 7142101568082590615}

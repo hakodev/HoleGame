@@ -17,6 +17,7 @@ TagManager:
   - HumanMesh
   - LastChanceDisplay
   - replacingThisObjectWithPrefab
+  - Chair
   layers:
   - Default
   - TransparentFX
