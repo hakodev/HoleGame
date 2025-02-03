@@ -110,19 +110,22 @@ public class StickyNote : DynamicInteractableObject
 
     }
 
+    CursorToggle cursorToggle;
     public override void Use()
     {
         if (IsPoster) { return; }
         mousePainter = transform.root.GetComponentInChildren<MousePainter>();
         tempCamRef = transform.root.GetComponentInChildren<Camera>();
+        cursorToggle = transform.root.GetComponent<CursorToggle>();
 
         if (!isInteractedWith)
         {
             currentlyDrawing = true;
             currentlyOwnedByAvatar.gameObject.GetComponent<PlayerController>().enabled = false;
             currentlyOwnedByAvatar.gameObject.GetComponentInChildren<CameraMovement>().enabled = false;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            cursorToggle.UICursorAndCam(true);
+            //Cursor.visible = true;
+            //Cursor.lockState = CursorLockMode.None;
 
             DrawPosition(transform.parent.parent.GetChild(1).position + transform.parent.parent.GetChild(1).forward * 0.4f, Multiplayer.GetUser().Index);
         }
@@ -131,8 +134,9 @@ public class StickyNote : DynamicInteractableObject
             currentlyDrawing = false;
             currentlyOwnedByAvatar.gameObject.GetComponent<PlayerController>().enabled = true;
             currentlyOwnedByAvatar.gameObject.GetComponentInChildren<CameraMovement>().enabled = true;
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            cursorToggle.UICursorAndCam(false);
+            //Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
             DrawPosition(originalPos, Multiplayer.GetUser().Index);
         }
 

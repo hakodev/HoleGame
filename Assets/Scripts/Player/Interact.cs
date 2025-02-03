@@ -26,7 +26,7 @@ public class Interact : AttributesSync, IObserver
     [SerializeField] Vector2 minMaxThrowStrength;
     [SerializeField] Vector2 minMaxThrowChargeUpTime;
     [SerializeField] float smoothingHeldObjectMovement;
-    [SerializeField] float spamProtectUseButton = 0.02f;
+    [SerializeField] float spamProtectUseButton = 0.05f;
     float spamProtectUseButtonMax;
 
     float currentChargeUpTime = 0;
