@@ -140,13 +140,15 @@ public class StickyNote : DynamicInteractableObject
     [SynchronizableMethod] //minimizing data these take full name is StackFallDomino
     private void F()
     {
-        Debug.Log("stack " +gameObject.name + " " + stackPseudoChild.gameObject.name);
-        stackPseudoChild.ToggleRigidbody(true);
-        stackPseudoChild.isStasis = false;
+        if(stackPseudoChild!=null)
+        {
+            stackPseudoChild.ToggleRigidbody(true);
+            stackPseudoChild.isStasis = false;
 
-        if (stackPseudoChild.stackPseudoChild != null) stackPseudoChild.BroadcastRemoteMethod(nameof(stackPseudoChild.F));
+            if (stackPseudoChild.stackPseudoChild != null) stackPseudoChild.BroadcastRemoteMethod(nameof(stackPseudoChild.F));
 
-        stackPseudoChild = null;
+            stackPseudoChild = null;
+        }
     }
     public void DrawPosition(Vector3 finalPos, int userId)
     {
