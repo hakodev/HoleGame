@@ -29,8 +29,8 @@ public class SymptomNotifText : AttributesSync
     {
         base.OnEnable();
         if(RoleAssignment.hasGameStarted) {
-            SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
-            lobbySystem.gameObject.SetActive(false);
+            //SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+            //lobbySystem.gameObject.SetActive(false);
             //DestroyImmediate(lobbySystem.gameObject);
         }
     }
@@ -43,7 +43,7 @@ public class SymptomNotifText : AttributesSync
 
         if (transform.root.GetComponent<PlayerRole>().GetRole() == Roles.Machine)
         {
-            StartCoroutine(LerpDithering());
+            //StartCoroutine(LerpDithering());
         }
 
         if (allCarpets==null) allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();

@@ -83,9 +83,9 @@ public class RoleAssignment : AttributesSync
                         DetermineMaxNumberOfInfiltrators();
                         AssignRoles();
 
-
                         //BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
-                        //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
+                        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+                        //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandNumber());
                         VotingPhase voting = transform.root.GetComponent<VotingPhase>();
                         voting.AllVotersSymptomNotifStartOfGame();
                     }
@@ -110,7 +110,7 @@ public class RoleAssignment : AttributesSync
     {
         //yeah so im not doing this
         Debug.Log("damn " + Multiplayer.GetUser());
-        Destroy(lobbyCanvas);
+        
     }
 
     private void FindRolelessPlayers()

@@ -26,7 +26,7 @@ public class VotingPhase : AttributesSync {
 
 
     int randomlyPickedPlayer;
-    static List<VotingPhase> votingPlayers = new List<VotingPhase>();
+    public static List<VotingPhase> votingPlayers = new List<VotingPhase>();
     [SynchronizableField] int pickedPlayerIndex;
 
     private bool hasVoted = false;

@@ -19,7 +19,7 @@ public class LobbySystem : MonoBehaviour {
     private void Start()
     {
         allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
-        if (!avatar.IsMe) controlsText.enabled = false;
+        controlsText.enabled = true;
     }
 
     private void Update() {
