@@ -83,13 +83,13 @@ public class CursorToggle : MonoBehaviour
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            camMovement.FreezeCameraRotation = true;
+            //camMovement.FreezeCameraRotation = true;
         }
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            camMovement.FreezeCameraRotation = false;
+            //camMovement.FreezeCameraRotation = false;
         }
     }
     private bool HitUI()
