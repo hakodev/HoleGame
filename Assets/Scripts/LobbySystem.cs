@@ -25,9 +25,9 @@ public class LobbySystem : MonoBehaviour {
     private void Update() {
 
         if(!avatar.IsMe) { return; }
-        if(Input.GetKeyDown(KeyCode.Tab)) {
-            controlsText.enabled = !controlsText.enabled;
-        }
+        //if(Input.GetKeyDown(KeyCode.Tab)) {
+            //controlsText.enabled = !controlsText.enabled;
+        //}
 
         if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
             SymptomsManager.Instance.JustSetSymptom(0); // Inverted controls

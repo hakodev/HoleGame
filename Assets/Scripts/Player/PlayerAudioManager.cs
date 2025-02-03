@@ -47,16 +47,11 @@ public class PlayerAudioManager : MonoBehaviour
         }
     }
 
-    public void PlaySound(GameObject sourceObject, AudioClipSettings sound)
+    public void PlaySound(GameObject sourceObject, AudioSource source, AudioClipSettings sound)
     {
-        AudioSource source;
-        if (sourceObject.GetComponent<AudioSource>() == null)
+        if (source == null)
         {
             source = sourceObject.AddComponent<AudioSource>();
-        }
-        else
-        {
-            source = sourceObject.GetComponent<AudioSource>();
         }
 
         SetAudioParams(sound, source);

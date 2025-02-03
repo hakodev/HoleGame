@@ -3,6 +3,7 @@ using UnityEngine;
 public class BasicPhysicsObject : DynamicInteractableObject
 {
     Rigidbody rb;
+    AudioSource source;
 
     protected override void Awake()
     {
@@ -33,11 +34,11 @@ public class BasicPhysicsObject : DynamicInteractableObject
         {
             if (rb.mass > 1)
             {
-                PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetHeavyHit);
+                PlayerAudioManager.Instance.PlaySound(this.gameObject, source, PlayerAudioManager.Instance.GetHeavyHit);
             }
             else
             {
-                PlayerAudioManager.Instance.PlaySound(this.gameObject, PlayerAudioManager.Instance.GetLightHit);
+                PlayerAudioManager.Instance.PlaySound(this.gameObject, source, PlayerAudioManager.Instance.GetLightHit);
             }
             //Debug.Log("bratle " + gameObject.name + " " + rb.linearVelocity.magnitude);
         }

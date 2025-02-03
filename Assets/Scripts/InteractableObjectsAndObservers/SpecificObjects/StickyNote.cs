@@ -34,6 +34,8 @@ public class StickyNote : DynamicInteractableObject
     CharacterController playerParentCollider;
     Transform parentedTo;
 
+    AudioSource source;
+
     public bool IsPoster { get; private set; } = false;
 
 
@@ -63,7 +65,7 @@ public class StickyNote : DynamicInteractableObject
             // BroadcastRemoteMethod(nameof(SyncSetParent));
             CheckRaycastForRigidbody();
             Stick();
-            PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
+            PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetSticky);
         }
         if (interaction == InteractionEnum.ThrownStickyNote)
         {
@@ -99,7 +101,7 @@ public class StickyNote : DynamicInteractableObject
             {
                 AlignWithSurface(collision);
                 Stick();
-                if (RoleAssignment.hasGameStarted) PlayerAudioManager.Instance.PlaySound(gameObject, PlayerAudioManager.Instance.GetSticky);
+                if (RoleAssignment.hasGameStarted) PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetSticky);
             }
        // }
 
