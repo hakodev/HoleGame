@@ -18,7 +18,7 @@ public class AssignPlayerProgileTexture : AttributesSync {
         
         screenrenderer = GetComponent<Renderer>();
 
-        //BroadcastRemoteMethod(nameof(SetTextureArray));
+        BroadcastRemoteMethod(nameof(SetTextureArray));
 
         
     }
@@ -49,7 +49,7 @@ public class AssignPlayerProgileTexture : AttributesSync {
 
     private void Update()
     {
-        //BroadcastRemoteMethod(nameof(SyncTexture));
+        BroadcastRemoteMethod(nameof(SyncTexture));
     }
 
     
@@ -66,9 +66,10 @@ public class AssignPlayerProgileTexture : AttributesSync {
 
         if (screenrenderer == null)
         {
-
             screenrenderer = GetComponent<Renderer>();
         }
         screenrenderer.material.SetTexture("_MaskTexture", texture);
     }
+
+  
 }
