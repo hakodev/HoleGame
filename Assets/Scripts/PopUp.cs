@@ -117,13 +117,13 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
         }
         else
         {
-            /*Texture screenTexture = screenRenderer.material.GetTexture("_MaskTexture");
+            Texture screenTexture = screenRenderer.material.GetTexture("_MaskTexture");
 
-            Texture2D texture2D = new Texture2D(screenTexture.width/7, screenTexture.height/7, TextureFormat.RGBA32, false);
+            Texture2D texture2D = new Texture2D(16, 16, TextureFormat.RGBA32, false);
 
             RenderTexture currentRT = RenderTexture.active;
 
-            RenderTexture renderTexture = new RenderTexture(screenTexture.width/7, screenTexture.height/7, 32);
+            RenderTexture renderTexture = new RenderTexture(16, 16, 2);
             Graphics.Blit(screenTexture, renderTexture);
 
             RenderTexture.active = renderTexture;
@@ -131,10 +131,10 @@ public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHan
             texture2D.Apply();
             RenderTexture.active = currentRT;
 
-            TexturesManager.Instance.width = screenTexture.width/7;
-            TexturesManager.Instance.height = screenTexture.height/7;
-            TexturesManager.Instance.SetTextureParams(texture2D.GetPixelData<Color32>(0).ToArray(), screenTexture.width/7, screenTexture.height/7);
-            */
+            TexturesManager.Instance.width = 16;
+            TexturesManager.Instance.height = 16;
+            TexturesManager.Instance.SetTextureParams(texture2D.GetPixelData<Color32>(0).ToArray(), 16, 16);
+            
             
 
             //RenderTexture.active = previous;
