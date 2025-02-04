@@ -44,5 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84f357eb1e0f634cbb0f2745f2b94ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 24772a69-ebd8-4c45-939e-adead98e8478
+  Reliability: 1
+  LocalMethodBehavior: 1
   texturePaint: {fileID: 4800000, guid: 5b5993a459e851644b79b618fb45e331, type: 3}
   extendIslands: {fileID: 4800000, guid: 151a34b346c2c584cacdf6d942738660, type: 3}
+  stainPrefabs: []
+  mask:
+    serializedVersion: 2
+    m_Bits: 0

@@ -147,12 +147,15 @@ public class StickyNote : DynamicInteractableObject
     {
         if(stackPseudoChild!=null)
         {
-            stackPseudoChild.ToggleRigidbody(true);
-            stackPseudoChild.isStasis = false;
+            if(!IsPoster)
+            {
+                stackPseudoChild.ToggleRigidbody(true);
+                stackPseudoChild.isStasis = false;
 
-            if (stackPseudoChild.stackPseudoChild != null) stackPseudoChild.BroadcastRemoteMethod(nameof(stackPseudoChild.F));
+                if (stackPseudoChild.stackPseudoChild != null) stackPseudoChild.BroadcastRemoteMethod(nameof(stackPseudoChild.F));
 
-            stackPseudoChild = null;
+                stackPseudoChild = null;
+            }
         }
     }
     public void DrawPosition(Vector3 finalPos, int userId)
