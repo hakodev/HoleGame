@@ -50,10 +50,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplayer: {fileID: 0}
-  _uidString: 90088aec-d9e5-4d74-92eb-cd11dd6ac267
+  _uidString: 88f3c2a5-7780-46dc-ac9e-202f6a7f34e1
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
+  minVelocityToProduceSound: 0.1
   painter: {fileID: 0}
 --- !u!114 &1193113104529899421
 MonoBehaviour:
@@ -103,7 +105,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &8726033799619441643
 MonoBehaviour:
   m_ObjectHideFlags: 0

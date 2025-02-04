@@ -30,9 +30,9 @@ public class CursorToggle : MonoBehaviour
     bool performedAnAction = false;
     private void CheckForEsc()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (Escape == layerOfUI.inGame && !performedAnAction)
+            if (Escape == layerOfUI.inGame && !performedAnAction && !StickyNote.currentlyDrawing)
             {
                 performedAnAction = true;
                 Escape = layerOfUI.interactWithPopUps;
@@ -40,7 +40,7 @@ public class CursorToggle : MonoBehaviour
             }
 
 
-            if (Escape == layerOfUI.interactWithPopUps && !performedAnAction)
+            if (Escape == layerOfUI.interactWithPopUps && !performedAnAction && !StickyNote.currentlyDrawing)
             {
                 performedAnAction = true;
                 Escape = layerOfUI.inGame;
@@ -50,6 +50,8 @@ public class CursorToggle : MonoBehaviour
             performedAnAction = false;
         }
     }
+
+
     private void CheckForReturningToGame()
     {
         if (Input.GetMouseButtonDown(0))
@@ -88,6 +90,7 @@ public class CursorToggle : MonoBehaviour
             camMovement.FreezeCameraRotation = false;
         }
     }
+
     private bool HitUI()
     {
         EventSystem eventSystem = EventSystem.current;

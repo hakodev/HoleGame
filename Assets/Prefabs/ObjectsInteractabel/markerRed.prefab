@@ -54,6 +54,8 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
+  minVelocityToProduceSound: 0.1
   painter: {fileID: 0}
 --- !u!114 &1193113104529899421
 MonoBehaviour:
@@ -103,7 +105,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &8726033799619441643
 MonoBehaviour:
   m_ObjectHideFlags: 0

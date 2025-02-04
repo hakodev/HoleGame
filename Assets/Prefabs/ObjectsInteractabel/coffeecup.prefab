@@ -216,6 +216,7 @@ MonoBehaviour:
   Reliability: 2
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
   minVelocityToProduceSound: 0.1
   coffeeFilled: 0
   coffeeFillHeight: 0.97

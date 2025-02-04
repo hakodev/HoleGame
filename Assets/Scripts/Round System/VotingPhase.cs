@@ -235,6 +235,7 @@ public class VotingPhase : AttributesSync {
 
     private void VoteRandomly()
     {
+        /*
         List<PlayerRole> votableCandidates = new List<PlayerRole>();
         for (int i = 0; i < totalALivePlayers.Count; i++)
         {
@@ -248,6 +249,7 @@ public class VotingPhase : AttributesSync {
         randomlyVotedPlayer.VotedCount++;
 
         //Debug.Log("randomly Chosen " + randomlyVotedPlayer.gameObject.name);
+        */
 
         StartCoroutine(DisplayRandomlyVotedCanvas());
     }
