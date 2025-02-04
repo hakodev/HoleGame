@@ -719,7 +719,7 @@ MonoBehaviour:
   minMaxThrowStrength: {x: 3, y: 20}
   minMaxThrowChargeUpTime: {x: 0.3, y: 1}
   smoothingHeldObjectMovement: 0.1
-  spamProtectUseButton: 0.02
+  spamProtectUseButton: 0.1
 --- !u!114 &4068735110024494927
 MonoBehaviour:
   m_ObjectHideFlags: 0
