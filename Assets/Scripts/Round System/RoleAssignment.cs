@@ -30,7 +30,7 @@ public class RoleAssignment : AttributesSync {
     [SynchronizableField] public static int playerNumber = 0;
     public static int playerID = -10; //client based id
     [SynchronizableField] bool assignedRole = false;
-    [SynchronizableField] int readyPlayerCount = 0;
+    [SynchronizableField] public int readyPlayerCount = 0;
     private bool thisPlayerIsReady = false;
     RoleAssignment raHost;
 
@@ -55,12 +55,11 @@ public class RoleAssignment : AttributesSync {
         if (avatar.IsMe) userAvatar = avatar;
         youNeedFriends = transform.parent.Find("YouNeedFriendsToStartGame").GetComponent<CanvasGroup>();
 
-        raHost = Multiplayer.GetAvatars()[0].GetComponent<RoleAssignment>();
+        raHost = Multiplayer.GetAvatars()[0].GetComponentInChildren<RoleAssignment>();
         
         // totalPlayers = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None).ToList();
 
         if (playerID == -10) playerID = playerNumber; //sets proper number
-        Debug.Log("player's count " + totalPlayers.Count);
 
 
         if (!avatar.IsMe) { return; }
@@ -69,10 +68,14 @@ public class RoleAssignment : AttributesSync {
             pressGtoReady.enabled = false;
             youAreReadyOrWaitingForOthers.enabled = true;
 
-                thisPlayerIsReady = true;
-                BroadcastRemoteMethod(nameof(raHost.AAA));
-            
-        } else {
+            thisPlayerIsReady = true;
+            raHost.readyPlayerCount++;
+            Commit();
+            Debug.Log("AAA3 " + raHost.readyPlayerCount + " " + raHost.name + totalPlayers.Count);
+            //BroadcastRemoteMethod(nameof(raHost.AAA));
+
+        }
+        else {
             hostPressGtoStart.enabled = false;
             pressGtoReady.enabled = true;
             youAreReadyOrWaitingForOthers.enabled = false;
@@ -85,17 +88,11 @@ public class RoleAssignment : AttributesSync {
         hasGameStarted = newState;
     }
 
-    [SynchronizableMethod]
-    private void AAA()
-    {
-        readyPlayerCount++;
-    }
-    
+
     private void Update()
     {
-        if (!avatar.IsMe) { return; }
 
-        Debug.Log("AAA " + totalPlayers.Count);
+        //Debug.Log("AAA2 " + totalPlayers.Count);
         if (Multiplayer.GetUser().IsHost && readyPlayerCount == totalPlayers.Count)
         {
             hostPressGtoStart.enabled = true;
@@ -103,23 +100,32 @@ public class RoleAssignment : AttributesSync {
             youAreReadyOrWaitingForOthers.enabled = false;
         }
 
-        if (!hasGameStarted && Input.GetKeyUp(KeyCode.G))
+
+
+        if (!hasGameStarted && Input.GetKeyUp(KeyCode.G) && avatar.IsMe)
         {
             if (!thisPlayerIsReady)
             {
 
                 pressGtoReady.enabled = false;
                 youAreReadyOrWaitingForOthers.enabled = true;
+                //raHost.BroadcastRemoteMethod(nameof(raHost.AAA));
+
                 thisPlayerIsReady = true;
-                raHost.BroadcastRemoteMethod(nameof(raHost.AAA));
+                raHost.readyPlayerCount++;
+                Commit();
+                Debug.Log("AAA3 " + raHost.readyPlayerCount + " " + raHost.name + totalPlayers.Count);
             }
+
+
+
 
             if (Multiplayer.GetUser().IsHost)
             {
 
                 VotingPhase voting = transform.root.GetComponent<VotingPhase>();
 
-                Debug.Log("AAA2" + readyPlayerCount + " " + " " + totalPlayers.Count);
+                //Debug.Log("AAA2" + readyPlayerCount + " " + " " + totalPlayers.Count);
                 if (totalPlayers.Count > 1 && readyPlayerCount == totalPlayers.Count)
                 {
                     hostPressGtoStart.enabled = false;
@@ -132,11 +138,11 @@ public class RoleAssignment : AttributesSync {
                     AssignRoles();
 
 
-                    //BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
-                    SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+                     BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
+                    //SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
                     //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandomNum());
 
-                    voting.AllVotersSymptomNotifStartOfGame();
+                    //voting.AllVotersSymptomNotifStartOfGame();
                 }
                 else
                 {
@@ -156,9 +162,11 @@ public class RoleAssignment : AttributesSync {
     [SynchronizableMethod]
     private void DestroyLobbyForAll()
     {
-        //yeah so im not doing this
-        Debug.Log("damn " + Multiplayer.GetUser());
-        
+        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+        //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandNumber());
+        VotingPhase voting = transform.root.GetComponent<VotingPhase>();
+        voting.AllVotersSymptomNotifStartOfGame();
+
     }
 
     private void FindRolelessPlayers()
