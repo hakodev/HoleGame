@@ -460,6 +460,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 150157299084091565, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3277018296094056439, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -522,11 +526,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3277018296094056439, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 419
+      value: 555.2
       objectReference: {fileID: 0}
     - target: {fileID: 3277018296094056439, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 145
+      value: 456
       objectReference: {fileID: 0}
     - target: {fileID: 3277018296094056439, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -611,6 +615,10 @@ PrefabInstance:
     - target: {fileID: 8495727316091608246, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
       propertyPath: m_Name
       value: PopupCaptcha
+      objectReference: {fileID: 0}
+    - target: {fileID: 9177628585312481588, guid: 2848f37353a80614e8479ae7f54089b5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
