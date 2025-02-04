@@ -23,7 +23,6 @@ public class CrumpablePaper : DynamicInteractableObject
     }
     public override void SpecialInteraction(InteractionEnum interaction, Component caller)
     {
-        //planeCollider.enabled = false;
     }
 
     public override void Use()
@@ -42,7 +41,6 @@ public class CrumpablePaper : DynamicInteractableObject
             planeCollider.enabled = false;
             crumple.SetActive(true);
             straight.SetActive(false);
-            Debug.Log("crumple " + sphereCollider.enabled + planeCollider.enabled);
         }
     }
 }
