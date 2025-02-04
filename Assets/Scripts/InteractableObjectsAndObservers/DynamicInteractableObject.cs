@@ -60,7 +60,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         bool isSticky = this is StickyNote; //dont delete theese bools
         bool isChair = (gameObject.CompareTag("Chair"));
         bool isBall = this is Ball;
-        bool Special = (isSticky || isChair || isBall);
+        bool isCrumpablePaper = this is CrumpablePaper;
+        bool Special = (isSticky || isChair || isBall || isCrumpablePaper);
        
 
         if (newState)

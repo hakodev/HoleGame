@@ -23,14 +23,12 @@ public class CrumpablePaper : DynamicInteractableObject
     }
     public override void SpecialInteraction(InteractionEnum interaction, Component caller)
     {
-        planeCollider.enabled = false;
+        //planeCollider.enabled = false;
     }
 
     public override void Use()
     {
         BroadcastRemoteMethod(nameof(Crumple));
-
-
     }
 
     [SynchronizableMethod]
@@ -38,11 +36,13 @@ public class CrumpablePaper : DynamicInteractableObject
     {
         if (!isCrumpled)
         {
+            isCrumpled=true;
             PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetCrumple);
-            crumple.SetActive(true);
-            straight.SetActive(false);
             sphereCollider.enabled = true;
             planeCollider.enabled = false;
+            crumple.SetActive(true);
+            straight.SetActive(false);
+            Debug.Log("crumple " + sphereCollider.enabled + planeCollider.enabled);
         }
     }
 }
