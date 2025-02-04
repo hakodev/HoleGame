@@ -122,4 +122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 776b669444d5e8141bc180d2e2176345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 8d5a2b93-69e2-4564-a78e-ffa4c6cf5ff6
+  Reliability: 1
+  LocalMethodBehavior: 1
   extendsIslandOffset: 1

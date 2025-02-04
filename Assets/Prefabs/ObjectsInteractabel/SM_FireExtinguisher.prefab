@@ -133,6 +133,8 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
+  minVelocityToProduceSound: 0.1
 --- !u!54 &-6133277456646342357
 Rigidbody:
   m_ObjectHideFlags: 0

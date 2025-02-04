@@ -40,6 +40,10 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         collidersDynamic = GetComponentsInChildren<Collider>()
             .Where(c => !c.isTrigger)
             .ToList();
+
+        if(rbSyncDynamic.SyncEveryNUpdates != 999999 || rbSyncDynamic.FullSyncEveryNSync != 999999 && rbSyncDynamic.gameObject.activeInHierarchy) {
+            Debug.LogError("OBJECT NOT SYNCED 999999: " + rbSyncDynamic.gameObject.name);
+        }
     }
 
 
