@@ -2,9 +2,15 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
+#if UNITY_EDITOR
 using UnityEditor.SceneManagement;
+#endif
 
 public class ReconnectPrefab : MonoBehaviour {
+#if UNITY_EDITOR
+
+
+
     [MenuItem("Assets/Reconnect Prefabs With Tag replacingThisObjectWithPrefab")]
     private static void Reconnect() {
         //string prefabPath = "Assets/Meshes/Prefab/SM_sink.prefab";
@@ -24,4 +30,6 @@ public class ReconnectPrefab : MonoBehaviour {
         }
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
+#endif
+
 }

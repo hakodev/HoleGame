@@ -19,8 +19,6 @@ public class SymptomsManager : AttributesSync {
     SymptomNotifText thisAvatarSymptomNotifText;
     float renderDistanceTimer = 2;
 
-
-
     private void Awake() {
         if(Instance != null && Instance != this) {
             Destroy(this);

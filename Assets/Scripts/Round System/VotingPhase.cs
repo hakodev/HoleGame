@@ -210,6 +210,7 @@ public class VotingPhase : AttributesSync {
         if (endGameResolution.inWildWest)
         {
             endGameResolution.HandOutGuns();
+            StartCoroutine(DisplaySymptomNotif());
         }
         else
         {

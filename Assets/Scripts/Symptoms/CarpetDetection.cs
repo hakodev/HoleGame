@@ -62,7 +62,7 @@ public class CarpetDetection : MonoBehaviour
 
                         foreach (AudioSource source in audioSources)
                         {
-                            source.Play();
+                            //source.Play();
                         }
                     }
                 }
@@ -74,10 +74,10 @@ public class CarpetDetection : MonoBehaviour
 
                         playerController.Jump();
 
-                        //foreach (AudioSource source in audioSources)
-                       // {
-                       //     source.Play();
-                       // }
+                        foreach (AudioSource source in audioSources)
+                        {
+                            //source.Play();
+                        }
                     }
 
 
