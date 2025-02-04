@@ -86,8 +86,6 @@ public class Interact : AttributesSync, IObserver
             int selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
             gameObject.layer = selfLayer;
             SetLayerRecursively(gameObject, selfLayer);
-
-            SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
         }
     }
     void SetLayerRecursively(GameObject obj, int layer)
