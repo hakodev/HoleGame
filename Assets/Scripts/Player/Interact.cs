@@ -86,6 +86,8 @@ public class Interact : AttributesSync, IObserver
             int selfLayer = LayerMask.NameToLayer("SelfPlayerLayer");
             gameObject.layer = selfLayer;
             SetLayerRecursively(gameObject, selfLayer);
+
+            SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
         }
     }
     void SetLayerRecursively(GameObject obj, int layer)
@@ -169,14 +171,14 @@ public class Interact : AttributesSync, IObserver
                 if (heldObject != null)
                 {
                     heldObject.GetComponent<DynamicInteractableObject>().Use();
-                    Debug.Log("Debussy " + Multiplayer.GetAvatar().name + " " + hasCompletedClick1);
+                    //Debug.Log("Debussy " + Multiplayer.GetAvatar().name + " " + hasCompletedClick1);
                 }
 
             }
             if (Input.GetMouseButtonUp(1))
             {
                 hasCompletedClick1 = true;
-                Debug.Log("Deb " + Multiplayer.GetAvatar().name + " " + hasCompletedClick1);
+                //Debug.Log("Deb " + Multiplayer.GetAvatar().name + " " + hasCompletedClick1);
             }
 
             if (heldObject)
@@ -455,17 +457,20 @@ public class Interact : AttributesSync, IObserver
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, notPlayer) || pickedUp == spawnedGun)
         {
             GameObject unleashedGameDev = hit.collider.gameObject;
+            if (spawnedGun == pickedUp) unleashedGameDev = spawnedGun;
             if (unleashedGameDev.layer != 7 && unleashedGameDev.layer != 12) {
                 return;
             }
 
-            Debug.Log("hitting " + hit.collider.gameObject.layer);
+
+            //Debug.Log("hitting " + hit.collider.gameObject.layer);
             PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetPickUp);
             DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
-            Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
             if (DIO != null && DIO.GetCurrentlyOwnedByAvatar() == null)
             {
+                //Debug.Log("owned by " + DIO.GetCurrentlyOwnedByAvatar());
+
                 finishedPickUp = false;
 
                 heldObject = pickedUp;
@@ -552,8 +557,6 @@ public class Interact : AttributesSync, IObserver
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
             pickedUp = spawnedGun;
-
-
 
             BroadcastRemoteMethod(nameof(TryPickUp));
         }
