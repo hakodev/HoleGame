@@ -1,8 +1,7 @@
 using Alteruna;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-
-
 
 
 public class Interact : AttributesSync, IObserver
@@ -452,8 +451,15 @@ public class Interact : AttributesSync, IObserver
         if (!avatar.IsMe) return;
         if (heldObject != null) { return; }
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, dynamicLayerMask) || pickedUp == spawnedGun)
+        int notPlayer = ~(1 << 10);
+        if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, notPlayer) || pickedUp == spawnedGun)
         {
+            GameObject unleashedGameDev = hit.collider.gameObject;
+            if (unleashedGameDev.layer != 7 && unleashedGameDev.layer != 12) {
+                return;
+            }
+
+            Debug.Log("hitting " + hit.collider.gameObject.layer);
             PlayerAudioManager.Instance.PlaySound(gameObject, source, PlayerAudioManager.Instance.GetPickUp);
             DIO = pickedUp.GetComponent<DynamicInteractableObject>();
 
