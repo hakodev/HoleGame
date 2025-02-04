@@ -225,6 +225,8 @@ MonoBehaviour:
   Reliability: 2
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
+  minVelocityToProduceSound: 0.1
   isPlaced: 0
   isInteractedWith: 0
 --- !u!1 &8281173070946733831
