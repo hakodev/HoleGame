@@ -103,7 +103,15 @@ public class PlayerRole : AttributesSync
     [SynchronizableMethod]
     public void SetRole(Roles newRole)
     {
+
         role = newRole;
         localClientRole = newRole;
+        if (!avatar.IsMe) { return; }
+        BroadcastRemoteMethod(nameof(SetName), UIInput.PlayerNameSync);
+    }
+
+    private void OnApplicationQuit()
+    {
+        
     }
 }

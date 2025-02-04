@@ -162,7 +162,7 @@ public class PlayerController : MonoBehaviour
             verticalVelocity.y += gravity * gravityMultiplier * Time.deltaTime;
         }
 
-        if (characterController.isGrounded)
+        if (characterController.isGrounded && verticalVelocity.y <= 0)
         {
             mishSync.SetJumping(false);
         }
@@ -189,6 +189,8 @@ public class PlayerController : MonoBehaviour
             mishSync.SetJumping(true);
         }
     }
+
+
 
     private void ResetMovementValues()
     {

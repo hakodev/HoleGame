@@ -66,9 +66,10 @@ public class AssignPlayerProgileTexture : AttributesSync {
 
         if (screenrenderer == null)
         {
-
             screenrenderer = GetComponent<Renderer>();
         }
         screenrenderer.material.SetTexture("_MaskTexture", texture);
     }
+
+  
 }

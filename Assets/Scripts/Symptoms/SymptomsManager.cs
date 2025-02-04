@@ -50,10 +50,12 @@ public class SymptomsManager : AttributesSync {
             thisAvatarSymptomNotifText = avatar.transform.GetComponentInChildren<SymptomNotifText>(true);
         }
 
-       
+        CarpetManager.Instance.ResetCarpetParams();
         thisAvatarSymptomNotifText.ApplyEffectsOfSymptom();
         thisAvatarSymptomNotifText.ChangeNotifText();
     }
+
+    
 
     public void JustSetSymptom(int index)
     {
