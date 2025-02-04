@@ -15,6 +15,7 @@ public class Gun : DynamicInteractableObject
     Quaternion startRotation;
     Transform childTransform;
     ParticleSystem glitchParticle;
+    
 
     AudioSource source;
     // Animator playerAnimator;

@@ -144,10 +144,10 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
         if (currentlyOwnedByAvatar == null)
         {
-            if (rbDynamic.linearVelocity.magnitude < 0.05f)
+            if (rbDynamic.linearVelocity.magnitude < 0.2f)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
-                if (timeSinceLastSignificantMovement > 3f)
+                if (timeSinceLastSignificantMovement > 1f)
                 {
                     //    Debug.Log("sleep");
                     timeSinceLastSignificantMovement = 0;
