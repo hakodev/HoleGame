@@ -219,7 +219,7 @@ public class VotingPhase : AttributesSync {
 
     public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
     {
-        if (!avatar.IsMe) { return; }
+        if(!avatar.IsMe) { return; }
         SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
         if (endGameResolution.inWildWest)
         {

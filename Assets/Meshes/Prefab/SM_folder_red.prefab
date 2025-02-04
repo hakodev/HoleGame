@@ -43,7 +43,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 329172156506304371}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 4cbf9641654f92b4398c60f23dff0145, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -115,8 +115,8 @@ MonoBehaviour:
     NetLOD: 4
     Frequency: 120
   Reliability: 1
-  SyncEveryNUpdates: 10
-  FullSyncEveryNSync: 4
+  SyncEveryNUpdates: 999999
+  FullSyncEveryNSync: 999999
   SendData: 1
   ApplyAsTransform: 0
   AllowCollisionToAssumeOwner: 1

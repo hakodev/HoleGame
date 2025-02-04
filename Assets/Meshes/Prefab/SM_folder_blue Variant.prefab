@@ -56,13 +56,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 62f3a3bc930b7a34c8a9304aab9dcc55, type: 2}
+    - target: {fileID: 8005086289151563481, guid: 049a4e70dc0d5cc4291f268bb8a6d200, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 4cbf9641654f92b4398c60f23dff0145, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 329172156506304371, guid: 049a4e70dc0d5cc4291f268bb8a6d200, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -3982766615954070863}
     - targetCorrespondingSourceObject: {fileID: 329172156506304371, guid: 049a4e70dc0d5cc4291f268bb8a6d200, type: 3}
       insertIndex: -1
       addedObject: {fileID: -2890012700157939079}
@@ -75,25 +76,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 329172156506304371, guid: 049a4e70dc0d5cc4291f268bb8a6d200, type: 3}
   m_PrefabInstance: {fileID: 8059424436695843759}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-3982766615954070863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7730894429356698844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64fb435e20e4d394a8e60948a8999407, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Multiplayer: {fileID: 0}
-  _uidString: c47a2749-8163-46b6-a9ed-9fa70596f92b
-  Reliability: 1
-  LocalMethodBehavior: 1
-  isPickedUp: 0
-  <forceWhenThrownMultiplier>k__BackingField: 1
-  minVelocityToProduceSound: 0.1
 --- !u!54 &-2890012700157939079
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -152,8 +134,8 @@ MonoBehaviour:
     NetLOD: 4
     Frequency: 120
   Reliability: 1
-  SyncEveryNUpdates: 10
-  FullSyncEveryNSync: 4
+  SyncEveryNUpdates: 999999
+  FullSyncEveryNSync: 999999
   SendData: 1
   ApplyAsTransform: 0
   AllowCollisionToAssumeOwner: 1

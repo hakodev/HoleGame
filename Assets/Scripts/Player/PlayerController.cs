@@ -192,6 +192,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
     private void ResetMovementValues()
     {
         IsCrouching = false;
