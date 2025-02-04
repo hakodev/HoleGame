@@ -30,7 +30,7 @@ public class CursorToggle : MonoBehaviour
     bool performedAnAction = false;
     private void CheckForEsc()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             if (Escape == layerOfUI.inGame && !performedAnAction)
             {

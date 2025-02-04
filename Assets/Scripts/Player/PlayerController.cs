@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float timeSavingJumpInput;
     float maxTimeSavingJumpInput;
 
-
     private Alteruna.Avatar avatar;
     private GameObject animationTie;
     MishSyncAnimations mishSync;
@@ -163,9 +162,8 @@ public class PlayerController : MonoBehaviour
             verticalVelocity.y += gravity * gravityMultiplier * Time.deltaTime;
         }
 
-        if (characterController.isGrounded && verticalVelocity.y <= 0)
+        if (characterController.isGrounded)
         {
-            //do AFTER
             mishSync.SetJumping(false);
         }
 
