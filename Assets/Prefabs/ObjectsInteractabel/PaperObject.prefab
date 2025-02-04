@@ -76,6 +76,8 @@ MonoBehaviour:
   Reliability: 1
   LocalMethodBehavior: 1
   isPickedUp: 0
+  <forceWhenThrownMultiplier>k__BackingField: 1
+  minVelocityToProduceSound: 0.1
   sphereCollider: {fileID: 6703899540787175163}
   planeCollider: {fileID: 6354098150272779015}
   crumple: {fileID: 1386153899390546136}
@@ -127,7 +129,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1379750388160430668
 MonoBehaviour:
   m_ObjectHideFlags: 0

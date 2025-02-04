@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7883302400821889489}
   - component: {fileID: -4062475326329940184}
   - component: {fileID: -3095297908000378450}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_folder_red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &-4062475326329940184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,6 +199,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 0a240bf7ac1374945ae21eca82b43b93, type: 3}
       propertyPath: m_Name
       value: SM_folder
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0a240bf7ac1374945ae21eca82b43b93, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
