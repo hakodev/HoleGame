@@ -640,7 +640,7 @@ MonoBehaviour:
   Reliability: 2
   UseGlobalPosition: 0
   OnlySyncFromRoomOwner: 0
-  refreshRate: 60
+  refreshRate: 40
   SyncedAxes: 511
 --- !u!143 &2219904496887266049
 CharacterController:
