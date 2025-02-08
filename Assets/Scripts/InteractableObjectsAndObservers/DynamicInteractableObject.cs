@@ -41,9 +41,11 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
             .Where(c => !c.isTrigger)
             .ToList();
 
-        if(rbSyncDynamic.SyncEveryNUpdates != 999999 || rbSyncDynamic.FullSyncEveryNSync != 999999 && rbSyncDynamic.gameObject.activeInHierarchy) {
-            Debug.LogError("OBJECT NOT SYNCED 999999: " + rbSyncDynamic.gameObject.name);
-        }
+            if (rbSyncDynamic.SyncEveryNUpdates < 999999 || rbSyncDynamic.FullSyncEveryNSync < 999999 && rbSyncDynamic.gameObject.activeInHierarchy)
+            {
+                Debug.LogError("OBJECT NOT SYNCED: " + rbSyncDynamic.SyncEveryNUpdates + " " + rbSyncDynamic.FullSyncEveryNSync + " " + rbSyncDynamic.gameObject.name);
+            }
+        
     }
 
 
