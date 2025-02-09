@@ -555,6 +555,7 @@ GameObject:
   - component: {fileID: 3393442953825086244}
   - component: {fileID: 5667255255816071511}
   - component: {fileID: 5794261390685907181}
+  - component: {fileID: 7237088280496114717}
   m_Layer: 9
   m_Name: 0BigMerge2Player
   m_TagString: Player
@@ -832,6 +833,18 @@ MonoBehaviour:
   kickForce: 3
   extents: {x: 0.28, y: 1, z: 0.28}
   offset: {x: 0, y: -0.25, z: 0}
+--- !u!114 &7237088280496114717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029518652290077993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceea304bd19b9d549afad9c1219d5c95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2380961244887926389
 GameObject:
   m_ObjectHideFlags: 0

@@ -83,9 +83,7 @@ public class RoleAssignment : AttributesSync
                         DetermineMaxNumberOfInfiltrators();
                         AssignRoles();
 
-                        //BroadcastRemoteMethod(nameof(DestroyLobbyForAll));
                         SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
-                        //SymptomsManager.Instance.BroadcastRemoteMethod(nameof(SymptomsManager.Instance.SetSymptom), SymptomsManager.Instance.GetRandNumber());
                         VotingPhase voting = transform.root.GetComponent<VotingPhase>();
                         voting.AllVotersSymptomNotifStartOfGame();
                     }

@@ -35,6 +35,8 @@ public class CarpetManager : AttributesSync {
     public void RandomizeCarpetColor()
     {
         carpetColorRandNum = UnityEngine.Random.Range(0, numOfTotalCarpetColors);
+        Debug.Log("carcol " + carpetColorRandNum);
+        BroadcastRemoteMethod(nameof(SyncNumb), carpetColorRandNum);
     }
     public void ResetCarpetParams()
     {
@@ -44,7 +46,14 @@ public class CarpetManager : AttributesSync {
             carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
         }
     }
+    [SynchronizableMethod]
+    private void SyncNumb(int a)
+    {
+        carpetColorRandNum = a;
+        Debug.Log("carcol2 " + carpetColorRandNum);
+    }
 }
+
 
 public enum CarpetColor {
     Red = 0,

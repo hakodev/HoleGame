@@ -206,7 +206,6 @@ public class VotingPhase : AttributesSync {
     public void EndVotingPhaseFinale() //needs to be here bc of sequencing errors
     {
         if(!avatar.IsMe) { return; }
-        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
         if (endGameResolution.inWildWest)
         {
             endGameResolution.HandOutGuns();
@@ -232,6 +231,8 @@ public class VotingPhase : AttributesSync {
             StartCoroutine(DisplayTaskManager());
             StartCoroutine(DisplaySymptomNotif());
         }
+        SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
+
     }
 
     private void VoteRandomly()
