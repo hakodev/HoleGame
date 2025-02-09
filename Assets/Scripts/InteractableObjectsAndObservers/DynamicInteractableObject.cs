@@ -10,7 +10,6 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     Alteruna.Avatar userAvatar;
 
     [SynchronizableField] public bool isPickedUp;
-    [SynchronizableField] private bool wasMoved = false;
 
     [field: SerializeField] public float forceWhenThrownMultiplier { get; private set; } = 1;
     public abstract void SpecialInteraction(InteractionEnum interaction, UnityEngine.Component caller);
@@ -21,13 +20,14 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     List<Collider> collidersDynamic;
     [SerializeField] protected float minVelocityToProduceSound = 0.1f;
 
-    bool awake = false;
+    [SynchronizableField] bool awake = false;
 
     [Header("removed serialize fields for speed. Nsync Objects is Here. x - when object is inactive(high number), y - when object is active(low number), also in the script both are 30 2, for ease of access")]
     Vector2 syncEveryNUpdates = new Vector2(30, 2);
     Vector2 fullSyncEveryNSyncs = new Vector2(30, 2);
 
     [SynchronizableField] float timeSinceLastSignificantMovement = 0;
+    float movementThreshhold = 0.43f;
 
     protected virtual void Awake()
     {
@@ -37,22 +37,30 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     protected virtual void Start()
     {
         //BroadcastRemoteMethod(nameof(DynamicSleep));
-        collidersDynamic = GetComponentsInChildren<Collider>()
-            .Where(c => !c.isTrigger)
-            .ToList();
+        AssignCollidersDynamic();
 
+        /* // gives error when gun is spawned which is very funny
             if (rbSyncDynamic.SyncEveryNUpdates < 999999 || rbSyncDynamic.FullSyncEveryNSync < 999999 && rbSyncDynamic.gameObject.activeInHierarchy)
             {
                 Debug.LogError("OBJECT NOT SYNCED: " + rbSyncDynamic.SyncEveryNUpdates + " " + rbSyncDynamic.FullSyncEveryNSync + " " + rbSyncDynamic.gameObject.name);
             }
-        
+        */
     }
 
+    private void AssignCollidersDynamic()
+    {
+        if(collidersDynamic == null)
+        {
+            collidersDynamic = GetComponentsInChildren<Collider>()
+    .Where(c => !c.isTrigger)
+    .ToList();
+        }
+    }
 
     protected virtual void Update()
     {
         SelfSleepIfUnmoving();
-        CheckForMovement();
+        //CheckForMovement();
     }
     [SynchronizableMethod]
     public void ToggleRigidbody(bool newstate)
@@ -100,6 +108,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
 
     private void ToTriggerCols(bool newState) //because the sticky notes are just so god damn special
     {
+        AssignCollidersDynamic();
+
         for (int i = 0; i < collidersDynamic.Count; i++)
         {
             collidersDynamic[i].isTrigger = newState;
@@ -108,6 +118,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     private void DisableCols(bool newState)
     {
+        AssignCollidersDynamic();
+
         for (int i = 0; i<collidersDynamic.Count; i++)
         {
             collidersDynamic[i].enabled = !newState;
@@ -116,6 +128,8 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     private void IgnoreCols(bool newState)
     {
+        AssignCollidersDynamic();
+
         for (int i = 0; i < collidersDynamic.Count; i++)
         {
             Physics.IgnoreCollision(collidersDynamic[i], currentController, newState);
@@ -146,7 +160,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         //Debug.Log("yikes " + currentlyOwnedByAvatar==null);
         if (currentlyOwnedByAvatar == null)
         {
-            if (rbDynamic.linearVelocity.magnitude < 0.2f)
+            if (rbDynamic.linearVelocity.magnitude < movementThreshhold)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
                 if (timeSinceLastSignificantMovement > 1f)
@@ -164,15 +178,15 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     }
     private void CheckForMovement()
     {
-        if (userAvatar == null || !userAvatar.IsMe) { return; }
+        if ((userAvatar == null || !userAvatar.IsMe)) { return; }
 
 
-        if (rbDynamic.linearVelocity.magnitude >= 0.1f || currentlyOwnedByAvatar != null)
+        if (rbDynamic.linearVelocity.magnitude >= movementThreshhold || currentlyOwnedByAvatar != null)
         {
             timeSinceLastSignificantMovement = 0;
             if (!awake)
             {
-                wasMoved = true;
+                Debug.Log("awake wtf " + rbDynamic.linearVelocity.magnitude + " " + movementThreshhold + " " + currentlyOwnedByAvatar);
                 BroadcastRemoteMethod(nameof(DynamicAwake));
             }
         }
@@ -192,7 +206,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
         awake = true;
         rbSyncDynamic.SyncEveryNUpdates = 4;
         rbSyncDynamic.FullSyncEveryNSync = 8;
-        Debug.Log("awake " + gameObject.name + " " + rbDynamic.linearVelocity.magnitude); //keep this here so we know what causes problems with latency in the future
+        Debug.Log("awake " + gameObject.name + " " + rbDynamic.linearVelocity.magnitude + " " + currentlyOwnedByAvatar); //keep this here so we know what causes problems with latency in the future
     }
 
     public Alteruna.Avatar GetCurrentlyOwnedByAvatar()

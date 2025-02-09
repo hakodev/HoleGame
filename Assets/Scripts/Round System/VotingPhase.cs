@@ -23,6 +23,7 @@ public class VotingPhase : AttributesSync {
     [SerializeField] GameObject votingPhaseObject;
     EndGameResolution endGameResolution;
     Alteruna.Avatar avatar;
+    CursorToggle cursorToggle;
 
 
     int randomlyPickedPlayer;
@@ -42,6 +43,7 @@ public class VotingPhase : AttributesSync {
     {
         avatar = GetComponent<Alteruna.Avatar>();
         player = GetComponent<PlayerRole>();
+        cursorToggle = GetComponent<CursorToggle>();
     }
     private void Start() {
 
@@ -59,7 +61,7 @@ public class VotingPhase : AttributesSync {
     public void InitiateVotingPhase() {
         if (!avatar.IsMe) { return; }
         endGameResolution.CheckForEndGame();
-        DespawnAllGuns();
+        if(!endGameResolution.inWildWest) DespawnAllGuns();
 
         if (!wildWestPopUpOnce) { //ensures that the popup for voting doesnt appear if this is hte second time they're gonna get it
             if(endGameResolution.inWildWest) wildWestPopUpOnce = true;
@@ -68,12 +70,11 @@ public class VotingPhase : AttributesSync {
             votingCanvas.SetActive(true);
             votingPopUp.PopIn();
 
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            cursorToggle.UICursorAndCam(true);
             player.VotedCount = 0;
             hasVoted = false;
 
-            player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
+            if (!endGameResolution.inWildWest) player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
 
             if (player.IsTaskManager)
             { // Player who was task manager in the previous round can't be it again
@@ -136,8 +137,7 @@ public class VotingPhase : AttributesSync {
 
         votingCanvas.SetActive(false);
         votedCanvas.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        cursorToggle.UICursorAndCam(false);
       //  player.gameObject.GetComponent<PlayerController>().MovementEnabled = true; // Enable movement again
 
         EndVotingPhaseHost();
@@ -223,10 +223,13 @@ public class VotingPhase : AttributesSync {
 
             //Debug.Log("BITTE_Finale2 " + taskManagerNameInHost + " " + pickedPlayerIndex    );
 
-            if (player.IsTaskManager)
+            Interact playerInteract = GetComponent<Interact>();
+            GameObject held = playerInteract.GetHeldObject();
+            Gun gun = held.GetComponent<Gun>();
+            if (player.IsTaskManager && gun == null)
             {
                 //Debug.Log(player.IsTaskManager + player.gameObject.name);
-                GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+                playerInteract.SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
             }
 
             StartCoroutine(DisplayTaskManager());

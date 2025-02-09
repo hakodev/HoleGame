@@ -454,9 +454,16 @@ public class Interact : AttributesSync, IObserver
         int notPlayer = ~(1 << 10);
         if (Physics.Raycast(playerCamera.ScreenPointToRay(new Vector2(playerCamera.pixelWidth / 2, playerCamera.pixelHeight / 2)), out hit, grabReach, notPlayer) || pickedUp == spawnedGun)
         {
-            GameObject unleashedGameDev = hit.collider.gameObject;
-            if (spawnedGun == pickedUp) unleashedGameDev = spawnedGun;
-            if (unleashedGameDev.layer != 7 && unleashedGameDev.layer != 12) {
+            GameObject unleashedGameDev;
+            if (spawnedGun == pickedUp)
+            {
+                unleashedGameDev = spawnedGun;
+            }
+            else
+            {
+                unleashedGameDev = hit.collider.gameObject;
+            }
+            if (unleashedGameDev.layer != 7 && unleashedGameDev.layer != 12 && !unleashedGameDev.name.Contains("Gun")) {
                 return;
             }
 

@@ -798,7 +798,7 @@ MonoBehaviour:
   playerVoteButton: {fileID: 2520141654089684476, guid: 8cf9effcf3f9f65448a62779912237c4, type: 3}
   pickedPlayerNameText: {fileID: 1477126311247207046}
   votingCanvas: {fileID: 6317649633646999548}
-  votedCanvas: {fileID: 0}
+  votedCanvas: {fileID: 4901471997713498116}
   taskManagerPickedDisplayCanvas: {fileID: 3993467346638926968}
   randomlyVotedPlayer: {fileID: 4478109256786002089}
   symptomsNotifCanvas: {fileID: 6990669613581925008}
@@ -5468,6 +5468,11 @@ PrefabInstance:
 --- !u!224 &3275116890700336496 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 229203973926534856, guid: 02236331695ff714d8917c6f8d13bb22, type: 3}
+  m_PrefabInstance: {fileID: 3341044998378156984}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4901471997713498116 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7662945587411563452, guid: 02236331695ff714d8917c6f8d13bb22, type: 3}
   m_PrefabInstance: {fileID: 3341044998378156984}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3484696620319447734
