@@ -2240,9 +2240,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a344ba19c229a5f4a8d0838ce4fbd870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 4
+  mouseSensitivity: 3
   invertCameraXAxis: 0
   invertCameraYAxis: 0
+  sensitivityStep: 1
+  minSensitivity: 0.1
+  maxSensitivity: 7
   uncrouchedCameraHeight: 0.6
   crouchedCameraHeight: -0.4
   cameraHeightSwitchSpeed: 4
@@ -4728,7 +4731,7 @@ MonoBehaviour:
   LocalMethodBehavior: 1
   InfiltratorsToPlayers:
   - {x: 1, y: 1}
-  - {x: 5, y: 2}
+  - {x: 6, y: 2}
   - {x: 9, y: 3}
   lobbyCanvas: {fileID: 7786332907640270110}
 --- !u!1 &8978290959981016378
@@ -5279,10 +5282,22 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2628901346771977195, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2628901346771977195, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 3037271771799307306, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_SortingOrder
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 3238557009795668127, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fd1d934dccef5af4f814f99a81fbe4db, type: 3}
     - target: {fileID: 4528067742869382769, guid: 357797a8451a2814cb8345d64a5030a1, type: 3}
       propertyPath: m_IsActive
       value: 0

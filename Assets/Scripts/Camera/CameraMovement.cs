@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -8,6 +7,10 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private bool invertCameraXAxis;
     [SerializeField] private bool invertCameraYAxis;
     private float verticalRotation;
+    [SerializeField] private float sensitivityStep = 0.5f;
+    [SerializeField] private float minSensitivity = 0.1f;
+    [SerializeField] private float maxSensitivity = 10f;
+
 
     [Header("Crouching")]
     [SerializeField] private float uncrouchedCameraHeight;
@@ -63,6 +66,12 @@ public class CameraMovement : MonoBehaviour
         mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
         if (invertCameraYAxis)
             mouseY = -mouseY;
+
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (scroll != 0)
+        {
+            ChangeSensitivity(scroll);
+        }
     }
 
     private void ProcessCamera()
@@ -95,6 +104,14 @@ public class CameraMovement : MonoBehaviour
         Vector3 resetToUncrouchedCamera = new(this.transform.localPosition.x, uncrouchedCameraHeight, this.transform.localPosition.z);
         this.transform.localPosition = resetToUncrouchedCamera;
     }
+
+
+    private void ChangeSensitivity(float scrollAmount)
+    {
+        mouseSensitivity = Mathf.Clamp(mouseSensitivity + scrollAmount * sensitivityStep, minSensitivity, maxSensitivity);
+    }
+
+
 }
 
 

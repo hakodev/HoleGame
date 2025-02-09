@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class throwBar : MonoBehaviour

@@ -1,9 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
-using Alteruna;
-using System;
-using Unity.Collections;
-using System.Runtime.CompilerServices;
 
 public class TexturesManager : MonoBehaviour
 {

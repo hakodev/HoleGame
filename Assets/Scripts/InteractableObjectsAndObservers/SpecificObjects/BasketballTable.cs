@@ -1,6 +1,5 @@
 using Alteruna;
 using TMPro;
-using UnityEngine;
 
 public class BasketballTable : AttributesSync
 {

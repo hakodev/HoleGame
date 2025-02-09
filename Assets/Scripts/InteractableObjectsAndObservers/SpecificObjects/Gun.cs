@@ -1,5 +1,4 @@
 using UnityEngine;
-using Alteruna;
 using System.Collections;
 public class Gun : DynamicInteractableObject
 {

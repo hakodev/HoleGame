@@ -1,7 +1,5 @@
 using UnityEngine;
 using Alteruna;
-using System.Collections.Generic;
-
 
 public class Health : AttributesSync {
 

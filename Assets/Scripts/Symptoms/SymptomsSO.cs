@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "NewSymptom", menuName = "Symptoms/New Symptom")]
 public class SymptomsSO : ScriptableObject {

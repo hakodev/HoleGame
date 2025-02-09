@@ -1,12 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
-using Alteruna;
 using TMPro;
-using System.IO;
-using UnityEditor;
-using System;
-using Unity.VisualScripting;
+
 
 
 public class PopUp : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
