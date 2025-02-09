@@ -223,13 +223,10 @@ public class VotingPhase : AttributesSync {
 
             //Debug.Log("BITTE_Finale2 " + taskManagerNameInHost + " " + pickedPlayerIndex    );
 
-            Interact playerInteract = GetComponent<Interact>();
-            GameObject held = playerInteract.GetHeldObject();
-            Gun gun = held.GetComponent<Gun>();
-            if (player.IsTaskManager && gun == null)
+            if (player.IsTaskManager)
             {
                 //Debug.Log(player.IsTaskManager + player.gameObject.name);
-                playerInteract.SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+                GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
             }
 
             StartCoroutine(DisplayTaskManager());

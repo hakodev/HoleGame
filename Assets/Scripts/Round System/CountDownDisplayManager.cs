@@ -69,7 +69,15 @@ public class CountDownDisplayManager : AttributesSync {
 
 
 
-        affectedDisplay.time = affectedDisplay.maxTime;  
+        affectedDisplay.time = affectedDisplay.maxTime;
+
+        DeactivateUnusedTimer(objectCalled);
+    }
+    public void DeactivateUnusedTimer(string objectCalled)
+    {
+        if (objectCalled == StartDowntime.name) StartDowntime.SetActive(false);
+        if (objectCalled == PickTaskManager.name) PickTaskManager.SetActive(false);
+        if (objectCalled == CountDown.name) CountDown.SetActive(false);
     }
 }
 

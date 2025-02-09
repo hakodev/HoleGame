@@ -38,10 +38,10 @@ public class EndGameResolution : AttributesSync
     private void Awake()
     {
         endGameCanvas = GetComponent<Canvas>();
-        popUp = transform.GetComponentInChildren<PopUp>();
     }
     private void Start()
     {
+        popUp = transform.GetComponentInChildren<PopUp>();
 
         display = FindAnyObjectByType<CountDownDisplayManager>();
         wildWestExplanatoryText.gameObject.SetActive(false);
@@ -91,10 +91,18 @@ public class EndGameResolution : AttributesSync
     }
     public void HandOutGuns()
     {
-       // foreach (PlayerRole player in VotingPhase.totalALivePlayers)
-       // {
-            transform.root.GetComponent<Interact>().SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
-      //  }
+        Interact playerInteract = transform.root.GetComponent<Interact>();
+        GameObject held = playerInteract.GetHeldObject();
+        Gun gun = null;
+        if (held!=null)
+        {
+           gun = held.GetComponent<Gun>();
+        }
+       
+        if (gun == null)
+        {
+            playerInteract.SpecialInteraction(InteractionEnum.GivenTaskManagerRole, this);
+        }
     }
 
     private bool once = true;

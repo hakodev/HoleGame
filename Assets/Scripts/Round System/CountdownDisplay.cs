@@ -45,11 +45,7 @@ public class CountdownDisplay : AttributesSync {
     }
     
 
-    [SynchronizableMethod]
-    private void DeactivateUnusedTimers()//(string deactivatedObject)
-    {
-        gameObject.SetActive(false);
-    }
+
 
     [SynchronizableMethod]
     private void InitiateVotingPhaseForAllPlayers()
@@ -105,8 +101,6 @@ public class CountdownDisplay : AttributesSync {
     private void UpdateTickDown()
     {
         if (!Multiplayer.GetUser().IsHost) { return; }
-        if (!Multiplayer.GetAvatar().IsMe) { return; }
-        if (RoleAssignment.playerID - 1 != 0) { return; }
 
 
         if (time > 0) 
@@ -115,30 +109,41 @@ public class CountdownDisplay : AttributesSync {
             if (deltaTime >= 1)
             {
                 deltaTime = 0;
-                if (Multiplayer.GetUser().IsHost)
-                {
+
                     if(VotingPhase.totalALivePlayers.Count>1)
                     {
                         if(endGameResolution==null) endGameResolution = Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>();
                         //if (!endGameResolution.inWildWest) {
-                            time--;
+                        //time--;
+                    BroadcastRemoteMethod(nameof(ReduceTime));
                         //}
                     }
-                }
+                
             }
         }
         else
         {
             if (gameObject.CompareTag("VotingDisplay"))
             {
-                manager.RoundsLeft--;
+                //manager.RoundsLeft--;
+                BroadcastRemoteMethod(nameof(ReduceRoundTime));
             }
 
-            manager.BroadcastRemoteMethod("ActivateTimer", parameters: gameObject.name);
-            BroadcastRemoteMethod(nameof(DeactivateUnusedTimers));
-            
+            manager.BroadcastRemoteMethod(nameof(manager.ActivateTimer), gameObject.name);
+            //im deactivating them at the end of activate timer for sequencing reasons
+
             if(gameObject.CompareTag("DowntimeDisplay")) BroadcastRemoteMethod(nameof(InitiateVotingPhaseForAllPlayers));
             if (gameObject.CompareTag("VotingDisplay")) BroadcastRemoteMethod(nameof(EndVotingPhaseForAllPlayers));
         }
+    }
+    [SynchronizableMethod]
+    private void ReduceTime()
+    {
+        time--;
+    }
+    [SynchronizableMethod]
+    private void ReduceRoundTime()
+    {
+        manager.RoundsLeft--;
     }
 }
