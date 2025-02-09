@@ -47,7 +47,7 @@ public class CarpetManager : AttributesSync {
         }
     }
     [SynchronizableMethod]
-    private void SyncNumb(int a)
+    public void SyncNumb(int a)
     {
         carpetColorRandNum = a;
         Debug.Log("carcol2 " + carpetColorRandNum);

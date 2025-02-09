@@ -48,11 +48,11 @@ public class SymptomsManager : AttributesSync {
             thisAvatarSymptomNotifText = avatar.transform.GetComponentInChildren<SymptomNotifText>(true);
         }
 
-        CarpetManager.Instance.ResetCarpetParams();
-        if (index == 1) CarpetManager.Instance.BroadcastRemoteMethod(nameof(CarpetManager.Instance.RandomizeCarpetColor));
+        if (index != 1) CarpetManager.Instance.ResetCarpetParams();
+        //if (index == 1) CarpetManager.Instance.BroadcastRemoteMethod(nameof(CarpetManager.Instance.RandomizeCarpetColor));
         avatar.GetComponent<CarpetSymptom>().ApplyEffectsOfSymptom();
         thisAvatarSymptomNotifText.ChangeNotifText();
-    }
+    }   
 
     
 
@@ -75,6 +75,14 @@ public class SymptomsManager : AttributesSync {
         randNum = 1;
         BroadcastRemoteMethod(nameof(SyncRandNum), randNum);
         BroadcastRemoteMethod(nameof(SetSymptom), randNum);
+
+        if (randNum == 1)
+        {
+            int randCarpetNum = UnityEngine.Random.Range(0, 3);
+            CarpetManager.Instance.BroadcastRemoteMethod(nameof(CarpetManager.Instance.SyncNumb), randCarpetNum);
+
+           // CarpetManager.Instance.BroadcastRemoteMethod(nameof(CarpetManager.Instance.RandomizeCarpetColor));
+        }
     }
 
     public int GetRandNumber() { return randNum; }

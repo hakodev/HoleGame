@@ -25,7 +25,7 @@ public class CarpetSymptom : MonoBehaviour
             //StartCoroutine(LerpDithering());
         }
 
-        if (allCarpets == null) allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
+        allCarpets = FindObjectsByType<CarpetData>(FindObjectsSortMode.None).ToList();
 
         if (SymptomsManager.Instance.GetSymptom() == SymptomsManager.Instance.GetSymptomsList()[1] && playerRole.GetRole() == Roles.Machine)
         {
@@ -33,15 +33,19 @@ public class CarpetSymptom : MonoBehaviour
             {
                 case 0:
                     // red carpets
+                    Debug.Log("carcol RED");
                     foreach (CarpetData carpet in allCarpets)
                     {
                         if (carpet.GetColor() == CarpetColor.Red)
                         {
                             carpet.IsCorrupted = true;
                             carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
+                            Debug.Log("carcol RED2");
+
                         }
                         else
                         {
+                            Debug.Log("carcol RED3");
                             carpet.IsCorrupted = false;
                             carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                         }
@@ -49,15 +53,19 @@ public class CarpetSymptom : MonoBehaviour
                     break;
                 case 1:
                     // green carpets
+                    Debug.Log("carcol GREEN");
                     foreach (CarpetData carpet in allCarpets)
                     {
                         if (carpet.GetColor() == CarpetColor.Green)
                         {
+                            Debug.Log("carcol GREEN2");
+
                             carpet.IsCorrupted = true;
                             carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                         }
                         else
                         {
+                            Debug.Log("carcol GREEN3");
                             carpet.IsCorrupted = false;
                             carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                         }
@@ -65,15 +73,19 @@ public class CarpetSymptom : MonoBehaviour
                     break;
                 case 2:
                     // blue carpets
+                    Debug.Log("carcol BLUE");
                     foreach (CarpetData carpet in allCarpets)
                     {
                         if (carpet.GetColor() == CarpetColor.Blue)
                         {
+                            Debug.Log("carcol BLUE2");
+
                             carpet.IsCorrupted = true;
                             carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.CorruptedMat;
                         }
                         else
                         {
+                            Debug.Log("carcol BLUE3");
                             carpet.IsCorrupted = false;
                             carpet.gameObject.GetComponentInChildren<MeshRenderer>().material = carpet.NormalMat;
                         }
