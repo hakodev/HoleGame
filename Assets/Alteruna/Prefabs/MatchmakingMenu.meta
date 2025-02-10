@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Alteruna/Prefabs/MatchmakingMenu.meta
 guid: 3e3564877b8fd4d459d0fb169fe88c66
 folderAsset: yes
+========
+guid: 0a4f179e30837a946a4fa6669ddce5e5
+>>>>>>>> Ivan_main:Assets/Sounds/kenney_digital-audio/Visit Kenney.url.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

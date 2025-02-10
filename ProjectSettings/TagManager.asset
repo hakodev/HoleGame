@@ -6,6 +6,18 @@ TagManager:
   tags:
   - SceneParentForPlacedObjects
   - playerCamera
+  - DowntimeDisplay
+  - VotingDisplay
+  - drawnOn
+  - NetworkManager
+  - RoomMenu
+  - nameInput
+  - Carpet
+  - Ball
+  - HumanMesh
+  - LastChanceDisplay
+  - replacingThisObjectWithPrefab
+  - Chair
   layers:
   - Default
   - TransparentFX
@@ -19,8 +31,8 @@ TagManager:
   - PlayerLayer
   - SelfPlayerLayer
   - HeldObject
-  - 
-  - 
+  - OutlineLayer
+  - Carpet
   - 
   - 
   - 

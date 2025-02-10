@@ -1,42 +1,95 @@
+using Alteruna;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SymptomsManager : MonoBehaviour {
-    [SerializeField] private GameObject symptomUICanvas;
-    [SerializeField] private List<SymptomsSO> listOfSymptoms;
-    private List<SymptomsSO> caughtSymptoms = new();
+public class SymptomsManager : AttributesSync {
+    public static SymptomsManager Instance { get; private set; }
 
-    private void Update() {
-        ToggleCanvas();
-        GiveSymptom();
+    [Header("MAKE SURE THE SYMPTOMS ARE LISTED IN THE FOLLOWING ORDER!\n" +
+            "Sym0\n" +
+            "Sym1\n" +
+            "Sym2")]
+    [SerializeField] private List<SymptomsSO> symptoms;
+    private SymptomsSO currentSymptom = null;
+    [SynchronizableField] int randNum; //should only be modified by host
+
+    Alteruna.Avatar avatar;
+    SymptomNotifText thisAvatarSymptomNotifText;
+    float renderDistanceTimer = 2;
+
+    private void Awake() {
+        if(Instance != null && Instance != this) {
+            Destroy(this);
+            return;
+        }
+
+        Instance = this;
     }
 
-    private void ToggleCanvas() {
-        if(Input.GetKeyDown(KeyCode.Tab)) {
-            symptomUICanvas.SetActive(true);
+    public SymptomsSO GetSymptom() {
+        return currentSymptom;
+    }
+
+    public List<SymptomsSO> GetSymptomsList() {
+        return symptoms;
+    }
+
+
+
+    [SynchronizableMethod]
+    public void SetSymptom(int index) {
+
+        JustSetSymptom(index);
+        if (avatar == null)
+        {
+            avatar = Multiplayer.GetAvatar();
+            thisAvatarSymptomNotifText = avatar.transform.GetComponentInChildren<SymptomNotifText>(true);
         }
 
-        if(Input.GetKeyUp(KeyCode.Tab)) {
-            symptomUICanvas.SetActive(false);
+        if (index != 1) CarpetManager.Instance.ResetCarpetParams();
+        //if (index == 1) CarpetManager.Instance.BroadcastRemoteMethod(nameof(CarpetManager.Instance.RandomizeCarpetColor));
+        avatar.GetComponent<CarpetSymptom>().ApplyEffectsOfSymptom();
+        thisAvatarSymptomNotifText.ChangeNotifText();
+    }   
+
+    
+
+    public void JustSetSymptom(int index)
+    {
+        if(index>symptoms.Count-1)
+        {
+            currentSymptom = null;
+        }
+        else
+        {
+            currentSymptom = symptoms[index];
         }
     }
 
-    private void GiveSymptom() {
-        if(symptomUICanvas.activeSelf && listOfSymptoms.Count > 0) {
-            if(Input.GetKeyDown(KeyCode.Alpha1) && !caughtSymptoms.Contains(listOfSymptoms[0])) {
-                caughtSymptoms.Add(listOfSymptoms[0]);
-                Debug.Log($"You got symptom: {listOfSymptoms[0].Name}");
-            }
+    public void PickRandNumberHostAndSetSymptomForAll() {
+        if (!Multiplayer.GetUser().IsHost) { return; }
 
-            if(Input.GetKeyDown(KeyCode.Alpha2) && !caughtSymptoms.Contains(listOfSymptoms[1])) {
-                caughtSymptoms.Add(listOfSymptoms[1]);
-                Debug.Log($"You got symptom: {listOfSymptoms[1].Name}");
-            }
+        //randNum = UnityEngine.Random.Range(0, symptoms.Count);
+        randNum = 1;
+        BroadcastRemoteMethod(nameof(SyncRandNum), randNum);
+        BroadcastRemoteMethod(nameof(SetSymptom), randNum);
 
-            if(Input.GetKeyDown(KeyCode.Alpha0) && caughtSymptoms.Count > 0) {
-                caughtSymptoms.Clear();
-                Debug.Log("Cleared all symptoms!");
-            }
+        if (randNum == 1)
+        {
+            int randCarpetNum = UnityEngine.Random.Range(0, 3);
+            CarpetManager.Instance.BroadcastRemoteMethod(nameof(CarpetManager.Instance.SyncNumb), randCarpetNum);
+
+           // CarpetManager.Instance.BroadcastRemoteMethod(nameof(CarpetManager.Instance.RandomizeCarpetColor));
         }
+    }
+
+    public int GetRandNumber() { return randNum; }
+
+    [SynchronizableMethod]
+    private void SyncRandNum(int a)
+    {
+        randNum = a;
     }
 }

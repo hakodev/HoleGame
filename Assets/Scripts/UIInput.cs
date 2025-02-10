@@ -1,17 +1,14 @@
+using Alteruna;
+using DG.Tweening;
+using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UIInput : MonoBehaviour
 {
-    [SerializeField] GameObject roomMenu;
-    private void Awake()
-    {
+    public static string PlayerNameSync;
 
-    }
-    public void ClickedPlayButton()
-    {
-        roomMenu.SetActive(true);
-        gameObject.SetActive(false);
-    }
     public void ClickedJoinButton()
     {
         gameObject.SetActive(false);
@@ -20,4 +17,10 @@ public class UIInput : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void SetPlayerNameSync(string setName)
+    {
+        PlayerNameSync = setName;
+    }
 }
+

@@ -1,46 +1,65 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using Alteruna;
+using System;
+using System.Drawing;
+public class MousePainter : MonoBehaviour {
 
-public class MousePainter : MonoBehaviour{
-	public Camera cam;
-	[Space]
-	public bool mouseSingleClick;
-	[Space]
-	public Color paintColor;
-	
-	public float radius = 1;
-	public float strength = 1;
-	public float hardness = 1;
-	
-	PaintManager paintManager;
+    public Camera cam;
+    [Space]
+    public UnityEngine.Color paintColor;
 
-	public LayerMask notPlayerMask;
-	
-	public void Start()
-	{
-		paintManager = FindAnyObjectByType<PaintManager>();
-	}
+    public float radius = 1;
+    public float strength = 1;
+    public float hardness = 1;
 
-	public void Update(){
+    public float range = 6;
 
-		bool click;
-		click = mouseSingleClick ? Input.GetMouseButtonDown(0) : Input.GetMouseButton(0);
+    PaintManager paintManager;
 
-		if (click){
-			Vector3 position = Input.mousePosition;
-			Ray ray = cam.ScreenPointToRay(position);
-			RaycastHit hit;
+    public LayerMask notPlayerMask;
+    Paintable p;
 
-			if (Physics.Raycast(ray, out hit, 100.0f, notPlayerMask)){
-				Debug.DrawRay(ray.origin, hit.point - ray.origin, Color.red);
-				transform.position = hit.point;
-				Paintable p = hit.collider.GetComponent<Paintable>();
-				if(p != null){
-					PaintManager.Instance.paint(p, hit.point, radius, hardness, strength, paintColor);
-				}
-			}
-		}
+    public bool isFreeForm = false;
 
-	}
+    public void Start()
+    {
+        paintManager = FindAnyObjectByType<PaintManager>();
+    }
+
+    public void Paint(Camera cam)
+    {
+        Vector3 position = Input.mousePosition;
+        Ray ray = cam.ScreenPointToRay(position);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, range, notPlayerMask))
+        {
+            p = hit.collider.GetComponent<Paintable>();
+            if (p != null)
+            {
+                CommunicationBridgeUID puid = p.GetComponent<CommunicationBridgeUID>();
+                Guid id = puid.GetUID();
+
+                paintManager.BroadcastRemoteMethod("paint", id, hit.point, radius, paintColor);
+               
+            }
+        }
+
+    }
+
+    private void Update()
+    {
+
+        if (isFreeForm && Input.GetMouseButton(0))
+        {
+            Paint(cam);
+        }
+        
+    }
+
+    public void ChangeColor(UnityEngine.Color color)
+    {
+        paintColor = color;
+    }
 
 }

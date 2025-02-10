@@ -8,9 +8,11 @@ public enum InteractionEnum
     PlacedStickyNote,
     ThrownStickyNote,
     PickedUpStickyNote,
-    Oiled,
-    Watered,
-    Caffenated,
-    GrowthFormulaed,
-    CoffeeStain
+    GivenTaskManagerRole,
+    RemoveGun,
+    PlaceCupInCoffeeMachine,
+    MarkerOnPosterOrStickyNote,
+    StoppedMarkerOnPosterOrStickyNote,
+    CoffeeStain,
+    smackedPlayerWithObject
 }

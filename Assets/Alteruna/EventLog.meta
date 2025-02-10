@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Alteruna/EventLog.meta
 guid: 82c0e1e039722e14abfc88895bb371d1
 folderAsset: yes
+========
+guid: 7210550e56029df49a0bf41dd7e1bc4b
+>>>>>>>> Ivan_main:Assets/_AHMETMISHO/LevelDesign.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
