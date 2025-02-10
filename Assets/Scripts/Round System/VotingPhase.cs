@@ -92,8 +92,8 @@ public class VotingPhase : AttributesSync {
         //StartCoroutine(WaitForButtons());
         //
 
-       // Health playerHealth = avatar.GetComponent<Health>();
-       // if (playerHealth.GetHealth() < 0) { return; }
+        Health playerHealth = avatar.GetComponent<Health>();
+        if (playerHealth.GetHealth() <= 0) { return; }
 
         int i = 0;
         foreach (PlayerRole otherPlayer in totalALivePlayers)
