@@ -556,6 +556,7 @@ GameObject:
   - component: {fileID: 5667255255816071511}
   - component: {fileID: 5794261390685907181}
   - component: {fileID: 7237088280496114717}
+  - component: {fileID: 7234452608575822063}
   m_Layer: 9
   m_Name: 0BigMerge2Player
   m_TagString: Player
@@ -760,6 +761,7 @@ MonoBehaviour:
   machineCanvas: {fileID: 2281513187124148408}
   VotedCount: 0
   IsTaskManager: 0
+  cannotVoteVorWasTaskManager: 0
   ceoFlashScreen: {fileID: 4566744043790251347}
   playerNameSync: 
   lobbyCanvas: {fileID: 7786332907640270110}
@@ -843,6 +845,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceea304bd19b9d549afad9c1219d5c95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7234452608575822063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029518652290077993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c279fe314569cf846b3f49a309cc974a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2380961244887926389

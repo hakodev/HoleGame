@@ -18,6 +18,8 @@ public class CountDownDisplayManager : AttributesSync {
     public string lastChanceText = "End Round";
 
     public static CountDownDisplayManager Instance { get; private set; }
+
+    private int playersMaxCount;
     private void Start()
     {
         Instance = this;
@@ -45,6 +47,9 @@ public class CountDownDisplayManager : AttributesSync {
     private void StartGameForAll()
     {
         hasInitiatedTheTimer = true;
+        playersMaxCount = VotingPhase.totalALivePlayers.Count;
+        RoundsLeft = playersMaxCount+1;
+        Debug.Log("aaa " + playersMaxCount);
         Commit();
     }
 
@@ -77,25 +82,36 @@ public class CountDownDisplayManager : AttributesSync {
         currentDisplay = affectedDisplay;
         affectedDisplay.time = affectedDisplay.maxTime;
 
+        /*
+        if (objectCalled == CountDown.name)
+        {
+           affectedDisplay.time = affectedDisplay.time * (VotingPhase.totalALivePlayers.Count / playersMaxCount);
+        }
+        */
+
 
         DeathCheck(affectedDisplay);
         DeactivateUnusedTimer(objectCalled);
     }
     public void DeathCheck(CountdownDisplay affectedDisplay)
     {
-        if (VotingPhase.totalALivePlayers.Count == 2)
-        {
+        
+       // if (VotingPhase.totalALivePlayers.Count == 2)
+      //  {
             Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>().CheckForEndGame();
-            affectedDisplay.time = 5;
-        }
+            //affectedDisplay.time = 5;
+      //  }
+        
     }
     public void DeathCheck()
     {
+        /*
         if (VotingPhase.totalALivePlayers.Count == 2)
         {
             //Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>().CheckForEndGame();
             currentDisplay.time = 5;
         }
+        */
     }
     public void DeactivateUnusedTimer(string objectCalled)
     {
