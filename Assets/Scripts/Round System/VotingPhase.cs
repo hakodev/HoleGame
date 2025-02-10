@@ -89,34 +89,57 @@ public class VotingPhase : AttributesSync {
 
     private void SpawnVotingButtons()
     {
-        int i = 0;
-        foreach (PlayerRole otherPlayer in totalALivePlayers)
-        {
-            if (otherPlayer == player) { continue; }
-            i++;
+        StartCoroutine(WaitForButtons());
+    }
+    public static void RemoveTotalAlivePlayers(PlayerRole role)
+    {
+        Debug.Log("pls " + totalALivePlayers.Count + role.gameObject.name);
+        totalALivePlayers.Remove(role);
+        votingPlayers.Remove(role.GetComponent<VotingPhase>());
+        Debug.Log("pls2 " + totalALivePlayers.Count + role.gameObject.name);
+    }
+    List<GameObject> allButtons = new List<GameObject>();
+    private IEnumerator WaitForButtons()
+    {
+        yield return new WaitForSeconds(0.2f);
 
-            GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingPopUp.transform);
-            newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
+        if (endGameResolution.inWildWest) {
 
-            RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
-            rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -80 * i + 120);
-
-            if (i % 2 == 0)
-            {
-              //  rect.anchorMin = new Vector2(0f, -0.5f);
-             //   rect.anchorMax = new Vector2(0f, -0.5f);
-                rect.anchoredPosition = new Vector2(734, rect.anchoredPosition.y+80);
-            }
-
-
-            newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
-                otherPlayer.VotedCount++;
-                votingCanvas.SetActive(false);
-                votedCanvas.SetActive(true);
-                hasVoted = true;
-                //Debug.Log("BITTE_Button " + otherPlayer.name);
-            });
         }
+        else
+        {
+            int i = 0;
+            foreach (PlayerRole otherPlayer in totalALivePlayers)
+            {
+                if (otherPlayer == player) { continue; }
+
+                Debug.Log("pls4 " + totalALivePlayers.Count + " " + otherPlayer.gameObject.name);
+                i++;
+
+                GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingPopUp.transform);
+                newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
+                allButtons.Add(newPlayerVoteOption);
+
+                RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
+                rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -80 * i + 120);
+
+                if (i % 2 == 0)
+                {
+                    //  rect.anchorMin = new Vector2(0f, -0.5f);
+                    //   rect.anchorMax = new Vector2(0f, -0.5f);
+                    rect.anchoredPosition = new Vector2(734, rect.anchoredPosition.y + 80);
+                }
+
+
+                newPlayerVoteOption.GetComponent<Button>().onClick.AddListener(() => {
+                    otherPlayer.VotedCount++;
+                    votingCanvas.SetActive(false);
+                    votedCanvas.SetActive(true);
+                    hasVoted = true;
+                    //Debug.Log("BITTE_Button " + otherPlayer.name);
+                });
+            }
+        }       
     }
 
     public void EndVotingPhase()
@@ -231,7 +254,10 @@ public class VotingPhase : AttributesSync {
             StartCoroutine(DisplaySymptomNotif());
         }
         SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
-
+        for(int i=0; i< allButtons.Count; i++)
+        {
+            Destroy(allButtons[i]); 
+        }
     }
 
     private void VoteRandomly()

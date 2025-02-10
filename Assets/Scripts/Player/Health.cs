@@ -50,7 +50,8 @@ public class Health : AttributesSync {
         deadScreen.SetActive(true);
         mishSync.SetStance(StanceEnum.Dead);
         Debug.Log("Player died!" + mishSync.GetCurrentStance());
-        VotingPhase.totalALivePlayers.Remove(GetComponent<PlayerRole>());
+        VotingPhase.RemoveTotalAlivePlayers(GetComponent<PlayerRole>());
+        CountDownDisplayManager.Instance.DeathCheck();
         Multiplayer.GetAvatar().GetComponentInChildren<EndGameResolution>().CheckForEndGame();
     }
 
