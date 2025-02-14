@@ -18,6 +18,7 @@ TagManager:
   - LastChanceDisplay
   - replacingThisObjectWithPrefab
   - Chair
+  - DebugPosition
   layers:
   - Default
   - TransparentFX

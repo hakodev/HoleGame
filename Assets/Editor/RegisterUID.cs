@@ -1,11 +1,15 @@
+/*
 using Alteruna;
 using System.Linq;
 using UnityEditor;
-using UnityEngine;
 using UnityEditor.SceneManagement;
+*/
+using UnityEngine;
+
 
 public class RegisterUID : MonoBehaviour
 {
+    /*
     [MenuItem("Window/Alteruna/Reregister UID in current scene")]
     private static void ReregisterUIDsForAllObjects()
     {
@@ -27,4 +31,5 @@ public class RegisterUID : MonoBehaviour
 
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
+    */
 }

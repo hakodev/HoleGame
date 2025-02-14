@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Alteruna;
-using System.Linq;
 public class VotingPhase : AttributesSync {
 
     public static List<PlayerRole> totalALivePlayers = new List<PlayerRole>();
@@ -76,37 +75,47 @@ public class VotingPhase : AttributesSync {
 
             if (!endGameResolution.inWildWest) player.gameObject.GetComponent<Interact>().SpecialInteraction(InteractionEnum.RemoveGun, this);
 
+            if (player.cannotVoteVorWasTaskManager) player.cannotVoteVorWasTaskManager = false;
             if (player.IsTaskManager)
             { // Player who was task manager in the previous round can't be it again
                 player.IsTaskManager = false;
+                player.cannotVoteVorWasTaskManager = true;
             }
-            else
-            {
-                if (!endGameResolution.inWildWest) SpawnVotingButtons();
-            }
+
+            if (!endGameResolution.inWildWest) SpawnVotingButtons();
         }
     }
 
 
     private void SpawnVotingButtons()
     {
+        //StartCoroutine(WaitForButtons());
+        //
+
+        Health playerHealth = avatar.GetComponent<Health>();
+        if (playerHealth.GetHealth() <= 0) { return; }
+
         int i = 0;
         foreach (PlayerRole otherPlayer in totalALivePlayers)
         {
             if (otherPlayer == player) { continue; }
+            if (totalALivePlayers.Count > 3 && otherPlayer.cannotVoteVorWasTaskManager) { continue; }
+
+            Debug.Log("pls4 " + totalALivePlayers.Count + " " + otherPlayer.gameObject.name);
             i++;
 
             GameObject newPlayerVoteOption = Instantiate(playerVoteButton, votingPopUp.transform);
             newPlayerVoteOption.GetComponentInChildren<TextMeshProUGUI>().text = otherPlayer.gameObject.name;
+            allButtons.Add(newPlayerVoteOption);
 
             RectTransform rect = newPlayerVoteOption.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -80 * i + 120);
 
             if (i % 2 == 0)
             {
-              //  rect.anchorMin = new Vector2(0f, -0.5f);
-             //   rect.anchorMax = new Vector2(0f, -0.5f);
-                rect.anchoredPosition = new Vector2(734, rect.anchoredPosition.y+80);
+                //  rect.anchorMin = new Vector2(0f, -0.5f);
+                //   rect.anchorMax = new Vector2(0f, -0.5f);
+                rect.anchoredPosition = new Vector2(734, rect.anchoredPosition.y + 80);
             }
 
 
@@ -118,6 +127,26 @@ public class VotingPhase : AttributesSync {
                 //Debug.Log("BITTE_Button " + otherPlayer.name);
             });
         }
+    }
+    public static void RemoveTotalAlivePlayers(PlayerRole role)
+    {
+        Debug.Log("pls " + totalALivePlayers.Count + role.gameObject.name);
+        totalALivePlayers.Remove(role);
+        votingPlayers.Remove(role.GetComponent<VotingPhase>());
+        Debug.Log("pls2 " + totalALivePlayers.Count + role.gameObject.name);
+    }
+    List<GameObject> allButtons = new List<GameObject>();
+    private IEnumerator WaitForButtons()
+    {
+        yield return new WaitForSeconds(0.01f);
+
+        if (endGameResolution.inWildWest) {
+
+        }
+        else
+        {
+           
+        }       
     }
 
     public void EndVotingPhase()
@@ -232,7 +261,10 @@ public class VotingPhase : AttributesSync {
             StartCoroutine(DisplaySymptomNotif());
         }
         SymptomsManager.Instance.PickRandNumberHostAndSetSymptomForAll();
-
+        for(int i=0; i< allButtons.Count; i++)
+        {
+            Destroy(allButtons[i]); 
+        }
     }
 
     private void VoteRandomly()

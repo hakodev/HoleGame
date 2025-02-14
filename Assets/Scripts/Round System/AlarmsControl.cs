@@ -1,6 +1,5 @@
 using UnityEngine;
 using Alteruna;
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -1,6 +1,4 @@
 using Alteruna;
-using DG.Tweening.Core.Enums;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CoffeeMachine : StationaryInteractableObject

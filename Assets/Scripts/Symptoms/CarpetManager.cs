@@ -1,9 +1,6 @@
 using Alteruna;
-using NUnit.Framework;
 using UnityEngine;
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using System.Linq;
 
 public class CarpetManager : AttributesSync {

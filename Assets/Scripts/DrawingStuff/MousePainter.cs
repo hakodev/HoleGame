@@ -1,7 +1,6 @@
 using UnityEngine;
 using Alteruna;
 using System;
-using System.Drawing;
 public class MousePainter : MonoBehaviour {
 
     public Camera cam;

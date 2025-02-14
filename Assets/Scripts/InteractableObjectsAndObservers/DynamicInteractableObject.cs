@@ -163,7 +163,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
             if (rbDynamic.linearVelocity.magnitude < movementThreshhold)
             {
                 timeSinceLastSignificantMovement += Time.deltaTime;
-                if (timeSinceLastSignificantMovement > 1f)
+                if (timeSinceLastSignificantMovement > 0.5f)
                 {
                     //    Debug.Log("sleep");
                     timeSinceLastSignificantMovement = 0;
@@ -205,7 +205,7 @@ public abstract class DynamicInteractableObject : AttributesSync, IObserver, IIn
     {
         awake = true;
         rbSyncDynamic.SyncEveryNUpdates = 4;
-        rbSyncDynamic.FullSyncEveryNSync = 8;
+        rbSyncDynamic.FullSyncEveryNSync = 12;
         Debug.Log("awake " + gameObject.name + " " + rbDynamic.linearVelocity.magnitude + " " + currentlyOwnedByAvatar); //keep this here so we know what causes problems with latency in the future
     }
 

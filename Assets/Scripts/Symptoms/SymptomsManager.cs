@@ -1,6 +1,4 @@
 using Alteruna;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -71,8 +69,8 @@ public class SymptomsManager : AttributesSync {
     public void PickRandNumberHostAndSetSymptomForAll() {
         if (!Multiplayer.GetUser().IsHost) { return; }
 
-        //randNum = UnityEngine.Random.Range(0, symptoms.Count);
-        randNum = 1;
+        randNum = UnityEngine.Random.Range(0, symptoms.Count);
+        //randNum = 1;
         BroadcastRemoteMethod(nameof(SyncRandNum), randNum);
         BroadcastRemoteMethod(nameof(SetSymptom), randNum);
 

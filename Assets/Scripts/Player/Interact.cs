@@ -1,6 +1,5 @@
 using Alteruna;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -559,6 +558,7 @@ public class Interact : AttributesSync, IObserver
         }
         if (interaction == InteractionEnum.GivenTaskManagerRole)
         {
+            if (GetComponent<Health>().GetHealth() <= 0) { return; }
             if (heldObject != null) Drop();
             spawnedGun = spawner.Spawn(0, transform.position, Quaternion.identity);
             pickedUp = spawnedGun;

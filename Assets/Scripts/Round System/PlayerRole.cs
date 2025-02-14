@@ -19,6 +19,7 @@ public class PlayerRole : AttributesSync
 
     [SynchronizableField] public int VotedCount = 0;
     [SynchronizableField] public bool IsTaskManager = false;
+    [SynchronizableField] public bool cannotVoteVorWasTaskManager = false; //was taskmanager last round
     [SerializeField] private GameObject ceoFlashScreen;
 
     [SynchronizableField] public string playerNameSync;

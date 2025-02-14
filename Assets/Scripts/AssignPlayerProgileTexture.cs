@@ -1,10 +1,6 @@
 using Alteruna;
-using System;
-using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
-using Unity.Collections.NotBurstCompatible;
+
 
 public class AssignPlayerProgileTexture : AttributesSync { 
     public Texture2D texture;

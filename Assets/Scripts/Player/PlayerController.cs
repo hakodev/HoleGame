@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     [field: SerializeField] public bool MovementEnabled { get; set; } = true;
 
     [Header("Movement")]

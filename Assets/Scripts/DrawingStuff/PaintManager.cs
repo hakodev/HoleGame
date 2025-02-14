@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using Alteruna;
-using System.Xml;
 using System;
 
 public class PaintManager : AttributesSync{
